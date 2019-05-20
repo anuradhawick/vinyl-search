@@ -1,0 +1,18 @@
+<app-loader #postloader></app-loader>
+<div [hidden]="hideView">
+  <div class="m-1">
+    <h2 aria-label="With textarea">{{title}}</h2>
+    <hr>
+    <ckeditor [editor]="Editor" [(ngModel)]="data" [disabled]="true"></ckeditor>
+    <hr>
+  </div>
+  <div class="float-right" *ngIf="">
+    <button class="btn btn-secondary m-1" type="button">
+      Edit
+    </button>
+    <button class="btn btn-danger m-1" type="button">
+      Delete
+    </button>
+  </div>
+</div>
+

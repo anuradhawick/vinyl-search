@@ -1,0 +1,368 @@
+<div class="row">
+  <div class="col-3">
+    <div class="container">
+      <div class="text-center">
+        <br>
+        <app-loader #recordImageLoader></app-loader>
+        <img *ngIf="chosenImage" [src]="chosenImage" class="rounded" width="100%" alt="">
+      </div>
+      <br>
+
+      <div class="input-group mb-3">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="addImage($event)"
+                 accept='image/*'>
+          <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose
+            file</label>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="jumbotron">
+        <p class="lead">Genres</p>
+        <span *ngFor="let g of selectedGenres" class="btn badge badge-primary m-1"
+              (click)="selectGenre(g, true)">{{g}}✗</span>
+        <hr class="my-4">
+        <p class="lead">Styles</p>
+        <span *ngFor="let s of selectedStyles" class="btn badge badge-primary m-1"
+              (click)="selectStyle(s, true)">{{s}}✗</span>
+        <hr class="my-4">
+        <p class="lead">Descriptions</p>
+        <span *ngFor="let d of selectedDescr" class="btn badge badge-primary m-1"
+              (click)="selectDescr(d, true)">{{d}}✗</span>
+        <hr class="my-4">
+      </div>
+    </div>
+  </div>
+  <div class="col-9">
+    <div class="container">
+      <h1>New Release Details</h1>
+      <form class="needs-validation" novalidate>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-5">
+              <label>Record Name</label>
+              <input type="text" class="form-control" placeholder="Name" name="release-name" [(ngModel)]="name"
+                     required>
+              <div class="invalid-feedback">
+                Enter record name
+              </div>
+            </div>
+
+            <div class="col-5">
+              <label>Artist Name</label>
+              <input type="text" class="form-control" placeholder="Name" name="main-artist-name"
+                     [(ngModel)]="mainArtist">
+              <div class="invalid-feedback">
+                Enter record name
+              </div>
+            </div>
+
+            <div class="col-2">
+              <label>Year</label>
+              <input type="text" class="form-control" placeholder="YYYY-MM-DD"
+                     pattern="([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?">
+              <div class="invalid-feedback">
+                Please enter the year
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">
+              <label>Label</label>
+              <input type="text" class="form-control" placeholder="Label" name="release-label" [(ngModel)]="label"
+                     required>
+              <div class="invalid-feedback">
+                Enter label name or use <em>Unlabelled</em>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-5">
+              <label>Country of origin</label>
+              <select name="country" class="form-control" [(ngModel)]="selectedCountry" required="">
+                <option *ngFor="let c of countriesJSON" [ngValue]="c.name">{{c.name}}</option>
+              </select>
+            </div>
+            <div class="col-5">
+              <label>Size</label>
+              <select name="size" class="form-control" [(ngModel)]="selectedSize" required>
+                <option></option>
+                <option *ngFor="let c of sizesJSON">{{c}}</option>
+              </select>
+            </div>
+            <div class="col-2">
+              <label>Speed</label>
+              <select name="speed" class="form-control" [(ngModel)]="selectedSpeed" required>
+                <option></option>
+                <option *ngFor="let c of speedsJSON">{{c}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!---->
+        <div class="accordion" id="accordionExample">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                  Select Genres
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="container">
+                  <div class="row">
+                    <span *ngFor="let g of genres | async" class="btn badge badge-primary m-1"
+                          (click)="selectGenre(g.name)">{{g.name}}</span>
+                  </div>
+                </div>
+
+                <label><i class="btn btn-link" data-toggle="modal" data-target="#newgenre">(add missing)</i></label>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="false" aria-controls="collapseTwo">
+                  Styles
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="container">
+                  <div class="row">
+                    <span *ngIf="_.isEmpty(styles)">Please select some genres</span>
+                    <span *ngFor="let s of styles" class="btn badge badge-primary m-1"
+                          (click)="selectStyle(s)">{{s}}</span>
+                  </div>
+                </div>
+                <label><i class="btn btn-link" data-toggle="modal" data-target="#newstyle">(add missing)</i></label>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                        aria-expanded="false" aria-controls="collapseThree">
+                  Descriptions
+                </button>
+              </h2>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="container">
+                  <div class="row">
+                    <span *ngFor="let d of descr" class="btn badge badge-primary m-1"
+                          (click)="selectDescr(d)">{{d}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!---->
+        <!--TRACKS START-->
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col" class="w-auto">Position</th>
+            <th scope="col" class="w-50">Artists</th>
+            <th scope="col" class="w-50">Title/Credits</th>
+            <th scope="col" class="w-auto">Duration</th>
+            <th scope="col" class="w-auto">Options</th>
+          </tr>
+          </thead>
+          <tbody #table id="bb">
+          <tr *ngFor="let track of tracks; let ti = index" style="cursor: all-scroll" id="track-row-{{ti}}">
+            <th scope="row">
+              <input type="text" class="form-control" placeholder="A:1/1" name="track-{{ti}}-index-{{i}}"
+                     [(ngModel)]="track.index" required>
+            </th>
+            <td class="do-validate">
+              <div class="form-group">
+                <div *ngFor="let artist of track.artists; let i = index" class="input-group mb-1">
+                  <input type="text" class="form-control" placeholder="Artist" name="track-{{ti}}-artist-{{i}}"
+                         [(ngModel)]="artist.name" required>
+
+                  <div class="input-group-append">
+                    <button type="button" (click)="removeArtist(tracks, ti, artist)" class="btn btn-secondary"><i
+                      class="fas fa-trash-alt"
+                      style="font-size: 18px;"></i></button>
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <button (click)="addArtist(track)" class="btn btn-link">
+                    <i class="fas fa-plus" style="font-size: 18px;"></i> Artist
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input type="text" class="form-control mb-1" placeholder="Title"
+                       name="track-{{ti}}-title-{{i}}"
+                       [(ngModel)]="track.title" required>
+                <div *ngFor="let credit of track.credits; let i = index" class="input-group mb-1">
+
+                  <input type="text" class="form-control" placeholder="Credits"
+                         name="track-{{ti}}-creadits-{{i}}"
+                         [(ngModel)]="credit.text" required>
+                  <div class="input-group-append">
+                    <button type="button" (click)="removeCredit(tracks, ti, credit)" class="btn btn-secondary">
+                      <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <button (click)="addCredit(track)" class="btn btn-link">
+                    <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="0:00" name="track-{{ti}}-duration-{{i}}"
+                       [(ngModel)]="track.duration" pattern="[0-9]{1,2}:[0-9]{1,2}">
+              </div>
+            </td>
+            <td>
+              <div class="dropdown dropleft">
+                <button class="btn btn-secondary" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-cogs" style="font-size: 18px;"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a (click)="removeTrack(track)" class="btn dropdown-item">Remove</a>
+                  <a (click)="insertTrackBefore(ti)" class="btn dropdown-item">Add Track Above</a>
+                  <a (click)="insertTrackAfter(ti)" class="btn dropdown-item">Add Track Below</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+        <div class="row container">
+          <button class="btn btn-secondary m-1" (click)="appendTrack()">
+            Track <i class="fas fa-plus" style="font-size: 18px;"></i>
+          </button>
+          <button class="btn btn-secondary m-1" (click)="autoIndex()">
+            Auto Index
+          </button>
+        </div>
+
+        <!--TRACKS END-->
+        <!---->
+        <hr>
+        <div class="form-group">
+          <label>Credits</label>
+          <div *ngFor="let credit of commonCredits; let i = index" class="input-group mb-1">
+            <input type="text" class="form-control" placeholder="Credits"
+                   name="common-credits-{{i}}"
+                   [(ngModel)]="credit.text" required>
+            <div class="input-group-append">
+              <button type="button" (click)="removeCommonCredit(credit)" class="btn btn-secondary">
+                <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <button (click)="addCommonCredit()" class="btn btn-link">
+              <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+            </button>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <div class="">
+            <label>Notes</label>
+            <textarea type="text" class="form-control" name="release-notes" [(ngModel)]="notes"></textarea>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving">Save</button>
+          <button type="button" class="btn btn-primary m-1" (click)="true" [disabled]="saving">Discard</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<!--MODALS-->
+<div id="newgenre" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Genre</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Genre name</label>
+            <input type="text" class="form-control" name="newGenreName" [(ngModel)]="newGenreName" placeholder="Name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addGenre()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="newstyle" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Style</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Genre</label>
+            <select name="genre" class="form-control" [(ngModel)]="selectedGenre">
+              <option></option>
+              <option *ngFor="let g of selectedGenres">{{g}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Style name</label>
+            <textarea type="text" rows="5" class="form-control" name="newGenreName" [(ngModel)]="newStyleNames"
+                      placeholder="Name">
+            </textarea>
+          </div>
+          <div class="form-group">
+            <label *ngIf="!_.isEmpty(newStyleNames)">These will be added</label>
+            <br>
+            <span *ngFor="let n of _.split(newStyleNames, '\n')" class="btn badge badge-primary m-1">{{_.startCase(_.lowerCase(n))}}</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addStyle()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

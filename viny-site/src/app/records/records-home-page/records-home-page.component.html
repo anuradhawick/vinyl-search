@@ -1,0 +1,146 @@
+<br>
+<div class="row col-12">
+  <div class="col-4">
+    <div class="container">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Keywords" aria-label="Search for recrods"
+               aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-secondary" type="button" id="button-addon2">Search</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="container">
+      <div class="float-right">
+        <button type="button" class="btn btn-secondary" routerLink="/records/new">
+          Add
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<hr>
+<div class="row col-12">
+  <div class="col-12 col-sm-3">
+    <div class="container">
+      <div class="card">
+        <h5 class="card-header" data-toggle="collapse" data-target="#collapseGenres"
+            aria-expanded="false" aria-controls="collapseGenres">
+          Genre
+        </h5>
+
+        <div id="collapseGenres" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <ul class="list-group">
+            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
+              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
+              {{key}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="card">
+        <h5 class="card-header" data-toggle="collapse" data-target="#collapseStyles"
+            aria-expanded="false" aria-controls="collapseGenres">
+          Style
+        </h5>
+
+        <div id="collapseStyles" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <ul class="list-group">
+            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
+              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
+              {{key}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="card">
+        <h5 class="card-header" data-toggle="collapse" data-target="#collapseFormats"
+            aria-expanded="false" aria-controls="collapseFormats">
+          Format
+        </h5>
+
+        <div id="collapseFormats" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <ul class="list-group">
+            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
+              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
+              {{key}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="card">
+        <h5 class="card-header" data-toggle="collapse" data-target="#collapseCountries"
+            aria-expanded="false" aria-controls="collapseCountries">
+          Country
+        </h5>
+
+        <div id="collapseCountries" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <ul class="list-group">
+            <li *ngFor="let country of countriesJSON" class="list-group-item text-left text-truncate">
+              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
+              {{country.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="card">
+        <h5 class="card-header" data-toggle="collapse" data-target="#collapseDecades"
+            aria-expanded="false" aria-controls="collapseDecades">
+          Decade
+        </h5>
+
+        <div id="collapseDecades" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <ul class="list-group">
+            <li *ngFor="let decade of decadesJSON" class="list-group-item text-left text-truncate">
+              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
+              {{decade}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+  <div class="col-12 col-sm-9">
+    <div class="container">
+      <div class="row">
+        <div *ngFor="let i of [1,1,1,1,1,1,1,1,1,1,1,11,9,11,1,1,1,1,1,1,1,1,1,1,1]" class="col-2">
+          <div class="card" style="width: 100%; margin-bottom: 10px">
+            <img
+              src="https://img.discogs.com/qfASNf_r90DAIuX5Pj3TnZjjjpg=/300x300/filters:strip_icc():format(jpeg):mode_rgb():quality(40)/discogs-images/R-3616980-1480174942-8252.jpeg.jpg"
+              class="card-img-top" style="max-height: 150px; max-width: 150px;" alt="">
+            <h6 class="m-1 text-truncate">Card title Card title Card title Card title</h6>
+            <p class="m-1 text-truncate">Card title Card title Card title Card title</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><span class="page-link">1-100 of 50000</span></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+

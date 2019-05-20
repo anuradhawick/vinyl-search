@@ -1,0 +1,47 @@
+<app-loader #editorloader></app-loader>
+<div [hidden]="hideView">
+  <div class="m-1">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Title</span>
+      </div>
+      <input [(ngModel)]="title" class="form-control" aria-label="With textarea" [disabled]="editorDisabled"/>
+    </div>
+    <hr>
+    <ckeditor [editor]="Editor" [(ngModel)]="data"
+              (ready)="onReady($event)" [disabled]="editorDisabled"></ckeditor>
+    <hr>
+  </div>
+  <div class="float-right">
+    <button class="btn btn-primary" type="button" id="saveBtn" (click)="savePost()">
+      <span id="saveLoader" hidden class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      {{newMode ? 'Save' : 'Update'}}
+    </button>
+    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModal" (click)="discardPost()">
+      {{newMode ? 'Discard' : 'Delete'}}
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong>You are about to discard changes.</strong>
+        <br>
+        <em>Are you sure?</em>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="discardPost()">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>

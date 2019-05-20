@@ -1,0 +1,4 @@
+/**
+ * ﻿db.getCollection('records-metadata').createIndex({ name: 1}, {name: "genre_name", unique: true})
+ * ﻿db.getCollection('users').createIndex({ uid: 1}, {name: "uid", unique: true})
+ */
