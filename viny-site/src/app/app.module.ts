@@ -20,6 +20,10 @@ import { AngularFireFunctionsModule, FunctionsRegionToken } from '@angular/fire/
 import { LoaderComponent } from './shared/loader/loader.component';
 import { RecordsHomePageComponent } from './records/records-home-page/records-home-page.component';
 import { RecordsEditPageComponent } from './records/records-edit-page/records-edit-page.component';
+import { RecordViewPageComponent } from './records/record-view-page/record-view-page.component';
+import { ImageViewerModule } from 'ngx-image-viewer';
+import { ForumEditorComponentComponent } from './forum/forum-editor-component/forum-editor-component.component';
+import { RecordsEditorComponentComponent } from './records/records-editor-component/records-editor-component.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,10 @@ import { RecordsEditPageComponent } from './records/records-edit-page/records-ed
     ForumEditPageComponent,
     LoaderComponent,
     RecordsHomePageComponent,
-    RecordsEditPageComponent
+    RecordsEditPageComponent,
+    RecordViewPageComponent,
+    ForumEditorComponentComponent,
+    RecordsEditorComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +50,8 @@ import { RecordsEditPageComponent } from './records/records-edit-page/records-ed
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
-    AngularFireFunctionsModule // to call firebase functions directly
+    AngularFireFunctionsModule, // to call firebase functions directly
+    ImageViewerModule.forRoot()
   ],
   providers: [
     { provide: FunctionsRegionToken, useValue: 'us-central1' }

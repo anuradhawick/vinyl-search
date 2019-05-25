@@ -9,9 +9,17 @@ const fetch_genres = (req, res) => cors(req, res, async () => {
     const db = await db_util.connect_db();
     const data = await db.collection('records-metadata').find().sort({name: 1}).toArray();
 
+    res.status(200).send({data: data});
+});
+
+const fetch_record = (req, res) => cors(req, res, async () => {
+    const db = await db_util.connect_db();
+    const data = await db.collection('records').findOne({id: ObjectID(req.body.data.id)});
+
     res.status(200).send({data: data})
 });
 
 module.exports = {
-    fetch_genres
+    fetch_genres,
+    fetch_record
 };

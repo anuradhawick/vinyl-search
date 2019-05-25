@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { AuthService } from './auth/auth.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import * as _ from 'lodash';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -12,29 +11,17 @@ import * as _ from 'lodash';
 export class AppComponent {
   title = 'viny-site';
 
-  constructor(public afAuth: AngularFireAuth, private fns: AngularFireFunctions) {
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      if (!_.isEmpty(user)) {
-        user.getIdToken().then((token) => {
-          console.log('Token');
-          console.log(token);
-          const callable = fns.httpsCallable('register_user');
-          const data = callable({});
-          data.subscribe(() => {
-          }, () => {
-            alert('Unable to connect to server');
-            this.afAuth.auth.signOut();
-          });
-        }).catch();
-      }
-    });
+  constructor(private auth: AuthService, private fns: AngularFireFunctions) {
+    if (!environment.production) {
+      fns.functions.useFunctionsEmulator('http://localhost:5001');
+    }
   }
 
   login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.auth.login();
   }
 
   logout() {
-    this.afAuth.auth.signOut();
+    this.auth.logout();
   }
 }

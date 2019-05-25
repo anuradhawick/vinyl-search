@@ -30,7 +30,7 @@ const register_user = (req, res) => cors(req, res, async () => {
         (err, r) => {
             assert.equal(null, err);
 
-            res.status(200).send({ data: true });
+            res.status(200).send({ data: r.value });
         });
 });
 

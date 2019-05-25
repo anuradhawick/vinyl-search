@@ -1,0 +1,421 @@
+<div class="row container-fluid">
+  <div class="col-12 col-sm-3">
+    <div class="container-fluid">
+      <div class="text-center">
+        <br>
+        <div style="width: 100%;">
+          <ngx-image-viewer [config]="imgvconfig"
+                            [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
+                            [(index)]="recordObject.chosenImage"
+                            (customEvent)="handleEvent($event)"></ngx-image-viewer>
+
+        </div>
+      </div>
+      <br>
+
+      <div class="input-group mb-1">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" (change)="addImage($event)"
+                 accept='image/*' multiple>
+          <label class="custom-file-label">Choose
+            Files</label>
+        </div>
+      </div>
+      <div *ngIf="uploadCount > 0" class="container-fluid">
+        <div *ngFor="let p of percentages" class="progress mb-1">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0"
+               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': (p | async)+'%'}"></div>
+        </div>
+      </div>
+      <!--<div *ngIf="images.length > 0" class="card mb-1">-->
+      <!--<div class="container-fluid">-->
+      <!--<div class="row">-->
+      <!--<div *ngFor="let image of images" class="col-4">-->
+      <!--<img (click)="selectImage(image)" [src]="image" class="rounded mb-1 mt-1"-->
+      <!--style="object-fit: cover; width: 100%; max-height: 100px;">-->
+      <!--<span (click)="deleteImage(image)" style="position: absolute; top: 5%; right: 5%;"-->
+      <!--class="btn badge badge-danger m-1"><i class="fas fa-trash-alt"></i></span>-->
+
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+    </div>
+  </div>
+  <div class="col-12 col-sm-9">
+    <div class="container-fluid">
+      <br>
+      <h1>New Release Details</h1>
+      <hr>
+      <form class="needs-validation" novalidate>
+        <div class="form-group">
+          <div class="row mb-1">
+            <div class="col-4">
+              <label>Record Title</label>
+              <input type="text" class="form-control" placeholder="Record title" name="release-name"
+                     [(ngModel)]="recordObject.name"
+                     required>
+              <div class="invalid-feedback">
+                Enter record title
+              </div>
+            </div>
+
+            <div class="col-4">
+              <label>Artist Name</label>
+              <input type="text" class="form-control" placeholder="Artist name" name="main-artist-name"
+                     [(ngModel)]="recordObject.mainArtist">
+              <div class="invalid-feedback">
+                Enter record name
+              </div>
+            </div>
+
+            <div class="col-4">
+              <label>Year</label>
+              <input name="release-date" [(ngModel)]="recordObject.date" type="text" class="form-control"
+                     placeholder="YYYY-MM-DD"
+                     pattern="([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?">
+              <div class="invalid-feedback">
+                Please enter the year
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row mb-1">
+            <div class="col-3">
+              <label>Label</label>
+              <input type="text" class="form-control" placeholder="Label" name="release-label"
+                     [(ngModel)]="recordObject.label"
+                     required>
+              <div class="invalid-feedback">
+                Enter label name or use <em>Unlabelled</em>
+              </div>
+            </div>
+            <div class="col-3">
+              <label>Catalog Number</label>
+              <input type="text" class="form-control" placeholder="Catalog No." name="release-label"
+                     [(ngModel)]="recordObject.catalogNo"
+                     required>
+              <div class="invalid-feedback">
+                Enter catalog number or use <em>NA</em>
+              </div>
+            </div>
+            <div class="col-3">
+              <label>Size</label>
+              <select name="size" class="form-control" [(ngModel)]="recordObject.selectedSize" required>
+                <option></option>
+                <option *ngFor="let c of sizesJSON">{{c}}</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="col-3">
+              <label>Speed</label>
+              <select name="speed" class="form-control" [(ngModel)]="recordObject.selectedSpeed" required>
+                <option></option>
+                <option *ngFor="let c of speedsJSON">{{c}}</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label>Country of origin</label>
+              <select name="country" class="form-control" [(ngModel)]="recordObject.selectedCountry" required="">
+                <option *ngFor="let c of countriesJSON" [ngValue]="c.name">{{c.name}}</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label>Channels</label>
+              <select name="country" class="form-control" [(ngModel)]="recordObject.selectedChannelCoding" required="">
+                <option>Stereo</option>
+                <option>Mono</option>
+                <option>Pseudo Stereo</option>
+                <option>Other/Unknown</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label>Format</label>
+              <select name="country" class="form-control" [(ngModel)]="recordObject.selectedFormat" required="">
+                <option>Vinyl</option>
+                <option>Acetate</option>
+                <option>Flexi-Disc</option>
+                <option>Lathe Cut</option>
+                <option>Shellac</option>
+                <option>CD</option>
+                <option>DVD</option>
+                <option>Mini Disc</option>
+                <option>Cassette Tape</option>
+                <option>4-Track Cartridge</option>
+                <option>8-Track Cartridge</option>
+                <option>Other/Unknown</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <!---->
+        <div class="accordion">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                  Select Genres
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+              <div class="card-body">
+                <span *ngFor="let g of genres | async" class="btn badge badge-primary m-1"
+                      (click)="selectGenre(g.name)">{{g.name}}</span>
+                <br>
+                <label><i class="btn btn-link" data-toggle="modal" data-target="#newgenre">(add missing)</i></label>
+                <br>
+                <span *ngFor="let g of recordObject.selectedGenres" class="btn badge badge-danger m-1"
+                      (click)="selectGenre(g, true)">{{g}} <i class="fas fa-trash-alt"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                  Styles
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+              <div class="card-body">
+
+                <span *ngIf="_.isEmpty(styles)">Please select some genres</span>
+                <span *ngFor="let s of styles" class="btn badge badge-primary m-1"
+                      (click)="selectStyle(s)">{{s}}</span>
+                <br>
+                <label><i class="btn btn-link" data-toggle="modal" data-target="#newstyle">(add missing)</i></label>
+                <br>
+                <span *ngFor="let s of recordObject.selectedStyles" class="btn badge badge-danger m-1"
+                      (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <!---->
+        <!--TRACKS START-->
+        <br>
+        <h2>Track List</h2>
+
+        <div class="container col-12">
+          <table class="table table-responsive">
+            <thead>
+            <tr>
+              <th scope="col" class="w-auto">Position</th>
+              <th scope="col" class="w-50">Artists</th>
+              <th scope="col" class="w-50">Title/Credits</th>
+              <th scope="col" class="w-auto">Duration</th>
+              <th scope="col" class="w-auto">Options</th>
+            </tr>
+            </thead>
+            <tbody #table id="bb">
+            <tr *ngFor="let track of recordObject.tracks; let ti = index" style="cursor: all-scroll"
+                id="track-row-{{ti}}">
+              <th scope="row">
+                <input type="text" class="form-control" placeholder="A:1/1" name="track-{{ti}}-index-{{i}}"
+                       [(ngModel)]="track.index" required>
+              </th>
+              <td class="do-validate">
+                <div class="form-group">
+                  <div *ngFor="let artist of track.artists; let i = index" class="input-group mb-1">
+                    <input type="text" class="form-control" placeholder="Artist" name="track-{{ti}}-artist-{{i}}"
+                           [(ngModel)]="artist.name" required>
+
+                    <div class="input-group-append">
+                      <button type="button" (click)="removeArtist(tracks, ti, artist)" class="btn btn-secondary"><i
+                        class="fas fa-trash-alt"
+                        style="font-size: 18px;"></i></button>
+                    </div>
+                  </div>
+                  <div class="row mt-1">
+                    <button (click)="addArtist(track)" class="btn btn-link">
+                      <i class="fas fa-plus" style="font-size: 18px;"></i> Artist
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control mb-1" placeholder="Title"
+                         name="track-{{ti}}-title-{{i}}"
+                         [(ngModel)]="track.title" required>
+                  <div *ngFor="let credit of track.credits; let i = index" class="input-group mb-1">
+
+                    <input type="text" class="form-control" placeholder="Credits"
+                           name="track-{{ti}}-creadits-{{i}}"
+                           [(ngModel)]="credit.text" required>
+                    <div class="input-group-append">
+                      <button type="button" (click)="removeCredit(tracks, ti, credit)" class="btn btn-secondary">
+                        <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+                    </div>
+                  </div>
+                  <div class="row mt-1">
+                    <button (click)="addCredit(track)" class="btn btn-link">
+                      <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="0:00" name="track-{{ti}}-duration-{{i}}"
+                         [(ngModel)]="track.duration" pattern="[0-9]{1,2}:[0-9]{1,2}">
+                </div>
+              </td>
+              <td>
+                <div class="dropdown dropleft">
+                  <button class="btn btn-secondary" type="button" id="dropdownMenuButton"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cogs" style="font-size: 18px;"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a (click)="removeTrack(track)" class="btn dropdown-item">Remove</a>
+                    <a (click)="insertTrackBefore(ti)" class="btn dropdown-item">Add Track Above</a>
+                    <a (click)="insertTrackAfter(ti)" class="btn dropdown-item">Add Track Below</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="row container">
+          <button class="btn btn-secondary" (click)="appendTrack()">
+            Track <i class="fas fa-plus" style="font-size: 18px;"></i>
+          </button>
+          <button class="btn btn-secondary ml-1" (click)="autoIndex()">
+            Auto Index
+          </button>
+        </div>
+
+        <!--TRACKS END-->
+        <hr>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                      aria-expanded="false" aria-controls="collapseThree">
+                Descriptions
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+            <div class="card-body">
+                <span *ngFor="let d of descr" class="btn badge badge-primary m-1"
+                      (click)="selectDescr(d)">{{d}}</span>
+              <hr *ngIf="!_.isEmpty(recordObject.selectedDescr)">
+              <span *ngFor="let s of recordObject.selectedDescr" class="btn badge badge-danger m-1"
+                    (click)="selectDescr(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
+            </div>
+          </div>
+        </div>
+        <!---->
+        <hr>
+        <div class="form-group">
+          <label>Credits</label>
+          <div *ngFor="let credit of recordObject.commonCredits; let i = index" class="input-group mb-1">
+            <input type="text" class="form-control" placeholder="Credits"
+                   name="common-credits-{{i}}"
+                   [(ngModel)]="credit.text" required>
+            <div class="input-group-append">
+              <button type="button" (click)="removeCommonCredit(credit)" class="btn btn-secondary">
+                <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <button (click)="addCommonCredit()" class="btn btn-link">
+              <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+            </button>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <div class="">
+            <label>Notes</label>
+            <textarea type="text" class="form-control" name="release-notes" [(ngModel)]="recordObject.notes"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<!--MODALS-->
+<div id="newgenre" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Genre</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Genre name</label>
+            <input type="text" class="form-control" name="newGenreName" [(ngModel)]="newGenreName" placeholder="Name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addGenre()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="newstyle" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Style</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Genre</label>
+            <select name="genre" class="form-control" [(ngModel)]="selectedGenre">
+              <option></option>
+              <option *ngFor="let g of recordObject.selectedGenres">{{g}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Style name</label>
+            <textarea type="text" rows="5" class="form-control" name="newGenreName" [(ngModel)]="newStyleNames"
+                      placeholder="Name">
+            </textarea>
+          </div>
+          <div class="form-group">
+            <label *ngIf="!_.isEmpty(newStyleNames)">These will be added</label>
+            <br>
+            <span *ngFor="let n of _.split(newStyleNames, '\n')" class="btn badge badge-primary m-1">{{_.startCase(_.lowerCase(n))}}</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addStyle()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

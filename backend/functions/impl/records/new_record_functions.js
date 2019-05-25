@@ -15,32 +15,15 @@ new_record = (req, res) => cors(req, res, async () => {
 
     const record = _.get(req, 'body.data', null);
 
-    if (!_.isEmpty(record.id)) {
-        db.collection('records').findOneAndUpdate(
-            {
-                _id: ObjectID(record.id)
-            },
-            {
-                $set: record
-            },
-            {
-                returnOriginal: false
-            },
-            (err, r) => {
-                assert.equal(null, err);
+    _.assign(record, {ownerUid, createdAt: new Date()});
+    _.assign(record, {id: new ObjectID()});
 
-                res.status(200).send({data: {id: record._id}});
-            });
-    } else {
-        _.assign(record, {ownerUid, createdAt: new Date()});
+    db.collection('records').insertOne(record, (err, r) => {
+        assert.equal(null, err);
+        assert.equal(1, r.insertedCount);
 
-        db.collection('records').insertOne(record, (err, r) => {
-            assert.equal(null, err);
-            assert.equal(1, r.insertedCount);
-
-            res.status(200).send({data: {id: record._id}});
-        });
-    }
+        res.status(200).send({data: {id: record._id}});
+    });
 });
 
 new_genre = (req, res) => cors(req, res, async () => {

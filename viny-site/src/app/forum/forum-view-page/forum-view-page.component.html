@@ -1,18 +1,43 @@
 <app-loader #postloader></app-loader>
-<div [hidden]="hideView">
-  <div class="m-1">
+<div [hidden]="!loader.isHidden()">
+  <div class="mt-3 col-sm-8 offset-2">
     <h2 aria-label="With textarea">{{title}}</h2>
     <hr>
-    <ckeditor [editor]="Editor" [(ngModel)]="data" [disabled]="true"></ckeditor>
+    <ckeditor [editor]="Editor" [(ngModel)]="data" [config]="{toolbar: false}" [disabled]="true"></ckeditor>
     <hr>
   </div>
-  <div class="float-right" *ngIf="">
-    <button class="btn btn-secondary m-1" type="button">
-      Edit
-    </button>
-    <button class="btn btn-danger m-1" type="button">
-      Delete
-    </button>
+  <div class="mt-3 col-sm-8 offset-2">
+    <div class="float-right" *ngIf="auth.user && post && auth.user.uid===post.ownerUid">
+      <button [routerLink]="['/forum',post.id,'edit']" class="btn btn-secondary m-1" type="button">
+        Edit
+      </button>
+      <button class="btn btn-danger m-1" type="button" data-toggle="modal" data-target="#delete">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong>You are about to DELETE the post.</strong>
+        <br>
+        <em>Are you sure?</em>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="delete()">Delete</button>
+      </div>
+    </div>
   </div>
 </div>
 

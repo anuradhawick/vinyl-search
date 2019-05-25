@@ -4,6 +4,7 @@ const assert = require('assert');
 const cors = require('cors')({origin: true});
 const db_util = require('../utils/db_util');
 const ObjectID = require('mongodb').ObjectID;
+const htmlToText = require('html-to-text');
 
 retrieve_post = (req, res) => cors(req, res, async () => {
     const postId = req.body.data.postId;
@@ -20,45 +21,152 @@ retrieve_post = (req, res) => cors(req, res, async () => {
 });
 
 retrieve_posts = (req, res) => cors(req, res, async () => {
-    const limit = req.body.data.limit | 50;
-    const skip = req.body.data.skip | 0;
+    const limit = _.get(req, 'body.data.limit', 50);
+    const skip = _.get(req, 'body.data.skip', 0);
     const db = await db_util.connect_db();
     const posts = await db.collection('forum_posts').aggregate([
-        {
-            $sort: {
-                createdAt: -1
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'ownerUid',
+                    foreignField: 'uid',
+                    as: 'user'
+                }
+            },
+            {
+                $addFields: {
+                    ownerName: "$user.displayName",
+                    ownerPic: "$user.photoURL",
+                    id: "$_id",
+                }
+            },
+            {
+                $facet: {
+                    data: [{$count: "total"}],
+                    posts: [
+                        {
+                            $skip: skip
+                        },
+                        {
+                            $limit: limit
+                        },
+                        {
+                            $project: {
+                                user: 0,
+                                _id: 0,
+                                postHTML: 0,
+                                textHTML: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    count: {$arrayElemAt: ["$data", 0]}
+                }
+            },
+            {
+                $project: {
+                    data: 0,
+                }
+            },
+            {
+                $addFields: {
+                    count: "$count.total",
+                    skip: skip,
+                    limit: limit
+                }
             }
-        },
-        {
-            $limit: limit
-        },
-        {
-            $skip: skip
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'ownerUid',
-                foreignField: 'uid',
-                as: 'user'
-            }
-        },
-        {
-            $addFields: {
-                ownerName: "$user.displayName",
-                ownerPic: "$user.photoURL",
-                id: "$_id"
-            }
-        },
-        {
-            $project: {
-                user: 0,
-                _id: 0
-            }
-        }
-    ]).toArray();
 
-    res.status(200).send({data: posts});
+        ]
+    ).toArray();
+
+    res.status(200).send({data: posts[0]});
+});
+
+
+search_posts = (req, res) => cors(req, res, async () => {
+    const limit = _.get(req, 'body.data.limit', 50);
+    const skip = _.get(req, 'body.data.skip', 0);
+    const query = _.get(req, 'body.data.query', '');
+    const db = await db_util.connect_db();
+    const posts = await db.collection('forum_posts').aggregate([
+            {
+                $match: {
+                    $text: {
+                        $search: query
+                    }
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'ownerUid',
+                    foreignField: 'uid',
+                    as: 'user'
+                }
+            },
+            {
+                $addFields: {
+                    ownerName: "$user.displayName",
+                    ownerPic: "$user.photoURL",
+                    id: "$_id",
+                }
+            },
+            {
+                $facet: {
+                    data: [{$count: "total"}],
+                    posts: [
+                        {
+                            $skip: skip
+                        },
+                        {
+                            $limit: limit
+                        },
+                        {
+                            $project: {
+                                user: 0,
+                                _id: 0,
+                                postHTML: 0,
+                                textHTML: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    count: {$arrayElemAt: ["$data", 0]}
+                }
+            },
+            {
+                $project: {
+                    data: 0,
+                }
+            },
+            {
+                $addFields: {
+                    count: "$count.total",
+                    skip: skip,
+                    limit: limit
+                }
+            }
+
+        ]
+    ).toArray();
+
+    res.status(200).send({data: posts[0]});
 });
 
 save_post = (req, res) => cors(req, res, async () => {
@@ -77,7 +185,8 @@ save_post = (req, res) => cors(req, res, async () => {
                 $set: {
                     postHTML: post.postHTML,
                     postTitle: post.postTitle,
-                    updatedAt: new Date()
+                    updatedAt: new Date(),
+                    textHTML: htmlToText.fromString(post.postHTML)
                 }
             },
             {
@@ -90,6 +199,8 @@ save_post = (req, res) => cors(req, res, async () => {
             });
     } else {
         _.assign(post, {ownerUid, createdAt: new Date()});
+        _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
+
 
         db.collection('forum_posts').insertOne(post, (err, r) => {
             assert.equal(null, err);
@@ -100,8 +211,32 @@ save_post = (req, res) => cors(req, res, async () => {
     }
 });
 
+delete_post = (req, res) => cors(req, res, async () => {
+    const tokenId = _.replace(_.get(req.headers, 'authorization', ''), 'Bearer ', '');
+    const decodedToken = await admin.auth().verifyIdToken(tokenId);
+    const db = await db_util.connect_db();
+    const userUid = decodedToken.uid;
+    const postId = req.body.data.postId;
+
+    let query = {
+        // ensure only the owner or an admin can delete
+        _id: ObjectID(postId),
+        ownerUid: userUid
+    };
+
+    db.collection('forum_posts').findOneAndDelete(
+        query,
+        (err, r) => {
+            assert.equal(null, err);
+
+            res.status(200).send({data: true});
+        });
+});
+
 module.exports = {
     retrieve_post,
     retrieve_posts,
-    save_post
+    save_post,
+    delete_post,
+    search_posts
 };

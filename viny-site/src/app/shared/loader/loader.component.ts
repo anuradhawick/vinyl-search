@@ -23,4 +23,8 @@ export class LoaderComponent implements OnInit {
     this.hidden = true;
   }
 
+  isHidden() {
+    return this.hidden;
+  }
+
 }

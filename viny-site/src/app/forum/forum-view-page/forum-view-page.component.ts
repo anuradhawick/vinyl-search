@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoaderComponent } from '../../shared/loader/loader.component';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-inline';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
+import { AuthService } from '../../auth/auth.service';
 
 
 @Component({
@@ -17,9 +18,11 @@ export class ForumViewPageComponent implements OnInit {
   private Editor = ClassicEditor;
   private title = '';
   private data = '';
-  private hideView = true;
 
-  constructor(private route: ActivatedRoute, private fns: AngularFireFunctions) {
+  constructor(private route: ActivatedRoute,
+              private fns: AngularFireFunctions,
+              private auth: AuthService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -37,8 +40,18 @@ export class ForumViewPageComponent implements OnInit {
         this.data = _.get(post, 'postHTML', '');
         this.title = _.get(post, 'postTitle', '');
         this.loader.hide();
-        this.hideView = false;
       });
+    });
+  }
+
+  delete() {
+    this.loader.show();
+    console.log(this.post.id);
+    const callable = this.fns.httpsCallable('delete_post');
+    const data = callable({postId: this.post.id});
+    data.subscribe(() => {
+    this.loader.hide();
+      this.router.navigate(['/forum']);
     });
   }
 }

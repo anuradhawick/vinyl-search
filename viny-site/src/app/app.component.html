@@ -12,18 +12,12 @@
           <a class="nav-link" role="button" [routerLink]="['/records']" aria-haspopup="true" aria-expanded="false">
             Records
           </a>
-
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="forumNavDrop" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
+        <li class="nav-item">
+          <a class="nav-link" role="button" [routerLink]="['/forum']" aria-haspopup="true" aria-expanded="false">
             Forum
           </a>
-          <div class="dropdown-menu" aria-labelledby="forumNavDrop">
-            <a class="dropdown-item" [routerLink]="['/forum']">View</a>
-            <a class="dropdown-item" [routerLink]="['/forum/editor']">Post</a>
-          </div>
         </li>
 
         <li class="nav-item dropdown">
@@ -34,7 +28,6 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" [routerLink]="['/events/auctions']">Auctions</a>
             <a class="dropdown-item" href="#">Gatherings</a>
-            <!--<div class="dropdown-divider"></div>-->
             <a class="dropdown-item" href="#">Demonstrations</a>
           </div>
         </li>
@@ -71,7 +64,7 @@
 
 
       <div class="nav-item">
-        <div class="nav-link" *ngIf="afAuth.user | async as user; else showLogin">
+        <div class="nav-link" *ngIf="auth.user as user; else showLogin">
           <span class="nav-link text-white">Hi {{ user.displayName.split(" ")[0] }}
             <a (click)="logout()"><span class="btn badge badge-light">Logout</span></a>
           </span>
