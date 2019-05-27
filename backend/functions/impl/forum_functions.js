@@ -105,8 +105,16 @@ search_posts = (req, res) => cors(req, res, async () => {
                 }
             },
             {
+                $addFields: {
+                    score: {
+                        $meta: "textScore"
+                    }
+                }
+
+            },
+            {
                 $sort: {
-                    createdAt: -1
+                    "score": 1
                 }
             },
             {

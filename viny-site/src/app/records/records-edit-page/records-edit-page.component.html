@@ -1,17 +1,20 @@
-<app-records-editor-component #editor (readyStateChange)="readyChange($event)"></app-records-editor-component>
+<app-loader #loader></app-loader>
+<div *ngIf="loader.isHidden()">
+  <app-records-editor-component #editor (readyStateChange)="readyChange($event)"></app-records-editor-component>
 
-<div class="row col-12">
-  <div class="col-12 col-sm-9 offset-3">
-    <div class="container-fluid">
-      <form>
-        <div class="form-group">
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!ready">
-            Save
-          </button>
-          <button type="button" class="btn btn-primary ml-1" (click)="true" [disabled]="!ready">Discard
-          </button>
-        </div>
-      </form>
+  <div class="row col-12">
+    <div class="col-12 col-sm-9 offset-3">
+      <div class="container-fluid">
+        <form>
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!ready">
+              Save
+            </button>
+            <button type="button" class="btn btn-primary ml-1" (click)="true" [disabled]="!ready">Discard
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

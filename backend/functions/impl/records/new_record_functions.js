@@ -17,12 +17,13 @@ new_record = (req, res) => cors(req, res, async () => {
 
     _.assign(record, {ownerUid, createdAt: new Date()});
     _.assign(record, {id: new ObjectID()});
+    _.assign(record, {latest: true});
 
     db.collection('records').insertOne(record, (err, r) => {
         assert.equal(null, err);
         assert.equal(1, r.insertedCount);
 
-        res.status(200).send({data: {id: record._id}});
+        res.status(200).send({data: {id: record.id}});
     });
 });
 

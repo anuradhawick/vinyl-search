@@ -9,41 +9,41 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" role="button" [routerLink]="['/records']" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link" role="button" [routerLink]="['/records']" routerLinkActive="active" aria-haspopup="true" aria-expanded="false">
             Records
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" role="button" [routerLink]="['/forum']" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link" role="button" [routerLink]="['/forum']" routerLinkActive="active" aria-haspopup="true" aria-expanded="false">
             Forum
           </a>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            Events
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" [routerLink]="['/events/auctions']">Auctions</a>
-            <a class="dropdown-item" href="#">Gatherings</a>
-            <a class="dropdown-item" href="#">Demonstrations</a>
-          </div>
-        </li>
+        <!--<li class="nav-item dropdown">-->
+          <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"-->
+             <!--aria-haspopup="true" aria-expanded="false">-->
+            <!--Events-->
+          <!--</a>-->
+          <!--<div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+            <!--<a class="dropdown-item" [routerLink]="['/events/auctions']">Auctions</a>-->
+            <!--<a class="dropdown-item" href="#">Gatherings</a>-->
+            <!--<a class="dropdown-item" href="#">Demonstrations</a>-->
+          <!--</div>-->
+        <!--</li>-->
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            Items
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <a class="dropdown-item" href="#">Sale</a>
-            <a class="dropdown-item" href="#">Wanted</a>
-            <a class="dropdown-item" href="#">Exchange</a>
-            <a class="dropdown-item" href="#">Repairs</a>
-          </div>
-        </li>
+        <!--<li class="nav-item dropdown">-->
+          <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"-->
+             <!--aria-haspopup="true" aria-expanded="false">-->
+            <!--Items-->
+          <!--</a>-->
+          <!--<div class="dropdown-menu" aria-labelledby="navbarDropdown1">-->
+            <!--<a class="dropdown-item" href="#">Sale</a>-->
+            <!--<a class="dropdown-item" href="#">Wanted</a>-->
+            <!--<a class="dropdown-item" href="#">Exchange</a>-->
+            <!--<a class="dropdown-item" href="#">Repairs</a>-->
+          <!--</div>-->
+        <!--</li>-->
 
 
         <!--<li class="nav-item active">-->
@@ -71,7 +71,11 @@
 
         </div>
         <ng-template #showLogin>
-          <a (click)="login()"><span class="btn badge badge-success">Login</span></a>
+          <div class="nav-link">
+          <span class="nav-link text-white">
+            <a (click)="login()"><span class="btn badge badge-success">Login</span></a>
+          </span>
+          </div>
         </ng-template>
       </div>
 

@@ -12,7 +12,7 @@ import uuid from 'uuid';
 export class ForumEditorComponentComponent implements OnInit {
   @Input() imageProgress = 0;
   @Output() imageProgressChange = new EventEmitter();
-  private Editor = ClassicEditor;
+  public Editor = ClassicEditor;
   @Input() title;
   @Output() titleChange = new EventEmitter();
   @Input() data;

@@ -11,18 +11,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./forum-edit-page.component.css']
 })
 export class ForumEditPageComponent implements OnInit {
-  private title = '';
-  private data = '';
-  private editorDisabled = false;
-  private post = null;
-  private hideView = true;
+  public title = '';
+  public data = '';
+  public editorDisabled = false;
+  public post = null;
+  public hideView = true;
   @ViewChild('editorloader') loader: LoaderComponent;
-  private newMode = true;
-  private postId = null;
-  private imageProgress = 0;
+  public newMode = true;
+  public postId = null;
+  public imageProgress = 0;
 
 
-  constructor(private route: ActivatedRoute,
+  constructor(public route: ActivatedRoute,
               private fns: AngularFireFunctions,
               private router: Router) {
   }

@@ -11,22 +11,41 @@ import * as _ from 'lodash';
 })
 export class RecordViewPageComponent implements OnInit {
   @ViewChild('releasepageloader') loader: LoaderComponent;
+  public _ = _;
+  public recordObject = null;
+  public imgvconfig = {
+    btnClass: 'default',
+    zoomFactor: 0.1,
+    containerBackgroundColor: '#ccc',
+    wheelZoom: false,
+    allowFullscreen: true,
+    allowKeyboardNavigation: true,
+    btnIcons: {
+      next: 'fas fa-angle-double-right',
+      prev: 'fas fa-angle-double-left',
+      fullscreen: 'fas fa-arrows-alt',
+    },
+    btnShow: {
+      next: true,
+      prev: true
+    }
+  };
 
-  constructor(private route: ActivatedRoute, private fns: AngularFireFunctions) {
+  constructor(public route: ActivatedRoute, private fns: AngularFireFunctions) {
 
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
-      console.log(recordId);
       this.loader.show();
       const callable = this.fns.httpsCallable('fetch_record');
       const data = callable({id: recordId});
-      data.subscribe((post) => {
-        console.log(post)
+      this.recordObject = data;
+      data.subscribe((record) => {
+        this.loader.hide();
       }, () => {
-        console.log("error");
+        console.log('error');
       });
     });
   }

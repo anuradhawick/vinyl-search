@@ -21,21 +21,21 @@ declare const $;
   styleUrls: ['./records-editor-component.component.css']
 })
 export class RecordsEditorComponentComponent implements OnInit {
-  private genresJSON = genresJSON;
-  private genres: Observable<any[]>;
-  private styles = [];
-  private countriesJSON = countriesJSON;
-  private objectKeys = Object.keys;
-  private _ = _;
-  private descr = descrJSON;
-  private sizesJSON = sizesJSON;
-  private speedsJSON = speedsJSON;
-  private map = {};
+  public genresJSON = genresJSON;
+  public genres: Observable<any[]>;
+  public styles = [];
+  public countriesJSON = countriesJSON;
+  public objectKeys = Object.keys;
+  public _ = _;
+  public descr = descrJSON;
+  public sizesJSON = sizesJSON;
+  public speedsJSON = speedsJSON;
+  public map = {};
 
   @ViewChild('table') table: ElementRef;
 
-  private recordId: string = null;
-  private newMode = true;
+  public recordId: string = null;
+  public newMode = true;
 
   // passed as prop
   @Input()
@@ -49,16 +49,16 @@ export class RecordsEditorComponentComponent implements OnInit {
   readyStateChange = new EventEmitter<boolean>();
 
   // current entry
-  private recordObject = {
+  public recordObject = {
     chosenImage: 0,
     images: [],
     date: null,
-    selectedGenres: [],
-    selectedStyles: [],
-    selectedDescr: [],
-    selectedSpeed: null,
-    selectedSize: null,
-    selectedCountry: null,
+    genres: [],
+    styles: [],
+    descriptions: [],
+    speed: null,
+    size: null,
+    country: null,
     tracks: [{
       index: null,
       artists: [],
@@ -72,22 +72,22 @@ export class RecordsEditorComponentComponent implements OnInit {
     label: null,
     mainArtist: null,
     catalogNo: null,
-    selectedFormat: null,
-    selectedChannelCoding: null,
+    format: null,
+    channelCoding: null,
   };
 
   // new genre related
-  private newGenreName: string = null;
-  private newStyleNames: string = null;
-  private selectedGenre: string = null;
+  public newGenreName: string = null;
+  public newStyleNames: string = null;
+  public selectedGenre: string = null;
 
 
   // context control
-  private uploadCount = 0;
-  private percentages = [];
+  public uploadCount = 0;
+  public percentages = [];
 
   // image viewer config
-  private imgvconfig = {
+  public imgvconfig = {
     btnClass: 'default',
     zoomFactor: 0.1,
     containerBackgroundColor: '#ccc',
@@ -105,14 +105,12 @@ export class RecordsEditorComponentComponent implements OnInit {
       prev: true
     }
   };
-// TODO update indexes before adding new one with index = length + 1 # CRITICAL ERROR MAY RAISE
+
   constructor(private auth: AngularFireAuth,
               private storage: AngularFireStorage,
-              private database: AngularFirestore,
-              private route: ActivatedRoute,
+              public route: ActivatedRoute,
               private fns: AngularFireFunctions,
-              private router: Router,
-              private ngZone: NgZone) {
+              public ngZone: NgZone) {
   }
 
   ngOnInit() {
@@ -214,6 +212,10 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addArtist(track) {
+    _.forEach(track.artists, (a, i) => {
+      a.index = i;
+    });
+
     track.artists.push(
       {
         index: track.artists.length + 1,
@@ -222,22 +224,38 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addCommonCredit() {
+    const newCredits = _.cloneDeep(this.recordObject.commonCredits);
     // const new
-    this.recordObject.commonCredits.push(
+    newCredits.push(
       {
         index: this.recordObject.commonCredits.length + 1,
         text: ''
       });
+    _.forEach(newCredits, (c, i) => {
+      c.index = i;
+    });
+
+    this.recordObject.commonCredits = newCredits;
   }
 
   removeCommonCredit(credit) {
-    _.remove(this.recordObject.commonCredits, (c) => _.isEqual(c, credit));
+    const newCredits = _.cloneDeep(this.recordObject.commonCredits);
+
+    _.remove(newCredits, (c) => _.isEqual(c, credit));
+    _.forEach(newCredits, (c, i) => {
+      c.index = i;
+    });
+
+    this.recordObject.commonCredits = newCredits;
   }
 
   removeArtist(oldtracks, ti, artist) {
     const tracks = _.cloneDeep(oldtracks);
 
     _.remove(tracks[ti].artists, (a) => _.isEqual(a, artist));
+    _.forEach(tracks[ti].artists, (a, i) => {
+      a.index = i;
+    });
 
     this.recordObject.tracks = tracks;
   }
@@ -384,17 +402,17 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   selectGenre(genre, remove) {
     if (remove) {
-      _.remove(this.recordObject.selectedGenres, (item) => {
+      _.remove(this.recordObject.genres, (item) => {
         return item === genre;
       });
-      _.each(this.map[genre], s => _.remove(this.recordObject.selectedStyles, (x) => s === x));
+      _.each(this.map[genre], s => _.remove(this.recordObject.styles, (x) => s === x));
       delete this.map[genre];
     } else {
       if (_.isEmpty(genre)) {
         return;
       }
-      this.recordObject.selectedGenres.push(genre);
-      this.recordObject.selectedGenres = _.uniq(this.recordObject.selectedGenres);
+      this.recordObject.genres.push(genre);
+      this.recordObject.genres = _.uniq(this.recordObject.genres);
     }
 
     this.loadStyles();
@@ -402,7 +420,7 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   async loadStyles() {
     this.styles = [];
-    const genres = this.recordObject.selectedGenres;
+    const genres = this.recordObject.genres;
     const allgenres = await this.genres.toPromise();
 
     _.each(genres, (genre) => {
@@ -414,29 +432,29 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   selectStyle(style, remove) {
     if (remove) {
-      _.remove(this.recordObject.selectedStyles, (item) => {
+      _.remove(this.recordObject.styles, (item) => {
         return item === style;
       });
     } else {
       if (_.isEmpty(style)) {
         return;
       }
-      this.recordObject.selectedStyles.push(style);
-      this.recordObject.selectedStyles = _.uniq(this.recordObject.selectedStyles);
+      this.recordObject.styles.push(style);
+      this.recordObject.styles = _.uniq(this.recordObject.styles);
     }
   }
 
   selectDescr(descr, remove) {
     if (remove) {
-      _.remove(this.recordObject.selectedDescr, (item) => {
+      _.remove(this.recordObject.descriptions, (item) => {
         return item === descr;
       });
     } else {
       if (_.isEmpty(descr)) {
         return;
       }
-      this.recordObject.selectedDescr.push(descr);
-      this.recordObject.selectedDescr = _.uniq(this.recordObject.selectedDescr);
+      this.recordObject.descriptions.push(descr);
+      this.recordObject.descriptions = _.uniq(this.recordObject.descriptions);
     }
   }
 

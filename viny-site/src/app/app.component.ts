@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 'viny-site';
 
-  constructor(private auth: AuthService, private fns: AngularFireFunctions) {
+  constructor(public auth: AuthService, private fns: AngularFireFunctions) {
     if (!environment.production) {
       fns.functions.useFunctionsEmulator('http://localhost:5001');
     }

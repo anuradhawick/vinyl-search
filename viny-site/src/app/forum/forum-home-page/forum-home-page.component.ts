@@ -11,21 +11,38 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./forum-home-page.component.css']
 })
 export class ForumHomePageComponent implements OnInit {
-  private posts = null;
-  private skip = 0;
-  private limit = 10;
-  private count = 0;
-  private page = 1;
-  private autocomplete = null;
-  private _ = _;
-  private query = null;
+  public posts = null;
+  public skip = 0;
+  public limit = 10;
+  public count = 0;
+  public page = 1;
+  public autocomplete = null;
+  public _ = _;
+  public query = null;
 
   @ViewChild('forumloader') loader: LoaderComponent;
 
   constructor(private fns: AngularFireFunctions,
-              private route: ActivatedRoute,
-              private router: Router,
-              private auth: AuthService) {
+              public route: ActivatedRoute,
+              public router: Router,
+              public auth: AuthService) {
+
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((p: any) => {
+      this.posts = null;
+      const page = _.max([_.get(p, 'page', 1), 1]);
+      this.skip = (page - 1) * this.limit;
+      this.page = page;
+      this.loader.show();
+      this.query = _.get(p, 'query', '');
+      if (_.isEmpty(_.trim(this.query))) {
+        this.loadPosts();
+      } else {
+        this.loadSearchPage();
+      }
+    });
 
   }
 
@@ -37,7 +54,7 @@ export class ForumHomePageComponent implements OnInit {
       this.posts = postsList.posts;
       this.skip = postsList.skip;
       this.limit = postsList.limit;
-      this.count = postsList.count;
+      this.count = _.get(postsList, 'count', 0);
       this.loader.hide();
     });
   }
@@ -54,23 +71,6 @@ export class ForumHomePageComponent implements OnInit {
       this.count = postsList.count;
       this.loader.hide();
     });
-  }
-
-  ngOnInit() {
-    this.route.queryParams.subscribe((p: any) => {
-      this.posts = null;
-      const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
-      this.loader.show();
-      this.query = _.get(p, 'query', '');
-      if (_.isEmpty(_.trim(this.query))){
-        this.loadPosts();
-      } else {
-        this.loadSearchPage();
-      }
-    });
-
   }
 
   loadAutoComplete(event) {

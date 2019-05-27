@@ -19,5 +19,7 @@ exports.new_style = functions.https.onRequest(new_record_functions.new_style);
 exports.new_record = functions.https.onRequest(new_record_functions.new_record);
 exports.fetch_genres = functions.https.onRequest(fetch_records_metadata.fetch_genres);
 exports.fetch_record = functions.https.onRequest(fetch_records_metadata.fetch_record);
+exports.fetch_records = functions.https.onRequest(fetch_records_metadata.fetch_records);
+exports.search_records = functions.https.onRequest(fetch_records_metadata.search_records);
 
 exports.register_user = functions.https.onRequest(user_functions.register_user);

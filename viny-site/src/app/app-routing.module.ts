@@ -25,7 +25,10 @@ const routes: Routes = [
   },
   {path: 'events/auctions', component: AuctionsPageComponent},
   {path: 'records', component: RecordsHomePageComponent},
-  {path: 'records/new', component: RecordsEditPageComponent},
+  {
+    path: 'records/new', component: RecordsEditPageComponent,
+    canActivate: [AuthGuard]
+  },
   {path: 'records/:recordId/view', component: RecordViewPageComponent},
 ];
 

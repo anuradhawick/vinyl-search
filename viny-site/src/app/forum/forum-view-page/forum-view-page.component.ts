@@ -13,15 +13,15 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./forum-view-page.component.css']
 })
 export class ForumViewPageComponent implements OnInit {
-  private post;
+  public post;
   @ViewChild('postloader') loader: LoaderComponent;
-  private Editor = ClassicEditor;
-  private title = '';
-  private data = '';
+  public Editor = ClassicEditor;
+  public title = '';
+  public data = '';
 
-  constructor(private route: ActivatedRoute,
+  constructor(public route: ActivatedRoute,
               private fns: AngularFireFunctions,
-              private auth: AuthService,
+              public auth: AuthService,
               private router: Router) {
   }
 
