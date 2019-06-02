@@ -7,6 +7,7 @@ import { LoaderComponent } from '../../shared/loader/loader.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { RecordsService } from '../../services/records.service';
 
 @Component({
   selector: 'app-records-home-page',
@@ -29,10 +30,10 @@ export class RecordsHomePageComponent implements OnInit {
   public _ = _;
   public query = null;
 
-  constructor(private fns: AngularFireFunctions,
-              public route: ActivatedRoute,
+  constructor(public route: ActivatedRoute,
               private router: Router,
-              public auth: AuthService) {
+              public auth: AuthService,
+              private recordsService: RecordsService) {
 
   }
 
@@ -54,12 +55,11 @@ export class RecordsHomePageComponent implements OnInit {
 
   loadAutoComplete(event) {
     const query = _.trim(event.target.value);
-    const callable = this.fns.httpsCallable('search_records');
     if (_.isEmpty(query)) {
       this.autocomplete = null;
       return;
     }
-    this.autocomplete = callable({limit: 5, skip: 0, query});
+    this.autocomplete = this.recordsService.search_records({limit: 5, skip: 0, query});
   }
 
   exitSearch() {
@@ -85,12 +85,14 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   loadRecords() {
-    const callable = this.fns.httpsCallable('fetch_records');
-    const data = callable({});
+    const data = this.recordsService.fetch_records({
+      skip: this.skip,
+      limit: this.limit
+    });
 
     this.records = data;
 
-    data.subscribe((records) => {
+    data.subscribe((records: any) => {
       this.skip = records.skip;
       this.limit = records.limit;
       this.count = _.get(records, 'count', 0);
@@ -100,12 +102,15 @@ export class RecordsHomePageComponent implements OnInit {
 
   loadSearchPage() {
     this.records = null;
-    const callable = this.fns.httpsCallable('search_records');
-    const data = callable({limit: this.limit, skip: this.skip, query: this.query});
+    const data = this.recordsService.save_record({
+      limit: this.limit,
+      skip: this.skip,
+      query: this.query
+    });
 
     this.records = data;
 
-    data.subscribe((postsList) => {
+    data.subscribe((postsList: any) => {
       this.skip = postsList.skip;
       this.limit = postsList.limit;
       this.count = postsList.count;

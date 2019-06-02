@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/auth.service';
-import { AngularFireFunctions } from '@angular/fire/functions';
-import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -11,17 +9,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 'viny-site';
 
-  constructor(public auth: AuthService, private fns: AngularFireFunctions) {
-    if (!environment.production) {
-      fns.functions.useFunctionsEmulator('http://localhost:5001');
-    }
-  }
+  constructor(public auth: AuthService) {
 
-  login() {
-    this.auth.login();
-  }
-
-  logout() {
-    this.auth.logout();
   }
 }

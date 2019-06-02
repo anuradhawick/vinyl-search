@@ -1,11 +1,8 @@
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFireFunctions } from '@angular/fire/functions';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import { LoaderComponent } from '../../shared/loader/loader.component';
+import { RecordsService } from '../../services/records.service';
 
 declare const $;
 
@@ -46,13 +43,7 @@ export class RecordsEditPageComponent implements OnInit {
   //   'channelCoding': 'Other/Unknown'
   // };
 
-  constructor(private auth: AngularFireAuth,
-              private storage: AngularFireStorage,
-              private database: AngularFirestore,
-              private route: ActivatedRoute,
-              private fns: AngularFireFunctions,
-              private router: Router,
-              private ngZone: NgZone) {
+  constructor(private recordsService: RecordsService, private router: Router) {
 
   }
 
@@ -65,11 +56,12 @@ export class RecordsEditPageComponent implements OnInit {
 
     if (record) {
       this.loader.show();
-      const callable = this.fns.httpsCallable('new_record');
-      const data = callable(record);
       this.ready = false;
-      data.subscribe((result) => {
-        this.router.navigate(['/records', result.id, 'view']);
+
+      const data = this.recordsService.save_record(record);
+
+      data.subscribe((result: any) => {
+        this.router.navigate(['/records', result.recordId, 'view']);
       }, () => {
         this.ready = true;
         this.loader.hide();

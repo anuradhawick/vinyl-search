@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import * as _ from 'lodash';
+import { RecordsService } from '../../services/records.service';
 
 @Component({
   selector: 'app-record-view-page',
@@ -31,18 +32,19 @@ export class RecordViewPageComponent implements OnInit {
     }
   };
 
-  constructor(public route: ActivatedRoute, private fns: AngularFireFunctions) {
+  constructor(public route: ActivatedRoute, private recordsService: RecordsService) {
 
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
-      const recordId = _.get(map, 'params.recordId', null);
       this.loader.show();
-      const callable = this.fns.httpsCallable('fetch_record');
-      const data = callable({id: recordId});
+
+      const recordId = _.get(map, 'params.recordId', null);
+      const data = this.recordsService.fetch_record(recordId);
       this.recordObject = data;
-      data.subscribe((record) => {
+
+      data.subscribe((d) => {
         this.loader.hide();
       }, () => {
         console.log('error');

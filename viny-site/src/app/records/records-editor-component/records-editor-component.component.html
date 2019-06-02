@@ -184,7 +184,7 @@
 
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
               <div class="card-body">
-                <span *ngFor="let g of genres | async" class="btn badge badge-primary m-1"
+                <span *ngFor="let g of genres" class="btn badge badge-primary m-1"
                       (click)="selectGenre(g.name)">{{g.name}}</span>
                 <br>
                 <label><i class="btn btn-link" data-toggle="modal" data-target="#newgenre">(add missing)</i></label>
@@ -206,11 +206,12 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
               <div class="card-body">
 
-                <span *ngIf="_.isEmpty(styles)">Please select some genres</span>
-                <span *ngFor="let s of styles" class="btn badge badge-primary m-1"
-                      (click)="selectStyle(s)">{{s}}</span>
-                <br>
-                <label><i class="btn btn-link" data-toggle="modal" data-target="#newstyle">(add missing)</i></label>
+                <span *ngIf="_.isEmpty(recordObject.genres)">Please select some genres</span>
+                <!--<span *ngFor="let s of styles" class="btn badge badge-primary m-1"-->
+                      <!--(click)="selectStyle(s)">{{s}}</span>-->
+                <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link" data-toggle="modal" data-target="#allstyles">Show All Styles</i></label>
+                <br *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)">
+                <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal" data-target="#newstyle">(add missing)</i></label>
                 <br>
                 <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
                       (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
@@ -430,6 +431,29 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addStyle()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="allstyles" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" style="max-width: 90%" role="document">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h5 class="modal-title">Select Styles</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span *ngFor="let s of styles" class="btn badge badge-primary m-1"
+              (click)="selectStyle(s)">{{s}}</span>
+        <hr>
+        <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
+              (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
       </div>
     </div>
   </div>

@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { Router } from '@angular/router';
+import { ForumService } from '../../services/forum.service';
 
 @Component({
   selector: 'app-forum-edit-page',
@@ -23,7 +23,7 @@ export class ForumEditPageComponent implements OnInit {
 
 
   constructor(public route: ActivatedRoute,
-              private fns: AngularFireFunctions,
+              private forumService: ForumService,
               private router: Router) {
   }
 
@@ -39,9 +39,10 @@ export class ForumEditPageComponent implements OnInit {
       }
       this.loader.show();
       this.newMode = false;
-      const callable = this.fns.httpsCallable('retrieve_post');
-      const data = callable({postId: postId});
-      data.subscribe((post) => {
+      const data = this.forumService.fetch_post(this.postId);
+
+      data.subscribe((res: any) => {
+        const post = res.post;
         this.post = post;
         this.data = _.get(post, 'postHTML', '');
         this.title = _.get(post, 'postTitle', '');
@@ -68,21 +69,18 @@ export class ForumEditPageComponent implements OnInit {
       id: null
     };
     if (this.newMode) {
-      const callable = this.fns.httpsCallable('save_post');
-      const data = callable(object);
-      data.subscribe((result) => {
-        this.router.navigate(['/forum', result.id, 'view']);
+      const data = this.forumService.new_post(object);
+
+      data.subscribe((result: any) => {
+        this.router.navigate(['/forum', result.postId, 'view']);
         this.editorDisabled = true;
       }, () => {
         this.editorDisabled = false;
         alert('Saving failed! Please try again later');
       });
     } else {
-      this.editorDisabled = true;
-      object.id = this.postId;
-      const callable = this.fns.httpsCallable('save_post');
-      const data = callable(object);
-      data.subscribe((result) => {
+      const data = this.forumService.update_post(this.postId, object);
+      data.subscribe(() => {
         this.router.navigate(['/forum', this.postId, 'view']);
         this.editorDisabled = true;
       }, () => {
@@ -93,6 +91,7 @@ export class ForumEditPageComponent implements OnInit {
   }
 
   discardPost() {
+    this.router.navigate(['/forum']);
   }
 
 }

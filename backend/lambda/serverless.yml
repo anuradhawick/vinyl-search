@@ -1,0 +1,110 @@
+custom:
+  config: ${file(./${opt:stage}.env.yml):config}
+  env: ${file(./${opt:stage}.env.yml):env}
+
+service: ${self:custom.config.service}
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage}
+  region: ${self:custom.config.region}
+
+package:
+  # individually: true
+  exclude:
+    - '**/*'
+  include:
+    - node_modules/**
+    - utils/**
+    - records-management-service/**
+    - userpool-trigger-service/**
+    - user-management-service/**
+    - forum-management-service/**
+
+functions:
+  userpool-trigger-service:
+    handler: userpool-trigger-service/post-confirm-signup.handler
+    name:  ${self:service}-userpool-trigger-service-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+  forum-management-service:
+    handler: forum-management-service/forum-main.main
+    name:  ${self:service}-forum-management-service-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+    events:
+      - http:
+          method: get 
+          path: forum/{postId}
+          cors: true
+      - http:
+          method: get 
+          path: forum
+          cors: true
+      - http:
+          method: get 
+          path: forum/search
+          cors: true
+      - http:
+          method: post 
+          path: forum
+          cors: true
+          authorizer: 
+            name: vinyl-authorizer 
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: post 
+          path: forum/{postId}
+          cors: true
+          authorizer: 
+            name: vinyl-authorizer 
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete 
+          path: forum/{postId}
+          cors: true
+          authorizer: 
+            name: vinyl-authorizer 
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+
+  user-management-service:
+    handler: user-management-service/user-main.main
+    name:  ${self:service}-user-management-service-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+    events:
+      - http:
+          method: post 
+          path: users
+          cors: true
+
+  records-management-service:
+    handler: records-management-service/records-main.main
+    name:  ${self:service}-records-management-service-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+    events:
+      - http:
+          method: get 
+          path: records
+          cors: true
+      - http:
+          method: get 
+          path: records/search
+          cors: true
+      - http:
+          method: get 
+          path: records/{recordId}
+          cors: true
+      - http:
+          method: post 
+          path: records
+          cors: true
+          authorizer: 
+            name: vinyl-authorizer 
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+

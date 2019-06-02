@@ -5,6 +5,7 @@ import { LoaderComponent } from '../../shared/loader/loader.component';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
 import { AuthService } from '../../auth/auth.service';
+import { ForumService } from '../../services/forum.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ForumViewPageComponent implements OnInit {
   public data = '';
 
   constructor(public route: ActivatedRoute,
-              private fns: AngularFireFunctions,
+              private forumService: ForumService,
               public auth: AuthService,
               private router: Router) {
   }
@@ -33,9 +34,11 @@ export class ForumViewPageComponent implements OnInit {
       if (_.isEmpty(postId)) {
         return;
       }
-      const callable = this.fns.httpsCallable('retrieve_post');
-      const data = callable({postId: postId});
-      data.subscribe((post) => {
+
+      const data = this.forumService.fetch_post(postId);
+
+      data.subscribe((res: any) => {
+        const post = res.post;
         this.post = post;
         this.data = _.get(post, 'postHTML', '');
         this.title = _.get(post, 'postTitle', '');
@@ -46,9 +49,7 @@ export class ForumViewPageComponent implements OnInit {
 
   delete() {
     this.loader.show();
-    console.log(this.post.id);
-    const callable = this.fns.httpsCallable('delete_post');
-    const data = callable({postId: this.post.id});
+    const data = this.forumService.delete_post(this.post.id);
     data.subscribe(() => {
     this.loader.hide();
       this.router.navigate(['/forum']);

@@ -4,6 +4,7 @@ import { LoaderComponent } from '../../shared/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../auth/auth.service';
+import { ForumService } from '../../services/forum.service';
 
 @Component({
   selector: 'app-forum-home-page',
@@ -22,7 +23,8 @@ export class ForumHomePageComponent implements OnInit {
 
   @ViewChild('forumloader') loader: LoaderComponent;
 
-  constructor(private fns: AngularFireFunctions,
+  constructor(/*private fns: AngularFireFunctions,*/
+              public forumService: ForumService,
               public route: ActivatedRoute,
               public router: Router,
               public auth: AuthService) {
@@ -47,10 +49,12 @@ export class ForumHomePageComponent implements OnInit {
   }
 
   loadPosts() {
-    const callable = this.fns.httpsCallable('retrieve_posts');
-    const data = callable({limit: this.limit, skip: this.skip});
+    const data = this.forumService.fetch_posts({
+      limit: this.limit,
+      skip: this.skip
+    });
 
-    data.subscribe((postsList) => {
+    data.subscribe((postsList: any) => {
       this.posts = postsList.posts;
       this.skip = postsList.skip;
       this.limit = postsList.limit;
@@ -60,11 +64,13 @@ export class ForumHomePageComponent implements OnInit {
   }
 
   loadSearchPage() {
-    this.posts = null;
-    const callable = this.fns.httpsCallable('search_posts');
-    const data = callable({limit: this.limit, skip: this.skip, query: this.query});
+    const data = this.forumService.search_posts({
+      limit: this.limit,
+      skip: this.skip,
+      query: this.query
+    });
 
-    data.subscribe((postsList) => {
+    data.subscribe((postsList: any) => {
       this.posts = postsList.posts;
       this.skip = postsList.skip;
       this.limit = postsList.limit;
@@ -75,12 +81,17 @@ export class ForumHomePageComponent implements OnInit {
 
   loadAutoComplete(event) {
     const query = _.trim(event.target.value);
-    const callable = this.fns.httpsCallable('search_posts');
+
     if (_.isEmpty(query)) {
       this.autocomplete = null;
       return;
     }
-    this.autocomplete = callable({limit: 5, skip: 0, query});
+
+    this.autocomplete = this.forumService.search_posts({
+      limit: 5,
+      skip: 0,
+      query
+    });
   }
 
   exitSearch() {

@@ -24,6 +24,10 @@ import { RecordViewPageComponent } from './records/record-view-page/record-view-
 import { ImageViewerModule } from 'ngx-image-viewer';
 import { ForumEditorComponentComponent } from './forum/forum-editor-component/forum-editor-component.component';
 import { RecordsEditorComponentComponent } from './records/records-editor-component/records-editor-component.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,7 @@ import { RecordsEditorComponentComponent } from './records/records-editor-compon
     RecordsEditorComponentComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FormsModule,
     NgbModule,
@@ -51,10 +55,16 @@ import { RecordsEditorComponentComponent } from './records/records-editor-compon
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     AngularFireFunctionsModule, // to call firebase functions directly
-    ImageViewerModule.forRoot()
+    ImageViewerModule.forRoot(),
+    HttpClientModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+    })
   ],
   providers: [
-    { provide: FunctionsRegionToken, useValue: 'us-central1' }
+    {provide: FunctionsRegionToken, useValue: 'us-central1'}
   ],
   bootstrap: [AppComponent]
 })

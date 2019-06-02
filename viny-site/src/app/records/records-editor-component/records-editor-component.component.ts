@@ -1,9 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import genresJSON from '../../shared/data/genres.json';
 import countriesJSON from '../../shared/data/countries.json';
 import speedsJSON from '../../shared/data/speed.json';
@@ -11,7 +8,7 @@ import sizesJSON from '../../shared/data/size.json';
 import descrJSON from '../../shared/data/description.json';
 import * as _ from 'lodash';
 import uuid from 'uuid';
-import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare const $;
 
@@ -22,7 +19,7 @@ declare const $;
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;
-  public genres: Observable<any[]>;
+  public genres = [];
   public styles = [];
   public countriesJSON = countriesJSON;
   public objectKeys = Object.keys;
@@ -35,7 +32,6 @@ export class RecordsEditorComponentComponent implements OnInit {
   @ViewChild('table') table: ElementRef;
 
   public recordId: string = null;
-  public newMode = true;
 
   // passed as prop
   @Input()
@@ -108,30 +104,19 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   constructor(private auth: AngularFireAuth,
               private storage: AngularFireStorage,
-              public route: ActivatedRoute,
-              private fns: AngularFireFunctions,
-              public ngZone: NgZone) {
+              public ngZone: NgZone,
+              private toastr: ToastrService) {
   }
 
   ngOnInit() {
-    // loading genres
-    this.fetchGenres();
-
-    this.route.paramMap.subscribe((map: any) => {
-      const recordId = _.get(map, 'params.recordId', null);
-
-      if (_.isEmpty(recordId)) {
-        return;
-      }
-      this.recordId = recordId;
-      this.newMode = false;
-
-      const callable = this.fns.httpsCallable('retrieve_record');
-      const data = callable({recordId: recordId});
-      data.subscribe((post) => {
-
+    const genres = [];
+    _.forEach(this.genresJSON, (s, g) => {
+      genres.push({
+        name: g,
+        styles: s
       });
     });
+    this.genres = genres;
 
     $(this.table.nativeElement).sortable({
       stop: (event) => {
@@ -280,40 +265,44 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addGenre() {
-    const callable = this.fns.httpsCallable('new_genre');
-    const data = callable({genre: this.newGenreName});
-    data.subscribe((result) => {
-      this.fetchGenres();
-      alert('Success!');
-    }, () => {
-      alert('Saving failed! Please try again later');
+    const candidateGenre = _.startCase(_.lowerCase(this.newGenreName));
+    const found = _.find(this.genres, (genre) => {
+      return genre.name === candidateGenre;
     });
+
+    if (found) {
+      this.toastr.error(`Genre ${candidateGenre} already exists`, 'Error');
+    } else {
+      this.genres.push({
+        name: candidateGenre,
+        styles: []
+      });
+      this.toastr.success(`Genre ${candidateGenre} added successfully`, 'Success');
+    }
   }
 
   addStyle() {
     if (_.isEmpty(this.selectedGenre)) {
-      alert('Select a genre to add the style');
+      this.toastr.error(`Select a genre to add the style`, 'Error');
       return;
     }
+    const newGenres = _.cloneDeep(this.genres);
+    const newStyles = _.map(_.split(this.newStyleNames, '\n'), (i) => _.startCase(_.lowerCase(i)));
+    const genre: any = _.find(newGenres, (g) => g.name === this.selectedGenre);
 
-    const callable = this.fns.httpsCallable('new_style');
-    const data = callable({
-      styles: _.map(_.split(this.newStyleNames, '\n'), (i) => _.startCase(_.lowerCase(i))),
-      genre: this.selectedGenre
+    _.remove(newGenres, (g) => g.name === this.selectedGenre);
+
+    newGenres.push({
+      name: this.selectedGenre,
+      styles: _.sortedUniq(_.concat(genre.styles, newStyles))
     });
 
-    data.subscribe((result) => {
-      this.fetchGenres().subscribe(() => {
-        this.loadStyles();
-      });
-      alert('Success!');
-    }, () => {
-      alert('Saving failed! Please try again later');
-    });
+    this.genres = _.sortedUniqBy(newGenres, (it) => it.name);
+    this.toastr.success(`Styles were added successfully`, 'Success');
+    this.loadStyles();
   }
 
   getReleaseData() {
-    console.log(this.recordObject)
     const form: any = document.getElementsByClassName('needs-validation')[0];
     const valid = form.checkValidity();
     form.classList.add('was-validated');
@@ -321,7 +310,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     if (!valid) {
       return valid;
     } else if (this.uploadCount > 0) {
-      alert('Images are still being uploaded. Please wait!');
+      this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');
       return false;
     }
 
@@ -330,7 +319,7 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   addImage(event) {
     if (_.isEmpty(_.get(this.auth, 'auth.currentUser.uid'))) {
-      alert('Please login before continue');
+      this.toastr.warning('Please login before continue', 'Warning');
       return;
     }
     if (!_.isEmpty(event.target.files)) {
@@ -362,7 +351,7 @@ export class RecordsEditorComponentComponent implements OnInit {
             }
           });
         }).catch(() => {
-          alert('Image upload failed');
+          this.toastr.error('Image upload failed! Are you online?', 'Error');
           this.imageDeleteButton();
           this.uploadCount--;
           _.remove(this.percentages, (p) => p === percentageEvent);
@@ -418,10 +407,10 @@ export class RecordsEditorComponentComponent implements OnInit {
     this.loadStyles();
   }
 
-  async loadStyles() {
+  loadStyles() {
     this.styles = [];
     const genres = this.recordObject.genres;
-    const allgenres = await this.genres.toPromise();
+    const allgenres = this.genres;
 
     _.each(genres, (genre) => {
       const styles = _.find(allgenres, (g) => g.name === genre).styles;
@@ -456,13 +445,6 @@ export class RecordsEditorComponentComponent implements OnInit {
       this.recordObject.descriptions.push(descr);
       this.recordObject.descriptions = _.uniq(this.recordObject.descriptions);
     }
-  }
-
-  fetchGenres() {
-    const callable = this.fns.httpsCallable('fetch_genres');
-    this.genres = callable({});
-
-    return this.genres;
   }
 
   deleteImage(index) {

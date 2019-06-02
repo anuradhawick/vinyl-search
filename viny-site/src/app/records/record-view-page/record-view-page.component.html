@@ -128,7 +128,7 @@
               </td>
               <td>
                 {{track.title}}
-                <div class="blockquote-footer mt-1">
+                <div *ngIf="!_.isEmpty(track.credits)" class="blockquote-footer mt-1">
                   <div *ngFor="let credit of track.credits; let i = index" class="input-group m-1">
                     <em>{{credit.text}}</em>
                   </div>
@@ -147,7 +147,7 @@
           </div>
           <table class="table table-hover table-bordered">
             <tbody>
-            <tr>
+            <tr *ngIf="!_.isEmpty(recordObject.commonCredits)">
               <td class="w-25">
                 Common credits
               </td>
