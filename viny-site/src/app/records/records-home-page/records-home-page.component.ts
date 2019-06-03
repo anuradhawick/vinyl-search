@@ -102,7 +102,7 @@ export class RecordsHomePageComponent implements OnInit {
 
   loadSearchPage() {
     this.records = null;
-    const data = this.recordsService.save_record({
+    const data = this.recordsService.search_records({
       limit: this.limit,
       skip: this.skip,
       query: this.query

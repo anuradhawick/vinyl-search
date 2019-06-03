@@ -10,7 +10,6 @@
                               [(index)]="recordObject.chosenImage"
                               (customEvent)="handleEvent($event)"></ngx-image-viewer>
           </div>
-
         </div>
       </div>
       <br>
@@ -60,7 +59,7 @@
   <div class="col-12 col-sm-9">
     <div class="container-fluid">
       <br>
-      <h1>New Release Details</h1>
+      <h1>{{editorTitle}}</h1>
       <hr>
       <form class="needs-validation" novalidate>
         <div class="form-group">
@@ -207,11 +206,13 @@
               <div class="card-body">
 
                 <span *ngIf="_.isEmpty(recordObject.genres)">Please select some genres</span>
-                <!--<span *ngFor="let s of styles" class="btn badge badge-primary m-1"-->
-                      <!--(click)="selectStyle(s)">{{s}}</span>-->
-                <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link" data-toggle="modal" data-target="#allstyles">Show All Styles</i></label>
+                <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#allstyles">Show
+                  All Styles</i></label>
                 <br *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)">
-                <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal" data-target="#newstyle">(add missing)</i></label>
+                <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal"
+                                                                  data-target="#newstyle">(add missing)</i></label>
                 <br>
                 <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
                       (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
@@ -250,7 +251,8 @@
                            [(ngModel)]="artist.name" required>
 
                     <div class="input-group-append">
-                      <button type="button" (click)="removeArtist(tracks, ti, artist)" class="btn btn-secondary"><i
+                      <button type="button" (click)="removeArtist(recordObject.tracks, ti, artist)"
+                              class="btn btn-secondary"><i
                         class="fas fa-trash-alt"
                         style="font-size: 18px;"></i></button>
                     </div>
@@ -273,7 +275,8 @@
                            name="track-{{ti}}-creadits-{{i}}"
                            [(ngModel)]="credit.text" required>
                     <div class="input-group-append">
-                      <button type="button" (click)="removeCredit(tracks, ti, credit)" class="btn btn-secondary">
+                      <button type="button" (click)="removeCredit(recordObject.tracks, ti, credit)"
+                              class="btn btn-secondary">
                         <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
                     </div>
                   </div>
@@ -409,14 +412,7 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label>Genre</label>
-            <select name="genre" class="form-control" [(ngModel)]="selectedGenre">
-              <option></option>
-              <option *ngFor="let g of recordObject.genres">{{g}}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Style name</label>
+            <label>Style names</label>
             <textarea type="text" rows="5" class="form-control" name="newGenreName" [(ngModel)]="newStyleNames"
                       placeholder="Name">
             </textarea>
@@ -438,7 +434,7 @@
 
 <div id="allstyles" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" style="max-width: 90%" role="document">
-    <div class="modal-content" >
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Select Styles</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

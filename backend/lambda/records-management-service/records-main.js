@@ -83,7 +83,10 @@ exports.main = (event, context, callback) => {
         'POST',
         '/records',
         (event, context, callback) => {
-            record_functions.new_record(event.requestContext.authorizer.claims['sub'], event.body).then((recordId) => {
+            record_functions.new_record(
+                event.requestContext.authorizer.claims['sub'],
+                event.body
+            ).then((recordId) => {
                 callback(null, lambdaRouter.builResponse(200, {
                     recordId,
                     success: true
@@ -97,4 +100,78 @@ exports.main = (event, context, callback) => {
             });
         }
     );
-}
+
+    /**
+     * update record
+     */
+    router.route(
+        'POST',
+        '/records/{recordId}',
+        (event, context, callback) => {
+            record_functions.update_record(
+                event.requestContext.authorizer.claims['sub'],
+                event.pathParameters.recordId,
+                event.body
+            ).then((recordId) => {
+                callback(null, lambdaRouter.builResponse(200, {
+                    recordId,
+                    success: true
+                }))
+            }).catch((e) => {
+                console.error(e)
+                callback(null, lambdaRouter.builResponse(500, {
+                    records: "ERROR",
+                    success: false
+                }))
+            });
+        }
+    );
+
+    /**
+     * fetch record history
+     */
+    router.route(
+        'GET',
+        '/records/{recordId}/revisions',
+        (event, context, callback) => {
+            record_functions.fetch_history(
+                event.pathParameters.recordId
+            ).then((history) => {
+                callback(null, lambdaRouter.builResponse(200, {
+                    history,
+                    success: true
+                }))
+            }).catch((e) => {
+                console.error(e);
+                callback(null, lambdaRouter.builResponse(500, {
+                    records: "ERROR",
+                    success: false
+                }))
+            });
+        }
+    );
+
+    /**
+     * fetch record revision
+     */
+    router.route(
+        'GET',
+        '/records/{recordId}/revisions/{revisionId}',
+        (event, context, callback) => {
+            record_functions.fetch_revision(
+                event.pathParameters.revisionId
+            ).then((record) => {
+                callback(null, lambdaRouter.builResponse(200, {
+                        ...record,
+                    success: true
+                }))
+            }).catch((e) => {
+                console.error(e);
+                callback(null, lambdaRouter.builResponse(500, {
+                    records: "ERROR",
+                    success: false
+                }))
+            });
+        }
+    );
+};

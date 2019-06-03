@@ -12,5 +12,5 @@ db.getCollection('records').createIndex({
     "catalogNo": "text"},
     {
         "name":"recordsIndex"
-    })
+    });
 

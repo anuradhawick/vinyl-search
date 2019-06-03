@@ -1,31 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import Amplify, { Auth, Hub } from 'aws-amplify';
+import { environment } from '../../environments/environment';
 
-Amplify.configure({
-  Auth: {
-    identityPoolId: 'ap-southeast-1:1f542b99-a4f8-426d-96b7-927306d34010',
-    region: 'ap-southeast-1',
-    userPoolId: 'ap-southeast-1_Z23imsu3V',
-    userPoolWebClientId: '5hi1o4rigdv6cqqf96k7cntqvj',
-    mandatorySignIn: false,
-  },
-  Storage: {
-    AWSS3: {
-      bucket: 'vinyl-bucket',
-      region: 'ap-southeast-1',
-    }
-  }
-});
-const oauth = {
-  domain: 'vinyl-search.auth.ap-southeast-1.amazoncognito.com',
-  scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
-  redirectSignIn: 'http://localhost:4200/',
-  redirectSignOut: 'http://localhost:4200/',
-  responseType: 'code'
-};
-
-Auth.configure({oauth});
+Amplify.configure(environment.aws_config);
+Auth.configure({oauth: environment.oauth});
 
 @Injectable({
   providedIn: 'root'

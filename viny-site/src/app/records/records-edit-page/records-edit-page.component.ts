@@ -16,32 +16,32 @@ export class RecordsEditPageComponent implements OnInit {
   @ViewChild('editor') editor: RecordsEditorComponentComponent;
   @ViewChild('loader') loader: LoaderComponent;
   private ready = true;
-  // private testRecord = {
-  //   'chosenImage': 0,
-  //   'images': [],
-  //   'date': '1993',
-  //   'genres': ['American', 'Classical'],
-  //   'styles': ['Chinese Modified', 'Red Indian'],
-  //   'descriptions': ['Album', 'Special Edition'],
-  //   'speed': '45 RPM',
-  //   'size': '11"',
-  //   'country': 'Angola',
-  //   'tracks': [{
-  //     'index': '1',
-  //     'artists': [{'index': 1, 'name': 'Vijini'}],
-  //     'title': 'Rosa Male Natuwe Katu',
-  //     'credits': [{'index': 1, 'text': 'Music by Anuradha'}],
-  //     'duration': '1:00'
-  //   }],
-  //   'notes': 'Mother was helping',
-  //   'commonCredits': [{'index': 0, 'text': 'Support by Father'}],
-  //   'name': 'Title A',
-  //   'label': 'Sakura',
-  //   'mainArtist': 'Name A',
-  //   'catalogNo': '123',
-  //   'format': '4-Track Cartridge',
-  //   'channelCoding': 'Other/Unknown'
-  // };
+  public testRecord = {
+    'chosenImage': 0,
+    'images': [],
+    'date': '1993',
+    'genres': ["African", "Asian", "Country", "Anu"],
+    'styles': [],
+    'descriptions': ['Album', 'Special Edition'],
+    'speed': '45 RPM',
+    'size': '11"',
+    'country': 'Angola',
+    'tracks': [{
+      'index': '1',
+      'artists': [{'index': 1, 'name': 'Vijini'}],
+      'title': 'Rosa Male Natuwe Katu',
+      'credits': [{'index': 1, 'text': 'Music by Anuradha'}],
+      'duration': '1:00'
+    }],
+    'notes': 'Mother was helping',
+    'commonCredits': [{'index': 0, 'text': 'Support by Father'}],
+    'name': 'Title A',
+    'label': 'Sakura',
+    'mainArtist': 'Name A',
+    'catalogNo': '123',
+    'format': '4-Track Cartridge',
+    'channelCoding': 'Other/Unknown'
+  };
 
   constructor(private recordsService: RecordsService, private router: Router) {
 

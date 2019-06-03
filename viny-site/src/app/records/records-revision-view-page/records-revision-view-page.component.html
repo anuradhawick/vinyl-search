@@ -1,4 +1,4 @@
-<app-loader [hidden]="!!(recordObject | async)"></app-loader>
+<app-loader #releasepageloader></app-loader>
 
 <div *ngIf="recordObject | async as recordObject" class="row container-fluid">
   <!--LEFT COL-->
@@ -6,13 +6,11 @@
     <div class="container-fluid">
       <div class="text-center">
         <br>
-        <div class="sq-container">
-          <div class="sq-content">
-            <ngx-image-viewer [config]="imgvconfig"
-                              [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
-                              [(index)]="recordObject.chosenImage">
-            </ngx-image-viewer>
-          </div>
+        <div style="width: 100%;">
+          <ngx-image-viewer [config]="imgvconfig"
+                            [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
+                            [(index)]="recordObject.chosenImage">
+          </ngx-image-viewer>
         </div>
       </div>
       <div class="card mt-1">
@@ -31,14 +29,6 @@
           <div>
             <span *ngFor="let s of recordObject.descriptions" class="btn badge badge-primary m-1">{{s}}</span>
           </div>
-          <hr>
-          <h6>Revision history</h6>
-          <div>
-            <app-loader [hidden]="!!(recordHistory | async)?.history"></app-loader>
-            <a *ngFor="let h of (recordHistory | async)?.history;" class="page-link"
-               [routerLink]="['/records', recordObject.id, 'revisions', h._id]">Revision - {{h.createdAt}}</a>
-          </div>
-
         </div>
       </div>
     </div>
@@ -48,7 +38,7 @@
   <div class="col-12 col-sm-8">
     <div class="container-fluid">
       <br>
-      <h1>{{recordObject.name}}</h1>
+      <a [routerLink]="['/records', recordObject.id, 'view']"><h1>{{recordObject.name}}</h1></a>
       <hr>
       <div class="card">
         <div class="m-1">
@@ -180,19 +170,25 @@
             </tr>
             </tbody>
           </table>
-
+          <hr>
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr>
+              <td class="w-25">
+                Revision comments
+              </td>
+              <td class="w-75">
+                <strong>
+                  <div style="white-space: pre-wrap">{{recordObject.revisionComments || 'Not available'}}
+                  </div>
+                </strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-
     </div>
-    <ng-container *ngIf="auth.isLoggedIn">
-      <hr>
-      <div class="container-fluid">
-        <div class="m-1">
-          <a [routerLink]="['/records', recordObject.id, 'update']">Submit a revision</a>
-        </div>
-      </div>
-    </ng-container>
   </div>
   <!--END RIGHT COL-->
 </div>

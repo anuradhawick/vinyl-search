@@ -10,7 +10,8 @@
             <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!ready">
               Save
             </button>
-            <button type="button" class="btn btn-primary ml-1" (click)="true" [disabled]="!ready">Discard
+            <button type="button" class="btn btn-primary ml-1" [routerLink]="['/records']"
+               [disabled]="!ready">Discard
             </button>
           </div>
         </form>

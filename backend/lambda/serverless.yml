@@ -36,6 +36,8 @@ functions:
     name:  ${self:service}-forum-management-service-${opt:stage}
     environment:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
+      BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
     events:
       - http:
           method: get 
@@ -87,6 +89,8 @@ functions:
     name:  ${self:service}-records-management-service-${opt:stage}
     environment:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
+      BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
     events:
       - http:
           method: get 
@@ -107,4 +111,20 @@ functions:
           authorizer: 
             name: vinyl-authorizer 
             arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: post
+          path: records/{recordId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: get
+          path: records/{recordId}/revisions
+          cors: true
+      - http:
+          method: get
+          path: records/{recordId}/revisions/{revisionId}
+          cors: true
+
 

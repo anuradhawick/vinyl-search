@@ -1,0 +1,13 @@
+User attributes
+---------------
+name
+given_name
+family_name
+email
+picture
+uid = sub
+
+
+image format
+------------
+json: {bucket, prefix, filename}

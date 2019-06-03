@@ -19,10 +19,22 @@ export class RecordsService {
     });
   }
 
+  update_record(record) {
+    return this.http.post(environment.api_gateway + 'records/' + record.id, record, {
+      headers: new HttpHeaders({
+        'Authorization': this.auth.token
+      })
+    });
+  }
+
   fetch_records(params) {
     return this.http.get(environment.api_gateway + 'records', {
       params
     });
+  }
+
+  fetch_record_history(recordId) {
+    return this.http.get(environment.api_gateway + 'records/' + recordId + '/revisions');
   }
 
   search_records(params) {
@@ -33,5 +45,9 @@ export class RecordsService {
 
   fetch_record(recordId) {
     return this.http.get(environment.api_gateway + 'records/' + recordId);
+  }
+
+  fetch_record_revision(recordId, revisionId) {
+    return this.http.get(`${environment.api_gateway}records/${recordId}/revisions/${revisionId}`);
   }
 }

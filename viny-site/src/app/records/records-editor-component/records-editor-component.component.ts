@@ -1,6 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireStorage } from '@angular/fire/storage';
 import genresJSON from '../../shared/data/genres.json';
 import countriesJSON from '../../shared/data/countries.json';
 import speedsJSON from '../../shared/data/speed.json';
@@ -9,6 +7,10 @@ import descrJSON from '../../shared/data/description.json';
 import * as _ from 'lodash';
 import uuid from 'uuid';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../auth/auth.service';
+import { Storage } from 'aws-amplify';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 declare const $;
 
@@ -40,6 +42,11 @@ export class RecordsEditorComponentComponent implements OnInit {
       this.recordObject = record;
     }
   }
+
+  @Input() public editorTitle = 'New Release Details';
+
+  @Output() recordChange = new EventEmitter();
+
 
   @Output()
   readyStateChange = new EventEmitter<boolean>();
@@ -75,8 +82,6 @@ export class RecordsEditorComponentComponent implements OnInit {
   // new genre related
   public newGenreName: string = null;
   public newStyleNames: string = null;
-  public selectedGenre: string = null;
-
 
   // context control
   public uploadCount = 0;
@@ -91,6 +96,8 @@ export class RecordsEditorComponentComponent implements OnInit {
     allowFullscreen: true,
     allowKeyboardNavigation: true,
     btnIcons: {
+      zoomIn: 'fas fa-plus',
+      zoomOut: 'fas fa-minus',
       next: 'fas fa-angle-double-right',
       prev: 'fas fa-angle-double-left',
       fullscreen: 'fas fa-arrows-alt',
@@ -98,12 +105,13 @@ export class RecordsEditorComponentComponent implements OnInit {
     customBtns: [],
     btnShow: {
       next: true,
-      prev: true
+      prev: true,
+      zoomIn: true,
+      zoomOut: true
     }
   };
 
-  constructor(private auth: AngularFireAuth,
-              private storage: AngularFireStorage,
+  constructor(private auth: AuthService,
               public ngZone: NgZone,
               private toastr: ToastrService) {
   }
@@ -116,7 +124,11 @@ export class RecordsEditorComponentComponent implements OnInit {
         styles: s
       });
     });
-    this.genres = genres;
+    this.genres = _.concat(genres, _.map(this.recordObject.genres, (g) => {
+      return {name: g};
+    }));
+
+    this.genres = _.sortedUniqBy(this.genres, (g) => g.name);
 
     $(this.table.nativeElement).sortable({
       stop: (event) => {
@@ -124,6 +136,8 @@ export class RecordsEditorComponentComponent implements OnInit {
         this.ngZone.runOutsideAngular(() => this.resort(arr));
       }
     });
+
+    this.loadStyles();
   }
 
   resort(arr) {
@@ -277,29 +291,16 @@ export class RecordsEditorComponentComponent implements OnInit {
         name: candidateGenre,
         styles: []
       });
+      this.recordObject.genres.push(candidateGenre);
       this.toastr.success(`Genre ${candidateGenre} added successfully`, 'Success');
     }
   }
 
   addStyle() {
-    if (_.isEmpty(this.selectedGenre)) {
-      this.toastr.error(`Select a genre to add the style`, 'Error');
-      return;
-    }
-    const newGenres = _.cloneDeep(this.genres);
-    const newStyles = _.map(_.split(this.newStyleNames, '\n'), (i) => _.startCase(_.lowerCase(i)));
-    const genre: any = _.find(newGenres, (g) => g.name === this.selectedGenre);
+    const newStyles = _.map(_.split(_.trim(this.newStyleNames), '\n'), (i) => _.startCase(_.lowerCase(i)));
 
-    _.remove(newGenres, (g) => g.name === this.selectedGenre);
-
-    newGenres.push({
-      name: this.selectedGenre,
-      styles: _.sortedUniq(_.concat(genre.styles, newStyles))
-    });
-
-    this.genres = _.sortedUniqBy(newGenres, (it) => it.name);
+    this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, newStyles));
     this.toastr.success(`Styles were added successfully`, 'Success');
-    this.loadStyles();
   }
 
   getReleaseData() {
@@ -318,47 +319,46 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addImage(event) {
-    if (_.isEmpty(_.get(this.auth, 'auth.currentUser.uid'))) {
+    if (!this.auth.isLoggedIn) {
       this.toastr.warning('Please login before continue', 'Warning');
       return;
     }
     if (!_.isEmpty(event.target.files)) {
       _.each(event.target.files, (file) => {
-        const filePath = `record-images/${this.auth.auth.currentUser.uid}/${uuid()}${file.name}`;
-        const ref = this.storage.ref(filePath);
-        const task = ref.put(file);
-        const percentageEvent = task.percentageChanges();
+        const filename = `${uuid()}.${file.name.split('.').pop() || ''}`;
 
         this.uploadCount++;
-        this.percentages.push(percentageEvent);
         this.readyStateChange.emit(false);
 
-        task.then(() => {
-          ref.getDownloadURL().subscribe((url) => {
+        const progressObserver = new Observable((observer) => {
+          Storage.put(filename, file, {
+            customPrefix: {
+              public: 'temp/'
+            },
+            progressCallback(progress) {
+              observer.next(progress.loaded * 100 / progress.total);
+            },
+          }).then(() => {
+            const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`;
+
             this.recordObject.images.push(url);
             this.uploadCount--;
-            _.remove(this.percentages, (p) => p === percentageEvent);
-            this.imageDeleteButton();
             if (this.uploadCount === 0) {
               this.readyStateChange.emit(true);
             }
-          }, () => {
+            observer.complete();
+            _.remove(this.percentages, (p) => p === progressObserver);
+          }).catch((e) => {
+            this.toastr.error('Image upload failed! Are you online?', 'Error');
             this.uploadCount--;
-            _.remove(this.percentages, (p) => p === percentageEvent);
-            this.imageDeleteButton();
+            _.remove(this.percentages, (p) => p === progressObserver);
             if (this.uploadCount === 0) {
               this.readyStateChange.emit(true);
             }
+            observer.complete();
           });
-        }).catch(() => {
-          this.toastr.error('Image upload failed! Are you online?', 'Error');
-          this.imageDeleteButton();
-          this.uploadCount--;
-          _.remove(this.percentages, (p) => p === percentageEvent);
-          if (this.uploadCount === 0) {
-            this.readyStateChange.emit(true);
-          }
         });
+        this.percentages.push(progressObserver);
       });
     }
   }
@@ -413,7 +413,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     const allgenres = this.genres;
 
     _.each(genres, (genre) => {
-      const styles = _.find(allgenres, (g) => g.name === genre).styles;
+      const styles = _.get(_.find(allgenres, (g) => g.name === genre), 'styles', []);
       this.map[genre] = styles;
       this.styles = _.uniq(this.styles.concat(styles)).sort();
     });

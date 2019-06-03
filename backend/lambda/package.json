@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.466.0",
+    "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
     "html-to-text": "^5.1.1",
     "lodash": "^4.17.11",

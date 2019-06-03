@@ -1,6 +1,9 @@
 const _ = require('lodash');
 const db_util = require('../utils/db-util');
 const ObjectID = require('mongodb').ObjectID;
+const S3 = require('aws-sdk').S3;
+
+const s3 = new S3();
 
 search_records = async (query_params) => {
     const limit = _.parseInt(_.get(query_params, 'limit', 30));
@@ -136,7 +139,31 @@ fetch_records = async (query_params) => {
 
 fetch_record = async (recordId) => {
     const db = await db_util.connect_db();
-    const data = await db.collection('records').findOne({id: ObjectID(recordId)});
+    const data = await db.collection('records').findOne({id: ObjectID(recordId), latest: true});
+
+    return data;
+};
+
+fetch_revision = async (revisionId) => {
+    const db = await db_util.connect_db();
+    const data = await db.collection('records').findOne({_id: ObjectID(revisionId)});
+
+    return data;
+};
+
+fetch_history = async (recordId) => {
+    const db = await db_util.connect_db();
+    const data = await db.collection('records').find(
+        {
+            id: ObjectID(recordId)
+        })
+        .project({
+            _id: 1,
+            createdAt: 1,
+            ownerUid: 1,
+            reviserUid: 1
+        })
+        .sort({createdAt: -1}).toArray();
 
     return data;
 };
@@ -144,66 +171,87 @@ fetch_record = async (recordId) => {
 new_record = async (uid, record) => {
     const db = await db_util.connect_db();
     const ownerUid = uid;
+    const newImages = await Promise.all(_.map(record.images, (image) => {
+        const filename = _.split(image, '/').pop();
+        const params = {
+            Bucket: process.env.BUCKET_NAME,
+            CopySource: `/${process.env.BUCKET_NAME}/temp/${filename}`,
+            Key: `records-images/${filename}`
+        };
+        return new Promise((resolve, reject) => {
+            s3.copyObject(params, (err, data) => {
+                    if (err) {
+                        reject(image);
+                    }
+                    else {
+                        resolve(`https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/${filename}`);
+                    }
+                }
+            );
+        });
+    }));
 
     _.assign(record, {ownerUid, createdAt: new Date()});
     _.assign(record, {id: new ObjectID()});
     _.assign(record, {latest: true});
+    _.assign(record, {images: newImages});
 
     await db.collection('records').insertOne(record);
 
     return record.id;
 };
 
-new_genre = (req, res) => cors(req, res, async () => {
-    const tokenId = _.replace(_.get(req.headers, 'authorization', ''), 'Bearer ', '');
+update_record = async (reviserUid, recordId, record) => {
     const db = await db_util.connect_db();
-    const decodedToken = await admin.auth().verifyIdToken(tokenId);
-    const ownerUid = decodedToken.uid;
+    const newImages = await Promise.all(_.map(record.images, (image) => {
+        const list = _.split(image, '/');
+        const filename = list.pop();
+        const pathname = list.pop();
+        if (pathname === 'records-images') {
+            return image;
+        }
+        const params = {
+            Bucket: process.env.BUCKET_NAME,
+            CopySource: `/${process.env.BUCKET_NAME}/temp/${filename}`,
+            Key: `records-images/${filename}`
+        };
+        return new Promise((resolve, reject) => {
+            s3.copyObject(params, (err, data) => {
+                    if (err) {
+                        reject(image);
+                    }
+                    else {
+                        resolve(`https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/${filename}`);
+                    }
+                }
+            );
+        });
+    }));
 
-    assert.equal(false, _.isEmpty(_.get(req, 'body.data.genre', null)));
+    _.unset(record, '_id');
 
-    const record = {
-        name: _.startCase(_.lowerCase(req.body.data.genre)),
-        ownerUid,
-        createAt: new Date(),
-        styles: []
-    };
-
-    db.collection('records-metadata').insertOne(record, (err, r) => {
-        assert.equal(null, err);
-
-        res.status(200).send({data: true});
-    });
-});
-
-new_style = (req, res) => cors(req, res, async () => {
-    const tokenId = _.replace(_.get(req.headers, 'authorization', ''), 'Bearer ', '');
-    const db = await db_util.connect_db();
-    const decodedToken = await admin.auth().verifyIdToken(tokenId);
-    const ownerUid = decodedToken.uid;
-    const styles = _.map(_.get(req, 'body.data.styles', []), (item) => _.startCase(_.lowerCase(item)));
-
-    db.collection('records-metadata').findOneAndUpdate(
+    await db.collection('records').updateMany(
         {
-            name: _.get(req, "body.data.genre", "")
+            id: ObjectID(recordId)
         },
         {
-            $addToSet: {
-                styles: {
-                    $each: styles
-                }
+            $set: {
+                latest: false
             }
         },
         {
-            returnOriginal: false
-        }
-        ,
-        (err, r) => {
-            assert.equal(null, err);
-
-            res.status(200).send({data: true});
+            upsert: false
         });
-});
+
+    _.assign(record, {reviserUid, createdAt: new Date()});
+    _.assign(record, {id: ObjectID(record.id)});
+    _.assign(record, {latest: true});
+    _.assign(record, {images: newImages});
+
+    await db.collection('records').insertOne(record);
+
+    return record.id;
+};
 
 
 module.exports = {
@@ -211,6 +259,7 @@ module.exports = {
     fetch_records,
     fetch_record,
     new_record,
-    new_genre,
-    new_style
-}
+    update_record,
+    fetch_history,
+    fetch_revision
+};

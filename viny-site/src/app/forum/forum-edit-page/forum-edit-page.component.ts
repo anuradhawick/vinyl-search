@@ -5,6 +5,8 @@ import { LoaderComponent } from '../../shared/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../../services/forum.service';
 
+declare const $;
+
 @Component({
   selector: 'app-forum-edit-page',
   templateUrl: './forum-edit-page.component.html',
@@ -66,8 +68,9 @@ export class ForumEditPageComponent implements OnInit {
     const object = {
       postTitle: this.title,
       postHTML: this.data,
-      id: null
+      id: null,
     };
+
     if (this.newMode) {
       const data = this.forumService.new_post(object);
 
