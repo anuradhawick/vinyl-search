@@ -9,21 +9,21 @@ const update_user = async (uid, userdata) => {
             $set:
             {
                 email: userdata.email,
-                family_name: userdata.emailVerified,
-                given_name: userdata.displayName,
-                name: userdata.photoURL,
+                family_name: userdata.family_name,
+                given_name: userdata.give_name,
+                name: userdata.name,
                 picture: userdata.phoneNumber,
                 updatedAt: new Date()
             }
         },
         {
             returnOriginal: false,
-            upsert: true
+            upsert: false
         });
     
     return true;
 };
 
 module.exports = {
-    register_user
+    update_user
 };

@@ -27,10 +27,11 @@ package:
 
 functions:
   userpool-trigger-service:
-    handler: userpool-trigger-service/post-confirm-signup.handler
+    handler: userpool-trigger-service/user-pool-triggers.handler
     name:  ${self:service}-userpool-trigger-service-${opt:stage}
     environment:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      user_pool_id: ${self:custom.config.user_pool_id}
   forum-management-service:
     handler: forum-management-service/forum-main.main
     name:  ${self:service}-forum-management-service-${opt:stage}
@@ -78,6 +79,7 @@ functions:
     name:  ${self:service}-user-management-service-${opt:stage}
     environment:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      user_pool_id: ${self:custom.config.user_pool_id}
     events:
       - http:
           method: post 
