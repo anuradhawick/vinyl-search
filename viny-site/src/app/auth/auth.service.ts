@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import Amplify, { Auth, Hub } from 'aws-amplify';
+import Amplify, { Auth, Hub, Logger } from 'aws-amplify';
 import { environment } from '../../environments/environment';
+import { ActivatedRoute } from '@angular/router';
+
+declare const $: any;
+declare const window: any;
 
 Amplify.configure(environment.aws_config);
 Auth.configure({oauth: environment.oauth});
@@ -16,7 +20,18 @@ export class AuthService {
   private autoLogin;
   public token = null;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
+    route.queryParams.subscribe((params: any) => {
+      console.log(params);
+      if (params.error === 'invalid_request' && params.error_description) {
+        if (params.error_description === 'PreSignUp failed with error Google. ') {
+          this.loginFacebook();
+        } else if (params.error_description === 'PreSignUp failed with error Facebook. ') {
+          this.loginGoogle();
+        }
+      }
+    });
+
 
     this.autoLogin = new Promise((resolve, reject) => {
       Auth.currentAuthenticatedUser().then((u) => {
@@ -32,8 +47,9 @@ export class AuthService {
 
       });
 
-      Hub.listen('auth', ({payload: {event, data}}) => {
-        switch (event) {
+      Hub.listen('auth', (data) => {
+        console.log(data)
+        switch (data.payload.event) {
           case 'signIn':
             Auth.currentAuthenticatedUser().then((u) => {
               this.user = u.attributes;
@@ -56,7 +72,7 @@ export class AuthService {
   }
 
 
-  loginF() {
+  loginFacebook() {
     Auth.federatedSignIn({customProvider: 'Facebook'}).then(() => {
 
     }).catch(e => {
@@ -64,19 +80,16 @@ export class AuthService {
     });
   }
 
-  loginG() {
-
+  loginGoogle() {
     Auth.federatedSignIn({customProvider: 'Google'}).then(() => {
 
     }).catch(e => {
       console.log(e);
     });
-    //
-    // Auth.federatedSignIn().then(() => {
-    //
-    // }).catch(e => {
-    //   console.log(e);
-    // });
+  }
+
+  login() {
+    $('#loginModal').modal('show');
   }
 
   logout() {

@@ -4,10 +4,11 @@ import countriesJSON from '../../shared/data/countries.json';
 import decadesJSON from '../../shared/data/decades.json';
 import * as _ from 'lodash';
 import { LoaderComponent } from '../../shared/loader/loader.component';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { RecordsService } from '../../services/records.service';
+
+declare const $: any;
 
 @Component({
   selector: 'app-records-home-page',
@@ -16,8 +17,6 @@ import { RecordsService } from '../../services/records.service';
 })
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
-  public countriesJSON = countriesJSON;
-  public decadesJSON = decadesJSON;
   public objectKeys = Object.keys;
   @ViewChild('recordsloader') loader: LoaderComponent;
   // context control
@@ -29,6 +28,17 @@ export class RecordsHomePageComponent implements OnInit {
   public autocomplete = null;
   public _ = _;
   public query = null;
+  public component = this;
+
+  // page filters
+  public genreFilters = [];
+  public styleFilters = [];
+  public formatFilters = [];
+  public countryFilters = [];
+
+  // context control
+  public toChooseFrom = [];
+  public chosenFilter = '';
 
   constructor(public route: ActivatedRoute,
               private router: Router,
@@ -51,6 +61,19 @@ export class RecordsHomePageComponent implements OnInit {
         this.loadSearchPage();
       }
     });
+  }
+
+  getStyles() {
+    let styles = [];
+    _.each(this.objectKeys(genresJSON), (g) => {
+      styles = _.concat(genresJSON[g], styles);
+    });
+
+    return _.uniq(styles);
+  }
+
+  getCountries() {
+    return _.map(countriesJSON, (c) => c.name);
   }
 
   loadAutoComplete(event) {
@@ -146,5 +169,12 @@ export class RecordsHomePageComponent implements OnInit {
     });
     this.records = null;
     this.skip = _.max([this.skip - this.limit, 0]);
+  }
+
+  openFilter(toChooseFrom, ref) {
+    this.toChooseFrom = toChooseFrom;
+    this.chosenFilter = ref;
+
+    $('#filterModal').modal('show');
   }
 }

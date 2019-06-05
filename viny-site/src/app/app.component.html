@@ -1,6 +1,6 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Vinyl-Site</a>
+    <a class="navbar-brand" href="/">Vinyl-Site</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -75,8 +75,7 @@
         <ng-template #showLogin>
           <div class="nav-link">
           <span class="nav-link text-white">
-            <a (click)="auth.loginG()"><span class="btn badge badge-success">Login Google</span></a>
-            <a (click)="auth.loginF()"><span class="btn badge badge-success ml-1">Login Facebook</span></a>
+            <a (click)="auth.login()"><span class="btn badge badge-success">Login</span></a>
           </span>
           </div>
         </ng-template>
@@ -86,3 +85,31 @@
   </nav>
 </header>
 <router-outlet></router-outlet>
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class="rounded mx-auto d-block" height="50%" width="50%" src="/assets/images/records-new-sample.svg"
+             alt="">
+        <hr>
+        <button (click)="auth.loginFacebook()" class="btn btn-block btn-lg btn-social btn-facebook">
+          <i class="fab fa-facebook-f"></i> Login with Facebook
+        </button>
+        <button (click)="auth.loginGoogle()" class="btn btn-block btn-lg btn-social btn-google">
+          <i class="fab fa-google"></i> Login with Google
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+

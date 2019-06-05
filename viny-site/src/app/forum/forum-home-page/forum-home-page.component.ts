@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';

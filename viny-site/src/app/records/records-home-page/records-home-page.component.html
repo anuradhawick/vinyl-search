@@ -3,14 +3,16 @@
   <div class="col-10 col-lg-4">
     <div class="container">
       <div class="input-group">
-        <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text" class="form-control"
+        <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
+               class="form-control"
                placeholder="Search records..." aria-label="Search for records"
                aria-describedby="button-addon2" name="search-query" [(ngModel)]="query">
         <div class="input-group-append">
           <button class="btn btn-secondary" type="button" id="button-addon2" (click)="search()">Search</button>
         </div>
         <div *ngIf="(autocomplete | async)?.records.length > 0" style="background-color: #fff; left: 0;">
-          <div style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+          <div
+            style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
             <table class="table table-hover table-bordered shadow">
               <tbody>
               <tr *ngFor="let r of (autocomplete | async)?.records">
@@ -30,25 +32,26 @@
         </div>
       </div>
     </div>
-    <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))" class="ml-3 mr-5 mt-2 text-dark">
+    <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
+         class="ml-3 mr-5 mt-2 text-dark">
       Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
     </div>
   </div>
   <div class="col-2 col-lg-8">
-      <div *ngIf="auth.isLoggedIn; else showLogin">
-        <div class="float-right">
-          <button type="button" class="btn btn-secondary" routerLink="/records/new">
-            Add
-          </button>
-        </div>
+    <div *ngIf="auth.isLoggedIn; else showLogin">
+      <div class="float-right">
+        <button type="button" class="btn btn-secondary" routerLink="/records/new">
+          Add
+        </button>
       </div>
-      <ng-template #showLogin>
-          <div class="float-right">
-            <button type="button" class="btn btn-success" (click)="auth.login()">
-              Login to post!
-            </button>
-          </div>
-      </ng-template>
+    </div>
+    <ng-template #showLogin>
+      <div class="float-right">
+        <button type="button" class="btn btn-success" (click)="auth.login()">
+          Login to publish!
+        </button>
+      </div>
+    </ng-template>
   </div>
 </div>
 <hr>
@@ -58,48 +61,72 @@
       <div class="card">
         <h5 class="card-header" data-toggle="collapse" data-target="#collapseGenres"
             aria-expanded="false" aria-controls="collapseGenres">
-          Genre
+          Genres
+          <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓</button>
         </h5>
 
         <div id="collapseGenres" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <ul class="list-group">
-            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
-              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
-              {{key}}
-            </li>
-          </ul>
+          <ng-container *ngIf="!_.isEmpty(genreFilters)">
+            <button *ngFor="let g of genreFilters; let i = index" class="btn badge badge-primary m-1"
+                    (click)="genreFilters.splice(i,1)">{{g}}<span aria-hidden="true">&times;</span>
+            </button>
+            <hr>
+          </ng-container>
+          <button class="btn badge badge-success m-1" (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
+            Select filters
+          </button>
+          <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-success m-1" (click)="genreFilters=[]">Clear
+            filters
+          </button>
         </div>
       </div>
       <hr>
       <div class="card">
         <h5 class="card-header" data-toggle="collapse" data-target="#collapseStyles"
             aria-expanded="false" aria-controls="collapseGenres">
-          Style
+          Styles
+          <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓</button>
         </h5>
 
         <div id="collapseStyles" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <ul class="list-group">
-            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
-              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
-              {{key}}
-            </li>
-          </ul>
+          <ng-container *ngIf="!_.isEmpty(styleFilters)">
+            <button *ngFor="let s of styleFilters; let i = index" class="btn badge badge-primary m-1"
+                    (click)="styleFilters.splice(i,1)">{{s}}<span aria-hidden="true">&times;</span>
+            </button>
+            <hr>
+          </ng-container>
+          <button class="btn badge badge-success m-1" (click)="openFilter(getStyles(), 'styleFilters')">Select filters
+          </button>
+          <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1" (click)="styleFilters=[]">Clear
+            filters
+          </button>
         </div>
       </div>
+
       <hr>
       <div class="card">
         <h5 class="card-header" data-toggle="collapse" data-target="#collapseFormats"
             aria-expanded="false" aria-controls="collapseFormats">
-          Format
+          Formats
+          <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+          </button>
         </h5>
 
         <div id="collapseFormats" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <ul class="list-group">
-            <li *ngFor="let key of objectKeys(genresJSON)" class="list-group-item text-left text-truncate">
-              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
-              {{key}}
-            </li>
-          </ul>
+          <ng-container *ngIf="!_.isEmpty(formatFilters)">
+            <button *ngFor="let f of formatFilters; let i = index" class="btn badge badge-primary m-1"
+                    (click)="formatFilters.splice(i,1)">{{f}}<span aria-hidden="true">&times;</span>
+            </button>
+            <hr>
+          </ng-container>
+          <button class="btn badge badge-success m-1"
+                  (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
+                  'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
+            Select filters
+          </button>
+          <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1" (click)="formatFilters=[]">Clear
+            filters
+          </button>
         </div>
       </div>
       <hr>
@@ -107,31 +134,23 @@
         <h5 class="card-header" data-toggle="collapse" data-target="#collapseCountries"
             aria-expanded="false" aria-controls="collapseCountries">
           Country
+          <button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+          </button>
         </h5>
-
         <div id="collapseCountries" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <ul class="list-group">
-            <li *ngFor="let country of countriesJSON" class="list-group-item text-left text-truncate">
-              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
-              {{country.name}}
-            </li>
-          </ul>
-        </div>
-      </div>
-      <hr>
-      <div class="card">
-        <h5 class="card-header" data-toggle="collapse" data-target="#collapseDecades"
-            aria-expanded="false" aria-controls="collapseDecades">
-          Decade
-        </h5>
-
-        <div id="collapseDecades" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <ul class="list-group">
-            <li *ngFor="let decade of decadesJSON" class="list-group-item text-left text-truncate">
-              <span class="badge badge-primary float-right badge-pill">14</span><input type="checkbox" aria-label="">
-              {{decade}}
-            </li>
-          </ul>
+          <ng-container *ngIf="!_.isEmpty(countryFilters)">
+            <button *ngFor="let c of countryFilters; let i = index" class="btn badge badge-primary m-1"
+                    (click)="countryFilters.splice(i,1)">{{c}}<span aria-hidden="true">&times;</span>
+            </button>
+            <hr>
+          </ng-container>
+          <button class="btn badge badge-success m-1"
+                  (click)="openFilter(getCountries(), 'countryFilters')">
+            Select filters
+          </button>
+          <button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-success m-1" (click)="countryFilters=[]">
+            Clear filters
+          </button>
         </div>
       </div>
       <hr>
@@ -147,7 +166,9 @@
             <div class="">
               <a [routerLink]="['/records', r.id, 'view']" class="thumbnail">
                 <div class="image" style="background-color: #d5d5d5">
-                  <img style="object-fit: cover" [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'" class="img img-responsive" />
+                  <img style="object-fit: cover"
+                       [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
+                       class="img img-responsive"/>
                 </div>
                 <h6 class="m-1 text-truncate">{{r.name}}</h6>
                 <p class="m-1 text-truncate">{{r.label}}</p>
@@ -174,6 +195,33 @@
         </li>
       </ul>
     </nav>
+  </div>
+</div>
+
+
+<!-- Filters Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Select Filters</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <button *ngFor="let c of toChooseFrom; let i = index" class="btn badge badge-primary m-1"
+                (click)="component[chosenFilter].push(c); component[chosenFilter]=_.uniq(component[chosenFilter])">{{c}}
+        </button>
+        <hr>
+        <button *ngFor="let c of component[chosenFilter]; let i = index" class="btn badge badge-danger m-1"
+                (click)="component[chosenFilter].splice(i,1)">{{c}}<span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+      </div>
+    </div>
   </div>
 </div>
 
