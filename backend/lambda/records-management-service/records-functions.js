@@ -146,9 +146,38 @@ fetch_record = async (recordId) => {
 
 fetch_revision = async (revisionId) => {
     const db = await db_util.connect_db();
-    const data = await db.collection('records').findOne({_id: ObjectID(revisionId)});
+    const data = await db.collection('records').aggregate([
+        {
+            $match: {
+                _id: ObjectID(revisionId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'reviserUid',
+                foreignField: 'uid',
+                as: 'reviser'
+            }
+        },
+        {
+            $addFields: {
+                reviser: {
+                    $arrayElemAt: ['$reviser', 0]
+                }
+            }
+        },
+        {
+            $project: {
+                "reviser._id": 0,
+                "reviser.authProviders": 0,
+                "reviser.email": 0,
+                "reviser.updatedAt": 0
+            }
+        }
+    ]).toArray();
 
-    return data;
+    return data[0];
 };
 
 fetch_history = async (recordId) => {
