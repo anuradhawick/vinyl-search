@@ -1,0 +1,206 @@
+<app-loader #releasepageloader></app-loader>
+
+<div *ngIf="recordObject | async as recordObject" class="row container-fluid">
+  <!--LEFT COL-->
+  <div class="col-12 col-sm-4">
+    <div class="container-fluid">
+      <div class="text-center">
+        <br>
+        <div style="width: 100%;">
+          <ngx-image-viewer [config]="imgvconfig"
+                            [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
+                            [(index)]="recordObject.chosenImage">
+          </ngx-image-viewer>
+        </div>
+      </div>
+      <div class="card mt-1">
+        <div class="m-1">
+          <h6>Genres</h6>
+          <div>
+            <span *ngFor="let s of recordObject.genres" class="btn badge badge-primary m-1">{{s}}</span>
+          </div>
+          <hr>
+          <h6>Styles</h6>
+          <div>
+            <span *ngFor="let s of recordObject.styles" class="btn badge badge-primary m-1">{{s}}</span>
+          </div>
+          <hr>
+          <h6>Descriptions</h6>
+          <div>
+            <span *ngFor="let s of recordObject.descriptions" class="btn badge badge-primary m-1">{{s}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--END LEFT COL-->
+  <!--RIGHT COL-->
+  <div class="col-12 col-sm-8">
+    <div class="container-fluid">
+      <br>
+      <a [routerLink]="['/records', recordObject.id, 'view']"><h1>{{recordObject.name}}</h1></a>
+      <hr>
+      <div class="card">
+        <div class="m-1">
+          <h2>Release Information</h2>
+        </div>
+        <div class="m-1">
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr>
+              <td class="w-25">Artist Name</td>
+              <td class="w-75">
+                <strong>
+                  {{recordObject.mainArtist}}
+                </strong>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="w-25">
+                Year
+              </td>
+              <td class="w-75">
+                <strong>
+                  {{recordObject.date}}
+                </strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <hr>
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr>
+              <td class="w-33">
+                Label - <strong>{{recordObject.label}}</strong>
+              </td>
+              <td class="w-33">
+                Catalog No - <strong>{{recordObject.catalogNo}}</strong>
+              </td>
+              <td class="w-33">
+                Country - <strong>{{recordObject.country}}</strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr>
+              <td class="w-25">
+                Size - <strong>{{recordObject.size}}</strong>
+              </td>
+              <td class="w-25">
+                Speed - <strong>{{recordObject.speed}}</strong>
+              </td>
+              <td class="w-25">
+                Channels - <strong>{{recordObject.channelCoding}}</strong>
+              </td>
+              <td class="w-25">
+                Format - <strong>{{recordObject.format}}</strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <hr>
+          <div class="m-1">
+            <h2>Track List</h2>
+          </div>
+          <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+              <th scope="col" class="w-auto">Position</th>
+              <th scope="col" class="w-25">Artists</th>
+              <th scope="col" class="w-75">Title/Credits</th>
+              <th scope="col" class="w-auto">Duration</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let track of recordObject.tracks; let ti = index"
+                id="track-row-{{ti}}">
+              <th scope="row">
+                <p>{{track.index}}</p>
+              </th>
+              <td>
+                <div *ngFor="let artist of track.artists; let i = index" class="input-group mb-1">
+                  {{artist.name}}
+                </div>
+              </td>
+              <td>
+                {{track.title}}
+                <div *ngIf="!_.isEmpty(track.credits)" class="blockquote-footer mt-1">
+                  <div *ngFor="let credit of track.credits; let i = index" class="input-group m-1">
+                    <em>{{credit.text}}</em>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {{track.duration}}
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
+          <hr>
+          <div class="m-1">
+            <h2>Other Information</h2>
+          </div>
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr *ngIf="!_.isEmpty(recordObject.commonCredits)">
+              <td class="w-25">
+                Common credits
+              </td>
+              <td class="w-75">
+                <div *ngFor="let credit of recordObject.commonCredits; let i = index">
+                  <strong>{{credit.text}}</strong>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-25">
+                Notes
+              </td>
+              <td class="w-75">
+                <strong>
+                  <div style="white-space: pre-wrap">{{recordObject.notes}}
+                  </div>
+                </strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <hr>
+          <table class="table table-hover table-bordered">
+            <tbody>
+            <tr *ngIf="recordObject.reviser">
+              <td class="w-25">
+                Revised by
+              </td>
+              <td class="w-75">
+                <strong>
+                  <div style="white-space: pre-wrap">{{recordObject.reviser.name || 'Not available'}}
+                  </div>
+                </strong>
+              </td>
+            </tr>
+            <tr *ngIf="recordObject.revisionComments">
+              <td class="w-25">
+                Revision comments
+              </td>
+              <td class="w-75">
+                <strong>
+                  <div style="white-space: pre-wrap">{{recordObject.revisionComments || 'Not available'}}
+                  </div>
+                </strong>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--END RIGHT COL-->
+</div>
+<br>

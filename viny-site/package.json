@@ -13,8 +13,8 @@
   "dependencies": {
     "@angular/animations": "^7.2.15",
     "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
+    "@angular/compiler": "^8.0.0",
+    "@angular/core": "^8.0.0",
     "@angular/forms": "~7.2.0",
     "@angular/http": "~7.2.0",
     "@angular/platform-browser": "~7.2.0",
@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.9",
-    "@angular/cli": "~7.2.3",
+    "@angular/cli": "^8.0.2",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "~7.2.0",
     "@ckeditor/ckeditor5-alignment": "^11.1.0",
