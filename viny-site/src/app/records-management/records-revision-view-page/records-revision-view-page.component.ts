@@ -10,7 +10,7 @@ import * as _ from 'lodash';
   styleUrls: ['./records-revision-view-page.component.css']
 })
 export class RecordsRevisionViewPageComponent implements OnInit {
-  @ViewChild('releasepageloader') loader: LoaderComponent;
+  @ViewChild('releasepageloader', {static: true}) loader: LoaderComponent;
   public _ = _;
   public recordObject = null;
   public imgvconfig = {

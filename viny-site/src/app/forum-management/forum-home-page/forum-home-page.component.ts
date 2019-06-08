@@ -20,7 +20,7 @@ export class ForumHomePageComponent implements OnInit {
   public _ = _;
   public query = null;
 
-  @ViewChild('forumloader') loader: LoaderComponent;
+  @ViewChild('forumloader', {static: true}) loader: LoaderComponent;
 
   constructor(/*private fns: AngularFireFunctions,*/
               public forumService: ForumService,

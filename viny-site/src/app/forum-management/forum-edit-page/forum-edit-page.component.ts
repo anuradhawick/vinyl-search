@@ -18,7 +18,7 @@ export class ForumEditPageComponent implements OnInit {
   public editorDisabled = false;
   public post = null;
   public hideView = true;
-  @ViewChild('editorloader') loader: LoaderComponent;
+  @ViewChild('editorloader', {static: true}) loader: LoaderComponent;
   public newMode = true;
   public postId = null;
   public imageProgress = 0;

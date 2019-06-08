@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecordsService } from '../../services/records.service';
 import { AuthService } from '../../shared-modules/auth/auth.service';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import * as _ from 'lodash';
 @Component({
@@ -11,7 +10,7 @@ import * as _ from 'lodash';
   styleUrls: ['./records-update-page.component.css']
 })
 export class RecordsUpdatePageComponent implements OnInit {
-  @ViewChild('editor') editor: RecordsEditorComponentComponent;
+  @ViewChild('editor', {static: true}) editor: RecordsEditorComponentComponent;
 
   public _ = _;
   public recordObject = null;

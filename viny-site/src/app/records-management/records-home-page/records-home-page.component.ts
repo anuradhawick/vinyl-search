@@ -17,7 +17,7 @@ declare const $: any;
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
   public objectKeys = Object.keys;
-  @ViewChild('recordsloader') loader: LoaderComponent;
+  @ViewChild('recordsloader', {static: true}) loader: LoaderComponent;
   // context control
   public records = null;
   public skip = 0;

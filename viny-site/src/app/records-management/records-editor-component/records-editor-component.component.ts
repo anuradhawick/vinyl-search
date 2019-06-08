@@ -31,7 +31,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   public speedsJSON = speedsJSON;
   public map = {};
 
-  @ViewChild('table') table: ElementRef;
+  @ViewChild('table', {static: true}) table: ElementRef;
 
   public recordId: string = null;
 

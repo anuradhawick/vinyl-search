@@ -14,7 +14,7 @@ import { ForumService } from '../../services/forum.service';
 })
 export class ForumViewPageComponent implements OnInit {
   public post;
-  @ViewChild('postloader') loader: LoaderComponent;
+  @ViewChild('postloader', {static: true}) loader: LoaderComponent;
   public Editor = ClassicEditor;
   public title = '';
   public data = '';

@@ -13,8 +13,8 @@ declare const $;
   styleUrls: ['./records-edit-page.component.css']
 })
 export class RecordsEditPageComponent implements OnInit {
-  @ViewChild('editor') editor: RecordsEditorComponentComponent;
-  @ViewChild('loader') loader: LoaderComponent;
+  @ViewChild('editor', {static: true}) editor: RecordsEditorComponentComponent;
+  @ViewChild('loader', {static: true}) loader: LoaderComponent;
   private ready = true;
   public testRecord = {
     'chosenImage': 0,
