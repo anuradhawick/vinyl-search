@@ -4,6 +4,7 @@ import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [LoaderComponent],
+  providers: [],
   imports: [
     CommonModule
   ],

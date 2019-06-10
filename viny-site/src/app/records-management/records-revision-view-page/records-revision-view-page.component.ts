@@ -10,7 +10,7 @@ import * as _ from 'lodash';
   styleUrls: ['./records-revision-view-page.component.css']
 })
 export class RecordsRevisionViewPageComponent implements OnInit {
-  @ViewChild('releasepageloader', {static: true}) loader: LoaderComponent;
+  @ViewChild('releasepageloader', {static: false}) loader: LoaderComponent;
   public _ = _;
   public recordObject = null;
   public imgvconfig = {
@@ -43,19 +43,10 @@ export class RecordsRevisionViewPageComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
-      this.loader.show();
-
       const recordId = _.get(map, 'params.recordId', null);
       const revisionId = _.get(map, 'params.revisionId', null);
-      const data = this.recordsService.fetch_record_revision(recordId, revisionId);
-      this.recordObject = data;
 
-      data.subscribe((d) => {
-        console.log(d)
-        this.loader.hide();
-      }, () => {
-        console.log('error');
-      });
+      this.recordObject  = this.recordsService.fetch_record_revision(recordId, revisionId);
     });
   }
 

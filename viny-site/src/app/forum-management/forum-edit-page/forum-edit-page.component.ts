@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../../services/forum.service';
+import { ToastrService } from 'ngx-toastr';
 
 declare const $;
 
@@ -26,7 +27,10 @@ export class ForumEditPageComponent implements OnInit {
 
   constructor(public route: ActivatedRoute,
               private forumService: ForumService,
-              private router: Router) {
+              private router: Router,
+              private toastr: ToastrService) {
+
+    console.log(this.forumService)
   }
 
   ngOnInit() {
@@ -58,11 +62,12 @@ export class ForumEditPageComponent implements OnInit {
     this.editorDisabled = true;
 
     if (_.isEmpty(this.title) || _.isEmpty(this.data)) {
-      alert('Title or the post body cannot be blank');
+      this.editorDisabled = false;
+      this.toastr.error('Title or the post body cannot be blank', 'Error');
       return;
     } else if (this.imageProgress > 0) {
       this.editorDisabled = false;
-      alert('Images are still uploading... Please wait');
+      this.toastr.warning('Images are still uploading... Please wait', 'Warning');
       return;
     }
     const object = {
@@ -75,11 +80,12 @@ export class ForumEditPageComponent implements OnInit {
       const data = this.forumService.new_post(object);
 
       data.subscribe((result: any) => {
+        this.toastr.success(`Post saved successfully`, 'Success');
         this.router.navigate(['/forum', result.postId, 'view']);
         this.editorDisabled = true;
       }, () => {
         this.editorDisabled = false;
-        alert('Saving failed! Please try again later');
+        this.toastr.error(`Saving failed! Please try again later`, 'Error');
       });
     } else {
       const data = this.forumService.update_post(this.postId, object);
@@ -88,7 +94,7 @@ export class ForumEditPageComponent implements OnInit {
         this.editorDisabled = true;
       }, () => {
         this.editorDisabled = false;
-        alert('Saving failed! Please try again later');
+        this.toastr.error(`Saving failed! Please try again later`, 'Error');
       });
     }
   }

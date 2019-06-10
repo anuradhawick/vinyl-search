@@ -1,4 +1,4 @@
-<app-loader #releasepageloader></app-loader>
+<app-loader [hidden]="!!(recordObject | async)" #releasepageloader></app-loader>
 
 <div *ngIf="recordObject | async as recordObject" class="row container-fluid">
   <!--LEFT COL-->
@@ -6,11 +6,13 @@
     <div class="container-fluid">
       <div class="text-center">
         <br>
-        <div style="width: 100%;">
-          <ngx-image-viewer [config]="imgvconfig"
-                            [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
-                            [(index)]="recordObject.chosenImage">
-          </ngx-image-viewer>
+        <div class="sq-container">
+          <div class="sq-content">
+            <ngx-image-viewer [config]="imgvconfig"
+                              [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
+                              [(index)]="recordObject.chosenImage">
+            </ngx-image-viewer>
+          </div>
         </div>
       </div>
       <div class="card mt-1">

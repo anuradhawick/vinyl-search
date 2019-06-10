@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import Amplify, { Auth, Hub, Logger } from 'aws-amplify';
+import Amplify, { Auth, Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 
@@ -22,7 +22,6 @@ export class AuthService {
 
   constructor(private route: ActivatedRoute) {
     route.queryParams.subscribe((params: any) => {
-      console.log(params);
       if (params.error === 'invalid_request' && params.error_description) {
         if (params.error_description === 'PreSignUp failed with error Google. ') {
           this.loginFacebook();
@@ -35,11 +34,8 @@ export class AuthService {
 
     this.autoLogin = new Promise((resolve, reject) => {
       Auth.currentAuthenticatedUser().then((u) => {
-        this.user = u.attributes;
-        this.user['uid'] = u.attributes.sub;
-        this.isLoggedIn = true;
-        this.token = _.get(u, 'signInUserSession.idToken.jwtToken', null);
-        console.log(this.token)
+        this.processUser(u);
+        console.log(this.token);
         console.log(JSON.parse(u.attributes.identities)[0].providerName)
         resolve(true);
 
@@ -48,14 +44,10 @@ export class AuthService {
       });
 
       Hub.listen('auth', (data) => {
-        console.log(data)
         switch (data.payload.event) {
           case 'signIn':
             Auth.currentAuthenticatedUser().then((u) => {
-              this.user = u.attributes;
-              this.user['uid'] = u.attributes.sub;
-              this.isLoggedIn = true;
-              this.token = _.get(u, 'signInUserSession.idToken.jwtToken', null);
+              this.processUser(u);
               resolve(true);
             }).catch((e) => {
             });
@@ -69,6 +61,13 @@ export class AuthService {
         }
       });
     });
+  }
+
+  processUser(u) {
+    this.user = u.attributes;
+    this.user['uid'] = u.attributes.sub;
+    this.isLoggedIn = true;
+    this.token = _.get(u, 'signInUserSession.idToken.jwtToken', null);
   }
 
 

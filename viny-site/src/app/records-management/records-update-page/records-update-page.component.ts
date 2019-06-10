@@ -10,7 +10,7 @@ import * as _ from 'lodash';
   styleUrls: ['./records-update-page.component.css']
 })
 export class RecordsUpdatePageComponent implements OnInit {
-  @ViewChild('editor', {static: true}) editor: RecordsEditorComponentComponent;
+  @ViewChild('editor', {static: false}) editor: RecordsEditorComponentComponent;
 
   public _ = _;
   public recordObject = null;

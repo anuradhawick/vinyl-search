@@ -8,11 +8,10 @@ const update_user = async (uid, userdata) => {
         {
             $set:
             {
-                email: userdata.email,
                 family_name: userdata.family_name,
                 given_name: userdata.give_name,
                 name: userdata.name,
-                picture: userdata.phoneNumber,
+                picture: '',
                 updatedAt: new Date()
             }
         },
