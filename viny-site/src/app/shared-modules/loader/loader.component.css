@@ -1,0 +1,8 @@
+.se-pre-con {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  width: 100px;
+  height: 100px;
+  background: url("/assets/images/loader.gif") center no-repeat #fff;
+}

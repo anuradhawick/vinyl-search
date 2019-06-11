@@ -47,6 +47,7 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.route.queryParams.subscribe((p: any) => {
       this.records = null;
       const page = _.max([_.get(p, 'page', 1), 1]);

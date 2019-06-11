@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import * as _ from 'lodash';
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
@@ -18,9 +18,8 @@ export class AuthService {
   public user = null;
   public isLoggedIn = false;
   private autoLogin;
-  public token = null;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private zone: NgZone) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         if (params.error_description === 'PreSignUp failed with error Google. ') {
@@ -35,8 +34,7 @@ export class AuthService {
     this.autoLogin = new Promise((resolve, reject) => {
       Auth.currentAuthenticatedUser().then((u) => {
         this.processUser(u);
-        console.log(this.token);
-        console.log(JSON.parse(u.attributes.identities)[0].providerName)
+        console.log(JSON.parse(u.attributes.identities)[0].providerName);
         resolve(true);
 
       }).catch((e) => {
@@ -46,6 +44,7 @@ export class AuthService {
       Hub.listen('auth', (data) => {
         switch (data.payload.event) {
           case 'signIn':
+            console.log('Login success');
             Auth.currentAuthenticatedUser().then((u) => {
               this.processUser(u);
               resolve(true);
@@ -53,6 +52,7 @@ export class AuthService {
             });
             break;
           case 'signOut':
+            console.log('Logout success');
             this.isLoggedIn = false;
             this.user = null;
             this.autoLogin = false;
@@ -64,10 +64,16 @@ export class AuthService {
   }
 
   processUser(u) {
-    this.user = u.attributes;
-    this.user['uid'] = u.attributes.sub;
-    this.isLoggedIn = true;
-    this.token = _.get(u, 'signInUserSession.idToken.jwtToken', null);
+    this.zone.run(() => {
+      this.user = u.attributes;
+      this.user['uid'] = u.attributes.sub;
+      this.isLoggedIn = true;
+    });
+  }
+
+  async getToken() {
+    const session: any = await Auth.currentSession();
+    return session.idToken.jwtToken || null;
   }
 
 

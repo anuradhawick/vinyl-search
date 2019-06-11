@@ -41,19 +41,6 @@
           </div>
         </div>
       </div>
-      <!--<div *ngIf="images.length > 0" class="card mb-1">-->
-      <!--<div class="container-fluid">-->
-      <!--<div class="row">-->
-      <!--<div *ngFor="let image of images" class="col-4">-->
-      <!--<img (click)="selectImage(image)" [src]="image" class="rounded mb-1 mt-1"-->
-      <!--style="object-fit: cover; width: 100%; max-height: 100px;">-->
-      <!--<span (click)="deleteImage(image)" style="position: absolute; top: 5%; right: 5%;"-->
-      <!--class="btn badge badge-danger m-1"><i class="fas fa-trash-alt"></i></span>-->
-
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
     </div>
   </div>
   <div class="col-12 col-sm-9">
@@ -65,7 +52,7 @@
         <div class="form-group">
           <div class="row mb-1">
             <div class="col-4">
-              <label>Record Title</label>
+              <h4>Record Title</h4>
               <input type="text" class="form-control" placeholder="Record title" name="release-name"
                      [(ngModel)]="recordObject.name"
                      required>
@@ -75,7 +62,7 @@
             </div>
 
             <div class="col-4">
-              <label>Artist Name</label>
+              <h4>Artist Name</h4>
               <input type="text" class="form-control" placeholder="Artist name" name="main-artist-name"
                      [(ngModel)]="recordObject.mainArtist">
               <div class="invalid-feedback">
@@ -84,7 +71,7 @@
             </div>
 
             <div class="col-4">
-              <label>Year</label>
+              <h4>Year</h4>
               <input name="release-date" [(ngModel)]="recordObject.date" type="text" class="form-control"
                      placeholder="YYYY-MM-DD"
                      pattern="([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?">
@@ -95,8 +82,8 @@
           </div>
           <hr>
           <div class="row mb-1">
-            <div class="col-3">
-              <label>Label</label>
+            <div class="col-6">
+              <h4>Label</h4>
               <input type="text" class="form-control" placeholder="Label" name="release-label"
                      [(ngModel)]="recordObject.label"
                      required>
@@ -104,8 +91,8 @@
                 Enter label name or use <em>Unlabelled</em>
               </div>
             </div>
-            <div class="col-3">
-              <label>Catalog Number</label>
+            <div class="col-6">
+              <h4>Catalog Number</h4>
               <input type="text" class="form-control" placeholder="Catalog No." name="release-catalog"
                      [(ngModel)]="recordObject.catalogNo"
                      required>
@@ -113,44 +100,34 @@
                 Enter catalog number or use <em>NA</em>
               </div>
             </div>
-            <div class="col-3">
-              <label>Size</label>
-              <select name="size" class="form-control" [(ngModel)]="recordObject.size" required>
-                <option></option>
-                <option *ngFor="let c of sizesJSON">{{c}}</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="col-3">
-              <label>Speed</label>
-              <select name="speed" class="form-control" [(ngModel)]="recordObject.speed" required>
-                <option></option>
-                <option *ngFor="let c of speedsJSON">{{c}}</option>
-                <option>Other</option>
-              </select>
-            </div>
           </div>
         </div>
         <hr>
         <div class="form-group">
           <div class="row">
             <div class="col-4">
-              <label>Country of origin</label>
+              <h4>Country of origin</h4>
               <select name="country" class="form-control" [(ngModel)]="recordObject.country" required="">
                 <option *ngFor="let c of countriesJSON" [ngValue]="c.name">{{c.name}}</option>
               </select>
+              <div class="invalid-feedback">
+                Select the field
+              </div>
             </div>
-            <div class="col-4">
-              <label>Channels</label>
+            <div class="col-2">
+              <h4>Channels</h4>
               <select name="channel" class="form-control" [(ngModel)]="recordObject.channelCoding" required="">
                 <option>Stereo</option>
                 <option>Mono</option>
                 <option>Pseudo Stereo</option>
                 <option>Other/Unknown</option>
               </select>
+              <div class="invalid-feedback">
+                Select the field
+              </div>
             </div>
-            <div class="col-4">
-              <label>Format</label>
+            <div class="col-2">
+              <h4>Format</h4>
               <select name="format" class="form-control" [(ngModel)]="recordObject.format" required="">
                 <option>Vinyl</option>
                 <option>Acetate</option>
@@ -165,65 +142,78 @@
                 <option>8-Track Cartridge</option>
                 <option>Other/Unknown</option>
               </select>
+              <div class="invalid-feedback">
+                Select the field
+              </div>
+            </div>
+            <div class="col-2">
+              <h4>Size</h4>
+              <select name="size" class="form-control" [(ngModel)]="recordObject.size" required>
+                <option></option>
+                <option *ngFor="let c of sizesJSON">{{c}}</option>
+                <option>Other</option>
+              </select>
+              <div class="invalid-feedback">
+                Select the field
+              </div>
+            </div>
+            <div class="col-2">
+              <h4>Speed</h4>
+              <select name="speed" class="form-control" [(ngModel)]="recordObject.speed" required>
+                <option></option>
+                <option *ngFor="let c of speedsJSON">{{c}}</option>
+                <option>Other</option>
+              </select>
+              <div class="invalid-feedback">
+                Select the field
+              </div>
             </div>
           </div>
         </div>
-        <hr>
+        <br>
         <!---->
         <div class="accordion">
           <div class="card">
             <div class="card-header" id="headingOne">
-              <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                        aria-expanded="true" aria-controls="collapseOne">
-                  Select Genres
-                </button>
-              </h2>
+              <h4 class="card-title">Select Genres</h4>
             </div>
 
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-              <div class="card-body">
+            <div class="card-body">
                 <span *ngFor="let g of genres" class="btn badge badge-primary m-1"
                       (click)="selectGenre(g.name)">{{g.name}}</span>
-                <br>
-                <label><i class="btn btn-link" data-toggle="modal" data-target="#newgenre">(add missing)</i></label>
-                <br>
-                <span *ngFor="let g of recordObject.genres" class="btn badge badge-danger m-1"
-                      (click)="selectGenre(g, true)">{{g}} <i class="fas fa-trash-alt"></i></span>
-              </div>
+              <br>
+              <label><i class="btn btn-link" data-toggle="modal" data-backdrop="" data-target="#newgenre">(add
+                missing)</i></label>
+              <br>
+              <span *ngFor="let g of recordObject.genres" class="btn badge badge-danger m-1"
+                    (click)="selectGenre(g, true)">{{g}}<i class="material-icons">delete_outline</i></span>
             </div>
           </div>
+          <br>
           <div class="card">
             <div class="card-header" id="headingTwo">
-              <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
-                  Styles
-                </button>
-              </h2>
+              <h4 class="card-title">Styles</h4>
             </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
-              <div class="card-body">
+            <div class="card-body">
 
-                <span *ngIf="_.isEmpty(recordObject.genres)">Please select some genres</span>
-                <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link"
-                                                                                        data-toggle="modal"
-                                                                                        data-target="#allstyles">Show
-                  All Styles</i></label>
-                <br *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)">
-                <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal"
-                                                                  data-target="#newstyle">(add missing)</i></label>
-                <br>
-                <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
-                      (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
-              </div>
+              <span *ngIf="_.isEmpty(recordObject.genres)">Please select some genres</span>
+              <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link"
+                                                                                      data-toggle="modal"
+                                                                                      data-backdrop=""
+                                                                                      data-target="#allstyles">Show
+                All Styles</i></label>
+              <br *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)">
+              <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal"
+                                                                data-backdrop=""
+                                                                data-target="#newstyle">(add missing)</i></label>
+              <br>
+              <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
+                    (click)="selectStyle(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
             </div>
           </div>
         </div>
-        <hr>
         <!---->
         <!--TRACKS START-->
-        <br>
         <h2>Track List</h2>
 
         <div class="container col-12">
@@ -240,26 +230,29 @@
             <tbody #table id="bb">
             <tr *ngFor="let track of recordObject.tracks; let ti = index" style="cursor: all-scroll"
                 id="track-row-{{ti}}">
-              <th scope="row">
+              <td scope="row">
                 <input type="text" class="form-control" placeholder="A:1/1" name="track-{{ti}}-index-{{i}}"
                        [(ngModel)]="track.index" required>
-              </th>
+                <div class="invalid-feedback">
+                  Index empty
+                </div>
+              </td>
               <td class="do-validate">
                 <div class="form-group">
                   <div *ngFor="let artist of track.artists; let i = index" class="input-group mb-1">
                     <input type="text" class="form-control" placeholder="Artist" name="track-{{ti}}-artist-{{i}}"
                            [(ngModel)]="artist.name" required>
-
-                    <div class="input-group-append">
-                      <button type="button" (click)="removeArtist(recordObject.tracks, ti, artist)"
-                              class="btn btn-secondary"><i
-                        class="fas fa-trash-alt"
-                        style="font-size: 18px;"></i></button>
+                    <button type="button" (click)="removeArtist(recordObject.tracks, ti, artist)"
+                            class="btn btn-default btn-sm"><i class="material-icons">delete_outline</i></button>
+                    <div class="invalid-feedback">
+                      Enter name or remove the field
                     </div>
+
+
                   </div>
                   <div class="row mt-1">
-                    <button (click)="addArtist(track)" class="btn btn-link">
-                      <i class="fas fa-plus" style="font-size: 18px;"></i> Artist
+                    <button (click)="addArtist(track)" class="btn btn-default btn-sm">
+                      Artist<i class="material-icons">exposure_plus_1</i>
                     </button>
                   </div>
                 </div>
@@ -269,20 +262,24 @@
                   <input type="text" class="form-control mb-1" placeholder="Title"
                          name="track-{{ti}}-title-{{i}}"
                          [(ngModel)]="track.title" required>
+                  <div class="invalid-feedback">
+                    Enter the song title
+                  </div>
                   <div *ngFor="let credit of track.credits; let i = index" class="input-group mb-1">
 
                     <input type="text" class="form-control" placeholder="Credits"
                            name="track-{{ti}}-creadits-{{i}}"
                            [(ngModel)]="credit.text" required>
-                    <div class="input-group-append">
-                      <button type="button" (click)="removeCredit(recordObject.tracks, ti, credit)"
-                              class="btn btn-secondary">
-                        <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+                    <button type="button" (click)="removeCredit(recordObject.tracks, ti, credit)"
+                            class="btn btn-default btn-sm">
+                      <i class="material-icons">delete_outline</i></button>
+                    <div class="invalid-feedback">
+                      Enter credits or remove the field
                     </div>
                   </div>
                   <div class="row mt-1">
-                    <button (click)="addCredit(track)" class="btn btn-link">
-                      <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+                    <button (click)="addCredit(track)" class="btn btn-default btn-sm">
+                      Credit<i class="material-icons">exposure_plus_1</i>
                     </button>
                   </div>
                 </div>
@@ -295,14 +292,14 @@
               </td>
               <td>
                 <div class="dropdown dropleft">
-                  <button class="btn btn-secondary" type="button" id="dropdownMenuButton"
+                  <button class="btn btn-default btn-sm" type="button" id="dropdownMenuButton"
                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-cogs" style="font-size: 18px;"></i>
+                    <i class="material-icons">settings</i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a (click)="removeTrack(track)" class="btn dropdown-item">Remove</a>
-                    <a (click)="insertTrackBefore(ti)" class="btn dropdown-item">Add Track Above</a>
-                    <a (click)="insertTrackAfter(ti)" class="btn dropdown-item">Add Track Below</a>
+                    <a (click)="removeTrack(track)" class="btn btn-default dropdown-item">Remove</a>
+                    <a (click)="insertTrackBefore(ti)" class="btn btn-default dropdown-item">Add Track Above</a>
+                    <a (click)="insertTrackAfter(ti)" class="btn btn-default dropdown-item">Add Track Below</a>
                   </div>
                 </div>
               </td>
@@ -312,60 +309,52 @@
           </table>
         </div>
         <div class="row container">
-          <button class="btn btn-secondary" (click)="appendTrack()">
-            Track <i class="fas fa-plus" style="font-size: 18px;"></i>
+          <button class="btn btn-default" (click)="appendTrack()">
+            Track<i class="material-icons">exposure_plus_1</i>
           </button>
-          <button class="btn btn-secondary ml-1" (click)="autoIndex()">
+          <button class="btn btn-default ml-1" (click)="autoIndex()">
             Auto Index
           </button>
         </div>
 
         <!--TRACKS END-->
-        <hr>
+        <br>
         <div class="card">
-          <div class="card-header" id="headingThree">
-            <h2 class="mb-0">
-              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
-                      aria-expanded="false" aria-controls="collapseThree">
-                Descriptions
-              </button>
-            </h2>
+          <div class="card-header">
+            <h4 class="card-title">Descriptions</h4>
           </div>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
-            <div class="card-body">
+          <div class="card-body">
                 <span *ngFor="let d of descr" class="btn badge badge-primary m-1"
                       (click)="selectDescr(d)">{{d}}</span>
-              <hr *ngIf="!_.isEmpty(recordObject.descriptions)">
-              <span *ngFor="let s of recordObject.descriptions" class="btn badge badge-danger m-1"
-                    (click)="selectDescr(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
-            </div>
+            <hr *ngIf="!_.isEmpty(recordObject.descriptions)">
+            <span *ngFor="let s of recordObject.descriptions" class="btn badge badge-danger m-1"
+                  (click)="selectDescr(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
           </div>
         </div>
         <!---->
         <hr>
         <div class="form-group">
-          <label>Credits</label>
+          <h4>Credits</h4>
           <div *ngFor="let credit of recordObject.commonCredits; let i = index" class="input-group mb-1">
             <input type="text" class="form-control" placeholder="Credits"
                    name="common-credits-{{i}}"
                    [(ngModel)]="credit.text" required>
-            <div class="input-group-append">
-              <button type="button" (click)="removeCommonCredit(credit)" class="btn btn-secondary">
-                <i class="fas fa-trash-alt" style="font-size: 18px;"></i></button>
+            <button type="button" (click)="removeCommonCredit(credit)" class="btn btn-default btn-sm">
+              <i class="material-icons">delete_outline</i></button>
+            <div class="invalid-feedback">
+              Enter credits or remove the field
             </div>
           </div>
-          <div class="row mt-1">
-            <button (click)="addCommonCredit()" class="btn btn-link">
-              <i class="fas fa-plus" style="font-size: 18px;"></i> Credit
+          <div class="row container">
+            <button (click)="addCommonCredit()" class="btn btn-default btn-sm">
+              Credit<i class="material-icons">exposure_plus_1</i>
             </button>
           </div>
         </div>
         <hr>
         <div class="form-group">
-          <div class="">
-            <label>Notes</label>
-            <textarea type="text" class="form-control" name="release-notes" [(ngModel)]="recordObject.notes"></textarea>
-          </div>
+          <h4>Notes</h4>
+          <textarea type="text" class="form-control" name="release-notes" [(ngModel)]="recordObject.notes"></textarea>
         </div>
       </form>
     </div>
@@ -393,8 +382,9 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addGenre()">Save changes</button>
+        <button type="button" class="btn btn-default m-1" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary m-1" data-dismiss="modal" (click)="addGenre()">Save changes
+        </button>
       </div>
     </div>
   </div>
@@ -425,15 +415,16 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addStyle()">Save changes</button>
+        <button type="button" class="btn btn-default m-1" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary m-1" data-dismiss="modal" (click)="addStyle()">Save changes
+        </button>
       </div>
     </div>
   </div>
 </div>
 
 <div id="allstyles" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" style="max-width: 90%" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Select Styles</h5>
@@ -446,7 +437,7 @@
               (click)="selectStyle(s)">{{s}}</span>
         <hr>
         <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
-              (click)="selectStyle(s, true)">{{s}} <i class="fas fa-trash-alt"></i></span>
+              (click)="selectStyle(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>

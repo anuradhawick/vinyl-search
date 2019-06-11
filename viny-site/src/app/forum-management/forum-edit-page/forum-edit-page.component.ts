@@ -5,6 +5,7 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../shared-modules/auth/auth.service';
 
 declare const $;
 
@@ -30,7 +31,6 @@ export class ForumEditPageComponent implements OnInit {
               private router: Router,
               private toastr: ToastrService) {
 
-    console.log(this.forumService)
   }
 
   ngOnInit() {
@@ -79,21 +79,23 @@ export class ForumEditPageComponent implements OnInit {
     if (this.newMode) {
       const data = this.forumService.new_post(object);
 
-      data.subscribe((result: any) => {
+      data.then((result: any) => {
         this.toastr.success(`Post saved successfully`, 'Success');
         this.router.navigate(['/forum', result.postId, 'view']);
         this.editorDisabled = true;
-      }, () => {
+      }, (err) => {
         this.editorDisabled = false;
+        console.log('error ', err);
         this.toastr.error(`Saving failed! Please try again later`, 'Error');
       });
     } else {
       const data = this.forumService.update_post(this.postId, object);
-      data.subscribe(() => {
+      data.then(() => {
         this.router.navigate(['/forum', this.postId, 'view']);
         this.editorDisabled = true;
-      }, () => {
+      }, (err) => {
         this.editorDisabled = false;
+        console.log('error ', err);
         this.toastr.error(`Saving failed! Please try again later`, 'Error');
       });
     }

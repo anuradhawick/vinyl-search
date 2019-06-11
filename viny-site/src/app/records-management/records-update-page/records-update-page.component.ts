@@ -4,6 +4,7 @@ import { RecordsService } from '../../services/records.service';
 import { AuthService } from '../../shared-modules/auth/auth.service';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-records-update-page',
   templateUrl: './records-update-page.component.html',
@@ -20,7 +21,8 @@ export class RecordsUpdatePageComponent implements OnInit {
   constructor(public route: ActivatedRoute,
               private recordsService: RecordsService,
               public auth: AuthService,
-              private router: Router) {
+              private router: Router,
+              private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -46,16 +48,20 @@ export class RecordsUpdatePageComponent implements OnInit {
       revisionComments: this.revisionComments
     });
 
+    if (!valid || !record) {
+      this.toastr.error(`Please fill the required fields`, 'Error');
+    }
+
     if (record && valid) {
       this.ready = false;
 
       const data = this.recordsService.update_record(record);
 
-      data.subscribe((result: any) => {
+      data.then((result: any) => {
         this.router.navigate(['/records', result.recordId, 'view']);
       }, () => {
         this.ready = true;
-        alert('Saving failed! Please try again later');
+        this.toastr.error(`Unable to submit revision. Try again later`, 'Error');
       });
     }
   }

@@ -11,20 +11,24 @@ export class RecordsService {
   constructor(private http: HttpClient, private auth: AuthService) {
   }
 
-  save_record(record) {
-    return this.http.post(environment.api_gateway + 'records', record, {
+  async save_record(record) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'records', record, {
       headers: new HttpHeaders({
-        'Authorization': this.auth.token
+        'Authorization': token
       })
-    });
+    }).toPromise();
   }
 
-  update_record(record) {
-    return this.http.post(environment.api_gateway + 'records/' + record.id, record, {
+  async update_record(record) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'records/' + record.id, record, {
       headers: new HttpHeaders({
-        'Authorization': this.auth.token
+        'Authorization': token
       })
-    });
+    }).toPromise();
   }
 
   fetch_records(params) {

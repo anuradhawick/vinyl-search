@@ -63,7 +63,7 @@ export class RecordsEditPageComponent implements OnInit {
 
       const data = this.recordsService.save_record(record);
 
-      data.subscribe((result: any) => {
+      data.then((result: any) => {
           this.toastr.success(`Records saved successfully`, 'Success');
           this.router.navigate(['/records', result.recordId, 'view']);
         }, () => {

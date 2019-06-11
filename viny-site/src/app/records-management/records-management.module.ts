@@ -28,6 +28,8 @@ import { SharedModules } from '../shared-modules/shared.module';
     FormsModule,
     ImageViewerModule,
     SharedModules
+  ],
+  providers: [
   ]
 })
 export class RecordsManagementModule {

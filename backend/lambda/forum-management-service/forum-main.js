@@ -78,7 +78,8 @@ exports.main = (event, context, callback) => {
     router.route(
         'POST',
         '/forum',
-        (event, context, callback) => {        
+        (event, context, callback) => {
+            console.log(event.requestContext.authorizer.claims)
             forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, null).then((data) => {
                 callback(null, lambdaRouter.builResponse(200, {
                     postId: data,

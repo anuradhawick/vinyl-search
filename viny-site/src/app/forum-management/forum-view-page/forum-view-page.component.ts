@@ -49,7 +49,7 @@ export class ForumViewPageComponent implements OnInit {
   delete() {
     this.loader.show();
     const data = this.forumService.delete_post(this.post.id);
-    data.subscribe(() => {
+    data.then(() => {
     this.loader.hide();
       this.router.navigate(['/forum']);
     });

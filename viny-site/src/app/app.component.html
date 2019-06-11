@@ -1,91 +1,3 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Vinyl-Site</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" role="button" [routerLink]="['/records']" routerLinkActive="active" aria-haspopup="true"
-             aria-expanded="false">
-            Records
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" role="button" [routerLink]="['/forum']" routerLinkActive="active" aria-haspopup="true"
-             aria-expanded="false">
-            Forum
-          </a>
-        </li>
-
-        <!--<li class="nav-item dropdown">-->
-        <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"-->
-        <!--aria-haspopup="true" aria-expanded="false">-->
-        <!--Events-->
-        <!--</a>-->
-        <!--<div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-        <!--<a class="dropdown-item" [routerLink]="['/events/auctions']">Auctions</a>-->
-        <!--<a class="dropdown-item" href="#">Gatherings</a>-->
-        <!--<a class="dropdown-item" href="#">Demonstrations</a>-->
-        <!--</div>-->
-        <!--</li>-->
-
-        <!--<li class="nav-item dropdown">-->
-        <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"-->
-        <!--aria-haspopup="true" aria-expanded="false">-->
-        <!--Items-->
-        <!--</a>-->
-        <!--<div class="dropdown-menu" aria-labelledby="navbarDropdown1">-->
-        <!--<a class="dropdown-item" href="#">Sale</a>-->
-        <!--<a class="dropdown-item" href="#">Wanted</a>-->
-        <!--<a class="dropdown-item" href="#">Exchange</a>-->
-        <!--<a class="dropdown-item" href="#">Repairs</a>-->
-        <!--</div>-->
-        <!--</li>-->
-
-
-        <!--<li class="nav-item active">-->
-        <!--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-        <!--</li>-->
-        <!--<li class="nav-item">-->
-        <!--<a class="nav-link" href="#">Link</a>-->
-        <!--</li>-->
-
-        <!--<li class="nav-item">-->
-        <!--<a class="nav-link disabled" href="#">Disabled</a>-->
-        <!--</li>-->
-      </ul>
-      <!--<form class="form-inline my-2 my-lg-0">-->
-      <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-      <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-      <!--</form>-->
-
-
-      <div class="nav-item">
-        <div class="nav-link" *ngIf="auth.user as user; else showLogin">
-          <span class="nav-link text-white">Hi {{ user.name.split(" ")[0] }}
-            <a (click)="auth.logout()"><span class="btn badge badge-light">Logout</span></a>
-          </span>
-
-        </div>
-        <ng-template #showLogin>
-          <div class="nav-link">
-          <span class="nav-link text-white">
-            <a (click)="auth.login()"><span class="btn badge badge-success">Login</span></a>
-          </span>
-          </div>
-        </ng-template>
-      </div>
-
-    </div>
-  </nav>
-</header>
-<router-outlet></router-outlet>
-<!-- Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -98,13 +10,16 @@
       <div class="modal-body">
         <img class="rounded mx-auto d-block" height="50%" width="50%" src="/assets/images/records-new-sample.svg"
              alt="">
-        <hr>
-        <button (click)="auth.loginFacebook()" class="btn btn-block btn-lg btn-social btn-facebook">
-          <i class="fab fa-facebook-f"></i> Login with Facebook
-        </button>
-        <button (click)="auth.loginGoogle()" class="btn btn-block btn-lg btn-social btn-google">
-          <i class="fab fa-google"></i> Login with Google
-        </button>
+        <div class="sharing-area">
+          <button (click)="auth.loginFacebook()" class="btn btn-block btn-raised btn-facebook sharrre">
+            <i class="fa fa-facebook-square"></i> Login with Facebook
+            <div class="ripple-container"></div>
+          </button>
+
+          <button (click)="auth.loginGoogle()" class="btn btn-block btn-raised btn-google-plus sharrre">
+            <i class="fa fa-google-plus"></i> Login with Google
+          </button>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -113,3 +28,90 @@
   </div>
 </div>
 
+<!--NEW-->
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
+     id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand" href="/">
+        Vinyl Search </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="dropdown nav-item">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="material-icons">library_music</i> Records
+          </a>
+          <div class="dropdown-menu dropdown-with-icons">
+            <a [routerLink]="'/records'" class="dropdown-item">
+              <i class="material-icons">album</i> Browse Records
+            </a>
+            <a *ngIf="auth.isLoggedIn" [routerLink]="'/records/new'"
+               class="dropdown-item">
+              <i class="material-icons">content_paste</i> New Record
+            </a>
+          </div>
+        </li>
+        <li class="dropdown nav-item">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="material-icons">bookmarks</i> Forum
+          </a>
+          <div class="dropdown-menu dropdown-with-icons">
+            <a [routerLink]="'/forum'" class="dropdown-item">
+              <i class="material-icons">forum</i> Browse Forum
+            </a>
+            <a *ngIf="auth.isLoggedIn" [routerLink]="'/forum/editor'"
+               class="dropdown-item">
+              <i class="material-icons">content_paste</i> New Post
+            </a>
+          </div>
+        </li>
+        <ng-container *ngIf="auth.isLoggedIn; else showLogin">
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0)">
+              <i class="material-icons">person</i> Hi {{ auth.user.name.split(" ")[0] }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0)" (click)="auth.logout()">
+              <i class="material-icons">exit_to_app</i> Logout
+            </a>
+          </li>
+        </ng-container>
+        <ng-template #showLogin>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0)" (click)="auth.login()">
+              <i class="material-icons">person</i> Login/Register
+            </a>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header header-filter" data-parallax="true"
+     style="background-image: url('../assets/images/profile_city.jpg'); height: 400px">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1 class="title">The Vinyl World</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+<footer class="footer footer-default">
+  <div class="container">
+    <div class="copyright">
+      &copy; The Vinyl Search | <a [routerLink]="'/privacy-policy'">Privacy</a>
+    </div>
+  </div>
+</footer>

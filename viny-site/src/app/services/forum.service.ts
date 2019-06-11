@@ -27,27 +27,33 @@ export class ForumService {
     });
   }
 
-  new_post(post) {
-    return this.http.post(environment.api_gateway + 'forum/', post, {
+  async new_post(post) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'forum/', post, {
       headers: new HttpHeaders({
-        'Authorization': this.auth.token
+        'Authorization': token
       })
-    });
+    }).toPromise();
   }
 
-  update_post(postId, post) {
-    return this.http.post(environment.api_gateway + 'forum/' + postId, post, {
+  async update_post(postId, post) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'forum/' + postId, post, {
       headers: new HttpHeaders({
-        'Authorization': this.auth.token
+        'Authorization': token
       })
-    });
+    }).toPromise();
   }
 
-  delete_post(postId) {
-    return this.http.delete(environment.api_gateway + 'forum/' + postId, {
+  async delete_post(postId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.delete(environment.api_gateway + 'forum/' + postId, {
       headers: new HttpHeaders({
-        'Authorization': this.auth.token
+        'Authorization': token
       })
-    });
+    }).toPromise();
   }
 }

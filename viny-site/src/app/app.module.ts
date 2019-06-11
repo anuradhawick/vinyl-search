@@ -11,28 +11,30 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModules } from './shared-modules/shared.module';
+import { PrivacyPolicyPageComponent } from './pages/privacy-policy-page/privacy-policy-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent,
+    PrivacyPolicyPageComponent
   ],
   imports: [
+    SharedModules,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     NgbModule,
     HttpClientModule,
-    BrowserAnimationsModule,
     CommonModule,
     ToastrModule.forRoot({
       preventDuplicates: true,
     }),
-    SharedModules
   ],
   providers: [
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }
