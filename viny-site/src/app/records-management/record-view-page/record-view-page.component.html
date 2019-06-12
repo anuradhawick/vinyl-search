@@ -1,4 +1,5 @@
 <div class="main main-raised">
+  <br>
   <app-loader [hidden]="!!(recordObject | async)"></app-loader>
 
   <div *ngIf="recordObject | async as recordObject" class="row container-fluid">

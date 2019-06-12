@@ -11,13 +11,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModules } from './shared-modules/shared.module';
-import { PrivacyPolicyPageComponent } from './pages/privacy-policy-page/privacy-policy-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
-    PrivacyPolicyPageComponent
+    HomePageComponent
   ],
   imports: [
     SharedModules,
