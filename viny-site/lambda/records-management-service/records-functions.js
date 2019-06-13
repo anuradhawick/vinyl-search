@@ -6,11 +6,10 @@ const S3 = require('aws-sdk').S3;
 const s3 = new S3();
 
 search_records = async (query_params) => {
-
-  const genres = JSON.parse(_.get(query_params, 'genres', '[]'))
-  const styles = JSON.parse(_.get(query_params, 'styles', '[]'))
-  const formats = JSON.parse(_.get(query_params, 'formats', '[]'))
-  const countries = JSON.parse(_.get(query_params, 'countries', '[]'))
+  const genres = JSON.parse(_.get(query_params, 'genres', '[]'));
+  const styles = JSON.parse(_.get(query_params, 'styles', '[]'));
+  const formats = JSON.parse(_.get(query_params, 'formats', '[]'));
+  const countries = JSON.parse(_.get(query_params, 'countries', '[]'));
   const limit = _.parseInt(_.get(query_params, 'limit', 30));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
   const query = _.get(query_params, 'query', '');
@@ -24,50 +23,60 @@ search_records = async (query_params) => {
 
   // Add query filter
   if (!_.isEmpty(query)) {
-    match.$match.$text =﻿{
-      $search: query
-    }
+    _.assign(match.$match, {
+      $text: {
+        $search: query
+      }
+    });
   }
 
   // Add genres filter
   if (!_.isEmpty(genres)) {
-    match.$match["genres"] =﻿{
-      $all: [...genres]
-    }
+    _.assign(match.$match, {
+      genres: {
+        $all: [...genres]
+      }
+    });
   }
 
   // Add styles filter
   if (!_.isEmpty(styles)) {
-    match.$match["styles"] =﻿{
-      $all: [...styles]
-    }
+    _.assign(match.$match, {
+      styles: {
+        $all: [...styles]
+      }
+    });
   }
 
   // Add formats filter
   if (!_.isEmpty(formats)) {
-    match.$match["format"] =﻿{
-      $in: [...formats]
-    }
+    _.assign(match.$match, {
+      format: {
+        $in: [...formats]
+      }
+    });
   }
 
   // Add countries filter
   if (!_.isEmpty(countries)) {
-    match.$match["country"] =﻿{
-      $in: [...countries]
-    }
+    _.assign(match.$match, {
+      country: {
+        $in: [...countries]
+      }
+    });
   }
-
 
   const dbQuery = [match];
 
   if (!_.isEmpty(query)) {
-    dbQuery.push(...[{
-      $addFields: {
-        score: {
-          $meta: "textScore"
+    dbQuery.push(...[
+      {
+        $addFields: {
+          score: {
+            $meta: "textScore"
+          }
         }
-      }
-    },
+      },
       {
         $sort: {
           "score": 1

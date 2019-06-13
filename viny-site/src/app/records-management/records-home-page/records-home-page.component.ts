@@ -36,6 +36,7 @@ export class RecordsHomePageComponent implements OnInit {
   public countryFilters = [];
 
   // context control
+  public chosenTemp = [];
   public toChooseFrom = [];
   public chosenFilter = '';
 
@@ -55,7 +56,30 @@ export class RecordsHomePageComponent implements OnInit {
       this.page = page;
       this.loader.show();
       this.query = _.get(p, 'query', '');
-      if (_.isEmpty(_.trim(this.query))) {
+      this.genreFilters = _.get(p, 'genres', []);
+      this.styleFilters = _.get(p, 'styles', []);
+      this.formatFilters = _.get(p, 'formats', []);
+      this.countryFilters = _.get(p, 'countries', []);
+
+      if (!Array.isArray(this.genreFilters)) {
+        this.genreFilters = [this.genreFilters];
+      }
+      if (!Array.isArray(this.styleFilters)) {
+        this.styleFilters = [this.styleFilters];
+      }
+      if (!Array.isArray(this.formatFilters)) {
+        this.formatFilters = [this.formatFilters];
+      }
+      if (!Array.isArray(this.countryFilters)) {
+        this.countryFilters = [this.countryFilters];
+      }
+
+      if (_.isEmpty(_.trim(this.query)) &&
+        _.isEmpty(this.genreFilters) &&
+        _.isEmpty(this.styleFilters) &&
+        _.isEmpty(this.countryFilters) &&
+        _.isEmpty(this.formatFilters)
+      ) {
         this.loadRecords();
       } else {
         this.loadSearchPage();
@@ -128,7 +152,11 @@ export class RecordsHomePageComponent implements OnInit {
     const data = this.recordsService.search_records({
       limit: this.limit,
       skip: this.skip,
-      query: this.query
+      query: this.query,
+      genres: JSON.stringify(this.genreFilters),
+      styles: JSON.stringify(this.styleFilters),
+      formats: JSON.stringify(this.formatFilters),
+      countries: JSON.stringify(this.countryFilters),
     });
 
     this.records = data;
@@ -172,9 +200,34 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   openFilter(toChooseFrom, ref) {
-    this.toChooseFrom = toChooseFrom;
+    this.chosenTemp = _.cloneDeep(this[ref]);
+    this.toChooseFrom = _.cloneDeep(toChooseFrom);
     this.chosenFilter = ref;
 
     $('#filterModal').modal('show');
+  }
+
+  filtersChosen() {
+    console.log(this.chosenFilter, this.chosenTemp, this.chosenFilter)
+    this[this.chosenFilter] = this.chosenTemp;
+    this.chosenTemp = [];
+    this.chosenFilter = null;
+  }
+
+  activateFilters() {
+    const queryParams = {
+      query: _.isEmpty(this.query) ? null : this.query,
+      genres: _.isEmpty(this.genreFilters) ? null : this.genreFilters,
+      styles: _.isEmpty(this.styleFilters) ? null : this.styleFilters,
+      formats: _.isEmpty(this.formatFilters) ? null : this.formatFilters,
+      countries: _.isEmpty(this.countryFilters) ? null : this.countryFilters
+    };
+
+    this.router.navigateByUrl(this.router.url.split(/[?#]/)[0]).then(() => {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams
+      });
+    });
   }
 }

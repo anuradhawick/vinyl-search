@@ -56,6 +56,7 @@
   <div class="row container-fluid">
     <div class="col-12 col-lg-3">
       <div class="container-fluid">
+        <button class="btn btn-default">BUTTON</button>
         <div class="card">
           <h5 class="card-header">
             Genres
@@ -66,7 +67,7 @@
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(genreFilters)">
               <button *ngFor="let g of genreFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="genreFilters.splice(i,1)">{{g}}<i class="material-icons">delete_outline</i>
+                      (click)="genreFilters.splice(i,1); activateFilters()">{{g}}<i class="material-icons">delete_outline</i>
               </button>
               <hr>
             </ng-container>
@@ -74,7 +75,7 @@
               <button class="btn badge badge-success m-1" (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
                 Select filters
               </button>
-              <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-success m-1" (click)="genreFilters=[]">
+              <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-success m-1" (click)="genreFilters=[]; activateFilters()">
                 Clear
                 filters
               </button>
@@ -92,7 +93,7 @@
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(styleFilters)">
               <button *ngFor="let s of styleFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="styleFilters.splice(i,1)">{{s}}<i class="material-icons">delete_outline</i>
+                      (click)="styleFilters.splice(i,1); activateFilters()">{{s}}<i class="material-icons">delete_outline</i>
               </button>
               <hr>
             </ng-container>
@@ -100,7 +101,7 @@
               <button class="btn badge badge-success m-1" (click)="openFilter(getStyles(), 'styleFilters')">Select
                 filters
               </button>
-              <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1" (click)="styleFilters=[]">
+              <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1" (click)="styleFilters=[]; activateFilters()">
                 Clear
                 filters
               </button>
@@ -118,7 +119,7 @@
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(formatFilters)">
               <button *ngFor="let f of formatFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="formatFilters.splice(i,1)">{{f}}<i class="material-icons">delete_outline</i>
+                      (click)="formatFilters.splice(i,1); activateFilters()">{{f}}<i class="material-icons">delete_outline</i>
               </button>
               <hr>
             </ng-container>
@@ -128,9 +129,8 @@
                   'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
                 Select filters
               </button>
-              <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1" (click)="formatFilters=[]">
-                Clear
-                filters
+              <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1" (click)="formatFilters=[]; activateFilters()">
+                Clear filters
               </button>
             </div>
           </div>
@@ -145,7 +145,7 @@
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(countryFilters)">
               <button *ngFor="let c of countryFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="countryFilters.splice(i,1)">{{c}}<i class="material-icons">delete_outline</i>
+                      (click)="countryFilters.splice(i,1); activateFilters()">{{c}}<i class="material-icons">delete_outline</i>
               </button>
               <hr>
             </ng-container>
@@ -155,7 +155,7 @@
                 Select filters
               </button>
               <button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-success m-1"
-                      (click)="countryFilters=[]">
+                      (click)="countryFilters=[]; activateFilters()">
                 Clear filters
               </button>
             </div>
@@ -218,15 +218,15 @@
       </div>
       <div class="modal-body">
         <button *ngFor="let c of toChooseFrom; let i = index" class="btn badge badge-primary m-1"
-                (click)="component[chosenFilter].push(c); component[chosenFilter]=_.uniq(component[chosenFilter])">{{c}}
+                (click)="chosenTemp.push(c); chosenTemp=_.uniq(chosenTemp)">{{c}}
         </button>
         <hr>
-        <button *ngFor="let c of component[chosenFilter]; let i = index" class="btn badge badge-danger m-1"
-                (click)="component[chosenFilter].splice(i,1)">{{c}}<i class="material-icons">delete_outline</i>
+        <button *ngFor="let c of chosenTemp; let i = index" class="btn badge badge-danger m-1"
+                (click)="chosenTemp.splice(i,1);">{{c}}<i class="material-icons">delete_outline</i>
         </button>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="filtersChosen(); activateFilters()">Done</button>
       </div>
     </div>
   </div>

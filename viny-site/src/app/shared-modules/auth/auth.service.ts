@@ -64,6 +64,8 @@ export class AuthService {
   }
 
   processUser(u) {
+    console.log(u);
+    console.log(u.signInUserSession.idToken.jwtToken);
     this.zone.run(() => {
       this.user = u.attributes;
       this.user['uid'] = u.attributes.sub;

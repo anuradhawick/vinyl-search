@@ -41,37 +41,37 @@ functions:
       BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
     events:
       - http:
-          method: get 
+          method: get
           path: forum/{postId}
           cors: true
       - http:
-          method: get 
+          method: get
           path: forum
           cors: true
       - http:
-          method: get 
+          method: get
           path: forum/search
           cors: true
       - http:
-          method: post 
+          method: post
           path: forum
           cors: true
-          authorizer: 
-            name: vinyl-authorizer 
+          authorizer:
+            name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
-          method: post 
+          method: post
           path: forum/{postId}
           cors: true
-          authorizer: 
-            name: vinyl-authorizer 
+          authorizer:
+            name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
-          method: delete 
+          method: delete
           path: forum/{postId}
           cors: true
-          authorizer: 
-            name: vinyl-authorizer 
+          authorizer:
+            name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
 
   user-management-service:
@@ -82,9 +82,16 @@ functions:
       user_pool_id: ${self:custom.config.user_pool_id}
     events:
       - http:
-          method: post 
+          method: post
           path: users
           cors: true
+      - http:
+          method: get
+          path: users
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
 
   records-management-service:
     handler: records-management-service/records-main.main
@@ -95,23 +102,23 @@ functions:
       BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
     events:
       - http:
-          method: get 
+          method: get
           path: records
           cors: true
       - http:
-          method: get 
+          method: get
           path: records/search
           cors: true
       - http:
-          method: get 
+          method: get
           path: records/{recordId}
           cors: true
       - http:
-          method: post 
+          method: post
           path: records
           cors: true
-          authorizer: 
-            name: vinyl-authorizer 
+          authorizer:
+            name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
           method: post
