@@ -7,7 +7,7 @@
           <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
                  class="form-control"
                  placeholder="Search records..." name="search-query" [(ngModel)]="query">
-          <button class="btn btn-default" type="button" (click)="search()">Search</button>
+          <button mat-button class="btn btn-default" type="button" (click)="search()">Search</button>
           <div *ngIf="(autocomplete | async)?.records.length > 0" style="background-color: #fff; left: 0;">
             <div
               style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
@@ -38,14 +38,14 @@
     <div class="col-sm-12 col-lg-8">
       <div *ngIf="auth.isLoggedIn; else showLogin">
         <div class="float-right">
-          <button type="button" class="btn btn-default" routerLink="/records/new">
+          <button mat-button type="button" class="btn btn-default" routerLink="/records/new">
             Add
           </button>
         </div>
       </div>
       <ng-template #showLogin>
         <div class="float-right">
-          <button type="button" class="btn btn-success" (click)="auth.login()">
+          <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
             Login to publish!
           </button>
         </div>
@@ -56,7 +56,6 @@
   <div class="row container-fluid">
     <div class="col-12 col-lg-3">
       <div class="container-fluid">
-        <button class="btn btn-default">BUTTON</button>
         <div class="card">
           <h5 class="card-header">
             Genres
@@ -66,16 +65,22 @@
 
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(genreFilters)">
-              <button *ngFor="let g of genreFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="genreFilters.splice(i,1); activateFilters()">{{g}}<i class="material-icons">delete_outline</i>
-              </button>
+              <mat-chip-list>
+                <mat-chip style="font-size: 10px" *ngFor="let g of genreFilters; let i = index">
+                  {{g}}
+                  <mat-icon matChipRemove (click)="genreFilters.splice(i,1); activateFilters()">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
               <hr>
             </ng-container>
             <div class="text-center">
-              <button class="btn badge badge-success m-1" (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
+              <button mat-button class="badge badge-success m-1 filter-buttons"
+                      (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
                 Select filters
               </button>
-              <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-success m-1" (click)="genreFilters=[]; activateFilters()">
+              <button mat-button *ngIf="!_.isEmpty(genreFilters)"
+                      class="badge badge-success btn-sm m-1  filter-buttons"
+                      (click)="genreFilters=[]; activateFilters()">
                 Clear
                 filters
               </button>
@@ -86,22 +91,27 @@
         <div class="card">
           <h5 class="card-header">
             Styles
-            <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+            <button *ngIf="!_.isEmpty(styleFilters)"
+                    class="btn badge badge-pill badge-success m-1 float-right">✓
             </button>
           </h5>
 
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(styleFilters)">
-              <button *ngFor="let s of styleFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="styleFilters.splice(i,1); activateFilters()">{{s}}<i class="material-icons">delete_outline</i>
-              </button>
+              <mat-chip-list>
+                <mat-chip style="font-size: 10px" *ngFor="let s of styleFilters; let i = index">{{s}}
+                  <mat-icon matChipRemove (click)="styleFilters.splice(i,1); activateFilters()">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
               <hr>
             </ng-container>
             <div class="text-center">
-              <button class="btn badge badge-success m-1" (click)="openFilter(getStyles(), 'styleFilters')">Select
+              <button mat-button class="btn badge badge-success m-1  filter-buttons" (click)="openFilter(getStyles(), 'styleFilters')">
+                Select
                 filters
               </button>
-              <button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1" (click)="styleFilters=[]; activateFilters()">
+              <button mat-button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1  filter-buttons"
+                      (click)="styleFilters=[]; activateFilters()">
                 Clear
                 filters
               </button>
@@ -112,24 +122,28 @@
         <div class="card">
           <h5 class="card-header">
             Formats
-            <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+            <button *ngIf="!_.isEmpty(formatFilters)"
+                    class="btn badge badge-pill badge-success m-1 float-right">✓
             </button>
           </h5>
 
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(formatFilters)">
-              <button *ngFor="let f of formatFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="formatFilters.splice(i,1); activateFilters()">{{f}}<i class="material-icons">delete_outline</i>
-              </button>
+              <mat-chip-list>
+                <mat-chip style="font-size: 10px" *ngFor="let f of formatFilters; let i = index">{{f}}
+                  <mat-icon (click)="formatFilters.splice(i,1); activateFilters()" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
               <hr>
             </ng-container>
             <div class="text-center">
-              <button class="btn badge badge-success m-1"
+              <button class="btn badge badge-success m-1  filter-buttons"
                       (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
                   'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
                 Select filters
               </button>
-              <button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1" (click)="formatFilters=[]; activateFilters()">
+              <button mat-button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1  filter-buttons"
+                      (click)="formatFilters=[]; activateFilters()">
                 Clear filters
               </button>
             </div>
@@ -139,22 +153,26 @@
         <div class="card">
           <h5 class="card-header">
             Country
-            <button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+            <button *ngIf="!_.isEmpty(countryFilters)"
+                    class="btn badge badge-pill badge-success m-1 float-right">✓
             </button>
           </h5>
           <div class="card-body">
             <ng-container *ngIf="!_.isEmpty(countryFilters)">
-              <button *ngFor="let c of countryFilters; let i = index" class="btn badge badge-primary m-1"
-                      (click)="countryFilters.splice(i,1); activateFilters()">{{c}}<i class="material-icons">delete_outline</i>
-              </button>
+              <mat-chip-list>
+                <mat-chip style="font-size: 10px" *ngFor="let c of countryFilters; let i = index">
+                  {{c}}
+                  <mat-icon matChipRemove (click)="countryFilters.splice(i,1); activateFilters()">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
               <hr>
             </ng-container>
             <div class="text-center">
-              <button class="btn badge badge-success m-1"
+              <button mat-button class="btn badge badge-success m-1  filter-buttons"
                       (click)="openFilter(getCountries(), 'countryFilters')">
                 Select filters
               </button>
-              <button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-success m-1"
+              <button mat-button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-success m-1  filter-buttons"
                       (click)="countryFilters=[]; activateFilters()">
                 Clear filters
               </button>
@@ -217,16 +235,23 @@
         </button>
       </div>
       <div class="modal-body">
-        <button *ngFor="let c of toChooseFrom; let i = index" class="btn badge badge-primary m-1"
-                (click)="chosenTemp.push(c); chosenTemp=_.uniq(chosenTemp)">{{c}}
-        </button>
+        <mat-chip-list>
+          <mat-chip style="font-size: 10px" *ngFor="let c of toChooseFrom; let i = index"
+                    (click)="chosenTemp.push(c); chosenTemp=_.uniq(chosenTemp)">{{c}}
+          </mat-chip>
+        </mat-chip-list>
         <hr>
-        <button *ngFor="let c of chosenTemp; let i = index" class="btn badge badge-danger m-1"
-                (click)="chosenTemp.splice(i,1);">{{c}}<i class="material-icons">delete_outline</i>
-        </button>
+        <mat-chip-list>
+          <mat-chip style="font-size: 10px" mat-chip *ngFor="let c of chosenTemp; let i = index">
+            {{c}}
+            <mat-icon matChipRemove (click)="chosenTemp.splice(i,1);">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="filtersChosen(); activateFilters()">Done</button>
+        <button mat-button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="filtersChosen(); activateFilters()">Done
+        </button>
       </div>
     </div>
   </div>

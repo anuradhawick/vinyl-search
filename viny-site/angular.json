@@ -28,12 +28,13 @@
               "src/assets/css/material-kit.css"
             ],
             "scripts": [
-              "src/assets/js/material-kit.js",
-              "src/assets/js/core/jquery.min.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery-ui-dist/jquery-ui.js",
               "src/assets/js/core/popper.min.js",
               "src/assets/js/core/bootstrap-material-design.min.js",
               "src/assets/js/plugins/moment.min.js",
               "src/assets/js/plugins/bootstrap-datetimepicker.js",
+              "src/assets/js/material-kit.js",
               "src/assets/js/plugins/nouislider.min.js"
             ]
           },

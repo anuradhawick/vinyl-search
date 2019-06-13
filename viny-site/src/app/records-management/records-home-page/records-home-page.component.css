@@ -1,11 +1,17 @@
-.image{
-  position:relative;
-  overflow:hidden;
-  padding-bottom:100%;
+.image {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 100%;
   object-fit: cover;
 }
-.image img{
-  position:absolute;
+
+.image img {
+  position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.filter-buttons {
+  line-height: 20px;
+  padding: 5px;
 }

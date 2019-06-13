@@ -1,24 +1,25 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from './loader/loader.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppModule } from '../app.module';
+import { MatBadgeModule, MatButtonModule, MatChipsModule, MatIconModule } from '@angular/material';
 
 @NgModule({
   declarations: [LoaderComponent],
   providers: [],
   imports: [
     CommonModule,
-    // BrowserAnimationsModule
-    // BrowserAnimationsModule,
-    // BrowserModule,
+    MatButtonModule,
+    MatBadgeModule,
+    MatChipsModule,
+    MatIconModule
 
   ],
   exports: [
     LoaderComponent,
-    // BrowserAnimationsModule,
-    // BrowserModule
+    MatButtonModule,
+    MatBadgeModule,
+    MatChipsModule,
+    MatIconModule
   ]
 })
 export class SharedModules {
