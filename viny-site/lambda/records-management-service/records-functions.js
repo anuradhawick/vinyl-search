@@ -261,6 +261,12 @@ fetch_history = async (recordId) => {
 new_record = async (uid, record) => {
   const db = await db_util.connect_db();
   const ownerUid = uid;
+  const exists = await db.collection('records').findOne({catalogNo: _.trim(_.get(record, 'catalogNo', ''))});
+
+  if (!_.isEmpty(exists)) {
+    return {recordId: false, originalId: exists.id};
+  }
+
   const newImages = await Promise.all(_.map(record.images, (image) => {
     const filename = _.split(image, '/').pop();
     const params = {
@@ -288,7 +294,7 @@ new_record = async (uid, record) => {
 
   await db.collection('records').insertOne(record);
 
-  return record.id;
+  return {recordId: record.id};
 };
 
 update_record = async (reviserUid, recordId, record) => {

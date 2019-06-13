@@ -11,6 +11,7 @@ import { RecordsRevisionViewPageComponent } from './records-revision-view-page/r
 import { FormsModule } from '@angular/forms';
 import { ImageViewerModule } from 'ngx-image-viewer';
 import { SharedModules } from '../shared-modules/shared.module';
+import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SharedModules } from '../shared-modules/shared.module';
     RecordViewPageComponent,
     RecordsEditorComponentComponent,
     RecordsUpdatePageComponent,
-    RecordsRevisionViewPageComponent
+    RecordsRevisionViewPageComponent,
+    CatalogErrorModalComponent
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,9 @@ import { SharedModules } from '../shared-modules/shared.module';
     SharedModules
   ],
   providers: [
+  ],
+  entryComponents: [
+    CatalogErrorModalComponent
   ]
 })
 export class RecordsManagementModule {
