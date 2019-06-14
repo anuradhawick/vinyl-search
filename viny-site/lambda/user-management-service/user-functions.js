@@ -154,15 +154,12 @@ const get_user_forum_posts = async (uid, query_params) => {
 
 const delete_record = async (uid, recordId) => {
 
-  recordId = "5cf8ee10f780eb0007a686c9"
-
   const db = await db_util.connect_db();
-  // const record = await db.collection('records').findOne({_id: ObjectID(recordId)});
 
   let query = {
     // ensure only the owner or an admin can delete
-    id: ObjectID(recordId)
-    // ownerUid: uid
+    id: ObjectID(recordId),
+    ownerUid: uid
   };
 
   const removeRecord = db.collection('records').remove(query);
