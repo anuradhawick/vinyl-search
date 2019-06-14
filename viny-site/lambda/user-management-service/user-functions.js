@@ -155,6 +155,36 @@ const get_user_forum_posts = async (uid, query_params) => {
 const delete_record = async (uid, recordId) => {
 
   const db = await db_util.connect_db();
+  const records = await db.collection('records').find({id: ObjectID(recordId)}).toArray();
+  const images = []
+
+  _.forEach(records, (record) => {
+    const listImages = record.images;
+    _.forEach(listImages, (image) => {
+      images.push(image);
+    });
+  });
+
+  const uniqueImages = _.uniq(images)
+
+  // const removeImages = Promise.all(_.map(images, (image) => {
+  //   const filename = _.split(image, '/').pop();
+  //   const params = {
+  //     Bucket: process.env.BUCKET_NAME,
+  //     Key: `forum-images/${filename}`
+  //   };
+  //   return new Promise((resolve, reject) => {
+  //     s3.deleteObject(params, (err, data) => {
+  //         if (err) {
+  //           resolve();
+  //         }
+  //         else {
+  //           resolve()
+  //         }
+  //       }
+  //     );
+  //   });
+  // }));
 
   let query = {
     // ensure only the owner or an admin can delete
