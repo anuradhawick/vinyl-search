@@ -22,7 +22,6 @@ import { SharedModules } from './shared-modules/shared.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule,
     NgbModule,
     HttpClientModule,
     CommonModule,

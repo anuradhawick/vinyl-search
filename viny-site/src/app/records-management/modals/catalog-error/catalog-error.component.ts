@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class CatalogErrorModalComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<CatalogErrorModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: string) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   close(): void {

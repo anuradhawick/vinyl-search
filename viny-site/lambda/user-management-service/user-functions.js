@@ -7,9 +7,6 @@ const update_user = async (uid, userdata) => {
 
   const set_user = {
     $set: {
-      family_name: userdata.family_name,
-      given_name: userdata.given_name,
-      name: userdata.given_name + " "+ userdata.family_name,
       updatedAt: new Date()
     }
   };
@@ -18,6 +15,18 @@ const update_user = async (uid, userdata) => {
     _.assign(set_user.$set, {
       picture: userdata.picture
     });
+  }
+
+  if (!_.isEmpty(userdata.family_name) && !_.isEmpty(userdata.given_name)) {
+    _.assign(set_user.$set, {
+      family_name: userdata.family_name,
+      given_name: userdata.given_name,
+      name: userdata.given_name + " " + userdata.family_name,
+    });
+  }
+
+  if (_.isEmpty(userdata.family_name) && _.isEmpty(userdata.given_name) && _.isEmpty(userdata.picture)) {
+    return null;
   }
 
   const newUserData = await db.collection('users').findOneAndUpdate({uid: uid},

@@ -21,6 +21,16 @@ export class UserService {
     }).toPromise();
   }
 
+  async update_profile(user) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'users/', user, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
   async get_records() {
     const token = await this.auth.getToken();
 
