@@ -18,6 +18,7 @@ export class UpdateDetailsComponent implements OnInit {
   public uploading = false;
   public uploadingProgress = 0;
   private user = null;
+  private originalUser = null;
   public form = new FormGroup(
     {
       'firstName': new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z]*$/)]),
@@ -33,6 +34,7 @@ export class UpdateDetailsComponent implements OnInit {
   ngOnInit() {
     this.userService.get_profile().then((u: any) => {
       this.user = u;
+      this.originalUser = _.cloneDeep(u);
       this.form.get('firstName').setValue(this.user.given_name);
       this.form.get('lastName').setValue(this.user.family_name);
       this.form.valueChanges.subscribe((value) => {
@@ -68,7 +70,10 @@ export class UpdateDetailsComponent implements OnInit {
   }
 
   discardDetails() {
-    window.location.reload();
+    this.form.reset({
+      firstName: this.originalUser.given_name,
+      lastName: this.originalUser.family_name,
+    });
   }
 
   upload() {

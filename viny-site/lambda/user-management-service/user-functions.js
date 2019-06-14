@@ -1,6 +1,9 @@
 const _ = require('lodash');
 const db_util = require('../utils/db-util');
 const ObjectID = require('mongodb').ObjectID;
+const S3 = require('aws-sdk').S3;
+
+const s3 = new S3();
 
 const update_user = async (uid, userdata) => {
   const db = await db_util.connect_db();
@@ -46,7 +49,6 @@ const get_user = async (uid) => {
   return await db.collection('users').findOne({uid: uid});
 };
 
-
 const get_user_records = async (uid, query_params) => {
   const limit = _.parseInt(_.get(query_params, 'limit', 30));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
@@ -62,6 +64,11 @@ const get_user_records = async (uid, query_params) => {
       $facet: {
         data: [{$count: "total"}],
         records: [
+          {
+            $sort: {
+              createdAt: -1
+            }
+          },
           {
             $skip: skip
           },
@@ -161,7 +168,6 @@ const get_user_forum_posts = async (uid, query_params) => {
   ]).toArray();
 
   return data[0];
-
 };
 
 
@@ -169,45 +175,45 @@ const delete_record = async (uid, recordId) => {
 
   const db = await db_util.connect_db();
   const records = await db.collection('records').find({id: ObjectID(recordId)}).toArray();
-  const images = []
 
-  _.forEach(records, (record) => {
-    const listImages = record.images;
-    _.forEach(listImages, (image) => {
-      images.push(image);
-    });
+  let images = [];
+
+  _.each(records, (record) => {
+    images = _.uniq(_.concat(images, record.images));
   });
 
-  const uniqueImages = _.uniq(images)
+  const removeImages = Promise.all(_.map(images, (image) => {
+    const list = _.split(image, '/');
+    const filename = list.pop();
+    const pathname = list.pop();
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: `records-images/${filename}`
+    };
 
-  // const removeImages = Promise.all(_.map(images, (image) => {
-  //   const filename = _.split(image, '/').pop();
-  //   const params = {
-  //     Bucket: process.env.BUCKET_NAME,
-  //     Key: `forum-images/${filename}`
-  //   };
-  //   return new Promise((resolve, reject) => {
-  //     s3.deleteObject(params, (err, data) => {
-  //         if (err) {
-  //           resolve();
-  //         }
-  //         else {
-  //           resolve()
-  //         }
-  //       }
-  //     );
-  //   });
-  // }));
+    if (pathname !== 'records-images') {
+      return true;
+    }
 
-  let query = {
-    // ensure only the owner or an admin can delete
+    return new Promise((resolve, reject) => {
+      s3.deleteObject(params, (err, data) => {
+          if (err) {
+            resolve();
+          }
+          else {
+            resolve()
+          }
+        }
+      );
+    });
+  }));
+
+  const removeRecord = db.collection('records').remove({
     id: ObjectID(recordId),
     ownerUid: uid
-  };
+  });
 
-  const removeRecord = db.collection('records').remove(query);
-
-  await Promise.all([removeRecord]);
+  await Promise.all([removeRecord, removeImages]);
 
   return true;
 };

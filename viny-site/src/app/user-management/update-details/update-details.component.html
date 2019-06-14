@@ -20,14 +20,13 @@
   <h3>Update Profile Picture</h3>
   <img *ngIf="uploadImageUrl" [src]="uploadImageUrl" class="img-thumbnail">
   <div *ngIf="uploadImageUrl===null && !uploading" class="form-group">
-    <label for="profilePicture"><strong>Click To Upload</strong></label>
+    <label class="btn btn-default btn-sm" for="profilePicture"><strong>Click To Upload</strong></label>
     <input id="profilePicture" type="file" class="form-control-file" (change)="addImage($event)" accept='image/*'>
   </div>
   <br>
   <mat-progress-bar *ngIf="uploading" mode="determinate" value="{{uploadingProgress}}"></mat-progress-bar>
   <button *ngIf="uploadImageUrl" mat-button (click)="uploadImageUrl=null; uploadableFile=null;" class="btn btn-default btn-sm m-1">Cancel</button>
   <button *ngIf="uploadImageUrl" mat-button class="btn btn-primary btn-sm m-1" (click)="upload()">Upload</button>
-  <button class="btn btn-default btn-sm m-1" mat-button *ngIf="uploadImageUrl===null && !uploading" [routerLink]="'/profile'">Cancel</button>
   <br>
   <br>
 </div>

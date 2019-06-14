@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from './loader/loader.component';
 import {
   MatBadgeModule, MatButtonModule, MatChipsModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule,
+  MatMenuModule,
   MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatSelectModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +28,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatProgressBarModule,
     MatPaginatorModule,
-    MatListModule
+    MatListModule,
+    MatMenuModule
   ],
   exports: [
     CommonModule,
@@ -47,7 +49,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatProgressBarModule,
     MatPaginatorModule,
-    MatListModule
+    MatListModule,
+    MatMenuModule
   ]
 })
 export class SharedModules {

@@ -14,35 +14,29 @@
           </div>
         </div>
       </div>
-      <br>
 
-      <div class="input-group mb-1">
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" (change)="addImage($event)"
-                 accept='image/*' multiple>
-          <label class="custom-file-label">Choose
-            Files</label>
-        </div>
+      <div class="form-group m-0">
+        <label class="btn btn-default btn-block btn-sm" for="images"><strong>Click To Upload</strong></label>
+        <input type="file" class="custom-file-input" (change)="addImage($event)" id="images" accept='image/*' multiple>
       </div>
-      <div *ngIf="uploadCount > 0" class="container-fluid">
-        <div *ngFor="let p of percentages" class="progress mb-1">
-          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0"
-               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': (p | async)+'%'}"></div>
-        </div>
-      </div>
-      <div class="card">
+      <mat-progress-bar class="mb-1" *ngFor="let p of percentages" mode="determinate"
+                        value="{{(p | async)}}"></mat-progress-bar>
+
+      <div *ngIf="recordObject.images.length>0" class="card col-12 m-0">
         <div class="row">
-          <div *ngFor="let image of recordObject.images; let i = index" class="col-lg-4 col-sm-6 col-12">
+          <div *ngFor="let image of recordObject.images; let i = index" class="col-lg-4 col-sm-6 col-12 p-0">
             <div class="m-1">
               <a (click)="recordObject.chosenImage=i" class="thumbnail">
                 <div class="image" style="background-color: #d5d5d5">
-                  <img style="object-fit: cover" [src]="image" class="img img-responsive"/>
+                  <img style="object-fit: cover" [src]="image"
+                       class="img img-responsive"/>
                 </div>
               </a>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
   <div class="col-12 col-sm-9">
@@ -50,125 +44,106 @@
       <br>
       <h1>{{editorTitle}}</h1>
       <hr>
-      <form class="needs-validation" novalidate>
+      <form [formGroup]="form" class="needs-validation" novalidate>
         <div class="form-group">
           <div class="row mb-1">
             <div class="col-4">
-              <h4>Record Title</h4>
-              <input type="text" class="form-control" placeholder="Record title" name="release-name"
-                     [(ngModel)]="recordObject.name"
-                     required>
-              <div class="invalid-feedback">
-                Enter record title
-              </div>
+              <mat-form-field class="w-100">
+                <input matInput type="text" placeholder="Record Title" name="release-name"
+                       formControlName="name">
+                <mat-error *ngIf="form.controls.name.invalid">Record required</mat-error>
+              </mat-form-field>
             </div>
 
             <div class="col-4">
-              <h4>Artist Name</h4>
-              <input type="text" class="form-control" placeholder="Artist name" name="main-artist-name"
-                     [(ngModel)]="recordObject.mainArtist">
-              <div class="invalid-feedback">
-                Enter record name
-              </div>
+              <mat-form-field class="w-100">
+                <input matInput type="text" placeholder="Artist Name" name="main-artist-name"
+                       formControlName="mainArtist">
+              </mat-form-field>
             </div>
 
             <div class="col-4">
-              <h4>Year</h4>
-              <input name="release-date" [(ngModel)]="recordObject.date" type="text" class="form-control"
-                     placeholder="YYYY-MM-DD"
-                     pattern="([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?">
-              <div class="invalid-feedback">
-                Please enter the year
-              </div>
+              <mat-form-field class="w-100">
+                <input matInput name="release-date" formControlName="date" type="text"
+                       placeholder="Date as YYYY-MM-DD">
+                <mat-error *ngIf="form.controls.date.invalid">Date invalid</mat-error>
+              </mat-form-field>
             </div>
           </div>
           <hr>
           <div class="row mb-1">
-            <div class="col-6">
-              <h4>Label</h4>
-              <input type="text" class="form-control" placeholder="Label" name="release-label"
-                     [(ngModel)]="recordObject.label"
-                     required>
-              <div class="invalid-feedback">
-                Enter label name or use <em>Unlabelled</em>
-              </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <input matInput type="text" placeholder="Label" name="release-label"
+                       formControlName="label"
+                       required>
+                <mat-error *ngIf="form.controls.label.invalid">Label required</mat-error>
+              </mat-form-field>
             </div>
-            <div class="col-6">
-              <h4>Catalog Number</h4>
-              <input type="text" class="form-control" placeholder="Catalog No." name="release-catalog"
-                     [(ngModel)]="recordObject.catalogNo"
-                     required>
-              <div class="invalid-feedback">
-                Enter catalog number or use <em>NA</em>
-              </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <input matInput type="text" placeholder="Catalogue No." name="release-catalog"
+                       formControlName="catalogNo"
+                       required>
+                <mat-error *ngIf="form.controls.catalogNo.invalid">Catalogue No. required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-select formControlName="country" name="country" placeholder="Country of origin">
+                  <mat-option *ngFor="let c of countriesJSON" [value]="c.name">{{c.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls.country.invalid">Country required</mat-error>
+              </mat-form-field>
             </div>
           </div>
         </div>
+
         <hr>
         <div class="form-group">
           <div class="row">
-            <div class="col-4">
-              <h4>Country of origin</h4>
-              <select name="country" class="form-control" [(ngModel)]="recordObject.country" required="">
-                <option *ngFor="let c of countriesJSON" [ngValue]="c.name">{{c.name}}</option>
-              </select>
-              <div class="invalid-feedback">
-                Select the field
-              </div>
+            <div class="col-3">
+              <mat-form-field class="w-100">
+                <mat-select placeholder="Channels" name="channel" formControlName="channelCoding">
+                  <mat-option value="Stereo">Stereo</mat-option>
+                  <mat-option value="Mono">Mono</mat-option>
+                  <mat-option value="Pseudo Stereo">Pseudo Stereo</mat-option>
+                  <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+                </mat-select>
+              </mat-form-field>
+
             </div>
-            <div class="col-2">
-              <h4>Channels</h4>
-              <select name="channel" class="form-control" [(ngModel)]="recordObject.channelCoding" required="">
-                <option>Stereo</option>
-                <option>Mono</option>
-                <option>Pseudo Stereo</option>
-                <option>Other/Unknown</option>
-              </select>
-              <div class="invalid-feedback">
-                Select the field
-              </div>
+            <div class="col-3">
+              <mat-form-field class="w-100">
+                <mat-select name="format" placeholder="Format" formControlName="format">
+                  <mat-option value="Vinyl">Vinyl</mat-option>
+                  <mat-option value="Acetate">Acetate</mat-option>
+                  <mat-option value="Flexi-Disc">Flexi-Disc</mat-option>
+                  <mat-option value="Lathe Cut">Lathe Cut</mat-option>
+                  <mat-option value="Shellac">Shellac</mat-option>
+                  <mat-option value="CD">CD</mat-option>
+                  <mat-option value="DVD">DVD</mat-option>
+                  <mat-option value="Mini Disc">Mini Disc</mat-option>
+                  <mat-option value="Cassette Tape">Cassette Tape</mat-option>
+                  <mat-option value="4-Track Cartridge">4-Track Cartridge</mat-option>
+                  <mat-option value="8-Track Cartridge">8-Track Cartridge</mat-option>
+                  <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <div class="col-2">
-              <h4>Format</h4>
-              <select name="format" class="form-control" [(ngModel)]="recordObject.format" required="">
-                <option>Vinyl</option>
-                <option>Acetate</option>
-                <option>Flexi-Disc</option>
-                <option>Lathe Cut</option>
-                <option>Shellac</option>
-                <option>CD</option>
-                <option>DVD</option>
-                <option>Mini Disc</option>
-                <option>Cassette Tape</option>
-                <option>4-Track Cartridge</option>
-                <option>8-Track Cartridge</option>
-                <option>Other/Unknown</option>
-              </select>
-              <div class="invalid-feedback">
-                Select the field
-              </div>
+            <div class="col-3">
+              <mat-form-field class="w-100">
+                <mat-select name="size" placeholder="Size" formControlName="size">
+                  <mat-option *ngFor="let c of sizesJSON" [value]="c">{{c}}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <div class="col-2">
-              <h4>Size</h4>
-              <select name="size" class="form-control" [(ngModel)]="recordObject.size" required>
-                <option></option>
-                <option *ngFor="let c of sizesJSON">{{c}}</option>
-                <option>Other</option>
-              </select>
-              <div class="invalid-feedback">
-                Select the field
-              </div>
-            </div>
-            <div class="col-2">
-              <h4>Speed</h4>
-              <select name="speed" class="form-control" [(ngModel)]="recordObject.speed" required>
-                <option></option>
-                <option *ngFor="let c of speedsJSON">{{c}}</option>
-                <option>Other</option>
-              </select>
-              <div class="invalid-feedback">
-                Select the field
-              </div>
+            <div class="col-3">
+              <mat-form-field class="w-100">
+                <mat-select name="speed" placeholder="Speed" formControlName="speed">
+                  <mat-option *ngFor="let c of speedsJSON" [value]="c">{{c}}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
         </div>
@@ -217,104 +192,103 @@
         <!---->
         <!--TRACKS START-->
         <h2>Track List</h2>
-
-        <div class="container col-12">
-          <table class="table table-responsive">
-            <thead>
-            <tr>
-              <th scope="col" class="w-auto">Position</th>
-              <th scope="col" class="w-50">Artists</th>
-              <th scope="col" class="w-50">Title/Credits</th>
-              <th scope="col" class="w-auto">Duration</th>
-              <th scope="col" class="w-auto">Options</th>
-            </tr>
-            </thead>
-            <tbody #table id="bb">
-            <tr *ngFor="let track of recordObject.tracks; let ti = index" style="cursor: all-scroll"
-                id="track-row-{{ti}}">
-              <td scope="row">
-                <input type="text" class="form-control" placeholder="A:1/1" name="track-{{ti}}-index-{{i}}"
-                       [(ngModel)]="track.index" required>
-                <div class="invalid-feedback">
-                  Index empty
-                </div>
-              </td>
-              <td class="do-validate">
-                <div class="form-group">
-                  <div *ngFor="let artist of track.artists; let i = index" class="input-group mb-1">
-                    <input type="text" class="form-control" placeholder="Artist" name="track-{{ti}}-artist-{{i}}"
-                           [(ngModel)]="artist.name" required>
-                    <button type="button" (click)="removeArtist(recordObject.tracks, ti, artist)"
-                            class="btn btn-default btn-sm"><i class="material-icons">delete_outline</i></button>
-                    <div class="invalid-feedback">
-                      Enter name or remove the field
-                    </div>
-
-
-                  </div>
-                  <div class="row mt-1">
-                    <button (click)="addArtist(track)" class="btn btn-default btn-sm">
-                      Artist<i class="material-icons">exposure_plus_1</i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="form-group">
-                  <input type="text" class="form-control mb-1" placeholder="Title"
-                         name="track-{{ti}}-title-{{i}}"
-                         [(ngModel)]="track.title" required>
-                  <div class="invalid-feedback">
-                    Enter the song title
-                  </div>
-                  <div *ngFor="let credit of track.credits; let i = index" class="input-group mb-1">
-
-                    <input type="text" class="form-control" placeholder="Credits"
-                           name="track-{{ti}}-creadits-{{i}}"
-                           [(ngModel)]="credit.text" required>
-                    <button type="button" (click)="removeCredit(recordObject.tracks, ti, credit)"
-                            class="btn btn-default btn-sm">
-                      <i class="material-icons">delete_outline</i></button>
-                    <div class="invalid-feedback">
-                      Enter credits or remove the field
-                    </div>
-                  </div>
-                  <div class="row mt-1">
-                    <button (click)="addCredit(track)" class="btn btn-default btn-sm">
-                      Credit<i class="material-icons">exposure_plus_1</i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="0:00" name="track-{{ti}}-duration-{{i}}"
-                         [(ngModel)]="track.duration" pattern="[0-9]{1,2}:[0-9]{1,2}">
-                </div>
-              </td>
-              <td>
-                <div class="dropdown dropleft">
-                  <button class="btn btn-default btn-sm" type="button" id="dropdownMenuButton"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="material-icons">settings</i>
+        <table class="table table-responsive" style="background-color: whitesmoke">
+          <thead>
+          <tr>
+            <th scope="col" class="w-auto">Position</th>
+            <th scope="col" class="w-50">Artists</th>
+            <th scope="col" class="w-50">Title/Credits</th>
+            <th scope="col" class="w-auto">Duration</th>
+            <th scope="col" class="w-25">Options</th>
+          </tr>
+          </thead>
+          <tbody #table id="bb" formArrayName="tracks">
+          <tr *ngFor="let track of form.get('tracks').controls; let ti = index" style="cursor: all-scroll"
+              id="track-row-{{ti}}" [formGroupName]="ti">
+            <td scope="row">
+              <mat-form-field>
+                <input matInput type="text" placeholder="Index" name="track-{{ti}}-index"
+                       formControlName="index">
+                <mat-error *ngIf="form.get('tracks').controls[ti].get('index').invalid">Required</mat-error>
+              </mat-form-field>
+            </td>
+            <td formArrayName="artists">
+              <div *ngFor="let artist of form.get('tracks').controls[ti].get('artists').controls; let i = index"
+                   [formGroupName]="i" class="input-group mb-1">
+                <mat-form-field>
+                  <input matInput formControlName="name" type="text" placeholder="Artist"
+                         name="track-{{ti}}-artist-{{i}}">
+                  <button mat-button (click)="form.get('tracks').controls[ti].get('artists').removeAt(i)" matSuffix>
+                    <mat-icon>cancel</mat-icon>
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a (click)="removeTrack(track)" class="btn btn-default dropdown-item">Remove</a>
-                    <a (click)="insertTrackBefore(ti)" class="btn btn-default dropdown-item">Add Track Above</a>
-                    <a (click)="insertTrackAfter(ti)" class="btn btn-default dropdown-item">Add Track Below</a>
-                  </div>
+                  <mat-error *ngIf="form.get('tracks').controls[ti].get('artists').controls[i].invalid">Enter name
+                    or remove the field
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <button mat-button (click)="addArtist(form.get('tracks').controls[ti].get('artists'))" matSuffix>
+                Artist
+                <mat-icon>add_circle</mat-icon>
+              </button>
+            </td>
+            <td>
+              <mat-form-field>
+                <input matInput type="text" placeholder="Title"
+                       name="track-{{ti}}-title"
+                       formControlName="title">
+                <mat-error *ngIf="form.get('tracks').controls[ti].get('title').invalid">Enter the song title
+                </mat-error>
+              </mat-form-field>
+              <div formArrayName="credits">
+                <div *ngFor="let credit of form.get('tracks').controls[ti].get('credits').controls; let i = index"
+                     [formGroupName]="i">
+                  <mat-form-field>
+                    <input matInput type="text" placeholder="Credits"
+                           name="track-{{ti}}-creadits-{{i}}"
+                           formControlName="text">
+                    <button mat-button (click)="form.get('tracks').controls[ti].get('credits').removeAt(i)" matSuffix>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                    <mat-error *ngIf="form.get('tracks').controls[ti].get('credits').controls[i].invalid">Enter name
+                      or remove the field
+                    </mat-error>
+                  </mat-form-field>
                 </div>
-              </td>
-            </tr>
+                <button mat-button (click)="addCredit(form.get('tracks').controls[ti].get('credits'))" matSuffix>
+                  Credits
+                  <mat-icon>add_circle</mat-icon>
+                </button>
+              </div>
+            </td>
+            <td>
+              <mat-form-field>
+                <input matInput type="text" placeholder="0:00" name="track-{{ti}}-duration"
+                       formControlName="duration">
+                <mat-error *ngIf="form.get('tracks').controls[ti].get('duration').invalid">MM:SS</mat-error>
+              </mat-form-field>
+            </td>
+            <td>
+              <!--<div class="dropdown dropleft">-->
+              <button mat-button [matMenuTriggerFor]="beforeMenu">
+                <mat-icon>settings</mat-icon>
+              </button>
+              <mat-menu #beforeMenu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="form.get('tracks').removeAt(ti)">Remove</button>
+                <button mat-menu-item (click)="insertTrackBefore(form.get('tracks'), ti)">Add track Above</button>
+                <button mat-menu-item (click)="insertTrackAfter(form.get('tracks'), ti)">Add Track Below</button>
+              </mat-menu>
+            </td>
+          </tr>
 
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
+
         <div class="row container">
-          <button class="btn btn-default" (click)="appendTrack()">
-            Track<i class="material-icons">exposure_plus_1</i>
+          <button mat-button (click)="appendTrack(form.get('tracks').controls)">
+            Track
+            <mat-icon>add_circle</mat-icon>
           </button>
-          <button class="btn btn-default ml-1" (click)="autoIndex()">
+          <button mat-button (click)="autoIndex()">
             Auto Index
           </button>
         </div>
@@ -335,29 +309,31 @@
         </div>
         <!---->
         <hr>
-        <div class="form-group">
-          <h4>Credits</h4>
-          <div *ngFor="let credit of recordObject.commonCredits; let i = index" class="input-group mb-1">
-            <input type="text" class="form-control" placeholder="Credits"
-                   name="common-credits-{{i}}"
-                   [(ngModel)]="credit.text" required>
-            <button type="button" (click)="removeCommonCredit(credit)" class="btn btn-default btn-sm">
-              <i class="material-icons">delete_outline</i></button>
-            <div class="invalid-feedback">
-              Enter credits or remove the field
-            </div>
+        <div formArrayName="commonCredits">
+          <div *ngFor="let credit of form.get('commonCredits').controls; let i = index" [formGroupName]="i">
+            <mat-form-field class="w-100">
+              <input matInput type="text" placeholder="Credits"
+                     name="common-credits-{{i}}"
+                     formControlName="text">
+              <button mat-button (click)="form.get('commonCredits').removeAt(i)" matSuffix>
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <mat-error *ngIf="form.get('commonCredits').controls[i].invalid">
+                Enter credits or remove the field
+              </mat-error>
+            </mat-form-field>
           </div>
           <div class="row container">
-            <button (click)="addCommonCredit()" class="btn btn-default btn-sm">
-              Credit<i class="material-icons">exposure_plus_1</i>
+            <button mat-button (click)="addCommonCredit(form.get('commonCredits'))">
+              Credit
+              <mat-icon>add_circle</mat-icon>
             </button>
           </div>
         </div>
         <hr>
-        <div class="form-group">
-          <h4>Notes</h4>
-          <textarea type="text" class="form-control" name="release-notes" [(ngModel)]="recordObject.notes"></textarea>
-        </div>
+        <mat-form-field class="w-100">
+          <textarea matInput placeholder="Notes" formControlName="notes"></textarea>
+        </mat-form-field>
       </form>
     </div>
 

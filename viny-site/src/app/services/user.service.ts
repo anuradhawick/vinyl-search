@@ -52,4 +52,14 @@ export class UserService {
       })
     }).toPromise();
   }
+
+  async delete_record(id) {
+    const token = await this.auth.getToken();
+
+    return await this.http.delete(environment.api_gateway + 'users/records/' + id, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }

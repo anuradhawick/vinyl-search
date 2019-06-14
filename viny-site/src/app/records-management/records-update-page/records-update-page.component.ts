@@ -44,7 +44,7 @@ export class RecordsUpdatePageComponent implements OnInit {
     const valid = form.checkValidity();
 
     form.classList.add('was-validated');
-    _.assign(this.recordObject, {
+    _.assign(record, {
       revisionComments: this.revisionComments
     });
 

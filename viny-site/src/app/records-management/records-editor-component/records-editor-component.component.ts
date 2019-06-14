@@ -11,6 +11,7 @@ import { AuthService } from '../../shared-modules/auth/auth.service';
 import { Storage } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 declare const $;
 
@@ -39,7 +40,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   @Input()
   set record(record) {
     if (!_.isEmpty(record)) {
-      this.recordObject = record;
+      _.assign(this.recordObject, record);
     }
   }
 
@@ -111,12 +112,60 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   };
 
+  public form;
+
   constructor(private auth: AuthService,
               public ngZone: NgZone,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
+    this.form = this.fb.group({
+      name: [this.recordObject.name, Validators.required],
+      mainArtist: [this.recordObject.mainArtist],
+      date: [this.recordObject.date, Validators.pattern(/([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?/)],
+      label: [this.recordObject.label, Validators.required],
+      catalogNo: [this.recordObject.catalogNo, Validators.required],
+      country: [this.recordObject.country, Validators.required],
+      channelCoding: [this.recordObject.channelCoding],
+      format: [this.recordObject.format],
+      size: [this.recordObject.size],
+      speed: [this.recordObject.speed],
+      tracks: this.fb.array(
+        _.map(this.recordObject.tracks, (track) => {
+          return this.fb.group({
+            index: [track.index, Validators.required],
+            artists: this.fb.array(_.map(track.artists, (artist) => {
+              return this.fb.group(
+                {
+                  index: [artist.index],
+                  name: [artist.name, Validators.required]
+                });
+            })),
+            title: [track.title, Validators.required],
+            credits: this.fb.array(_.map(track.credits, (credit) => {
+              return this.fb.group({
+                index: [credit.index],
+                text: [credit.text, Validators.required]
+              });
+            })),
+            duration: [track.duration, Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
+          });
+        })
+      ),
+      commonCredits: this.fb.array(_.map(this.recordObject.commonCredits, (credit) => {
+        return this.fb.group({
+          index: [credit.index],
+          text: [credit.text, Validators.required]
+        });
+      })),
+      notes: [this.recordObject.notes],
+    });
+    this.form.valueChanges.subscribe((values) => {
+      _.assign(this.recordObject, values);
+    });
+
     const genres = [];
     _.forEach(this.genresJSON, (s, g) => {
       genres.push({
@@ -155,87 +204,68 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   autoIndex() {
-    const newTracks = _.cloneDeep(this.recordObject.tracks);
+    _.each(this.form.get('tracks').controls, (control: FormControl, index) => {
+      const value = control.value;
 
-    _.forEach(newTracks, (track, pos) => {
-      track.index = pos + 1;
+      _.assign(value, {index: index + 1});
+      control.setValue(value);
     });
-
-    this.recordObject.tracks = newTracks;
   }
 
-  appendTrack() {
-    const newTracks = _.cloneDeep(this.recordObject.tracks);
+  appendTrack(tracks: FormArray) {
+    tracks.push(this.fb.group({
+      index: ['', Validators.required],
+      artists: this.fb.array([]),
+      title: ['', Validators.required],
+      credits: this.fb.array([]),
+      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
+    }));
+  }
 
-    newTracks.push(
+  insertTrackBefore(tracks: FormArray, index) {
+    tracks.insert(index, this.fb.group({
+      index: ['', Validators.required],
+      artists: this.fb.array([]),
+      title: ['', Validators.required],
+      credits: this.fb.array([]),
+      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
+    }));
+  }
+
+  insertTrackAfter(tracks: FormArray, index) {
+    tracks.insert(index + 1, this.fb.group({
+      index: ['', Validators.required],
+      artists: this.fb.array([]),
+      title: ['', Validators.required],
+      credits: this.fb.array([]),
+      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
+    }));
+  }
+
+  addArtist(track: FormArray) {
+    track.push(this.fb.group(
       {
-        index: '',
-        artists: [],
-        title: '',
-        credits: [],
-        duration: ''
-      });
+        index: [''],
+        name: ['', Validators.required]
+      }));
 
-    this.recordObject.tracks = newTracks;
-  }
-
-  insertTrackBefore(index) {
-    const newTracks = _.cloneDeep(this.recordObject.tracks);
-
-    newTracks.splice(index, 0,
-      {
-        index: '',
-        artists: [],
-        title: '',
-        credits: [],
-        duration: ''
-      }
-    );
-
-    this.recordObject.tracks = newTracks;
-  }
-
-  insertTrackAfter(index) {
-    const newTracks = _.cloneDeep(this.recordObject.tracks);
-
-    newTracks.splice(index + 1, 0,
-      {
-        index: '',
-        artists: [],
-        title: '',
-        credits: [],
-        duration: ''
-      }
-    );
-
-    this.recordObject.tracks = newTracks;
-  }
-
-  addArtist(track) {
-    _.forEach(track.artists, (a, i) => {
-      a.index = i;
+    _.each(track.controls, (control: FormControl, index) => {
+      control.setValue({index: index + 1, name: control.get('name').value});
     });
-
-    track.artists.push(
-      {
-        index: track.artists.length + 1,
-        name: ''
-      });
   }
 
-  addCommonCredit() {
-    const newCredits = _.cloneDeep(this.recordObject.commonCredits);
-    // const new
-    newCredits.push(
-      {
-        index: this.recordObject.commonCredits.length + 1,
-        text: ''
-      });
-    _.forEach(newCredits, (c, i) => {
-      c.index = i;
-    });
+  addCommonCredit(credits: FormArray) {
+    credits.push(this.fb.group({
+      index: [''],
+      text: ['', Validators.required]
+    }));
 
-    this.recordObject.commonCredits = newCredits;
+    _.each(credits.controls, (control: FormControl, index) => {
+      control.setValue({
+        index: index + 1,
+        text: control.get('text').value
+      });
+    });
   }
 
   removeCommonCredit(credit) {
@@ -249,33 +279,18 @@ export class RecordsEditorComponentComponent implements OnInit {
     this.recordObject.commonCredits = newCredits;
   }
 
-  removeArtist(oldtracks, ti, artist) {
-    const tracks = _.cloneDeep(oldtracks);
-
-    _.remove(tracks[ti].artists, (a) => _.isEqual(a, artist));
-    _.forEach(tracks[ti].artists, (a, i) => {
-      a.index = i;
-    });
-
-    this.recordObject.tracks = tracks;
-  }
-
   removeTrack(track) {
     _.remove(this.recordObject.tracks, (t) => t === track);
   }
 
-  removeCredit(oldtracks, ti, credit) {
-    const tracks = _.cloneDeep(oldtracks);
+  addCredit(track: FormArray) {
+    track.push(this.fb.group({
+      index: [''],
+      text: ['', Validators.required]
+    }));
 
-    _.remove(tracks[ti].credits, (c) => _.isEqual(c, credit));
-
-    this.recordObject.tracks = tracks;
-  }
-
-  addCredit(track) {
-    track.credits.push({
-      index: track.credits.length + 1,
-      text: ''
+    _.each(track.controls, (control: FormControl, index) => {
+      control.setValue({index: index + 1, text: control.get('text').value});
     });
   }
 
@@ -305,12 +320,8 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   getReleaseData() {
-    const form: any = document.getElementsByClassName('needs-validation')[0];
-    const valid = form.checkValidity();
-    form.classList.add('was-validated');
-
-    if (!valid) {
-      return valid;
+    if (this.form.invalid) {
+      return false;
     } else if (this.uploadCount > 0) {
       this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');
       return false;

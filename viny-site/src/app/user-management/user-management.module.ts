@@ -8,20 +8,23 @@ import { MyForumComponent } from './my-forum/my-forum.component';
 import { UpdateDetailsComponent } from './update-details/update-details.component';
 import { SharedModules } from '../shared-modules/shared.module';
 import { ForumShouldDeleteModalComponent } from './modals/forum-should-delete/forum-should-delete.component';
+import { RecordShouldDeleteModalComponent } from './modals/record-should-delete-modal/record-should-delete-modal.component';
 
 @NgModule({
   declarations: [UserHomePageComponent,
     MyRecordsComponent,
     MyForumComponent,
     UpdateDetailsComponent,
-    ForumShouldDeleteModalComponent],
+    ForumShouldDeleteModalComponent,
+    RecordShouldDeleteModalComponent],
   imports: [
     CommonModule,
     UserManagementRoutingModule,
     SharedModules
   ],
   entryComponents: [
-    ForumShouldDeleteModalComponent
+    ForumShouldDeleteModalComponent,
+    RecordShouldDeleteModalComponent
   ]
 })
 export class UserManagementModule {

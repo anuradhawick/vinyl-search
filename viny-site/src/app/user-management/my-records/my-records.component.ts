@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { UserService } from '../../services/user.service';
 import * as _ from 'lodash';
+import { RecordShouldDeleteModalComponent } from '../modals/record-should-delete-modal/record-should-delete-modal.component';
+import { MatDialog } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-records',
@@ -19,7 +22,9 @@ export class MyRecordsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog,
+              private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -59,6 +64,17 @@ export class MyRecordsComponent implements OnInit {
   }
 
   delete(id) {
-    alert('Feature being developed. Thanks :)');
+    const modal = this.dialog.open(RecordShouldDeleteModalComponent);
+
+    modal.afterClosed().subscribe((ok) => {
+      if (ok) {
+        this.userService.delete_record(id).then(() => {
+          this.loadPosts();
+          this.toastr.success('Forum item deleted successfully', 'Success');
+        }).catch(() => {
+          this.toastr.error('Request failed. Try again later!', 'Error');
+        });
+      }
+    });
   }
 }
