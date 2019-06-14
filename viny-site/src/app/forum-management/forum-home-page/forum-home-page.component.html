@@ -2,13 +2,13 @@
   <br>
   <div class="ml-5 mr-5 mt-3 mb-3">
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6 col-9">
         <div class="input-group">
           <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
                  class="form-control"
                  placeholder="Search forum..." aria-label="Search for posts"
                  aria-describedby="button-addon2" name="search-query" [(ngModel)]="query">
-          <button class="btn btn-default" type="button" id="button-addon2" (click)="search()">Search</button>
+          <button mat-button class="btn btn-default m-1" type="button" id="button-addon2" (click)="search()">Search</button>
           <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
             <div
               style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
@@ -31,18 +31,18 @@
           </div>
         </div>
       </div>
-      <div *ngIf="auth.user; else showLogin" class="col-sm-6">
+      <div *ngIf="auth.user; else showLogin" class="col-sm-6 col-3">
         <div class="float-right">
-          <button type="button" class="btn btn-default" routerLink="/forum/editor">
-            New Post
+          <button mat-button type="button" class="btn btn-default m-1" routerLink="/forum/editor">
+            New
           </button>
         </div>
       </div>
       <ng-template #showLogin>
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-3">
           <div class="float-right">
-            <button type="button" class="btn btn-success" (click)="auth.login()">
-              Login to post!
+            <button mat-button type="button" class="btn btn-success m-1" (click)="auth.login()">
+              Login!
             </button>
           </div>
         </div>
@@ -75,17 +75,7 @@
   </div>
 
   <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-      <li class="page-item">
-        <a (click)="previousPage()" class="page-link" aria-label="Previous">
-          Previous
-        </a>
-      </li>
-      <li class="page-item">
-        <a (click)="nextPage()" class="page-link" aria-label="Next">
-          Next
-        </a>
-      </li>
-    </ul>
+    <mat-paginator showFirstLastButtons [length]="count"
+                   [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

@@ -74,8 +74,13 @@ export class AuthService {
   }
 
   async getToken() {
-    const session: any = await Auth.currentSession();
-    return session.idToken.jwtToken || null;
+    try {
+      const session: any = await Auth.currentSession();
+      return session.idToken.jwtToken;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
   }
 
 

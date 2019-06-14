@@ -22,8 +22,7 @@ export class ForumHomePageComponent implements OnInit {
 
   @ViewChild('forumloader', {static: true}) loader: LoaderComponent;
 
-  constructor(/*private fns: AngularFireFunctions,*/
-              public forumService: ForumService,
+  constructor(public forumService: ForumService,
               public route: ActivatedRoute,
               public router: Router,
               public auth: AuthService) {
@@ -99,34 +98,15 @@ export class ForumHomePageComponent implements OnInit {
     }, 500);
   }
 
-  nextPage() {
-    if (this.skip + this.limit >= this.count) {
-      return;
-    }
+  changePage(event) {
     this.posts = null;
-    this.skip += this.limit;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + Number(this.page)
+        page: 1 + event.pageIndex
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
-  }
-
-  previousPage() {
-    if (this.skip - this.limit < 0) {
-      return;
-    }
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: Number(this.page) - 1
-      },
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
-    this.posts = null;
-    this.skip = _.max([this.skip - this.limit, 0]);
   }
 
   search() {

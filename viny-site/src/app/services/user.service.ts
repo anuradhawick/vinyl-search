@@ -31,20 +31,22 @@ export class UserService {
     }).toPromise();
   }
 
-  async get_records() {
+  async get_records(params) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'users/records', {
+      params,
       headers: new HttpHeaders({
         'Authorization': token
       })
     }).toPromise();
   }
 
-  async get_forum_posts() {
+  async get_forum_posts(params) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'users/forum', {
+      params,
       headers: new HttpHeaders({
         'Authorization': token
       })

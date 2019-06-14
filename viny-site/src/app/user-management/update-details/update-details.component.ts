@@ -16,7 +16,7 @@ export class UpdateDetailsComponent implements OnInit {
   public uploadImageUrl = null;
   public uploadableFile = null;
   public uploading = false;
-  public uploadingProgress = false;
+  public uploadingProgress = 0;
   private user = null;
   public form = new FormGroup(
     {

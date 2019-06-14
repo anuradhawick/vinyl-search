@@ -1,8 +1,8 @@
 <div class="main main-raised">
   <br>
-  <div class="row col-lg-12">
-    <div class="col-sm-12 col-lg-4">
-      <div class="container">
+  <div class="ml-5 mr-5 mt-3 mb-3">
+    <div class="row">
+      <div class="col-sm-6 col-9">
         <div class="input-group">
           <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
                  class="form-control"
@@ -34,9 +34,7 @@
            class="ml-3 mr-5 mt-2 text-dark">
         Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
       </div>
-    </div>
-    <div class="col-sm-12 col-lg-8">
-      <div *ngIf="auth.isLoggedIn; else showLogin">
+      <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
         <div class="float-right">
           <button mat-button type="button" class="btn btn-default" routerLink="/records/new">
             Add
@@ -44,10 +42,12 @@
         </div>
       </div>
       <ng-template #showLogin>
-        <div class="float-right">
-          <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
-            Login to publish!
-          </button>
+        <div class="col-sm-6 col-3">
+          <div class="float-right">
+            <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
+              Login!
+            </button>
+          </div>
         </div>
       </ng-template>
     </div>
@@ -106,7 +106,8 @@
               <hr>
             </ng-container>
             <div class="text-center">
-              <button mat-button class="btn badge badge-success m-1  filter-buttons" (click)="openFilter(getStyles(), 'styleFilters')">
+              <button mat-button class="btn badge badge-success m-1  filter-buttons"
+                      (click)="openFilter(getStyles(), 'styleFilters')">
                 Select
                 filters
               </button>
@@ -205,20 +206,8 @@
       </div>
       <br>
       <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <a (click)="previousPage()" class="page-link" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <li class="page-item">
-            <a (click)="nextPage()" class="page-link" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-        </ul>
+        <mat-paginator showFirstLastButtons [length]="count"
+                       [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
       </nav>
     </div>
   </div>

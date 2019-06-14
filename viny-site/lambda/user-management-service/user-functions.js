@@ -48,12 +48,9 @@ const get_user = async (uid) => {
 
 
 const get_user_records = async (uid, query_params) => {
-
   const limit = _.parseInt(_.get(query_params, 'limit', 30));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
-
   const db = await db_util.connect_db();
-
   const data = await db.collection('records').aggregate([
     {
       $match: {
@@ -77,6 +74,7 @@ const get_user_records = async (uid, query_params) => {
               label: 1,
               genres: 1,
               chosenImage: 1,
+              catalogNo: 1,
               images: 1,
               id: 1,
               score: 1
@@ -131,9 +129,15 @@ const get_user_forum_posts = async (uid, query_params) => {
             $limit: limit
           },
           {
+            $addFields: {
+              id: "$_id"
+            }
+          },
+          {
             $project: {
               postTitle: 1,
-              _id: 1
+              createdAt: 1,
+              id: 1
             }
           }
         ]

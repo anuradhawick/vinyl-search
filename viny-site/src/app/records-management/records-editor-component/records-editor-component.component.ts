@@ -137,6 +137,7 @@ export class RecordsEditorComponentComponent implements OnInit {
       }
     });
 
+    this.imageDeleteButton();
     this.loadStyles();
   }
 
@@ -348,6 +349,7 @@ export class RecordsEditorComponentComponent implements OnInit {
             }
             observer.complete();
             _.remove(this.percentages, (p) => p === progressObserver);
+            this.imageDeleteButton();
           }).catch((e) => {
             this.toastr.error('Image upload failed! Are you online?', 'Error');
             this.uploadCount--;
@@ -360,6 +362,7 @@ export class RecordsEditorComponentComponent implements OnInit {
         });
         this.percentages.push(progressObserver);
       });
+      event.target.value = '';
     }
   }
 
@@ -449,6 +452,7 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   deleteImage(index) {
     const removeItem = this.recordObject.images[index];
+    this.recordObject.chosenImage = 0;
     _.remove(this.recordObject.images, (item) => _.isEqual(item, removeItem));
     this.imageDeleteButton();
   }

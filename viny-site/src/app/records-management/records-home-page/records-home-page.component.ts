@@ -169,34 +169,15 @@ export class RecordsHomePageComponent implements OnInit {
     });
   }
 
-  nextPage() {
-    if (this.skip + this.limit >= this.count) {
-      return;
-    }
+  changePage(event) {
     this.records = null;
-    this.skip += this.limit;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + Number(this.page)
+        page: 1 + event.pageIndex
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
-  }
-
-  previousPage() {
-    if (this.skip - this.limit < 0) {
-      return;
-    }
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: Number(this.page) - 1
-      },
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
-    this.records = null;
-    this.skip = _.max([this.skip - this.limit, 0]);
   }
 
   openFilter(toChooseFrom, ref) {

@@ -2,7 +2,7 @@
   <br>
   <app-loader #loader></app-loader>
   <div *ngIf="loader.isHidden()">
-    <app-records-editor-component [record]="testRecord" #editor (readyStateChange)="readyChange($event)"></app-records-editor-component>
+    <app-records-editor-component #editor (readyStateChange)="readyChange($event)"></app-records-editor-component>
 
     <div class="row col-12">
       <div class="col-12 col-sm-9 offset-3">
