@@ -156,14 +156,28 @@
             </div>
 
             <div class="card-body">
-                <span *ngFor="let g of genres" class="btn badge badge-primary m-1"
-                      (click)="selectGenre(g.name)">{{g.name}}</span>
+              <mat-chip-list>
+                <mat-chip *ngFor="let g of genres" class="btn btn-primary" (click)="selectGenre(g.name)">{{g.name}}
+                </mat-chip>
+              </mat-chip-list>
               <br>
-              <label><i class="btn btn-link" data-toggle="modal" data-backdrop="" data-target="#newgenre">(add
-                missing)</i></label>
+              <mat-form-field class="w-100">
+                <mat-chip-list #genreList>
+                  <mat-chip *ngFor="let g of recordObject.genres" [selectable]="true"
+                            [removable]="true">
+                    {{g}}
+                    <mat-icon matChipRemove (click)="selectGenre(g, true)">cancel</mat-icon>
+                  </mat-chip>
+                  <input placeholder="Add custom genres"
+                         [matChipInputFor]="genreList"
+                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                         [matChipInputAddOnBlur]="true"
+                         (matChipInputTokenEnd)="addGenre($event)">
+                </mat-chip-list>
+              </mat-form-field>
               <br>
-              <span *ngFor="let g of recordObject.genres" class="btn badge badge-danger m-1"
-                    (click)="selectGenre(g, true)">{{g}}<i class="material-icons">delete_outline</i></span>
+              <label>Type and press Enter to add custom genres</label>
+              <br>
             </div>
           </div>
           <br>
@@ -172,20 +186,28 @@
               <h4 class="card-title">Styles</h4>
             </div>
             <div class="card-body">
-
-              <span *ngIf="_.isEmpty(recordObject.genres)">Please select some genres</span>
-              <label *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)"><i class="btn btn-link"
-                                                                                      data-toggle="modal"
-                                                                                      data-backdrop=""
-                                                                                      data-target="#allstyles">Show
-                All Styles</i></label>
-              <br *ngIf="!_.isEmpty(recordObject.genres) && !_.isEmpty(styles)">
-              <label *ngIf="!_.isEmpty(recordObject.genres)"><i class="btn btn-link" data-toggle="modal"
-                                                                data-backdrop=""
-                                                                data-target="#newstyle">(add missing)</i></label>
+              <mat-chip-list>
+                <mat-chip *ngFor="let s of styles" class="btn btn-primary" (click)="selectStyle(s)">{{s}}
+                </mat-chip>
+              </mat-chip-list>
               <br>
-              <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
-                    (click)="selectStyle(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
+              <mat-form-field class="w-100">
+                <mat-chip-list #styleList>
+                  <mat-chip *ngFor="let s of recordObject.styles" [selectable]="true"
+                            [removable]="true">
+                    {{s}}
+                    <mat-icon matChipRemove (click)="selectStyle(s, true)">cancel</mat-icon>
+                  </mat-chip>
+                  <input placeholder="Add custom styles"
+                         [matChipInputFor]="styleList"
+                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                         [matChipInputAddOnBlur]="true"
+                         (matChipInputTokenEnd)="addStyle($event)">
+                </mat-chip-list>
+              </mat-form-field>
+              <br>
+              <label>Select genres and add sub styles or type to add</label>
+              <br>
             </div>
           </div>
         </div>
@@ -195,10 +217,10 @@
         <table class="table table-responsive" style="background-color: whitesmoke">
           <thead>
           <tr>
-            <th scope="col" class="w-auto">Position</th>
+            <th scope="col">Position</th>
             <th scope="col" class="w-50">Artists</th>
             <th scope="col" class="w-50">Title/Credits</th>
-            <th scope="col" class="w-auto">Duration</th>
+            <th scope="col">Duration</th>
             <th scope="col" class="w-25">Options</th>
           </tr>
           </thead>
@@ -206,7 +228,7 @@
           <tr *ngFor="let track of form.get('tracks').controls; let ti = index" style="cursor: all-scroll"
               id="track-row-{{ti}}" [formGroupName]="ti">
             <td scope="row">
-              <mat-form-field>
+              <mat-form-field style="width: 60px;">
                 <input matInput type="text" placeholder="Index" name="track-{{ti}}-index"
                        formControlName="index">
                 <mat-error *ngIf="form.get('tracks').controls[ti].get('index').invalid">Required</mat-error>
@@ -261,14 +283,13 @@
               </div>
             </td>
             <td>
-              <mat-form-field>
+              <mat-form-field style="width: 100px">
                 <input matInput type="text" placeholder="0:00" name="track-{{ti}}-duration"
                        formControlName="duration">
                 <mat-error *ngIf="form.get('tracks').controls[ti].get('duration').invalid">MM:SS</mat-error>
               </mat-form-field>
             </td>
-            <td>
-              <!--<div class="dropdown dropleft">-->
+            <td style="width: 100px">
               <button mat-button [matMenuTriggerFor]="beforeMenu">
                 <mat-icon>settings</mat-icon>
               </button>
@@ -284,7 +305,7 @@
         </table>
 
         <div class="row container">
-          <button mat-button (click)="appendTrack(form.get('tracks').controls)">
+          <button mat-button (click)="appendTrack(form.get('tracks'))">
             Track
             <mat-icon>add_circle</mat-icon>
           </button>
@@ -300,11 +321,21 @@
             <h4 class="card-title">Descriptions</h4>
           </div>
           <div class="card-body">
-                <span *ngFor="let d of descr" class="btn badge badge-primary m-1"
-                      (click)="selectDescr(d)">{{d}}</span>
-            <hr *ngIf="!_.isEmpty(recordObject.descriptions)">
-            <span *ngFor="let s of recordObject.descriptions" class="btn badge badge-danger m-1"
-                  (click)="selectDescr(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
+            <mat-chip-list>
+              <mat-chip *ngFor="let d of descr" class="btn btn-primary" (click)="selectDescr(d)">{{d}}
+              </mat-chip>
+            </mat-chip-list>
+            <br>
+            <mat-form-field class="w-100">
+              <mat-chip-list #descrList>
+                <mat-chip *ngFor="let s of recordObject.descriptions" [selectable]="true"
+                          [removable]="true">
+                  {{s}}
+                  <mat-icon matChipRemove (click)="selectDescr(s, true)">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+            </mat-form-field>
+            <br>
           </div>
         </div>
         <!---->
@@ -336,90 +367,6 @@
         </mat-form-field>
       </form>
     </div>
-
   </div>
 </div>
 
-
-<!--MODALS-->
-<div id="newgenre" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Genre</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label>Genre name</label>
-            <input type="text" class="form-control" name="newGenreName" [(ngModel)]="newGenreName" placeholder="Name">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default m-1" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary m-1" data-dismiss="modal" (click)="addGenre()">Save changes
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="newstyle" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Style</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label>Style names</label>
-            <textarea type="text" rows="5" class="form-control" name="newGenreName" [(ngModel)]="newStyleNames"
-                      placeholder="Name">
-            </textarea>
-          </div>
-          <div class="form-group">
-            <label *ngIf="!_.isEmpty(newStyleNames)">These will be added</label>
-            <br>
-            <span *ngFor="let n of _.split(newStyleNames, '\n')" class="btn badge badge-primary m-1">{{_.startCase(_.lowerCase(n))}}</span>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default m-1" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary m-1" data-dismiss="modal" (click)="addStyle()">Save changes
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="allstyles" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Select Styles</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <span *ngFor="let s of styles" class="btn badge badge-primary m-1"
-              (click)="selectStyle(s)">{{s}}</span>
-        <hr>
-        <span *ngFor="let s of recordObject.styles" class="btn badge badge-danger m-1"
-              (click)="selectStyle(s, true)">{{s}}<i class="material-icons">delete_outline</i></span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
-      </div>
-    </div>
-  </div>
-</div>

@@ -344,8 +344,6 @@ update_record = async (reviserUid, recordId, record) => {
   _.assign(record, {latest: true});
   _.assign(record, {images: newImages});
 
-  console.log(record)
-
   await db.collection('records').insertOne(record);
 
   return record.id;

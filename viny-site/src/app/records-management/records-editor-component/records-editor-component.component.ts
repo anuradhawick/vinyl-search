@@ -11,7 +11,9 @@ import { AuthService } from '../../shared-modules/auth/auth.service';
 import { Storage } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material';
+import { ENTER } from '@angular/cdk/keycodes';
 
 declare const $;
 
@@ -81,7 +83,8 @@ export class RecordsEditorComponentComponent implements OnInit {
   };
 
   // new genre related
-  public newGenreName: string = null;
+  readonly separatorKeysCodes: number[] = [ENTER];
+  // public newGenreName: string = null;
   public newStyleNames: string = null;
 
   // context control
@@ -192,14 +195,17 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   resort(arr) {
     const new_index = _.map(arr, (item) => Number(_.split(item, '-').pop()));
-    const newTracks = _.cloneDeep(this.recordObject.tracks);
+    const oldTracks = _.cloneDeep(this.form.get('tracks').controls);
+    const updatedTracks = [];
 
-    _.forEach(new_index, (index, pos) => {
-      newTracks[index] = this.recordObject.tracks[pos];
+    _.each(new_index, (i) => {
+      updatedTracks.push(oldTracks[i]);
     });
 
     this.ngZone.run(() => {
-      this.recordObject.tracks = newTracks;
+      _.each(new_index, (i) => {
+        this.form.get('tracks').setControl(i, updatedTracks[i]);
+      });
     });
   }
 
@@ -268,21 +274,6 @@ export class RecordsEditorComponentComponent implements OnInit {
     });
   }
 
-  removeCommonCredit(credit) {
-    const newCredits = _.cloneDeep(this.recordObject.commonCredits);
-
-    _.remove(newCredits, (c) => _.isEqual(c, credit));
-    _.forEach(newCredits, (c, i) => {
-      c.index = i;
-    });
-
-    this.recordObject.commonCredits = newCredits;
-  }
-
-  removeTrack(track) {
-    _.remove(this.recordObject.tracks, (t) => t === track);
-  }
-
   addCredit(track: FormArray) {
     track.push(this.fb.group({
       index: [''],
@@ -294,8 +285,20 @@ export class RecordsEditorComponentComponent implements OnInit {
     });
   }
 
-  addGenre() {
-    const candidateGenre = _.startCase(_.lowerCase(this.newGenreName));
+  addGenre(event: MatChipInputEvent) {
+    const input = event.input;
+    const value = event.value;
+    const candidateGenre: string = _.trim(_.get(event, 'value', '')).replace(/\w+/g, _.capitalize);
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    if (candidateGenre.length < 1) {
+      return;
+    }
+
     const found = _.find(this.genres, (genre) => {
       return genre.name === candidateGenre;
     });
@@ -312,10 +315,21 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   }
 
-  addStyle() {
-    const newStyles = _.map(_.split(_.trim(this.newStyleNames), '\n'), (i) => _.startCase(_.lowerCase(i)));
+  addStyle(event: MatChipInputEvent) {
+    const input = event.input;
+    const value = event.value;
+    const newStyle: string = _.trim(_.get(event, 'value', '')).replace(/\w+/g, _.capitalize);
 
-    this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, newStyles));
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    if (newStyle.length < 1) {
+      return;
+    }
+
+    this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, [newStyle]));
     this.toastr.success(`Styles were added successfully`, 'Success');
   }
 

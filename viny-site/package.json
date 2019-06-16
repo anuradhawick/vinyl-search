@@ -29,7 +29,7 @@
     "@ckeditor/ckeditor5-build-inline": "^12.1.0",
     "@ng-bootstrap/ng-bootstrap": "^4.0.1",
     "amazon-cognito-identity-js": "^3.0.12",
-    "aws-amplify": "^1.1.28",
+    "aws-amplify": "^1.1.29-unstable.0",
     "aws-sdk": "^2.466.0",
     "core-js": "^2.5.4",
     "express": "^4.15.2",

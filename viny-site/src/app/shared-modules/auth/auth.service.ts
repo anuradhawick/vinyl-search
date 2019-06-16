@@ -78,7 +78,6 @@ export class AuthService {
       const session: any = await Auth.currentSession();
       return session.idToken.jwtToken;
     } catch (e) {
-      console.log(e)
       return null;
     }
   }
