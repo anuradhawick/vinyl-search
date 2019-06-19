@@ -77,7 +77,8 @@
         <ng-container *ngIf="auth.isLoggedIn; else showLogin">
           <li class="nav-item">
             <a class="nav-link" href="javascript:void(0)" [routerLink]="'/profile'">
-              <i class="material-icons">person</i> Hi {{ auth.user.name.split(" ")[0] }}
+              <img class="img-thumbnail p-0 m-0" [src]="_.get(auth, 'user.picture', '')" alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+              Hi {{ _.get(auth, 'user.name', '').split(' ')[0] }}
             </a>
           </li>
           <li class="nav-item">

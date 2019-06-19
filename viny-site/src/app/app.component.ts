@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './shared-modules/auth/auth.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { AuthService } from './shared-modules/auth/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'viny-site';
+  public _ = _;
 
   constructor(public auth: AuthService) {
 

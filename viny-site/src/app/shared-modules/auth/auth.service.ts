@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
-import * as _ from 'lodash';
-import Amplify, { Auth, Hub } from 'aws-amplify';
+import Amplify, { Auth, Hub, I18n } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare const $: any;
 declare const window: any;
@@ -19,7 +19,7 @@ export class AuthService {
   public isLoggedIn = false;
   private autoLogin;
 
-  constructor(private route: ActivatedRoute, private zone: NgZone) {
+  constructor(private route: ActivatedRoute, private zone: NgZone, private http: HttpClient) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         if (params.error_description === 'PreSignUp failed with error Google. ') {
@@ -67,9 +67,20 @@ export class AuthService {
     console.log(u);
     console.log(u.signInUserSession.idToken.jwtToken);
     this.zone.run(() => {
-      this.user = u.attributes;
-      this.user['uid'] = u.attributes.sub;
       this.isLoggedIn = true;
+      return this.fetchDbUser();
+    });
+  }
+
+  async fetchDbUser() {
+    const token = await this.getToken();
+
+    return this.http.get(environment.api_gateway + 'users/', {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise().then(user => {
+      this.user = user;
     });
   }
 
@@ -80,6 +91,10 @@ export class AuthService {
     } catch (e) {
       return null;
     }
+  }
+
+  setUser(user) {
+    this.user = user;
   }
 
 

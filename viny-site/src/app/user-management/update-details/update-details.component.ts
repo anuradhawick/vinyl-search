@@ -29,20 +29,18 @@ export class UpdateDetailsComponent implements OnInit {
   constructor(private auth: AuthService,
               private toastr: ToastrService,
               private userService: UserService) {
+    this.user = this.auth.user;
+    this.originalUser = _.cloneDeep(this.auth.user);
   }
 
   ngOnInit() {
-    this.userService.get_profile().then((u: any) => {
-      this.user = u;
-      this.originalUser = _.cloneDeep(u);
-      this.form.get('firstName').setValue(this.user.given_name);
-      this.form.get('lastName').setValue(this.user.family_name);
-      this.form.valueChanges.subscribe((value) => {
-        if (this.user) {
-          this.user.given_name = value.firstName;
-          this.user.family_name = value.lastName;
-        }
-      });
+    this.form.get('firstName').setValue(this.user.given_name);
+    this.form.get('lastName').setValue(this.user.family_name);
+    this.form.valueChanges.subscribe((value) => {
+      if (this.user) {
+        this.user.given_name = value.firstName;
+        this.user.family_name = value.lastName;
+      }
     });
   }
 
@@ -65,7 +63,10 @@ export class UpdateDetailsComponent implements OnInit {
       given_name: this.user.given_name,
       family_name: this.user.family_name,
     }).then(() => {
-      window.location.reload();
+      this.userService.get_profile().then((u: any) => {
+        this.user = u;
+        this.auth.setUser(u);
+      });
     });
   }
 
@@ -103,7 +104,10 @@ export class UpdateDetailsComponent implements OnInit {
       this.userService.update_profile({
         picture: url
       }).then(() => {
-        window.location.reload();
+        this.userService.get_profile().then((u: any) => {
+          this.user = u;
+          this.auth.setUser(u);
+        });
       });
     }).catch((e) => {
       this.uploading = false;

@@ -5,13 +5,13 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6 ml-auto mr-auto">
-            <div *ngIf="user" class="profile">
+            <div *ngIf="auth.user" class="profile">
               <div class="avatar">
-                <img [src]="user.picture" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                <img [src]="auth.user.picture" alt="Circle Image" class="img-raised rounded-circle img-fluid">
               </div>
               <div class="name">
-                <h3 class="title">{{user.name}}</h3>
-                <h6>{{user.email}}</h6>
+                <h3 class="title">{{auth.user.name}}</h3>
+                <h6>{{auth.user.email}}</h6>
               </div>
             </div>
           </div>
