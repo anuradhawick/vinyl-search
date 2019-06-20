@@ -7,10 +7,10 @@
     <div class="row col-12">
       <div class="col-12 col-sm-9 offset-3">
         <div class="container-fluid">
-          <button mat-button type="button" class="btn btn-danger m-1" [routerLink]="['/records']"
+          <button mat-raised-button type="button" [routerLink]="['/records']"
                   [disabled]="!ready">Discard
           </button>
-          <button mat-button type="button" class="btn btn-primary m-1" (click)="save()" [disabled]="!ready">
+          <button mat-raised-button type="button" class="ml-1" color="primary"  (click)="save()" [disabled]="!ready">
             Save
           </button>
         </div>

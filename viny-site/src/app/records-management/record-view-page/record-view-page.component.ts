@@ -15,19 +15,10 @@ export class RecordViewPageComponent implements OnInit {
   public recordObject = null;
   public recordHistory = null;
   public imgvconfig = {
-    btnClass: 'default',
     zoomFactor: 0.1,
-    containerBackgroundColor: '#ccc',
     wheelZoom: false,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
-    btnIcons: {
-      zoomIn: 'fas fa-plus',
-      zoomOut: 'fas fa-minus',
-      next: 'fas fa-angle-double-right',
-      prev: 'fas fa-angle-double-left',
-      fullscreen: 'fas fa-arrows-alt',
-    },
     customBtns: [],
     btnShow: {
       next: true,

@@ -17,7 +17,7 @@ export class UpdateDetailsComponent implements OnInit {
   public uploadableFile = null;
   public uploading = false;
   public uploadingProgress = 0;
-  private user = null;
+  private user = null; // TODO replace with a replay subject
   private originalUser = null;
   public form = new FormGroup(
     {
@@ -29,13 +29,17 @@ export class UpdateDetailsComponent implements OnInit {
   constructor(private auth: AuthService,
               private toastr: ToastrService,
               private userService: UserService) {
-    this.user = this.auth.user;
-    this.originalUser = _.cloneDeep(this.auth.user);
   }
 
   ngOnInit() {
-    this.form.get('firstName').setValue(this.user.given_name);
-    this.form.get('lastName').setValue(this.user.family_name);
+    this.auth.fetchDbUser().then((u) => {
+      this.user = u;
+      this.originalUser = _.cloneDeep(u);
+      this.form.setValue({
+        firstName: this.originalUser.given_name,
+        lastName: this.originalUser.family_name,
+      });
+    });
     this.form.valueChanges.subscribe((value) => {
       if (this.user) {
         this.user.given_name = value.firstName;
@@ -59,13 +63,21 @@ export class UpdateDetailsComponent implements OnInit {
   }
 
   updateDetails() {
+    if (this.form.invalid) {
+      return;
+    }
     this.userService.update_profile({
       given_name: this.user.given_name,
       family_name: this.user.family_name,
     }).then(() => {
       this.userService.get_profile().then((u: any) => {
         this.user = u;
+        this.originalUser = _.cloneDeep(u);
         this.auth.setUser(u);
+        this.form.reset({
+          firstName: u.given_name,
+          lastName: u.family_name
+        });
       });
     });
   }

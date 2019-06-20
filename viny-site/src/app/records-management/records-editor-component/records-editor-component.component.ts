@@ -93,20 +93,11 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   // image viewer config
   public imgvconfig = {
-    btnClass: 'default',
     zoomFactor: 0.1,
-    containerBackgroundColor: '#ccc',
     wheelZoom: false,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
-    btnIcons: {
-      zoomIn: 'fas fa-plus',
-      zoomOut: 'fas fa-minus',
-      next: 'fas fa-angle-double-right',
-      prev: 'fas fa-angle-double-left',
-      fullscreen: 'fas fa-arrows-alt',
-    },
-    customBtns: [],
+    customBtns: [{name: 'delete', icon: 'delete'}],
     btnShow: {
       next: true,
       prev: true,
@@ -392,21 +383,20 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   imageDeleteButton() {
-    const config = _.cloneDeep(this.imgvconfig);
-
-    if (_.isEmpty(this.recordObject.images)) {
-      config.customBtns = [];
-      config.wheelZoom = false;
-    } else {
-      config.wheelZoom = true;
-      if (_.isEmpty(this.imgvconfig.customBtns)) {
-        config.customBtns = [{name: 'delete', icon: 'fas fa-trash-alt'}];
-      }
-    }
-
-    this.ngZone.run(() => {
-      this.imgvconfig = config;
-    });
+    // console.log(this.recordObject.images)
+    // _.assign(this.imgvconfig, {customBtns});
+    // this.ngZone.run(() => {
+    //   let customBtns = [{name: 'delete', icon: 'delete'}];
+    //
+    //   if (_.isEmpty(this.recordObject.images)) {
+    //     customBtns = [];
+    //     this.imgvconfig.customBtns.pop()
+    //   }
+    //   this.imgvconfig.customBtns = customBtns;
+    // });
+    // if (_.isEmpty(this.recordObject.images)) {
+    //   this.toastr.warning('No more images to remove', 'Ops!');
+    // }
   }
 
   handleEvent(event) {

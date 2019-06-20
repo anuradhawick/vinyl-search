@@ -10,10 +10,10 @@
     <br>
     <mat-form-field class="w-100">
       <input matInput placeholder="Enter your last name" formControlName="lastName" required>
-      <mat-error *ngIf="form.controls['firstName'].invalid">Please enter a valid last name</mat-error>
+      <mat-error *ngIf="form.controls['lastName'].invalid">Please enter a valid last name</mat-error>
     </mat-form-field>
-    <button *ngIf="form.dirty" mat-button (click)="discardDetails()" class="btn btn-default btn-sm m-1">Cancel</button>
-    <button *ngIf="form.dirty" mat-button class="btn btn-primary btn-sm m-1" (click)="updateDetails()">Update</button>
+    <button *ngIf="form.dirty" mat-raised-button (click)="discardDetails()">Cancel</button>
+    <button *ngIf="form.dirty" mat-raised-button color="primary" class="ml-1" (click)="updateDetails()">Update</button>
     <br>
   </div>
     <hr>
@@ -25,8 +25,8 @@
   </div>
   <br>
   <mat-progress-bar *ngIf="uploading" mode="determinate" value="{{uploadingProgress}}"></mat-progress-bar>
-  <button *ngIf="uploadImageUrl" mat-button (click)="uploadImageUrl=null; uploadableFile=null;" class="btn btn-default btn-sm m-1">Cancel</button>
-  <button *ngIf="uploadImageUrl" mat-button class="btn btn-primary btn-sm m-1" (click)="upload()">Upload</button>
+  <button *ngIf="uploadImageUrl" mat-raised-button (click)="uploadImageUrl=null; uploadableFile=null;">Cancel</button>
+  <button *ngIf="uploadImageUrl" mat-raised-button color="primary" class="ml-1" (click)="upload()">Upload</button>
   <br>
   <br>
 </div>

@@ -73,15 +73,17 @@ export class AuthService {
   }
 
   async fetchDbUser() {
+    if (this.user) {
+      return this.user;
+    }
     const token = await this.getToken();
-
-    return this.http.get(environment.api_gateway + 'users/', {
+    this.user = await this.http.get(environment.api_gateway + 'users/', {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise().then(user => {
-      this.user = user;
-    });
+    }).toPromise();
+
+    return this.user;
   }
 
   async getToken() {
@@ -119,6 +121,10 @@ export class AuthService {
   }
 
   logout() {
+    this.redirectUrl = null;
+    this.user = null;
+    this.isLoggedIn = false;
+    this.autoLogin = null;
     Auth.signOut();
   }
 

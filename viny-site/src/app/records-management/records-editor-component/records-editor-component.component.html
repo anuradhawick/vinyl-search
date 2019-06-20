@@ -1,5 +1,5 @@
 <div class="row container-fluid">
-  <div class="col-12 col-sm-3">
+  <div class="col-12 col-lg-3">
     <div class="container-fluid">
       <div class="text-center">
         <br>
@@ -24,7 +24,7 @@
 
       <div *ngIf="recordObject.images.length>0" class="card col-12 m-0">
         <div class="row">
-          <div *ngFor="let image of recordObject.images; let i = index" class="col-lg-4 col-sm-6 col-12 p-0">
+          <div *ngFor="let image of recordObject.images; let i = index" class="col-sm-4 p-0">
             <div class="m-1">
               <a (click)="recordObject.chosenImage=i" class="thumbnail">
                 <div class="image" style="background-color: #d5d5d5">
@@ -39,7 +39,7 @@
 
     </div>
   </div>
-  <div class="col-12 col-sm-9">
+  <div class="col-12 col-lg-9">
     <div class="container-fluid">
       <br>
       <h1>{{editorTitle}}</h1>
