@@ -24,7 +24,7 @@ connect_db = async () => {
         console.error('an error occurred', err);
         throw new Error();
     }
-}
+};
 
 module.exports = {
     connect_db

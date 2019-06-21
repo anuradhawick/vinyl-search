@@ -11,7 +11,7 @@ function Router(event, context, callback) {
                 }
                 handler(event, context, callback);
             } catch (e) {
-                console.log(e)
+                console.log(e);
                 this.callback(null, builResponse(500, "Data Error"));
             }
         }

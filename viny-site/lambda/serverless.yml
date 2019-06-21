@@ -24,6 +24,7 @@ package:
     - userpool-trigger-service/**
     - user-management-service/**
     - forum-management-service/**
+    - administration-service/**
 
 functions:
   userpool-trigger-service:
@@ -73,7 +74,43 @@ functions:
           authorizer:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
-
+  administration-service:
+    handler: administration-service/admin-main.main
+    name:  ${self:service}-administration-service-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      user_pool_id: ${self:custom.config.user_pool_id}
+      BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
+      BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
+    events:
+      - http:
+          method: get
+          path: admin/users/{userUid}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: get
+          path: admin/admin-users
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete
+          path: admin/admin-users/{userUid}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: post
+          path: admin/admin-users/{userUid}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
   user-management-service:
     handler: user-management-service/user-main.main
     name:  ${self:service}-user-management-service-${opt:stage}
