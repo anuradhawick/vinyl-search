@@ -111,6 +111,34 @@ functions:
           authorizer:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: get
+          path: admin/records
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete
+          path: admin/records/{recordId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: get
+          path: admin/forum
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete
+          path: admin/forum/{postId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
   user-management-service:
     handler: user-management-service/user-main.main
     name:  ${self:service}-user-management-service-${opt:stage}

@@ -130,6 +130,11 @@ const get_user_forum_posts = async (uid, query_params) => {
         data: [{$count: "total"}],
         posts: [
           {
+            $sort: {
+              createdAt: -1
+            }
+          },
+          {
             $skip: skip
           },
           {

@@ -97,4 +97,88 @@ exports.main = (event, context, callback) => {
       });
     }
   );
+
+  /**
+   * get all records
+   */
+  router.route(
+    'GET',
+    '/admin/records',
+    (event, context, callback) => {
+      admin_functions.get_all_records(event.queryStringParameters).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
+   * delete record
+   */
+  router.route(
+    'DELETE',
+    '/admin/records/{recordId}',
+    (event, context, callback) => {
+
+      admin_functions.delete_record(event.pathParameters.recordId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
+   * get all forum posts
+   */
+  router.route(
+    'GET',
+    '/admin/forum',
+    (event, context, callback) => {
+      admin_functions.get_all_forum_posts(event.queryStringParameters).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
+   * delete forum post
+   */
+  router.route(
+    'DELETE',
+    '/admin/forum/{postId}',
+    (event, context, callback) => {
+      admin_functions.delete_forum_post(event.pathParameters.postId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
 };

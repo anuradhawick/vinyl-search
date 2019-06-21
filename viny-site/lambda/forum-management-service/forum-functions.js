@@ -7,7 +7,7 @@ const cheerio = require('cheerio');
 
 const s3 = new S3();
 
-retrieve_post = async (postId) => {
+const retrieve_post = async (postId) => {
   const db = await db_util.connect_db();
   const post = await db.collection('forum_posts').findOne({_id: ObjectID(postId)});
 
@@ -16,7 +16,7 @@ retrieve_post = async (postId) => {
   return post;
 };
 
-retrieve_posts = async (queryStringParameters) => {
+const retrieve_posts = async (queryStringParameters) => {
   const limit = _.parseInt(_.get(queryStringParameters, 'limit', 50));
   const skip = _.parseInt(_.get(queryStringParameters, 'skip', 0));
   const db = await db_util.connect_db();
@@ -92,7 +92,7 @@ retrieve_posts = async (queryStringParameters) => {
   return posts[0];
 };
 
-search_posts = async (queryStringParameters) => {
+const search_posts = async (queryStringParameters) => {
   const limit = _.parseInt(_.get(queryStringParameters, 'limit', 50));
   const skip = _.parseInt(_.get(queryStringParameters, 'skip', 0));
   const query = _.get(queryStringParameters, 'query', '');
@@ -184,7 +184,7 @@ search_posts = async (queryStringParameters) => {
   return posts[0];
 };
 
-save_post = async (uid, post, postId) => {
+const save_post = async (uid, post, postId) => {
   const db = await db_util.connect_db();
   const ownerUid = uid;
   const $ = cheerio.load(post.postHTML);
@@ -291,7 +291,7 @@ save_post = async (uid, post, postId) => {
   }
 };
 
-delete_post = async (uid, postId) => {
+const delete_post = async (uid, postId) => {
   const db = await db_util.connect_db();
   const post = await db.collection('forum_posts').findOne({_id: ObjectID(postId)});
   const $ = cheerio.load(post.postHTML);
@@ -320,13 +320,10 @@ delete_post = async (uid, postId) => {
     });
   }));
 
-  let query = {
-    // ensure only the owner or an admin can delete
+  const removePost = db.collection('forum_posts').findOneAndDelete({
     _id: ObjectID(postId),
     ownerUid: uid
-  };
-
-  const removePost = db.collection('forum_posts').findOneAndDelete(query);
+  });
 
   await Promise.all([removeImages, removePost]);
 
