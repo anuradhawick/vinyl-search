@@ -32,10 +32,10 @@ export class UpdateDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.fetchDbUser().then((u) => {
+    this.auth.user.asObservable().subscribe((u) => {
       this.user = u;
       this.originalUser = _.cloneDeep(u);
-      this.form.setValue({
+      this.form.reset({
         firstName: this.originalUser.given_name,
         lastName: this.originalUser.family_name,
       });
@@ -74,10 +74,6 @@ export class UpdateDetailsComponent implements OnInit {
         this.user = u;
         this.originalUser = _.cloneDeep(u);
         this.auth.setUser(u);
-        this.form.reset({
-          firstName: u.given_name,
-          lastName: u.family_name
-        });
       });
     });
   }
@@ -95,7 +91,7 @@ export class UpdateDetailsComponent implements OnInit {
     }
 
     const file = this.uploadableFile;
-    const filename = `${this.auth.user.uid}.${file.name.split('.').pop() || ''}`;
+    const filename = `${this.user.uid}.${file.name.split('.').pop() || ''}`;
 
     this.uploadableFile = null;
     this.uploadImageUrl = null;
@@ -117,7 +113,6 @@ export class UpdateDetailsComponent implements OnInit {
         picture: url
       }).then(() => {
         this.userService.get_profile().then((u: any) => {
-          this.user = u;
           this.auth.setUser(u);
         });
       });

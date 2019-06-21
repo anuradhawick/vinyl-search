@@ -18,11 +18,13 @@ export class ForumViewPageComponent implements OnInit {
   public Editor = ClassicEditor;
   public title = '';
   public data = '';
+  public user = null;
 
   constructor(public route: ActivatedRoute,
               private forumService: ForumService,
               public auth: AuthService,
               private router: Router) {
+    this.user = auth.user.asObservable();
   }
 
   ngOnInit() {

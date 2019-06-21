@@ -76,9 +76,14 @@
         </li>
         <ng-container *ngIf="auth.isLoggedIn; else showLogin">
           <li class="nav-item">
-            <a *ngIf="_.get(auth, 'user.name', '')" class="nav-link" href="javascript:void(0)" [routerLink]="'/profile'">
-              <img *ngIf="_.get(auth, 'user.picture', '')" class="img-thumbnail p-0 m-0" [src]="_.get(auth, 'user.picture', '')" alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
-              Hi {{ _.get(auth, 'user.name', '').split(' ')[0] }}
+            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link" href="javascript:void(0)" [routerLink]="'/admin'">
+              <i class="material-icons">security</i> Admin
+            </a>
+          </li>
+          <li class="nav-item">
+            <a *ngIf="(user | async)?.picture" class="nav-link" href="javascript:void(0)" [routerLink]="'/profile'">
+              <img *ngIf="(user | async)?.picture" class="img-thumbnail p-0 m-0" [src]="(user | async)?.picture" alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+              Hi {{(user | async)?.given_name}}
             </a>
           </li>
           <li class="nav-item">

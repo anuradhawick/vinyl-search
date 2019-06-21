@@ -4,7 +4,11 @@ const admin_functions = require('./admin-functions');
 const _ = require('lodash');
 
 const is_admin = (claims) => {
-  return _.findIndex(claims['cognito:groups'], (group) => group === 'Admin') !== -1;
+  if (claims['cognito:groups'] instanceof Array) {
+    return _.findIndex(claims['cognito:groups'], (group) => group === 'Admin') !== -1;
+  } else {
+    return _.findIndex(claims['cognito:groups'].split(','), (group) => group === 'Admin') !== -1;
+  }
 };
 
 exports.main = (event, context, callback) => {
@@ -45,16 +49,16 @@ exports.main = (event, context, callback) => {
     'GET',
     '/admin/users/{userUid}',
     (event, context, callback) => {
-        admin_functions.get_user_by_uid(event.pathParameters.userUid).then((data) => {
-          callback(null, lambdaRouter.builResponse(200, {
-            ...data
-          }));
-        }).catch((e) => {
-          console.error(e);
-          callback(null, lambdaRouter.builResponse(500, {
-            success: false
-          }));
-        });
+      admin_functions.get_user_by_uid(event.pathParameters.userUid).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data
+        }));
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
     }
   );
 
@@ -65,9 +69,9 @@ exports.main = (event, context, callback) => {
     'DELETE',
     '/admin/admin-users/{userUid}',
     (event, context, callback) => {
-      admin_functions.remove_admin(event.pathParameters.userUid).then(() => {
+      admin_functions.remove_admin(event.pathParameters.userUid).then((res) => {
         callback(null, lambdaRouter.builResponse(200, {
-          success: true
+          success: res
         }));
       }).catch((e) => {
         console.error(e);
@@ -83,11 +87,11 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/admin-users/{userUid}',
+    '/admin/admin-users/{userUid}', // actually we are using email here ;)
     (event, context, callback) => {
-      admin_functions.add_admin(event.pathParameters.userUid).then(() => {
+      admin_functions.add_admin(event.pathParameters.userUid).then((res) => {
         callback(null, lambdaRouter.builResponse(200, {
-          success: true
+          success: res
         }));
       }).catch((e) => {
         console.error(e);

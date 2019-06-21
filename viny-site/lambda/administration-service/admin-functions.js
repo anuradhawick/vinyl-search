@@ -21,56 +21,68 @@ const remove_admin = async (uid) => {
   const db = await db_util.connect_db();
   const cognito = new CognitoIdentityServiceProvider();
   const dbUser = await db.collection('users').findOne({uid});
-  const cognitoUser = (await cognito.listUsers({
+  const cognitoUsers = (await cognito.listUsers({
     UserPoolId: process.env.user_pool_id,
     Filter: `email = "${dbUser.email}"`
-  }).promise()).Users[0];
-  const username = cognitoUser.Username;
+  }).promise()).Users;
 
-  await cognito.adminRemoveUserFromGroup({
-    GroupName: 'Admin',
-    UserPoolId: process.env.user_pool_id,
-    Username: username
-  }).promise();
+  if (_.isEmpty(cognitoUsers) || dbUser.email === 'anuradhawick@gmail.com') {
+    return false;
+  } else {
+    const username = cognitoUsers[0].Username;
 
-  return await db.collection('users').updateOne(
-    {
-      uid, roles: "Admin"
-    },
-    {
-      $pull: {
-        roles: "Admin"
+    await cognito.adminRemoveUserFromGroup({
+      GroupName: 'Admin',
+      UserPoolId: process.env.user_pool_id,
+      Username: username
+    }).promise();
+
+    await db.collection('users').updateOne(
+      {
+        uid, roles: "Admin"
+      },
+      {
+        $pull: {
+          roles: "Admin"
+        }
       }
-    }
-  );
+    );
+    return true;
+  }
 };
 
-const add_admin = async (uid) => {
+const add_admin = async (email) => {
   const db = await db_util.connect_db();
   const cognito = new CognitoIdentityServiceProvider();
-  const dbUser = await db.collection('users').findOne({uid});
-  const cognitoUser = (await cognito.listUsers({
+  const cognitoUsers = (await cognito.listUsers({
     UserPoolId: process.env.user_pool_id,
-    Filter: `email = "${dbUser.email}"`
-  }).promise()).Users[0];
-  const username = cognitoUser.Username;
+    Filter: `email = "${email}"`
+  }).promise()).Users;
 
-  await cognito.adminAddUserToGroup({
-    GroupName: 'Admin',
-    UserPoolId: process.env.user_pool_id,
-    Username: username
-  }).promise();
+  if (_.isEmpty(cognitoUsers)) {
+    return false;
+  } else {
+    const username = cognitoUsers[0].Username;
 
-  return await db.collection('users').updateOne(
-    {
-      uid
-    },
-    {
-      $addToSet: {
-        roles: "Admin"
+    await cognito.adminAddUserToGroup({
+      GroupName: 'Admin',
+      UserPoolId: process.env.user_pool_id,
+      Username: username
+    }).promise();
+
+    await db.collection('users').updateOne(
+      {
+        email
+      },
+      {
+        $addToSet: {
+          roles: "Admin"
+        }
       }
-    }
-  );
+    );
+
+    return true;
+  }
 };
 
 const get_all_records = async (query_params) => {

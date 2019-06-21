@@ -7,8 +7,10 @@ import { AuthService } from '../../shared-modules/auth/auth.service';
   styleUrls: ['./user-home-page.component.css']
 })
 export class UserHomePageComponent implements OnInit {
+  public user = null;
 
   constructor(public auth: AuthService) {
+    this.user = auth.user.asObservable();
   }
 
   ngOnInit() {

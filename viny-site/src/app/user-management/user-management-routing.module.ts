@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        children: []
+        redirectTo: 'update-profile'
       },
       {
         path: 'records',

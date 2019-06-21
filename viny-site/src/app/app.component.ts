@@ -9,8 +9,9 @@ import * as _ from 'lodash';
 })
 export class AppComponent {
   public _ = _;
+  public user = null;
 
   constructor(public auth: AuthService) {
-
+    this.user = auth.user.asObservable();
   }
 }

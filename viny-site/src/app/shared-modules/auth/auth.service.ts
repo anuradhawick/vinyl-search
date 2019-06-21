@@ -3,6 +3,7 @@ import Amplify, { Auth, Hub, I18n } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ReplaySubject } from 'rxjs';
 
 declare const $: any;
 declare const window: any;
@@ -15,7 +16,7 @@ Auth.configure({oauth: environment.oauth});
 })
 export class AuthService {
   public redirectUrl = null;
-  public user = null;
+  public user = new ReplaySubject<any>(1);
   public isLoggedIn = false;
   private autoLogin;
 
@@ -30,7 +31,6 @@ export class AuthService {
       }
     });
 
-
     this.autoLogin = new Promise((resolve, reject) => {
       Auth.currentAuthenticatedUser().then((u) => {
         this.processUser(u);
@@ -38,7 +38,7 @@ export class AuthService {
         resolve(true);
 
       }).catch((e) => {
-
+        resolve(false);
       });
 
       Hub.listen('auth', (data) => {
@@ -66,24 +66,14 @@ export class AuthService {
   processUser(u) {
     console.log(u);
     console.log(u.signInUserSession.idToken.jwtToken);
-    this.zone.run(() => {
+    this.zone.run(async () => {
       this.isLoggedIn = true;
-      return this.fetchDbUser();
+      this.user.next(await this.http.get(environment.api_gateway + 'users/', {
+        headers: new HttpHeaders({
+          'Authorization': await this.getToken()
+        })
+      }).toPromise());
     });
-  }
-
-  async fetchDbUser() {
-    if (this.user) {
-      return this.user;
-    }
-    const token = await this.getToken();
-    this.user = await this.http.get(environment.api_gateway + 'users/', {
-      headers: new HttpHeaders({
-        'Authorization': token
-      })
-    }).toPromise();
-
-    return this.user;
   }
 
   async getToken() {
@@ -96,9 +86,8 @@ export class AuthService {
   }
 
   setUser(user) {
-    this.user = user;
+    this.user.next(user);
   }
-
 
   loginFacebook() {
     Auth.federatedSignIn({customProvider: 'Facebook'}).then(() => {
