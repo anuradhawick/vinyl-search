@@ -25,6 +25,7 @@ package:
     - user-management-service/**
     - forum-management-service/**
     - administration-service/**
+    - market-service/**
 
 functions:
   userpool-trigger-service:
@@ -224,5 +225,24 @@ functions:
           method: get
           path: records/{recordId}/revisions/{revisionId}
           cors: true
+  market-management-service:
+      handler: market-service/market-main.main
+      name:  ${self:service}-market-service-${opt:stage}
+      environment:
+        MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+        BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
+        BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
+      events:
+        - http:
+            method: get
+            path: market
+            cors: true
+        - http:
+            method: post
+            path: market
+            cors: true
+            authorizer:
+              name: vinyl-authorizer
+              arn:  ${self:custom.config.userpool_authorizer_arn}
 
 

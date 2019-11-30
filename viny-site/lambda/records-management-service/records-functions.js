@@ -2,6 +2,8 @@ const _ = require('lodash');
 const db_util = require('../utils/db-util');
 const ObjectID = require('mongodb').ObjectID;
 const S3 = require('aws-sdk').S3;
+const path = require('path');
+const Jimp = require('jimp');
 
 const s3 = new S3();
 
@@ -195,12 +197,25 @@ fetch_records = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const records = data[0];
+
+  records.records = _.map(records.records, record => {
+    record.images = _.map(record.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return record;
+  });
+
+  return records;
 };
 
 fetch_record = async (recordId) => {
   const db = await db_util.connect_db();
   const data = await db.collection('records').findOne({id: ObjectID(recordId), latest: true});
+
+  data.images = _.map(data.images, image => {
+    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`
+  });
 
   return data;
 };
@@ -238,7 +253,13 @@ fetch_revision = async (revisionId) => {
     }
   ]).toArray();
 
-  return data[0];
+  const revision = data[0];
+
+  revision.images = _.map(revision.images, image => {
+    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`
+  });
+
+  return revision;
 };
 
 fetch_history = async (recordId) => {
@@ -256,6 +277,47 @@ fetch_history = async (recordId) => {
     .sort({createdAt: -1}).toArray();
 
   return data;
+};
+
+create_watermarks = async (key) => {
+  const params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key: key
+  };
+  const s3Obj = await s3.getObject(params).promise();
+  const img = await Jimp.read(s3Obj.Body);
+  const img2 = await Jimp.read(s3Obj.Body);
+
+  let watermark = await Jimp.read(__dirname + '/wm.png');
+
+  watermark = await watermark.scaleToFit(img2.bitmap.width, img2.bitmap.height);
+
+  const smallBuffer = await img.resize(200, Jimp.AUTO).getBufferAsync(Jimp.MIME_JPEG);
+  const wmBuffer = await img2.composite(watermark,
+    img2.bitmap.width / 2 - watermark.bitmap.width / 2,
+    img2.bitmap.height / 2 - watermark.bitmap.height / 2,
+    {
+      mode: Jimp.BLEND_SOURCE_OVER,
+      opacityDest: 1,
+      opacitySource: 0.22
+    }).getBufferAsync(Jimp.MIME_JPEG);
+
+  const thumbnailPath = `${path.dirname(key)}/thumbnails/${path.parse(key).name}.jpeg`;
+  const watermarkedPath = `${path.dirname(key)}/watermarked/${path.parse(key).name}.jpeg`;
+  const params11 = {
+    Body: wmBuffer,
+    Bucket: params.Bucket,
+    Key: watermarkedPath
+  };
+  const params12 = {
+    Body: smallBuffer,
+    Bucket: params.Bucket,
+    Key: thumbnailPath
+  };
+  await s3.putObject(params11).promise();
+  await s3.putObject(params12).promise();
+
+  console.log(params11, params12, params, 'Finish')
 };
 
 new_record = async (uid, record) => {
@@ -277,10 +339,16 @@ new_record = async (uid, record) => {
     return new Promise((resolve, reject) => {
       s3.copyObject(params, (err, data) => {
           if (err) {
-            reject(image);
+            reject(err);
           }
           else {
-            resolve(`https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/${filename}`);
+            // create thumbnails and watermarks
+            create_watermarks(params.Key).then(() => {
+              resolve(filename);
+            }).catch((error) => {
+              console.error('watermarking ERROR', error);
+              resolve(filename);
+            });
           }
         }
       );
@@ -317,7 +385,13 @@ update_record = async (reviserUid, recordId, record) => {
             reject(image);
           }
           else {
-            resolve(`https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/${filename}`);
+            // create thumbnails and watermarks
+            create_watermarks(params.Key).then(() => {
+              resolve(filename);
+            }).catch((error) => {
+              console.error('watermarking ERROR', error);
+              resolve(filename);
+            });
           }
         }
       );
