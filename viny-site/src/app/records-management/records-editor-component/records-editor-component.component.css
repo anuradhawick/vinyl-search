@@ -11,7 +11,7 @@
 }
 
 .sq-container {
-  background-color: red;
+  background-color: black;
   width: 100%;
   padding-top: 100%; /* 1:1 Aspect Ratio */
   position: relative; /* If you want text inside of it */

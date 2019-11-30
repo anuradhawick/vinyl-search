@@ -30,6 +30,11 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./administration/administration.module').then(mod => mod.AdministrationModule),
     canActivate: [AuthGuard, AdminGuard]
+  },
+  {
+    path: 'market',
+    loadChildren: () => import('./market-place/market-place.module').then(mod => mod.MarketPlaceModule),
+    canActivate: []
   }
 ];
 

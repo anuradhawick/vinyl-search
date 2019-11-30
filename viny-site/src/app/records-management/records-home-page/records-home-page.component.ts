@@ -6,6 +6,7 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared-modules/auth/auth.service';
 import { RecordsService } from '../../services/records.service';
+import { environment } from '../../../environments/environment';
 
 declare const $: any;
 
@@ -40,11 +41,13 @@ export class RecordsHomePageComponent implements OnInit {
   public toChooseFrom = [];
   public chosenFilter = '';
 
+  public environment = environment;
+
+
   constructor(public route: ActivatedRoute,
               private router: Router,
               public auth: AuthService,
               private recordsService: RecordsService) {
-
   }
 
   ngOnInit() {
@@ -101,12 +104,26 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   loadAutoComplete(event) {
-    const query = _.trim(event.target.value);
-    if (_.isEmpty(query)) {
+    const query: string = _.trim(event.target.value);
+    let newquery = '';
+
+    if (_.isEmpty(query) || query.length < 3) {
       this.autocomplete = null;
       return;
+    } else {
+      const qarray = _.split(query, ' ');
+
+      _.each(qarray, (item) => {
+        const tmp: string = _.trim(item);
+
+        if (tmp.length >= 3) {
+          newquery += tmp;
+          newquery += ' ';
+        }
+      });
     }
-    this.autocomplete = this.recordsService.search_records({limit: 5, skip: 0, query});
+
+    this.autocomplete = this.recordsService.search_records({limit: 5, skip: 0, query: _.trim(newquery)});
   }
 
   exitSearch() {

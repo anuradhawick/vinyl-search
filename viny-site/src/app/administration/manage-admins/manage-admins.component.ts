@@ -28,6 +28,7 @@ export class ManageAdminsComponent implements OnInit {
   }
 
   loadAdmins() {
+    this.admins = [];
     this.loading = true;
     this.adminService.get_admins().then((res: any) => {
       this.admins = res.users;

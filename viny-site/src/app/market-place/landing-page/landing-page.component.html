@@ -1,0 +1,89 @@
+<div class="main main-raised">
+  <br>
+  <div class="ml-5 mr-5 mt-3 mb-3">
+    <div class="row">
+      <div class="col-sm-6 col-9">
+        <div class="input-group">
+          <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
+                 class="form-control"
+                 placeholder="Search marketplace..." name="search-query" [(ngModel)]="query">
+          <button mat-button class="btn btn-default" type="button" (click)="search()">Search</button>
+          <div *ngIf="(autocomplete | async)?.records.length > 0" style="background-color: #fff; left: 0;">
+            <div
+              style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+              <table class="table table-hover table-bordered shadow">
+                <tbody>
+                <tr *ngFor="let r of (autocomplete | async)?.records">
+                  <td>
+                    <a [routerLink]="['/market', r.id, 'view']">
+                      <strong>{{_.truncate(r.name, {length: 60})}}</strong>
+                      <br>
+                      <div class="blockquote-footer">
+                        {{_.truncate(r.label, {length: 60})}}
+                      </div>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
+        <div class="float-right">
+          <button mat-button type="button" class="btn btn-default" routerLink="/market/new">
+            Add
+          </button>
+        </div>
+      </div>
+      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
+           class="ml-3 mr-5 mt-2 text-dark">
+        Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/market']">cancel</a>)
+      </div>
+      <ng-template #showLogin>
+        <div class="col-sm-6 col-3">
+          <div class="float-right">
+            <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
+              Login!
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <hr>
+  <div class="row container-fluid">
+    <div class="col-12 col-lg-3">
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node *matTreeNodeDef="let node">
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled></button>
+          <button  mat-raised-button class="m-0 btn-block text-left" >{{node.name}}</button>
+        </mat-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild">
+          <!--<button mat-icon-button matTreeNodeToggle-->
+                  <!--[attr.aria-label]="'toggle ' + node.name">-->
+            <!--<mat-icon class="mat-icon-rtl-mirror">-->
+              <!--{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}-->
+            <!--</mat-icon>-->
+          <!--</button>-->
+          <button  mat-raised-button color="primary" class="m-0 btn-block text-left" matTreeNodeToggle>
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+            {{node.name}}
+          </button>
+        </mat-tree-node>
+      </mat-tree>
+    </div>
+  </div>
+  <div class="col-12 col-lg-9">
+    <app-loader #loader></app-loader>
+    <div class="container">
+    </div>
+  </div>
+</div>
+

@@ -30,16 +30,16 @@
           </div>
         </div>
       </div>
-      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
-           class="ml-3 mr-5 mt-2 text-dark">
-        Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
-      </div>
       <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
         <div class="float-right">
           <button mat-button type="button" class="btn btn-default" routerLink="/records/new">
             Add
           </button>
         </div>
+      </div>
+      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
+           class="ml-3 mr-5 mt-2 text-dark">
+        Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
       </div>
       <ng-template #showLogin>
         <div class="col-sm-6 col-3">
@@ -193,6 +193,7 @@
                 <a [routerLink]="['/records', r.id, 'view']" class="thumbnail">
                   <div class="image" style="background-color: #d5d5d5">
                     <img style="object-fit: cover"
+
                          [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
                          class="img img-responsive"/>
                   </div>
@@ -205,7 +206,7 @@
         </div>
       </div>
       <br>
-      <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
+      <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
         <mat-paginator showFirstLastButtons [length]="count"
                        [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
       </nav>

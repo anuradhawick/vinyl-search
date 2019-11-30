@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
+import { ManageRecordsComponent } from './manage-records/manage-records.component';
+import { ManageForumComponent } from './manage-forum/manage-forum.component';
 
 const routes: Routes = [
   {
@@ -15,6 +17,14 @@ const routes: Routes = [
       {
         path: 'home',
         component: ManageAdminsComponent
+      },
+      {
+        path: 'records',
+        component: ManageRecordsComponent
+      },
+      {
+        path: 'forum',
+        component: ManageForumComponent
       }
     ]
   },

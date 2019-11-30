@@ -38,4 +38,46 @@ export class AdminService {
       })
     }).toPromise();
   }
+
+  async fetch_records(params) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'admin/records', {
+      headers: new HttpHeaders({
+        'Authorization': token
+      }),
+      params
+    }).toPromise();
+  }
+
+  async delete_record(recordId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.delete(environment.api_gateway + 'admin/records/' + recordId, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
+  async fetch_forum(params) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'admin/forum', {
+      headers: new HttpHeaders({
+        'Authorization': token
+      }),
+      params
+    }).toPromise();
+  }
+
+  async delete_forum(postId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.delete(environment.api_gateway + 'admin/forum/' + postId, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }
