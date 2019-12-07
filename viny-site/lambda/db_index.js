@@ -12,4 +12,5 @@ db.getCollection('records').createIndex({
     {
         "name":"recordsIndex"
     });
-
+db.getCollection('selling_items').createIndex({
+    "name":"text"});

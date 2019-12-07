@@ -326,6 +326,10 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   getReleaseData() {
     if (this.form.invalid) {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control.markAsTouched({onlySelf: true});
+      });
       return false;
     } else if (this.uploadCount > 0) {
       this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');

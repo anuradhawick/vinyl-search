@@ -53,6 +53,17 @@ export class UserService {
     }).toPromise();
   }
 
+  async get_market_posts(params) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'users/market', {
+      params,
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
   async delete_record(id) {
     const token = await this.auth.getToken();
 

@@ -175,6 +175,66 @@ const get_user_forum_posts = async (uid, query_params) => {
   return data[0];
 };
 
+const get_user_market_posts = async (uid, query_params) => {
+  
+  const limit = _.parseInt(_.get(query_params, 'limit', 5));
+  const skip = _.parseInt(_.get(query_params, 'skip', 0));
+
+  const db = await db_util.connect_db();
+
+  const data = await db.collection('selling_items').aggregate([
+    {
+      $match: {
+        ownerUid: uid
+      }
+    },
+    {
+      $facet: {
+        data: [{$count: "total"}],
+        posts: [
+          {
+            $sort: {
+              createdAt: -1
+            }
+          },
+          {
+            $skip: skip
+          },
+          {
+            $limit: limit
+          },
+          {
+            $project: {
+              name: 1,
+              createdAt: 1,
+              chosenImage: 1,
+              images: 1,
+              id: 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {count: {$arrayElemAt: ["$data", 0]}}
+    },
+    {
+      $addFields: {
+        count: "$count.total",
+        limit: limit,
+        skip: skip
+      }
+    },
+    {
+      $project: {
+        data: 0
+      }
+    }
+  ]).toArray();
+
+  return data[0];
+};
+
 
 const delete_record = async (uid, recordId) => {
 
@@ -228,5 +288,6 @@ module.exports = {
   get_user,
   get_user_records,
   get_user_forum_posts,
+  get_user_market_posts,
   delete_record
 };

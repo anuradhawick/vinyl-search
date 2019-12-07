@@ -4,6 +4,7 @@ import { UserHomePageComponent } from './user-home-page/user-home-page.component
 import { MyRecordsComponent } from './my-records/my-records.component';
 import { MyForumComponent } from './my-forum/my-forum.component';
 import { UpdateDetailsComponent } from './update-details/update-details.component';
+import { MyMarketComponent } from './my-market/my-market.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: 'forum',
         component: MyForumComponent
+      },
+      {
+        path: 'market',
+        component: MyMarketComponent
       },
       {
         path: 'update-profile',

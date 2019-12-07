@@ -1,3 +1,4 @@
+# TODO use method any for reused endpoint urls
 custom:
   config: ${file(./${opt:stage}.env.yml):config}
   env: ${file(./${opt:stage}.env.yml):env}
@@ -12,6 +13,17 @@ provider:
   runtime: nodejs10.x
   stage: ${opt:stage}
   region: ${self:custom.config.region}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:*'
+      Resource:
+        - '*'
+    - Effect: 'Allow'
+      Action:
+        - 'cognito-idp:*'
+      Resource:
+        - '*'
 
 package:
   # individually: true
@@ -134,6 +146,13 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
+          method: get
+          path: admin/market
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
           method: delete
           path: admin/forum/{postId}
           cors: true
@@ -176,6 +195,13 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
+          method: get
+          path: users/market
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}            
+      - http:
           method: delete
           path: users/records/{recordId}
           cors: true
@@ -190,6 +216,7 @@ functions:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
       BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
       BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
+    timeout: 20
     events:
       - http:
           method: get
@@ -236,6 +263,14 @@ functions:
         - http:
             method: get
             path: market
+            cors: true
+        - http:
+            method: get
+            path: market/{postId}
+            cors: true
+        - http:
+            method: get
+            path: market/search
             cors: true
         - http:
             method: post

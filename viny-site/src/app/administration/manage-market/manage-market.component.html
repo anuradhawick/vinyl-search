@@ -1,0 +1,16 @@
+<hr>
+<ul class="nav justify-content-center">
+  <li class="nav-item col-12 col-sm-3">
+    <a class="nav-link" [routerLink]="'pending'" routerLinkActive="active">Pending Ads</a>
+  </li>
+  <li class="nav-item col-12 col-sm-3">
+    <a class="nav-link active" [routerLink]="'all'" routerLinkActive="active">All Ads</a>
+  </li>
+  <li class="nav-item col-12 col-sm-3">
+    <a class="nav-link" [routerLink]="'expired'">Expired/Rejected Ads</a>
+  </li>
+</ul>
+<div class="m-3">
+  <router-outlet></router-outlet>
+</div>
+

@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from './loader/loader.component';
 import {
-  MatBadgeModule, MatButtonModule, MatChipsModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule,
+  MatBadgeModule, MatButtonModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatIconModule,
+  MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatSelectModule, MatTreeModule
 } from '@angular/material';
@@ -30,7 +32,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     MatListModule,
     MatMenuModule,
-    MatTreeModule
+    MatTreeModule,
+    MatCheckboxModule,
   ],
   exports: [
     CommonModule,
@@ -52,7 +55,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     MatListModule,
     MatMenuModule,
-    MatTreeModule
+    MatTreeModule,
+    MatCheckboxModule
   ]
 })
 export class SharedModules {

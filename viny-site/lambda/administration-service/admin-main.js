@@ -1,6 +1,7 @@
 'use strict';
 const lambdaRouter = require('./../utils/lambda-router');
 const admin_functions = require('./admin-functions');
+const admin_market_functions = require('./admin-market-functions');
 const _ = require('lodash');
 
 const is_admin = (claims) => {
@@ -182,6 +183,53 @@ exports.main = (event, context, callback) => {
           success: false
         }));
       });
+    }
+  );
+
+  /**
+   * get market posts
+   */
+  router.route(
+    'GET',
+    '/admin/market',
+    (event, context, callback) => {
+      if (event.queryStringParameters.type === 'pending') {
+        admin_market_functions.pending_market_posts(event.queryStringParameters).then((data) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...data,
+            success: true
+          }))
+        }).catch((e) => {
+          console.error(e);
+          callback(null, lambdaRouter.builResponse(500, {
+            success: false
+          }));
+        });
+      } else if (event.queryStringParameters.type === 'all') {
+        admin_market_functions.all_market_posts(event.queryStringParameters).then((data) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...data,
+            success: true
+          }))
+        }).catch((e) => {
+          console.error(e);
+          callback(null, lambdaRouter.builResponse(500, {
+            success: false
+          }));
+        });
+      } else if (event.queryStringParameters.type === 'rejected-expired') {
+        admin_market_functions.expired_and_rejected_posts(event.queryStringParameters).then((data) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...data,
+            success: true
+          }))
+        }).catch((e) => {
+          console.error(e);
+          callback(null, lambdaRouter.builResponse(500, {
+            success: false
+          }));
+        });
+      }
     }
   );
 

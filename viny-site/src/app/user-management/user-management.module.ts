@@ -9,6 +9,7 @@ import { UpdateDetailsComponent } from './update-details/update-details.componen
 import { SharedModules } from '../shared-modules/shared.module';
 import { ForumShouldDeleteModalComponent } from './modals/forum-should-delete/forum-should-delete.component';
 import { RecordShouldDeleteModalComponent } from './modals/record-should-delete-modal/record-should-delete-modal.component';
+import { MyMarketComponent } from './my-market/my-market.component';
 
 @NgModule({
   declarations: [UserHomePageComponent,
@@ -16,7 +17,8 @@ import { RecordShouldDeleteModalComponent } from './modals/record-should-delete-
     MyForumComponent,
     UpdateDetailsComponent,
     ForumShouldDeleteModalComponent,
-    RecordShouldDeleteModalComponent],
+    RecordShouldDeleteModalComponent,
+    MyMarketComponent],
   imports: [
     CommonModule,
     UserManagementRoutingModule,

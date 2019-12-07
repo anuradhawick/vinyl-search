@@ -54,6 +54,10 @@
             <a [routerLink]="'/market'" class="dropdown-item">
               <i class="material-icons">shop</i> For Sale
             </a>
+            <a *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" [routerLink]="'/market/new'"
+               class="dropdown-item">
+              <i class="material-icons">content_paste</i> New Sale
+            </a>
           </div>
         </li>
         <li class="dropdown nav-item">

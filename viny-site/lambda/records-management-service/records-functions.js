@@ -139,8 +139,16 @@ search_records = async (query_params) => {
   ]);
 
   const data = await db.collection('records').aggregate(dbQuery).toArray();
+  const records = data[0];
 
-  return data[0];
+  records.records = _.map(records.records, record => {
+    record.images = _.map(record.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return record;
+  });
+
+  return records;
 };
 
 fetch_records = async (query_params) => {
@@ -279,6 +287,9 @@ fetch_history = async (recordId) => {
   return data;
 };
 
+// performance gainers
+let watermarkImageCache = null;
+
 create_watermarks = async (key) => {
   const params = {
     Bucket: process.env.BUCKET_NAME,
@@ -286,14 +297,21 @@ create_watermarks = async (key) => {
   };
   const s3Obj = await s3.getObject(params).promise();
   const img = await Jimp.read(s3Obj.Body);
-  const img2 = await Jimp.read(s3Obj.Body);
+  const img2 = img.clone();
 
-  let watermark = await Jimp.read(__dirname + '/wm.png');
+  let watermark;
+  if (watermarkImageCache)
+  {
+    watermark = watermarkImageCache.clone();
+  } else {
+    watermarkImageCache = await Jimp.read(__dirname + '/wm.png');
+    watermark = watermarkImageCache.clone();
+  }
 
   watermark = await watermark.scaleToFit(img2.bitmap.width, img2.bitmap.height);
 
-  const smallBuffer = await img.resize(200, Jimp.AUTO).getBufferAsync(Jimp.MIME_JPEG);
-  const wmBuffer = await img2.composite(watermark,
+  const smallBuffer = img.resize(100, Jimp.AUTO).getBufferAsync(Jimp.MIME_JPEG);
+  const wmBuffer = img2.composite(watermark,
     img2.bitmap.width / 2 - watermark.bitmap.width / 2,
     img2.bitmap.height / 2 - watermark.bitmap.height / 2,
     {
@@ -304,20 +322,19 @@ create_watermarks = async (key) => {
 
   const thumbnailPath = `${path.dirname(key)}/thumbnails/${path.parse(key).name}.jpeg`;
   const watermarkedPath = `${path.dirname(key)}/watermarked/${path.parse(key).name}.jpeg`;
+
   const params11 = {
-    Body: wmBuffer,
+    Body: await wmBuffer,
     Bucket: params.Bucket,
     Key: watermarkedPath
   };
   const params12 = {
-    Body: smallBuffer,
+    Body: await smallBuffer,
     Bucket: params.Bucket,
     Key: thumbnailPath
   };
-  await s3.putObject(params11).promise();
-  await s3.putObject(params12).promise();
 
-  console.log(params11, params12, params, 'Finish')
+  await Promise.all([s3.putObject(params11).promise(), s3.putObject(params12).promise()])
 };
 
 new_record = async (uid, record) => {

@@ -1,0 +1,23 @@
+<hr>
+<div class="container col-sm-12">
+  <h3>Expired and Rejected Ads</h3>
+  <hr>
+  <app-loader [hidden]="!loading"></app-loader>
+  <mat-list role="list">
+    <mat-list-item *ngFor="let p of posts" role="listitem">
+      <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
+      <div class="row float-right" style="flex-wrap: nowrap;">
+        <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
+          <mat-icon>open_in_new</mat-icon>
+        </a>
+        <a mat-button>
+          <mat-icon (click)="delete(p.id)">delete</mat-icon>
+        </a>
+      </div>
+    </mat-list-item>
+  </mat-list>
+  <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
+    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+  </nav>
+</div>

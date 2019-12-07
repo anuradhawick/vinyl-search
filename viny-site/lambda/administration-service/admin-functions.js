@@ -4,6 +4,7 @@ const ObjectID = require('mongodb').ObjectID;
 const CognitoIdentityServiceProvider = require('aws-sdk').CognitoIdentityServiceProvider;
 const S3 = require('aws-sdk').S3;
 const cheerio = require('cheerio');
+const path = require('path');
 
 const s3 = new S3();
 
@@ -142,7 +143,16 @@ const get_all_records = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const records = data[0];
+
+  records.records = _.map(records.records, record => {
+    record.images = _.map(record.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return record;
+  });
+
+  return records;
 
 };
 

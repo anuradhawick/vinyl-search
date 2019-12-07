@@ -101,6 +101,29 @@ exports.main = (event, context, callback) => {
   );
 
   /**
+   * get user market posts
+   */
+  router.route(
+    'GET',
+    '/users/market',
+    (event, context, callback) => {
+      user_functions.get_user_market_posts(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
+        .then((user) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...user,
+            success: true
+          }))
+        }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+    }
+  );
+
+  /**
    * delete record
    */
   router.route(

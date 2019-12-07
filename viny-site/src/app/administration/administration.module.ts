@@ -9,9 +9,13 @@ import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
 import { ManageRecordsComponent } from './manage-records/manage-records.component';
 import { ManageForumComponent } from './manage-forum/manage-forum.component';
 import { AdminActionConfirmModalComponent } from './modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
+import { ManageMarketComponent } from './manage-market/manage-market.component';
+import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
+import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
+import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
 
 @NgModule({
-  declarations: [HomePageComponent, ManageAdminsComponent, ManageRecordsComponent, ManageForumComponent, AdminActionConfirmModalComponent],
+  declarations: [HomePageComponent, ManageAdminsComponent, ManageRecordsComponent, ManageForumComponent, AdminActionConfirmModalComponent, ManageMarketComponent, PendingAdsComponent, AllAdsComponent, ExpiredAdsComponent],
   imports: [
     CommonModule,
     AdministrationRoutingModule,

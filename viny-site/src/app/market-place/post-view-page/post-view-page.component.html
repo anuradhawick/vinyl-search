@@ -1,0 +1,115 @@
+<div class="main main-raised">
+  <br>
+  <app-loader [hidden]="!!(postObject | async)"></app-loader>
+
+  <div *ngIf="postObject | async as postObject" class="row container-fluid">
+    <!--LEFT COL-->
+    <div class="col-12 col-sm-4">
+      <div class="container-fluid">
+        <div class="text-center">
+          <br>
+          <div class="sq-container">
+            <div class="sq-content">
+              <ngx-image-viewer [config]="imgvconfig"
+                                [src]="_.isEmpty(postObject.images) && ['/assets/images/records-new-sample.svg'] || postObject.images"
+                                [(index)]="postObject.chosenImage">
+              </ngx-image-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--END LEFT COL-->
+    <!--RIGHT COL-->
+    <div class="col-12 col-sm-8">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="m-1">
+            <div class="m-1">
+              <h2>Sale Information</h2>
+            </div>
+            <table class="table table-hover table-bordered">
+              <tbody>
+              <tr>
+                <td class="w-25">
+                  Name
+                </td>
+                <td class="w-75">
+                  <strong>{{postObject.name}}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-25">
+                  Description
+                </td>
+                <td class="w-75">
+                  <strong>{{postObject.description}}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-25">
+                  Item Type
+                </td>
+                <td class="w-75">
+                  <strong>{{typeMap[postObject.saleType]}}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-25">
+                  Item Subtype
+                </td>
+                <td class="w-75">
+                  <strong>{{subTypeMap[postObject.saleType][postObject.saleSubtype]}}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-25">
+                  Price
+                </td>
+                <td class="w-75">
+                  <strong>{{postObject.currency}} {{postObject.price}}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-25">
+                  Negotiable
+                </td>
+                <td class="w-100">
+                  <mat-icon *ngIf="postObject.isNegotiable; else nonNeg">done</mat-icon>
+                  <ng-template #nonNeg>
+                    <mat-icon>clear</mat-icon>
+                  </ng-template>
+                </td>
+              </tr>
+              <!--<tr>-->
+                <!--<td class="w-25">-->
+                  <!--Notes-->
+                <!--</td>-->
+                <!--<td class="w-75">-->
+                  <!--<strong>-->
+                    <!--<div style="white-space: pre-wrap">{{recordObject.notes}}-->
+                    <!--</div>-->
+                  <!--</strong>-->
+                <!--</td>-->
+              <!--</tr>-->
+              </tbody>
+            </table>
+
+          </div>
+          </div>
+        </div>
+
+      </div>
+      <!--<ng-container *ngIf="auth.isLoggedIn">-->
+        <!--<hr>-->
+        <!--<div class="container-fluid">-->
+          <!--<div class="m-1">-->
+            <!--<a [routerLink]="['/records', postObject.id, 'update']">Submit a revision</a>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</ng-container>-->
+    <!--</div>-->
+    <!--END RIGHT COL-->
+  </div>
+</div>
+<br>

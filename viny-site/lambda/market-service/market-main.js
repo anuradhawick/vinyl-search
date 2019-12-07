@@ -7,82 +7,83 @@ exports.main = (event, context, callback) => {
 
   const router = new lambdaRouter.Router(event, context, callback);
 
-  // /**
-  //  * search records
-  //  */
-  // router.route(
-  //   'GET',
-  //   '/market/search',
-  //   (event, context, callback) => {
-  //     record_functions.search_records(event.queryStringParameters).then((data) => {
-  //       callback(null, lambdaRouter.builResponse(200, {
-  //         ...data,
-  //         success: true
-  //       }))
-  //     }).catch((e) => {
-  //       console.error(e)
-  //       callback(null, lambdaRouter.builResponse(500, {
-  //         records: "ERROR",
-  //         success: false
-  //       }))
-  //     });
-  //
-  //   }
-  // );
-  //
-  // /**
-  //  * get records
-  //  */
-  // router.route(
-  //   'GET',
-  //   '/market',
-  //   (event, context, callback) => {
-  //     record_functions.fetch_records(event.queryStringParameters).then((data) => {
-  //       callback(null, lambdaRouter.builResponse(200, {
-  //         ...data,
-  //         success: true
-  //       }))
-  //     }).catch((e) => {
-  //       console.error(e)
-  //       callback(null, lambdaRouter.builResponse(500, {
-  //         records: "ERROR",
-  //         success: false
-  //       }))
-  //     });
-  //
-  //   }
-  // );
-  //
-  // /**
-  //  * get record
-  //  */
-  // router.route(
-  //   'GET',
-  //   '/market/{id}',
-  //   (event, context, callback) => {
-  //     record_functions.fetch_record(event.pathParameters.recordId).then((data) => {
-  //       callback(null, lambdaRouter.builResponse(200, {
-  //         ...data,
-  //         success: true
-  //       }))
-  //     }).catch((e) => {
-  //       console.error(e)
-  //       callback(null, lambdaRouter.builResponse(500, {
-  //         records: "ERROR",
-  //         success: false
-  //       }))
-  //     });
-  //
-  //   }
-  // );
+  /**
+   * search posts
+   */
+  router.route(
+    'GET',
+    '/market/search',
+    (event, context, callback) => {
+      selling_functions.search_posts(event.queryStringParameters).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+  
+    }
+  );
+  
+  /**
+   * get posts
+   */
+  router.route(
+    'GET',
+    '/market',
+    (event, context, callback) => {
+      selling_functions.fetch_posts(event.queryStringParameters).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+  
+    }
+  );
+  
+  /**
+   * get post
+   */
+  router.route(
+    'GET',
+    '/market/{postId}',
+    (event, context, callback) => {
+      selling_functions.fetch_post(event.pathParameters.postId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+  
+    }
+  );
 
   /**
-   * new record
+   * new post
    */
   router.route(
     'POST',
     '/market',
     (event, context, callback) => {
+      console.log(event.body);
       selling_functions.new_sell(
         event.requestContext.authorizer.claims['sub'],
         event.body

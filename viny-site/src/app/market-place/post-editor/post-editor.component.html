@@ -1,3 +1,127 @@
-<p>
-  post-editor works!
-</p>
+<div class="row container-fluid">
+  <div class="col-12 col-lg-3">
+    <div class="container-fluid">
+      <div class="text-center">
+        <br>
+        <div class="sq-container">
+          <div class="sq-content">
+            <div>
+              <ngx-image-viewer [config]="imgvconfig"
+                                [src]="_.isEmpty(postObject.images) && ['/assets/images/records-new-sample.svg'] || postObject.images"
+                                [(index)]="postObject.chosenImage"
+                                (customEvent)="handleEvent($event)"></ngx-image-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group m-0">
+        <label class="btn btn-default btn-block btn-sm" for="images"><strong>Click To Upload</strong></label>
+        <input type="file" class="custom-file-input" (change)="addImage($event)" id="images" accept='image/*' multiple>
+      </div>
+      <mat-progress-bar class="mb-1" *ngFor="let p of percentages" mode="determinate"
+                        value="{{(p | async)}}"></mat-progress-bar>
+
+      <div *ngIf="postObject.images.length>0" class="card col-12 m-0">
+        <div class="row">
+          <div *ngFor="let image of postObject.images; let i = index" class="col-sm-4 p-0">
+            <div class="m-1">
+              <a (click)="postObject.chosenImage=i" class="thumbnail">
+                <div class="image" style="background-color: #d5d5d5">
+                  <img style="object-fit: cover" [src]="image"
+                       class="img img-responsive"/>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-12 col-lg-9">
+    <div class="container-fluid">
+      <form [formGroup]="form" class="needs-validation" novalidate>
+        <div class="form-group">
+          <div class="row mb-1">
+            <div class="col-12">
+              <mat-form-field class="w-100">
+                <input matInput type="text" placeholder="Title" name="post-name"
+                       formControlName="name">
+                <mat-error *ngIf="form.controls.name.invalid">Title cannot be empty</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-12">
+              <mat-form-field class="w-100">
+                <textarea matInput placeholder="Item description" formControlName="description"></textarea>
+                <mat-error *ngIf="form.controls.description.invalid">Description cannot be empty</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <input matInput name="currency" formControlName="currency" type="text"
+                       placeholder="Currency as $/Rs">
+                <mat-error *ngIf="form.controls.currency.invalid">Currency invalid</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <input matInput name="price" formControlName="price" type="text"
+                       placeholder="Price as 100.00">
+                <mat-error *ngIf="form.controls.price.invalid">Currency invalid</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-4">
+              <mat-checkbox color="primary" name="negotiable" formControlName="isNegotiable">Is price negotiable?
+              </mat-checkbox>
+            </div>
+
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <mat-select placeholder="Type of Sale" name="type" formControlName="saleType">
+                  <mat-option value="material">Audio/Video Material</mat-option>
+                  <mat-option value="gear">Audio/Video Gear</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls.saleSubtype.invalid">Select a category</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <mat-select placeholder="Sub Category" name="subtype" formControlName="saleSubtype">
+                  <!--TODO fix validations-->
+                  <div *ngIf="form.controls.saleType.value=='material'">
+                    <mat-option value="phonograph">Phonograph Records</mat-option>
+                    <mat-option value="magnetic">Magnetic Tapes</mat-option>
+                    <mat-option value="compact">Compact Discs</mat-option>
+                    <mat-option value="digital">Digital Material</mat-option>
+                    <mat-option value="other">Other</mat-option>
+                  </div>
+                  <div *ngIf="form.controls.saleType.value=='gear'">
+                    <mat-option value="amplifiers">Amplifiers</mat-option>
+                    <mat-option value="pre-amplifiers">Pre Amplifiers</mat-option>
+                    <mat-option value="speakers">Speakers</mat-option>
+                    <mat-option value="equalizers">Equalizers</mat-option>
+                    <mat-option value="mixers">Mixers</mat-option>
+                    <mat-option value="tape">Tape Gear</mat-option>
+                    <mat-option value="vinyl">Vinyl Gear</mat-option>
+                    <mat-option value="audio">Audio Accessories</mat-option>
+                    <mat-option value="video">Video Gear</mat-option>
+                    <mat-option value="digital">Digital Gear</mat-option>
+                    <mat-option value="other">Other</mat-option>
+                  </div>
+                </mat-select>
+                <mat-error *ngIf="form.controls.saleSubtype.invalid">Select a sub category</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <hr>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
