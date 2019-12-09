@@ -19,7 +19,8 @@ const pending_market_posts = async (query_params) => {
     {
       $match: {
         approved: false,
-        latest: true
+        latest: true,
+        rejected: false
       }
     },
     {
@@ -140,7 +141,9 @@ const expired_and_rejected_posts = async (query_params) => {
     {
       $match: {
         latest: true,
-        rejected: true,
+        $or: [
+          {rejected: true}
+        ]
       }
     },
     {
@@ -190,8 +193,108 @@ const expired_and_rejected_posts = async (query_params) => {
   return data[0];
 };
 
+const approved_posts = async (query_params) => {
+  // TODO NOT EXPIRED
+  const limit = _.parseInt(_.get(query_params, 'limit', 5));
+  const skip = _.parseInt(_.get(query_params, 'skip', 0));
+
+  const db = await db_util.connect_db();
+
+  const data = await db.collection('selling_items').aggregate([
+    {
+      $match: {
+        latest: true,
+        $or: [
+          {approved: true}
+        ]
+      }
+    },
+    {
+      $facet: {
+        data: [{$count: "total"}],
+        posts: [
+          {
+            $sort: {
+              createdAt: -1
+            }
+          },
+          {
+            $skip: skip
+          },
+          {
+            $limit: limit
+          },
+          {
+            $project: {
+              name: 1,
+              createdAt: 1,
+              chosenImage: 1,
+              images: 1,
+              id: 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {count: {$arrayElemAt: ["$data", 0]}}
+    },
+    {
+      $addFields: {
+        count: "$count.total",
+        limit: limit,
+        skip: skip
+      }
+    },
+    {
+      $project: {
+        data: 0
+      }
+    }
+  ]).toArray();
+
+  return data[0];
+};
+
+const market_post_action = async (body) => {
+  const type = body.type;
+  const db = await db_util.connect_db();
+
+  if (type === 'approve') {
+    await db.collection('selling_items').updateOne(
+      { id: ObjectID(body.id) },
+      { 
+        $set: {
+          approved: true
+        }
+      }
+    );
+
+    return true;
+  }
+  
+  if (type === 'reject') {
+    await db.collection('selling_items').updateOne(
+      { id: ObjectID(body.id) },
+      { 
+        $set: {
+          rejected: true
+        }
+      }
+    );
+
+    return true;
+  }
+
+  
+
+  return false;
+}
+
 module.exports = {
   pending_market_posts,
   all_market_posts,
-  expired_and_rejected_posts
+  expired_and_rejected_posts,
+  market_post_action,
+  approved_posts
 };

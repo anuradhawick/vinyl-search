@@ -146,7 +146,7 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
-          method: get
+          method: any
           path: admin/market
           cors: true
           authorizer:

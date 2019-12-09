@@ -229,7 +229,39 @@ exports.main = (event, context, callback) => {
             success: false
           }));
         });
+      } else if (event.queryStringParameters.type === 'approved') {
+        admin_market_functions.approved_posts(event.queryStringParameters).then((data) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...data,
+            success: true
+          }))
+        }).catch((e) => {
+          console.error(e);
+          callback(null, lambdaRouter.builResponse(500, {
+            success: false
+          }));
+        });
       }
+    }
+  );
+  
+  /**
+   * transit market post status
+   */
+  router.route(
+    'POST',
+    '/admin/market',
+    (event, context, callback) => {
+      admin_market_functions.market_post_action(event.body).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          success: data
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
     }
   );
 

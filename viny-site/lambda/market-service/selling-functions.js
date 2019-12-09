@@ -16,9 +16,11 @@ search_posts = async (query_params) => {
   const query = _.get(query_params, 'query', '');
   const db = await db_util.connect_db();
 
+  // add expiry date restriction
   const match = {
     $match: {
-      latest: true
+      latest: true,
+      approved: true
     }
   };
 
@@ -156,7 +158,8 @@ fetch_posts = async (query_params) => {
       $match: {
         latest: true,
         approved: true,
-        sold: false
+        sold: false,
+        rejected: false
       }
     },
     {
@@ -225,59 +228,6 @@ fetch_post = async (postId) => {
 
   return data;
 };
-//
-// fetch_revision = async (revisionId) => {
-//   const db = await db_util.connect_db();
-//   const data = await db.collection('records').aggregate([
-//     {
-//       $match: {
-//         _id: ObjectID(revisionId)
-//       }
-//     },
-//     {
-//       $lookup: {
-//         from: 'users',
-//         localField: 'reviserUid',
-//         foreignField: 'uid',
-//         as: 'reviser'
-//       }
-//     },
-//     {
-//       $addFields: {
-//         reviser: {
-//           $arrayElemAt: ['$reviser', 0]
-//         }
-//       }
-//     },
-//     {
-//       $project: {
-//         "reviser._id": 0,
-//         "reviser.authProviders": 0,
-//         "reviser.email": 0,
-//         "reviser.updatedAt": 0
-//       }
-//     }
-//   ]).toArray();
-//
-//   return data[0];
-// };
-//
-// fetch_history = async (recordId) => {
-//   const db = await db_util.connect_db();
-//   const data = await db.collection('records').find(
-//     {
-//       id: ObjectID(recordId)
-//     })
-//     .project({
-//       _id: 1,
-//       createdAt: 1,
-//       ownerUid: 1,
-//       reviserUid: 1
-//     })
-//     .sort({createdAt: -1}).toArray();
-//
-//   return data;
-// };
 
 new_sell = async (uid, newSellingItem) => {
   const db = await db_util.connect_db();
@@ -313,6 +263,7 @@ new_sell = async (uid, newSellingItem) => {
   _.assign(newSellingItem, {id: new ObjectID()});
   _.assign(newSellingItem, {latest: true});
   _.assign(newSellingItem, {approved: false});
+  _.assign(newSellingItem, {rejected: false});
   _.assign(newSellingItem, {sold: false});
   _.assign(newSellingItem, {paid: false});
   _.assign(newSellingItem, {images: newImages});
@@ -323,7 +274,7 @@ new_sell = async (uid, newSellingItem) => {
 };
 
 // performance gainers
-const watermarkImageCache = null;
+let watermarkImageCache = null;
 
 create_watermarks = async (key) => {
   const params = {
