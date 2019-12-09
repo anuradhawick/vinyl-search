@@ -20,4 +20,14 @@ export class MarketService {
       params
     }).toPromise();
   }
+
+  async transit_post(id, type) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'admin/market', { id, type }, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }

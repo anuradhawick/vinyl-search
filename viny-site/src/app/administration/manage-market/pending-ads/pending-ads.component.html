@@ -8,11 +8,14 @@
       <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
       <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
       <div class="row float-right" style="flex-wrap: nowrap;">
+        <a target="_blank" (click)="approve(p.id)" mat-button>
+          <mat-icon>done</mat-icon>
+        </a>
         <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
           <mat-icon>open_in_new</mat-icon>
         </a>
         <a mat-button>
-          <mat-icon (click)="delete(p.id)">delete</mat-icon>
+          <mat-icon (click)="reject(p.id)">delete</mat-icon>
         </a>
       </div>
     </mat-list-item>

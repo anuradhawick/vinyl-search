@@ -60,20 +60,4 @@ export class ExpiredAdsComponent implements OnInit {
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
   }
-
-  delete(id) {
-    // const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to delete the forum post?.`}});
-    //
-    // modal.afterClosed().subscribe((ok) => {
-    //   if (ok) {
-    //     this.adminService.delete_forum(id).then(() => {
-    //       this.loadPosts();
-    //       this.toastr.success('Forum item deleted successfully', 'Success');
-    //     }).catch(() => {
-    //       this.toastr.error('Request failed. Try again later!', 'Error');
-    //     });
-    //   }
-    // });
-  }
-
 }

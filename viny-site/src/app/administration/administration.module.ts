@@ -13,9 +13,10 @@ import { ManageMarketComponent } from './manage-market/manage-market.component';
 import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
 import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
 import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
+import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 
 @NgModule({
-  declarations: [HomePageComponent, ManageAdminsComponent, ManageRecordsComponent, ManageForumComponent, AdminActionConfirmModalComponent, ManageMarketComponent, PendingAdsComponent, AllAdsComponent, ExpiredAdsComponent],
+  declarations: [HomePageComponent, ManageAdminsComponent, ManageRecordsComponent, ManageForumComponent, AdminActionConfirmModalComponent, ManageMarketComponent, PendingAdsComponent, AllAdsComponent, ExpiredAdsComponent, ApprovedAdsComponent],
   imports: [
     CommonModule,
     AdministrationRoutingModule,

@@ -7,11 +7,11 @@ import * as _ from 'lodash';
 import { AdminActionConfirmModalComponent } from '../../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 
 @Component({
-  selector: 'app-pending-ads',
-  templateUrl: './pending-ads.component.html',
-  styleUrls: ['./pending-ads.component.css']
+  selector: 'app-approved-ads',
+  templateUrl: './approved-ads.component.html',
+  styleUrls: ['./approved-ads.component.css']
 })
-export class PendingAdsComponent implements OnInit {
+export class ApprovedAdsComponent implements OnInit {
   public loading = true;
   public posts = null;
   public skip = 0;
@@ -43,7 +43,7 @@ export class PendingAdsComponent implements OnInit {
     this.adminMarketService.fetch_posts_by_type({
       limit: this.limit,
       skip: this.skip,
-      type: 'pending'
+      type: 'approved'
     }).then((records: any) => {
       this.posts = records.posts;
       this.skip = records.skip;
@@ -66,37 +66,38 @@ export class PendingAdsComponent implements OnInit {
     });
   }
 
-  approve(id) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
+  // approve(id) {
+  //   const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
+  //
+  //   modal.afterClosed().subscribe((ok) => {
+  //     if (ok) {
+  //       this.adminMarketService.transit_post(id, 'approve').then((res: any) => {
+  //         if (res.success) {
+  //           this.toastr.success('Approved successfully', 'Success');
+  //           this.loadPosts();
+  //         } else {
+  //           this.toastr.error('Request failed. Try again later!', 'Error');
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+  //
+  // reject(id) {
+  //   const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to reject?.`}});
+  //
+  //   modal.afterClosed().subscribe((ok) => {
+  //     if (ok) {
+  //       this.adminMarketService.transit_post(id, 'reject').then((res: any) => {
+  //         if (res.success) {
+  //           this.toastr.success('Rejected successfully', 'Success');
+  //           this.loadPosts();
+  //         } else {
+  //           this.toastr.error('Request failed. Try again later!', 'Error');
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
-    modal.afterClosed().subscribe((ok) => {
-      if (ok) {
-        this.adminMarketService.transit_post(id, 'approve').then((res: any) => {
-          if (res.success) {
-            this.toastr.success('Approved successfully', 'Success');
-            this.loadPosts();
-          } else {
-            this.toastr.error('Request failed. Try again later!', 'Error');
-          }
-        });
-      }
-    });
-  }
-
-  reject(id) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to reject?.`}});
-
-    modal.afterClosed().subscribe((ok) => {
-      if (ok) {
-        this.adminMarketService.transit_post(id, 'reject').then((res: any) => {
-          if (res.success) {
-            this.toastr.success('Rejected successfully', 'Success');
-            this.loadPosts();
-          } else {
-            this.toastr.error('Request failed. Try again later!', 'Error');
-          }
-        });
-      }
-    });
-  }
 }
