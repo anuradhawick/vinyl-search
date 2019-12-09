@@ -28,6 +28,10 @@ export class RecordViewPageComponent implements OnInit {
     }
   };
 
+  // context control
+  public histLoading = true;
+  public recordLoading = true;
+
   constructor(public route: ActivatedRoute,
               private recordsService: RecordsService,
               public auth: AuthService) {
@@ -37,8 +41,14 @@ export class RecordViewPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
-      this.recordObject = this.recordsService.fetch_record(recordId);
-      this.recordHistory = this.recordsService.fetch_record_history(recordId);
+      this.recordsService.fetch_record(recordId).toPromise().then((data) => {
+        this.recordObject = data;
+        this.recordLoading = false;
+        this.recordsService.fetch_record_history(recordId).toPromise().then((data1) => {
+          this.recordHistory = data1;
+          this.histLoading = false;
+        });
+      });
     });
   }
 

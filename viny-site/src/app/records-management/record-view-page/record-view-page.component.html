@@ -1,8 +1,8 @@
 <div class="main main-raised">
   <br>
-  <app-loader [hidden]="!!(recordObject | async)"></app-loader>
+  <app-loader [hidden]="!recordLoading"></app-loader>
 
-  <div *ngIf="recordObject | async as recordObject" class="row container-fluid">
+  <div *ngIf="recordObject" class="row container-fluid">
     <!--LEFT COL-->
     <div class="col-12 col-sm-4">
       <div class="container-fluid">
@@ -36,9 +36,11 @@
             <hr>
             <h6>Revision history</h6>
             <div>
-              <app-loader [hidden]="!!(recordHistory | async)?.history"></app-loader>
-              <a *ngFor="let h of (recordHistory | async)?.history;" class="page-link"
-                 [routerLink]="['/records', recordObject.id, 'revisions', h._id]">Revision - {{h.createdAt}}</a>
+              <app-loader [hidden]="!histLoading"></app-loader>
+              <div *ngIf="recordHistory">
+                <a *ngFor="let h of recordHistory.history;" class="page-link"
+                   [routerLink]="['/records', recordObject.id, 'revisions', h._id]">Revision - {{h.createdAt}}</a>
+              </div>
             </div>
 
           </div>
