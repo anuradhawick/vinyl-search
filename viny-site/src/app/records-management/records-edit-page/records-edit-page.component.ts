@@ -46,6 +46,7 @@ export class RecordsEditPageComponent implements OnInit {
   //   'format': '4-Track Cartridge',
   //   'channelCoding': 'Other/Unknown'
   // };
+  public record = null;
 
   constructor(private recordsService: RecordsService,
               private router: Router,
@@ -64,6 +65,7 @@ export class RecordsEditPageComponent implements OnInit {
     if (record) {
       this.loader.show();
       this.ready = false;
+      this.record = record;
 
       const data = this.recordsService.save_record(record);
 
