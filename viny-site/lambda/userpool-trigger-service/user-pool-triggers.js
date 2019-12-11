@@ -105,7 +105,8 @@ exports.handler = (event, context, callback) => {
                 family_name: userAttributes.family_name,
                 name: userAttributes.name,
                 picture,
-                updatedAt: new Date()
+                updatedAt: new Date(),
+                roles: []
             },
             $addToSet: {
                 authProviders: provider
