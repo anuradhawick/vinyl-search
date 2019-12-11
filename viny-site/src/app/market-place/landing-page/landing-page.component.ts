@@ -23,7 +23,7 @@ const TREE_DATA: TreeNode[] = [
       {name: 'Magnetic Records', saleType: 'material', saleSubtype: 'magnetic'},
       {name: 'Compact Discs', saleType: 'material', saleSubtype: 'compact'},
       {name: 'Digital Material', saleType: 'material', saleSubtype: 'digital'},
-      {name: 'Other', saleType: 'material', saleSubtype: ''}
+      {name: 'Other', saleType: 'material', saleSubtype: 'other'}
     ]
   }, {
     name: 'A/V Gear',

@@ -1,8 +1,8 @@
 <div class="main main-raised">
   <br>
-  <app-loader [hidden]="!!(recordObject | async)" #releasepageloader></app-loader>
+  <app-loader [hidden]="!recordLoading"></app-loader>
 
-  <div *ngIf="recordObject | async as recordObject" class="row container-fluid">
+  <div *ngIf="recordObject" class="row container-fluid">
     <!--LEFT COL-->
     <div class="col-12 col-sm-4">
       <div class="container-fluid">

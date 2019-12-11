@@ -94,6 +94,10 @@ export class PostEditorComponent implements OnInit {
       this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');
       return false;
     }
+    if (this.postObject.images.length < 2) {
+      this.toastr.warning(`An advertisement must carry at least 2 images of the item!`, 'Warning');
+      return false;
+    }
 
     return this.postObject;
   }

@@ -55,6 +55,9 @@ export class PostViewPageComponent implements OnInit {
     }
   };
 
+  // context control
+  public postLoading = true;
+
   constructor(public route: ActivatedRoute,
               private marketService: MarketService,
               public auth: AuthService) {
@@ -64,7 +67,10 @@ export class PostViewPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postId = _.get(map, 'params.postId', null);
-      this.postObject = this.marketService.fetch_post(postId);
+      this.marketService.fetch_post(postId).toPromise().then((data) => {
+        this.postObject = data;
+        this.postLoading = false;
+      });
     });
   }
 

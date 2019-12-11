@@ -49,9 +49,9 @@ export class NewPostComponent implements OnInit {
       const data = this.marketService.save_post(post);
 
       data.then((result: any) => {
-        if (result.recordId) {
+        if (result.id) {
           this.toastr.success(`Records saved successfully`, 'Success');
-          this.router.navigate(['/market', result.recordId, 'view']);
+          this.router.navigate(['/market', result.id, 'view']);
         } else {
           this.ready = true;
           this.loader.hide();

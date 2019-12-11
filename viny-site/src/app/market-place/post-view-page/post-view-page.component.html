@@ -1,8 +1,19 @@
 <div class="main main-raised">
   <br>
-  <app-loader [hidden]="!!(postObject | async)"></app-loader>
+  <!--<div class="alert alert-danger">-->
+    <!--<div class="container">-->
+      <!--<div class="alert-icon">-->
+        <!--<i class="material-icons">error_outline</i>-->
+      <!--</div>-->
+      <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+        <!--<span aria-hidden="true"><i class="material-icons">clear</i></span>-->
+      <!--</button>-->
+      <!--<b>Approval Pending:</b> Your advertisement needs approval. Until then it will not be visible on our website-->
+    <!--</div>-->
+  <!--</div>-->
+  <app-loader [hidden]="!postLoading"></app-loader>
 
-  <div *ngIf="postObject | async as postObject" class="row container-fluid">
+  <div *ngIf="postObject" class="row container-fluid">
     <!--LEFT COL-->
     <div class="col-12 col-sm-4">
       <div class="container-fluid">
