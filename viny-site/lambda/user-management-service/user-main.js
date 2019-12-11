@@ -13,7 +13,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/users',
+    '/',
     (event, context, callback) => {
       user_functions.get_user(event.requestContext.authorizer.claims['sub'])
         .then((user) => {
@@ -36,7 +36,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/users',
+    '/',
     (event, context, callback) => {
       user_functions.update_user(event.requestContext.authorizer.claims['sub'], event.body)
         .then((user) => {
@@ -59,7 +59,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/users/records',
+    '/records',
     (event, context, callback) => {
       user_functions.get_user_records(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
         .then((user) => {
@@ -82,7 +82,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/users/forum',
+    '/forum',
     (event, context, callback) => {
       user_functions.get_user_forum_posts(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
         .then((user) => {
@@ -105,7 +105,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/users/market',
+    '/market',
     (event, context, callback) => {
       user_functions.get_user_market_posts(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
         .then((user) => {
@@ -128,7 +128,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/users/records/{recordId}',
+    '/records/{recordId}',
     (event, context, callback) => {
 
       user_functions.delete_record(event.requestContext.authorizer.claims['sub'], event.pathParameters.recordId).then((data) => {

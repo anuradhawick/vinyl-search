@@ -27,7 +27,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/admin-users',
+    '/admin-users',
     (event, context, callback) => {
       admin_functions.get_admin_users().then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -48,7 +48,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/users/{userUid}',
+    '/users/{userUid}',
     (event, context, callback) => {
       admin_functions.get_user_by_uid(event.pathParameters.userUid).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -68,7 +68,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/admin-users/{userUid}',
+    '/admin-users/{userUid}',
     (event, context, callback) => {
       admin_functions.remove_admin(event.pathParameters.userUid).then((res) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -88,7 +88,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/admin-users/{userUid}', // actually we are using email here ;)
+    '/admin-users/{userUid}', // actually we are using email here ;)
     (event, context, callback) => {
       admin_functions.add_admin(event.pathParameters.userUid).then((res) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -108,7 +108,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/records',
+    '/records',
     (event, context, callback) => {
       admin_functions.get_all_records(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -129,7 +129,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/records/{recordId}',
+    '/records/{recordId}',
     (event, context, callback) => {
 
       admin_functions.delete_record(event.pathParameters.recordId).then((data) => {
@@ -150,7 +150,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/forum',
+    '/forum',
     (event, context, callback) => {
       admin_functions.get_all_forum_posts(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -171,7 +171,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/forum/{postId}',
+    '/forum/{postId}',
     (event, context, callback) => {
       admin_functions.delete_forum_post(event.pathParameters.postId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -191,7 +191,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/market',
+    '/market',
     (event, context, callback) => {
       if (event.queryStringParameters.type === 'pending') {
         admin_market_functions.pending_market_posts(event.queryStringParameters).then((data) => {
@@ -250,7 +250,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/market',
+    '/market',
     (event, context, callback) => {
       admin_market_functions.market_post_action(event.body).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {

@@ -326,9 +326,6 @@ mark_as_sold = async (uid, newSellingItem) => {
 
 };
 
-approve_post_for_sale = async (uid, newSellingItem) => {
-
-};
 // update_record = async (reviserUid, recordId, record) => {
 //   const db = await db_util.connect_db();
 //   const newImages = await Promise.all(_.map(record.images, (image) => {

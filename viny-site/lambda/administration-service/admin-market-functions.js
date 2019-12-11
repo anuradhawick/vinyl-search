@@ -67,7 +67,16 @@ const pending_market_posts = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const posts = data[0];
+
+  posts.posts = _.map(posts.posts, post => {
+    post.images = _.map(post.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return post;
+  });
+
+  return posts;
 };
 
 const all_market_posts = async (query_params) => {
@@ -127,7 +136,16 @@ const all_market_posts = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const posts = data[0];
+
+  posts.posts = _.map(posts.posts, post => {
+    post.images = _.map(post.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return post;
+  });
+
+  return posts;
 };
 
 const expired_and_rejected_posts = async (query_params) => {
@@ -190,7 +208,16 @@ const expired_and_rejected_posts = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const posts = data[0];
+
+  posts.posts = _.map(posts.posts, post => {
+    post.images = _.map(post.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return post;
+  });
+
+  return posts;
 };
 
 const approved_posts = async (query_params) => {
@@ -253,7 +280,16 @@ const approved_posts = async (query_params) => {
     }
   ]).toArray();
 
-  return data[0];
+  const posts = data[0];
+
+  posts.posts = _.map(posts.posts, post => {
+    post.images = _.map(post.images, image => {
+      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+    });
+    return post;
+  });
+
+  return posts;
 };
 
 const market_post_action = async (body) => {
@@ -285,8 +321,6 @@ const market_post_action = async (body) => {
 
     return true;
   }
-
-  
 
   return false;
 }

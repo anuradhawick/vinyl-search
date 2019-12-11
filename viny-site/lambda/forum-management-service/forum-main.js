@@ -12,7 +12,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/forum/{postId}',
+    '/{postId}',
     (event, context, callback) => {
       forum_functions.retrieve_post(event.pathParameters.postId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -34,7 +34,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/forum',
+    '/',
     (event, context, callback) => {
       forum_functions.retrieve_posts(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -56,7 +56,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/forum/search',
+    '/search',
     (event, context, callback) => {
       forum_functions.search_posts(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -77,7 +77,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/forum',
+    '/',
     (event, context, callback) => {
       console.log(event.requestContext.authorizer.claims)
       forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, null).then((data) => {
@@ -99,7 +99,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/forum/{postId}',
+    '/{postId}',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -120,7 +120,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/forum/{postId}',
+    '/{postId}',
     (event, context, callback) => {
       forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.postId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {

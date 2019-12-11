@@ -1,0 +1,54 @@
+package:
+  exclude:
+    - '**/*'
+  include:
+    - node_modules/**
+    - utils/**
+    - records-management-service/**
+
+service: vinyl-search-records-service
+
+functions:
+  records-management-service:
+    handler: records-management-service/records-main.main
+    name:  ${self:service}-${opt:stage}
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
+      BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
+      BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
+    timeout: 20
+    events:
+      - http:
+          method: get
+          path: /
+          cors: true
+      - http:
+          method: get
+          path: search
+          cors: true
+      - http:
+          method: get
+          path: /{recordId}
+          cors: true
+      - http:
+          method: post
+          path: /
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: post
+          path: /{recordId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: get
+          path: /{recordId}/revisions
+          cors: true
+      - http:
+          method: get
+          path: /{recordId}/revisions/{revisionId}
+          cors: true

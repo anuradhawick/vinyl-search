@@ -12,7 +12,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/records/search',
+    '/search',
     (event, context, callback) => {
       record_functions.search_records(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -35,7 +35,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/records',
+    '/',
     (event, context, callback) => {
       record_functions.fetch_records(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -58,7 +58,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/records/{recordId}',
+    '/{recordId}',
     (event, context, callback) => {
       record_functions.fetch_record(event.pathParameters.recordId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -81,7 +81,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/records',
+    '/',
     (event, context, callback) => {
       record_functions.new_record(
         event.requestContext.authorizer.claims['sub'],
@@ -106,7 +106,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/records/{recordId}',
+    '/{recordId}',
     (event, context, callback) => {
       record_functions.update_record(
         event.requestContext.authorizer.claims['sub'],
@@ -132,7 +132,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/records/{recordId}/revisions',
+    '/{recordId}/revisions',
     (event, context, callback) => {
       record_functions.fetch_history(
         event.pathParameters.recordId
@@ -156,7 +156,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/records/{recordId}/revisions/{revisionId}',
+    '/{recordId}/revisions/{revisionId}',
     (event, context, callback) => {
       record_functions.fetch_revision(
         event.pathParameters.revisionId

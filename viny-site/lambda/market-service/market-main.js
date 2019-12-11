@@ -12,7 +12,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/market/search',
+    '/search',
     (event, context, callback) => {
       selling_functions.search_posts(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -35,7 +35,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/market',
+    '/',
     (event, context, callback) => {
       selling_functions.fetch_posts(event.queryStringParameters).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -58,7 +58,7 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/market/{postId}',
+    '/{postId}',
     (event, context, callback) => {
       selling_functions.fetch_post(event.pathParameters.postId).then((data) => {
         callback(null, lambdaRouter.builResponse(200, {
@@ -81,9 +81,8 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/market',
+    '/',
     (event, context, callback) => {
-      console.log(event.body);
       selling_functions.new_sell(
         event.requestContext.authorizer.claims['sub'],
         event.body
@@ -107,7 +106,7 @@ exports.main = (event, context, callback) => {
   //  */
   // router.route(
   //   'POST',
-  //   '/market/{id}',
+  //   '/{id}',
   //   (event, context, callback) => {
   //     record_functions.update_record(
   //       event.requestContext.authorizer.claims['sub'],
