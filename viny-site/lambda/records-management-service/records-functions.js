@@ -385,9 +385,11 @@ new_record = async (uid, record) => {
 update_record = async (reviserUid, recordId, record) => {
   const db = await db_util.connect_db();
   const newImages = await Promise.all(_.map(record.images, (image) => {
-    const list = _.split(image, '/');
+    const pathstr = image.replace(/(.)*.amazonaws.com\//, '');
+    const list = _.split(pathstr, '/');
     const filename = list.pop();
-    const pathname = list.pop();
+    const pathname = list[0];
+
     if (pathname === 'records-images') {
       return image;
     }

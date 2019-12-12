@@ -220,7 +220,7 @@ fetch_posts = async (query_params) => {
 // TODO remove access for un approved items
 fetch_post = async (postId) => {
   const db = await db_util.connect_db();
-  const data = await db.collection('selling_items').findOne({id: ObjectID(postId)});
+  const data = await db.collection('selling_items').findOne({id: ObjectID(postId), latest: true});
 
   data.images = _.map(data.images, image => {
     return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/watermarked/${path.parse(image).name}.jpeg`

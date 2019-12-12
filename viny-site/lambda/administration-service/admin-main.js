@@ -244,6 +244,50 @@ exports.main = (event, context, callback) => {
       }
     }
   );
+
+  /**
+   * get market post by id
+   */
+  router.route(
+    'GET',
+    '/market/{postId}',
+    (event, context, callback) => {
+      admin_market_functions.get_market_post(event.pathParameters.postId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
+   * update market post by id
+   */
+  router.route(
+    'POST',
+    '/market/{postId}',
+    (event, context, callback) => {
+      admin_market_functions.update_market_post(event.requestContext.authorizer.claims['sub'], 
+      event.pathParameters.postId, 
+      event.body).then((postId) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          postId,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
   
   /**
    * transit market post status

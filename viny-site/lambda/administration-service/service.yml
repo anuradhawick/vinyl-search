@@ -75,6 +75,13 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
+          method: any
+          path: market/{postId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
           method: delete
           path: forum/{postId}
           cors: true

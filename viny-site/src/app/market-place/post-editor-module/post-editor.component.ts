@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../../shared-modules/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { Storage } from 'aws-amplify';
 import uuid from 'uuid';
 import { Observable } from 'rxjs';
@@ -106,6 +106,9 @@ export class PostEditorComponent implements OnInit {
     if (!this.auth.isLoggedIn) {
       this.toastr.warning('Please login before continue', 'Warning');
       return;
+    }
+    if (this.postObject.images.length >= 10) {
+      this.toastr.warning('Maximum number of images supported is 10', 'Warning');
     }
     if (!_.isEmpty(event.target.files)) {
       _.each(event.target.files, (file) => {
