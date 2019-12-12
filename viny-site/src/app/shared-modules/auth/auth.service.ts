@@ -21,6 +21,7 @@ export class AuthService {
   private autoLogin;
 
   constructor(private route: ActivatedRoute, private zone: NgZone, private http: HttpClient) {
+    this.user.subscribe(n => { console.log(n)})
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         if (params.error_description === 'PreSignUp failed with error Google. ') {

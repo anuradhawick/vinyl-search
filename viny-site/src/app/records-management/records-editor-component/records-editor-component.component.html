@@ -361,6 +361,28 @@
             </button>
           </div>
         </div>
+          <hr>
+        <div formArrayName="songUrls">
+          <div *ngFor="let songUrl of form.get('songUrls').controls; let i = index" [formGroupName]="i">
+            <mat-form-field class="w-100">
+              <input matInput type="text" placeholder="Song link"
+                     name="song-url-{{i}}"
+                     formControlName="text">
+              <button mat-button (click)="form.get('songUrls').removeAt(i)" matSuffix>
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <mat-error *ngIf="form.get('songUrls').controls[i].invalid">
+                Enter a valid web link or remove the field
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row container">
+            <button mat-button (click)="addSongUrl(form.get('songUrls'))">
+              Song Link
+              <mat-icon>add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
         <hr>
         <mat-form-field class="w-100">
           <textarea matInput placeholder="Notes" formControlName="notes"></textarea>

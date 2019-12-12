@@ -80,4 +80,24 @@ export class AdminService {
       })
     }).toPromise();
   }
+
+  async get_market_post(postId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'admin/market/' + postId, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
+  async update_market_post(post) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'admin/market/' + post.id, post, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }

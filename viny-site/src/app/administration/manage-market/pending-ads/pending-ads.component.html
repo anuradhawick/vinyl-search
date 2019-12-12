@@ -8,6 +8,9 @@
       <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
       <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
       <div class="row float-right" style="flex-wrap: nowrap;">
+        <a [routerLink]="['/admin/market',p.id,'edit']" mat-button>
+          <mat-icon>edit</mat-icon>
+        </a>
         <a target="_blank" (click)="approve(p.id)" mat-button>
           <mat-icon>done</mat-icon>
         </a>

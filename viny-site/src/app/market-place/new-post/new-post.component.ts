@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PostEditorComponent } from '../post-editor/post-editor.component';
+import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';

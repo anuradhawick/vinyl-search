@@ -184,7 +184,19 @@
               </tr>
               </tbody>
             </table>
-
+            <hr>
+            <div *ngIf="!_.isEmpty(recordObject.songUrls)" class="m-1">
+              <h3>Song links available</h3>
+            </div>
+            <div class="container" *ngIf="!_.isEmpty(recordObject.songUrls)">
+              <div class="row">
+                <div class="m-1" *ngFor="let url of recordObject.songUrls; let i = index">
+                  <a mat-raised-button href="{{url.text}}" target="_blank">
+                    <mat-icon>play_arrow</mat-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

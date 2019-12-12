@@ -1,0 +1,23 @@
+<hr>
+<div class="container col-sm-12">
+  <h3>Editing Advertisement</h3>
+  <hr>
+  <app-loader [hidden]="!!post"></app-loader>
+  <div *ngIf="post">
+    <app-post-editor #editor [post]="post" (readyStateChange)="readyChange($event)"></app-post-editor>
+
+    <div class="row col-12">
+      <div class="col-12 col-sm-9 offset-3">
+        <div class="container-fluid">
+          <button mat-raised-button type="button" (click)="goBack()"
+                  [disabled]="!ready">{{ changesSaved ? 'Go Back' : 'Discard'}}
+          </button>
+          <button mat-raised-button type="button" class="ml-1" color="primary"  (click)="save()" [disabled]="!ready">
+            Save
+          </button>
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>

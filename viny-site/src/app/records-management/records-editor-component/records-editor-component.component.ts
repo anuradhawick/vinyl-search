@@ -74,6 +74,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }],
     notes: null,
     commonCredits: [],
+    songUrls: [],
     name: null,
     label: null,
     mainArtist: null,
@@ -152,6 +153,12 @@ export class RecordsEditorComponentComponent implements OnInit {
         return this.fb.group({
           index: [credit.index],
           text: [credit.text, Validators.required]
+        });
+      })),
+      songUrls: this.fb.array(_.map(this.recordObject.songUrls, (songUrl) => {
+        return this.fb.group({
+          index: [songUrl.index],
+          text: [songUrl.text, [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
         });
       })),
       notes: [this.recordObject.notes],
@@ -258,6 +265,20 @@ export class RecordsEditorComponentComponent implements OnInit {
     }));
 
     _.each(credits.controls, (control: FormControl, index) => {
+      control.setValue({
+        index: index + 1,
+        text: control.get('text').value
+      });
+    });
+  }
+
+  addSongUrl(songUrls: FormArray) {
+    songUrls.push(this.fb.group({
+      index: [''],
+      text: ['', [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
+    }));
+
+    _.each(songUrls.controls, (control: FormControl, index) => {
       control.setValue({
         index: index + 1,
         text: control.get('text').value

@@ -6,18 +6,19 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
 import { NewPostComponent } from './new-post/new-post.component';
-import { PostEditorComponent } from './post-editor/post-editor.component';
 import { ImageViewerModule } from 'ngx-image-viewer';
 import { PostViewPageComponent } from './post-view-page/post-view-page.component';
+import { PostEditorModule } from './post-editor-module/post-editor-module.module';
 
 @NgModule({
-  declarations: [LandingPageComponent, NewPostComponent, PostEditorComponent, PostViewPageComponent],
+  declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent],
   imports: [
     ImageViewerModule,
     CommonModule,
     MarketPlaceRoutingModule,
     FormsModule,
-    SharedModules
+    SharedModules,
+    PostEditorModule
   ]
 })
 export class MarketPlaceModule { }

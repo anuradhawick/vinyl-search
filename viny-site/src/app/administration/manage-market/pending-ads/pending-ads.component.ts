@@ -83,6 +83,23 @@ export class PendingAdsComponent implements OnInit {
     });
   }
 
+  edit(id) {
+    // const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
+    //
+    // modal.afterClosed().subscribe((ok) => {
+    //   if (ok) {
+    //     this.adminMarketService.transit_post(id, 'approve').then((res: any) => {
+    //       if (res.success) {
+    //         this.toastr.success('Approved successfully', 'Success');
+    //         this.loadPosts();
+    //       } else {
+    //         this.toastr.error('Request failed. Try again later!', 'Error');
+    //       }
+    //     });
+    //   }
+    // });
+  }
+
   reject(id) {
     const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to reject?.`}});
 

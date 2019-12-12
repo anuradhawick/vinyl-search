@@ -14,13 +14,29 @@ import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.com
 import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
 import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
+import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
+import { ImageViewerModule } from 'ngx-image-viewer';
+import { PostEditorModule } from '../market-place/post-editor-module/post-editor-module.module';
 
 @NgModule({
-  declarations: [HomePageComponent, ManageAdminsComponent, ManageRecordsComponent, ManageForumComponent, AdminActionConfirmModalComponent, ManageMarketComponent, PendingAdsComponent, AllAdsComponent, ExpiredAdsComponent, ApprovedAdsComponent],
+  declarations: [
+    HomePageComponent,
+    ManageAdminsComponent,
+    ManageRecordsComponent,
+    ManageForumComponent,
+    AdminActionConfirmModalComponent,
+    ManageMarketComponent,
+    PendingAdsComponent,
+    AllAdsComponent,
+    ExpiredAdsComponent,
+    ApprovedAdsComponent,
+    EditAdComponent],
   imports: [
     CommonModule,
     AdministrationRoutingModule,
-    SharedModules
+    SharedModules,
+    ImageViewerModule,
+    PostEditorModule
   ],
   providers: [AdminService],
   entryComponents: [AdminActionConfirmModalComponent]
