@@ -112,6 +112,7 @@ search_posts = async (query_params) => {
             $project: {
               name: 1,
               chosenImage: 1,
+              images,
               id: 1,
               score: 1
             }
