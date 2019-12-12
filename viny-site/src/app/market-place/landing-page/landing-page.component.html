@@ -59,21 +59,13 @@
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
           <!-- This is the tree node template for leaf nodes -->
           <mat-tree-node *matTreeNodeDef="let node">
-            <!-- use a disabled button to provide padding for tree leaf -->
-            <!--<button mat-icon-button disabled></button>-->
-            <button mat-raised-button (click)="toggleFilter(node.saleType, node.saleSubtype)" class="m-0 btn-block text-left">
+            <button mat-raised-button (click)="toggleFilter(node.saleType, node.saleSubtype)"
+                    class="m-0 btn-block text-left">
               <mat-icon *ngIf="!!selectedFilters[node.saleType + '.' +node.saleSubtype]">done</mat-icon>
               {{node.name}}
             </button>
           </mat-tree-node>
-          <!-- This is the tree node template for expandable nodes -->
           <mat-tree-node *matTreeNodeDef="let node;when: hasChild">
-            <!--<button mat-icon-button matTreeNodeToggle-->
-            <!--[attr.aria-label]="'toggle ' + node.name">-->
-            <!--<mat-icon class="mat-icon-rtl-mirror">-->
-            <!--{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}-->
-            <!--</mat-icon>-->
-            <!--</button>-->
             <button mat-raised-button color="primary" class="m-0 btn-block text-left" matTreeNodeToggle>
               <mat-icon class="mat-icon-rtl-mirror">
                 {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}

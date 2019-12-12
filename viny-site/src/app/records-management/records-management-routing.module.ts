@@ -16,9 +16,18 @@ const routes: Routes = [
     path: 'new', component: RecordsEditPageComponent,
     canActivate: [AuthGuard]
   },
-  {path: ':recordId/view', component: RecordViewPageComponent},
-  {path: ':recordId/update', component: RecordsUpdatePageComponent},
-  {path: ':recordId/revisions/:revisionId', component: RecordsRevisionViewPageComponent},
+  {
+    path: ':recordId/view', component: RecordViewPageComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: ':recordId/update', component: RecordsUpdatePageComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: ':recordId/revisions/:revisionId', component: RecordsRevisionViewPageComponent,
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

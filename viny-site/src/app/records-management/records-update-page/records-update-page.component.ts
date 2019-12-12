@@ -30,7 +30,7 @@ export class RecordsUpdatePageComponent implements OnInit {
       const recordId = _.get(map, 'params.recordId', null);
       const data = this.recordsService.fetch_record(recordId);
 
-      data.subscribe((record) => {
+      data.then((record) => {
         this.recordObject = record;
       }, () => {
         console.log('error');

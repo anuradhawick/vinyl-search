@@ -37,8 +37,7 @@ export class RecordsRevisionViewPageComponent implements OnInit {
       const recordId = _.get(map, 'params.recordId', null);
       const revisionId = _.get(map, 'params.revisionId', null);
 
-      this.recordsService.fetch_record_revision(recordId, revisionId)
-        .toPromise().then((data) => {
+      this.recordsService.fetch_record_revision(recordId, revisionId).then((data) => {
         this.recordObject = data;
         this.recordLoading = false;
       });

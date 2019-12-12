@@ -41,10 +41,10 @@ export class RecordViewPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
-      this.recordsService.fetch_record(recordId).toPromise().then((data) => {
+      this.recordsService.fetch_record(recordId).then((data) => {
         this.recordObject = data;
         this.recordLoading = false;
-        this.recordsService.fetch_record_history(recordId).toPromise().then((data1) => {
+        this.recordsService.fetch_record_history(recordId).then((data1) => {
           this.recordHistory = data1;
           this.histLoading = false;
         });

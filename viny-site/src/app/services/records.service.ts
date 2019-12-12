@@ -37,8 +37,14 @@ export class RecordsService {
     });
   }
 
-  fetch_record_history(recordId) {
-    return this.http.get(environment.api_gateway + 'records/' + recordId + '/revisions');
+  async fetch_record_history(recordId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'records/' + recordId + '/revisions', {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
   }
 
   search_records(params) {
@@ -47,11 +53,23 @@ export class RecordsService {
     });
   }
 
-  fetch_record(recordId) {
-    return this.http.get(environment.api_gateway + 'records/' + recordId);
+  async fetch_record(recordId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'records/' + recordId, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
   }
 
-  fetch_record_revision(recordId, revisionId) {
-    return this.http.get(`${environment.api_gateway}records/${recordId}/revisions/${revisionId}`);
+  async fetch_record_revision(recordId, revisionId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(`${environment.api_gateway}records/${recordId}/revisions/${revisionId}`, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
   }
 }

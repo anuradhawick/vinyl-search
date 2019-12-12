@@ -168,6 +168,7 @@ const delete_record = async (recordId) => {
   });
 
   const removeImages = Promise.all(_.map(images, (image) => {
+    // TODO delete correct images from thumbnails and watermarks
     const list = _.split(image, '/');
     const filename = list.pop();
     const pathname = list.pop();

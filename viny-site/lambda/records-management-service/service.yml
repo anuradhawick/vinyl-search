@@ -30,6 +30,9 @@ functions:
           method: get
           path: /{recordId}
           cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
           method: post
           path: /
