@@ -184,6 +184,10 @@
     </div>
     <div class="col-12 col-lg-9">
       <app-loader #recordsloader></app-loader>
+      <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
+        <mat-paginator showFirstLastButtons [length]="count"
+                       [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+      </nav>
       <div class="container">
         <div *ngIf="records | async as records" class="row">
 

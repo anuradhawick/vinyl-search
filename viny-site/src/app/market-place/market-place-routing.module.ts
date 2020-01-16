@@ -14,7 +14,11 @@ const routes: Routes = [
     path: 'new', component: NewPostComponent,
     canActivate: [AuthGuard]
   },
-  {path: ':postId/view', component: PostViewPageComponent},
+  {
+    path: ':postId/view',
+    component: PostViewPageComponent,
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
