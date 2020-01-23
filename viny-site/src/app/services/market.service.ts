@@ -20,6 +20,16 @@ export class MarketService {
     }).toPromise();
   }
 
+  async update_post(post) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'market/' + post.id, post, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
   fetch_posts(params) {
     return this.http.get(environment.api_gateway + 'market', {
       params

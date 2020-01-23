@@ -26,10 +26,10 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
     }
   );
-  
+
   /**
    * get posts
    */
@@ -49,10 +49,10 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
     }
   );
-  
+
   /**
    * get post
    */
@@ -72,7 +72,33 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
+    }
+  );
+
+  /**
+   * update post
+   */
+  router.route(
+    'POST',
+    '/{postId}',
+    (event, context, callback) => {
+      selling_functions.update_post(
+        event.requestContext.authorizer.claims['sub'],
+        event.pathParameters.postId,
+        event.body).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+
     }
   );
 

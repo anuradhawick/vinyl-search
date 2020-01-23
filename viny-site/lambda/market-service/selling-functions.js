@@ -36,36 +36,37 @@ search_posts = async (query_params) => {
   // Add filter
   if (!_.isEmpty(gears) || !_.isEmpty(materials)) {
     _.assign(match.$match, {
-      $or: [
-        {
-          $and: [
-            {
-              saleType: {
-                $eq: 'gear'
-              } 
-            },
-            {
-              saleSubtype: {
-                $in: [...gears]
+        $or: [
+          {
+            $and: [
+              {
+                saleType: {
+                  $eq: 'gear'
+                }
+              },
+              {
+                saleSubtype: {
+                  $in: [...gears]
+                }
               }
-            }
-          ]
-        },
-        {
-          $and: [
-            {
-              saleType: {
-                $eq: 'material'
-              } 
-            },
-            {
-              saleSubtype: {
-                $in: [...materials]
+            ]
+          },
+          {
+            $and: [
+              {
+                saleType: {
+                  $eq: 'material'
+                }
+              },
+              {
+                saleSubtype: {
+                  $in: [...materials]
+                }
               }
-            }
-          ]
-        },
-      ]}
+            ]
+          },
+        ]
+      }
     );
   }
 
@@ -142,7 +143,7 @@ search_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -210,7 +211,7 @@ fetch_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -224,7 +225,7 @@ fetch_post = async (postId) => {
   const data = await db.collection('selling_items').findOne({id: ObjectID(postId), latest: true});
 
   data.images = _.map(data.images, image => {
-    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/watermarked/${path.parse(image).name}.jpeg`
+    return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/watermarked/${path.parse(image).name}.jpeg`
   });
 
   return data;
@@ -274,6 +275,78 @@ new_sell = async (uid, newSellingItem) => {
   return {id: newSellingItem.id};
 };
 
+update_post = async (uid, postId, updatedBody) => {
+  const db = await db_util.connect_db();
+  const ownerUid = uid;
+
+  const newImages = await Promise.all(_.map(updatedBody.images, (image) => {
+    const pathstr = image.replace(/(.)*.amazonaws.com\//, '');
+    const list = _.split(pathstr, '/');
+    const filename = list.pop();
+    const pathname = list[0];
+
+    if (pathname === 'selling-images') {
+      return image;
+    }
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      CopySource: `/${process.env.BUCKET_NAME}/temp/${filename}`,
+      Key: `selling-images/${filename}`
+    };
+    return new Promise((resolve, reject) => {
+      s3.copyObject(params, (err, data) => {
+          if (err) {
+            reject(image);
+          }
+          else {
+            // create thumbnails and watermarks
+            create_watermarks(params.Key).then(() => {
+              resolve(filename);
+            }).catch((error) => {
+              console.log('watermarking ERROR', error);
+              resolve(filename);
+            });
+          }
+        }
+      );
+    });
+  }));
+
+  const d = await db.collection('selling_items').findOne({
+    ownerUid,
+    id: ObjectID(postId),
+    approved: false,
+    rejected: false
+  });
+
+  console.log(updatedBody)
+
+  const d1 = await db.collection('selling_items').updateOne(
+    {
+      ownerUid,
+      id: ObjectID(postId),
+      approved: false,
+      rejected: false
+    },
+    {
+      $set: {
+        name: updatedBody.name,
+        description: updatedBody.description,
+        price: updatedBody.price,
+        images: newImages,
+        chosenImage: updatedBody.chosenImage,
+        currency: updatedBody.currency,
+        isNegotiable: updatedBody.isNegotiable
+      }
+    },
+    {
+      upsert: false
+    }
+  );
+
+  return {id: updatedBody.id};
+};
+
 // performance gainers
 let watermarkImageCache = null;
 
@@ -287,8 +360,7 @@ create_watermarks = async (key) => {
   const img2 = img.clone();
   let watermark;
 
-  if (watermarkImageCache)
-  {
+  if (watermarkImageCache) {
     watermark = watermarkImageCache.clone();
   } else {
     watermarkImageCache = await Jimp.read(__dirname + '/wm.png');
@@ -385,7 +457,7 @@ module.exports = {
   fetch_posts,
   fetch_post,
   new_sell,
-  // update_record,
+  update_post,
   // fetch_history,
   // fetch_revision
 };

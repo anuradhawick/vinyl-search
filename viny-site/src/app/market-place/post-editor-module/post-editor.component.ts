@@ -17,15 +17,6 @@ export class PostEditorComponent implements OnInit {
   @Output() readyStateChange = new EventEmitter<boolean>();
   public _ = _;
 
-
-  // passed as prop
-  @Input()
-  set post(record) {
-    if (!_.isEmpty(record)) {
-      _.assign(this.postObject, record);
-    }
-  }
-
   @Output() postChange = new EventEmitter();
 
   // current entry
@@ -40,6 +31,14 @@ export class PostEditorComponent implements OnInit {
     saleSubtype: null,
     isNegotiable: false
   };
+
+  // passed as prop
+  @Input()
+  set post(record) {
+    if (!_.isEmpty(record)) {
+      _.assign(this.postObject, record);
+    }
+  }
 
   // context control
   public uploadCount = 0;
