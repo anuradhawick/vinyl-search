@@ -294,26 +294,28 @@ const approved_posts = async (query_params) => {
 };
 
 const market_post_action = async (body) => {
+  // TODO set paid as true
   const type = body.type;
   const db = await db_util.connect_db();
 
   if (type === 'approve') {
     await db.collection('selling_items').updateOne(
       { id: ObjectID(body.id) },
-      { 
+      {
         $set: {
-          approved: true
+          approved: true,
+          paid: true
         }
       }
     );
 
     return true;
   }
-  
+
   if (type === 'reject') {
     await db.collection('selling_items').updateOne(
       { id: ObjectID(body.id) },
-      { 
+      {
         $set: {
           rejected: true
         }
@@ -394,11 +396,11 @@ const update_market_post = async(reviserUid, postId, post) => {
     const list = _.split(pathstr, '/');
     const filename = list.pop();
     const pathname = list[0];
-    
+
     if (pathname === 'selling-images') {
       return image;
     }
-    
+
     const params = {
       Bucket: process.env.BUCKET_NAME,
       CopySource: `/${process.env.BUCKET_NAME}/temp/${filename}`,
@@ -422,7 +424,7 @@ const update_market_post = async(reviserUid, postId, post) => {
       );
     });
   }));
-  
+
   _.unset(post, '_id');
 
   await db.collection('selling_items').updateMany(

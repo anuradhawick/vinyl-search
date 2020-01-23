@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Report Ad</h1>
+<div mat-dialog-content>
+  <p>Specify the reason to report</p>
+  <mat-form-field class="w-100">
+    <textarea matInput [(ngModel)]="data.reason"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-default" (click)="close()">Cancel</button>
+  <button mat-button class="btn btn-danger" [mat-dialog-close]="data.reason" cdkFocusInitial>Submit</button>
+</div>

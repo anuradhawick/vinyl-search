@@ -9,9 +9,10 @@ import { NewPostComponent } from './new-post/new-post.component';
 import { ImageViewerModule } from 'ngx-image-viewer';
 import { PostViewPageComponent } from './post-view-page/post-view-page.component';
 import { PostEditorModule } from './post-editor-module/post-editor-module.module';
+import { ReportModalComponent } from './modals/report-modal/report-modal.component';
 
 @NgModule({
-  declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent],
+  declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent, ReportModalComponent],
   imports: [
     ImageViewerModule,
     CommonModule,
@@ -19,6 +20,10 @@ import { PostEditorModule } from './post-editor-module/post-editor-module.module
     FormsModule,
     SharedModules,
     PostEditorModule
+  ],
+  entryComponents: [
+    ReportModalComponent
   ]
 })
-export class MarketPlaceModule { }
+export class MarketPlaceModule {
+}

@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MarketService } from '../../services/market.service';
 import { AuthService } from '../../shared-modules/auth/auth.service';
 import * as _ from 'lodash';
+import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-post-view-page',
@@ -60,7 +62,8 @@ export class PostViewPageComponent implements OnInit {
 
   constructor(public route: ActivatedRoute,
               private marketService: MarketService,
-              public auth: AuthService) {
+              public auth: AuthService,
+              public dialog: MatDialog) {
 
   }
 
@@ -71,6 +74,20 @@ export class PostViewPageComponent implements OnInit {
         this.postObject = data;
         this.postLoading = false;
       });
+    });
+  }
+
+  async report() {
+    const dialogRef = this.dialog.open(ReportModalComponent, {
+      width: '50%',
+      data: {reason: 'Item already sold'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!_.isEmpty(result)) {
+        // TODO
+        alert('Reported Successfully');
+      }
     });
   }
 
