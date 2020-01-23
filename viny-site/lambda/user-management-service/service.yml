@@ -50,10 +50,17 @@ functions:
           cors: true
           authorizer:
             name: vinyl-authorizer
-            arn:  ${self:custom.config.userpool_authorizer_arn}            
+            arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
           method: delete
           path: /records/{recordId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete
+          path: /market/{postID}
           cors: true
           authorizer:
             name: vinyl-authorizer

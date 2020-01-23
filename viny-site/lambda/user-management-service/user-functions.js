@@ -285,11 +285,59 @@ const delete_record = async (uid, recordId) => {
   return true;
 };
 
+const delete_marketplace_ad = async (uid, postID) => {
+
+  const db = await db_util.connect_db();
+  const posts = await db.collection('selling_items').find({id: ObjectID(postID)}).toArray();
+
+  let images = [];
+
+  _.each(posts, (post) => {
+    images = _.uniq(_.concat(images, post.images));
+  });
+
+  const removeImages = Promise.all(_.map(images, (image) => {
+    const list = _.split(image, '/');
+    const filename = list.pop();
+    const pathname = list.pop();
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: `selling-images/${filename}`
+    };
+
+    if (pathname !== 'selling-images') {
+      return true;
+    }
+
+    return new Promise((resolve, reject) => {
+      s3.deleteObject(params, (err, data) => {
+          if (err) {
+            resolve();
+          }
+          else {
+            resolve()
+          }
+        }
+      );
+    });
+  }));
+
+  const removeSellingItem = db.collection('selling_items').remove({
+    id: ObjectID(postID),
+    ownerUid: uid
+  });
+
+  await Promise.all([removeSellingItem, removeImages]);
+
+  return true;
+};
+
 module.exports = {
   update_user,
   get_user,
   get_user_records,
   get_user_forum_posts,
   get_user_market_posts,
-  delete_record
+  delete_record,
+  delete_marketplace_ad
 };

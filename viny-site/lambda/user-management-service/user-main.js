@@ -143,4 +143,25 @@ exports.main = (event, context, callback) => {
       });
     }
   );
+
+  /**
+   * delete ad
+   */
+  router.route(
+    'DELETE',
+    '/market/{postID}',
+    (event, context, callback) => {
+
+      user_functions.delete_marketplace_ad(event.requestContext.authorizer.claims['sub'], event.pathParameters.postID).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
 };
