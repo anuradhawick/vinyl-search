@@ -73,7 +73,7 @@ const pending_market_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -142,7 +142,7 @@ const all_market_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -162,7 +162,12 @@ const expired_and_rejected_posts = async (query_params) => {
       $match: {
         latest: true,
         $or: [
-          {rejected: true}
+          {rejected: true},
+          {
+            updatedAt: {
+              $lt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+            }
+          }
         ]
       }
     },
@@ -214,7 +219,7 @@ const expired_and_rejected_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -286,7 +291,7 @@ const approved_posts = async (query_params) => {
 
   posts.posts = _.map(posts.posts, post => {
     post.images = _.map(post.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return post;
   });
@@ -301,7 +306,7 @@ const market_post_action = async (body) => {
 
   if (type === 'approve') {
     await db.collection('selling_items').updateOne(
-      { id: ObjectID(body.id) },
+      {id: ObjectID(body.id)},
       {
         $set: {
           approved: true,
@@ -315,7 +320,7 @@ const market_post_action = async (body) => {
 
   if (type === 'reject') {
     await db.collection('selling_items').updateOne(
-      { id: ObjectID(body.id) },
+      {id: ObjectID(body.id)},
       {
         $set: {
           rejected: true
@@ -334,7 +339,7 @@ const get_market_post = async (postId) => {
   const data = await db.collection('selling_items').findOne({id: ObjectID(postId), latest: true});
 
   data.images = _.map(data.images, image => {
-    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/watermarked/${path.parse(image).name}.jpeg`
+    return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/selling-images/watermarked/${path.parse(image).name}.jpeg`
   });
 
   return data;
@@ -353,8 +358,7 @@ create_watermarks = async (key) => {
   const img2 = img.clone();
 
   let watermark;
-  if (watermarkImageCache)
-  {
+  if (watermarkImageCache) {
     watermark = watermarkImageCache.clone();
   } else {
     watermarkImageCache = await Jimp.read(__dirname + '/wm.png');
@@ -390,7 +394,7 @@ create_watermarks = async (key) => {
   await Promise.all([s3.putObject(params11).promise(), s3.putObject(params12).promise()])
 };
 
-const update_market_post = async(reviserUid, postId, post) => {
+const update_market_post = async (reviserUid, postId, post) => {
   const db = await db_util.connect_db();
   const newImages = await Promise.all(_.map(post.images, (image) => {
     const pathstr = image.replace(/(.)*.amazonaws.com\//, '');

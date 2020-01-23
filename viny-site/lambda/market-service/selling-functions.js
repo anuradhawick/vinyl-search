@@ -20,7 +20,10 @@ search_posts = async (query_params) => {
     $match: {
       approved: true,
       sold: false,
-      rejected: false
+      rejected: false,
+      updatedAt: {
+        $gt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+      }
     }
   };
 
@@ -36,33 +39,33 @@ search_posts = async (query_params) => {
   // Add filter
   if (!_.isEmpty(gears) || !_.isEmpty(materials)) {
     _.assign(match.$match, {
-      $or: [
-        {
-          $and: [
-            {
-              saleType: {
-                $eq: 'gear'
+        $or: [
+          {
+            $and: [
+              {
+                saleType: {
+                  $eq: 'gear'
+                }
+              },
+              {
+                saleSubtype: {
+                  $in: [...gears]
+                }
               }
-            },
-            {
-              saleSubtype: {
-                $in: [...gears]
+            ]
+          },
+          {
+            $and: [
+              {
+                saleType: {
+                  $eq: 'material'
+                }
+              },
+              {
+                saleSubtype: {
+                  $in: [...materials]
+                }
               }
-            }
-          ]
-        },
-        {
-          $and: [
-            {
-              saleType: {
-                $eq: 'material'
-              }
-            },
-            {
-              saleSubtype: {
-                $in: [...materials]
-              }
-            }
             ]
           },
         ]
@@ -160,7 +163,10 @@ fetch_posts = async (query_params) => {
       $match: {
         approved: true,
         sold: false,
-        rejected: false
+        rejected: false,
+        updatedAt: {
+          $gt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+        }
       }
     },
     {
@@ -260,7 +266,7 @@ new_sell = async (uid, newSellingItem) => {
     });
   }));
 
-  _.assign(newSellingItem, {ownerUid, createdAt: new Date()});
+  _.assign(newSellingItem, {ownerUid, createdAt: new Date(), updatedAt: new Date()});
   _.assign(newSellingItem, {id: new ObjectID()});
   _.assign(newSellingItem, {latest: true});
   _.assign(newSellingItem, {approved: false});
@@ -318,9 +324,7 @@ update_post = async (uid, postId, updatedBody) => {
     rejected: false
   });
 
-  console.log(updatedBody)
-
-  const d1 = await db.collection('selling_items').updateOne(
+  await db.collection('selling_items').updateOne(
     {
       ownerUid,
       id: ObjectID(postId),
@@ -335,7 +339,8 @@ update_post = async (uid, postId, updatedBody) => {
         images: newImages,
         chosenImage: updatedBody.chosenImage,
         currency: updatedBody.currency,
-        isNegotiable: updatedBody.isNegotiable
+        isNegotiable: updatedBody.isNegotiable,
+        updatedAt: new Date()
       }
     },
     {
