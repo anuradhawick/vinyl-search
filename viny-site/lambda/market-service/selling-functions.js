@@ -399,24 +399,17 @@ mark_as_sold = async (uid, newSellingItem) => {
 
 };
 
-report_marketplace_add = async (reporterUid, postId, report) => {
+report_marketplace_ad = async (reporterUid, postId, report) => {
   const db = await db_util.connect_db();
-  const item = await db.collection('selling_items').findOne({id: ObjectID(postId), latest: true});
-
-  // if (!_.isEmpty(item)) {
-  ownerUid = item.ownerUid;
-  // }
 
   _.assign(report, {reporterUid, createdAt: new Date()});
-  _.assign(report, {id: new ObjectID()});
-  _.assign(report, {ownerUid: ownerUid});
-  _.assign(report, {type: 'report'});
+  _.assign(report, {type: 'report_selling_ad'});
   _.assign(report, {resolved: false});
-  _.assign(report, {latest: true});
+  _.assign(report, {targetId: postId});
 
   await db.collection('reports').insertOne(report);
 
-  return {reportId: report.id};
+  return {id: report._id};
 
 };
 
@@ -478,12 +471,6 @@ module.exports = {
   fetch_posts,
   fetch_post,
   new_sell,
-<<<<<<< HEAD
-  report_marketplace_add,
-  // update_record,
-=======
-  update_post,
->>>>>>> b031c6e863685291cdeb73c3d28c6c949e9d3504
-  // fetch_history,
-  // fetch_revision
+  report_marketplace_ad,
+  update_post
 };

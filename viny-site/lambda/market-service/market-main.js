@@ -132,8 +132,9 @@ exports.main = (event, context, callback) => {
     'POST',
     '/{postId}/report',
     (event, context, callback) => {
-      selling_functions.report_marketplace_add(
+      selling_functions.report_marketplace_ad(
         event.requestContext.authorizer.claims['sub'],
+        event.pathParameters.postId,
         event.body
       ).then((id) => {
         callback(null, lambdaRouter.builResponse(200, {
