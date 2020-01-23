@@ -17,6 +17,7 @@ import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
 import { ImageViewerModule } from 'ngx-image-viewer';
 import { PostEditorModule } from '../market-place/post-editor-module/post-editor-module.module';
+import { ManageReportsComponent } from './manage-reports/manage-reports.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PostEditorModule } from '../market-place/post-editor-module/post-editor
     AllAdsComponent,
     ExpiredAdsComponent,
     ApprovedAdsComponent,
-    EditAdComponent],
+    EditAdComponent,
+    ManageReportsComponent],
   imports: [
     CommonModule,
     AdministrationRoutingModule,

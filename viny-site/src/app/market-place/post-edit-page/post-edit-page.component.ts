@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { ToastrService } from 'ngx-toastr';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-post-edit-page',
@@ -16,6 +17,7 @@ export class PostEditPageComponent implements OnInit {
   @ViewChild('editor', {static: false}) editor: PostEditorComponent;
   @ViewChild('loader', {static: false}) loader: LoaderComponent;
   public postObject = null;
+  public _ = _;
 
   // context control
   public postLoading = true;

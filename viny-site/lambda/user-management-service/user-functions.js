@@ -211,7 +211,8 @@ const get_user_market_posts = async (uid, query_params) => {
               images: 1,
               id: 1,
               approved: 1,
-              rejected: 1
+              rejected: 1,
+              sold: 1
             }
           }
         ]
@@ -235,6 +236,22 @@ const get_user_market_posts = async (uid, query_params) => {
   ]).toArray();
 
   return data[0];
+};
+
+const mark_selling_item_as_sold = async (uid, postId) => {
+  const db = await db_util.connect_db();
+
+  await db.collection('selling_items').findOneAndUpdate(
+    {
+      ownerUid: uid,
+      _id: ObjectID(postId)
+    },
+    {
+      $set: {
+        sold: true
+      }
+    }
+  )
 };
 
 
@@ -339,5 +356,6 @@ module.exports = {
   get_user_forum_posts,
   get_user_market_posts,
   delete_record,
-  delete_marketplace_ad
+  delete_marketplace_ad,
+  mark_selling_item_as_sold
 };

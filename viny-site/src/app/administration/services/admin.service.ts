@@ -100,4 +100,25 @@ export class AdminService {
       })
     }).toPromise();
   }
+
+  async fetch_reports(params) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'admin/reports', {
+      headers: new HttpHeaders({
+        'Authorization': token
+      }),
+      params
+    }).toPromise();
+  }
+
+  async resolve_report(reportId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'admin/reports/' + reportId, {resolved: true}, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }

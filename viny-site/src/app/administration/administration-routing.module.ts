@@ -10,6 +10,7 @@ import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
 import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
+import { ManageReportsComponent } from './manage-reports/manage-reports.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'forum',
         component: ManageForumComponent
+      },
+      {
+        path: 'reports',
+        component: ManageReportsComponent
       },
       {
         path: 'market',

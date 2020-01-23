@@ -187,6 +187,48 @@ exports.main = (event, context, callback) => {
   );
 
   /**
+   * get unresolved reports
+   */
+  router.route(
+    'GET',
+    '/reports',
+    (event, context, callback) => {
+      admin_functions.get_user_reports(event.queryStringParameters).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
+   * resolve reports
+   */
+  router.route(
+    'POST',
+    '/reports/{reportId}',
+    (event, context, callback) => {
+      admin_functions.resolve_user_reports(event.pathParameters.reportId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
    * get market posts
    */
   router.route(
@@ -273,8 +315,8 @@ exports.main = (event, context, callback) => {
     'POST',
     '/market/{postId}',
     (event, context, callback) => {
-      admin_market_functions.update_market_post(event.requestContext.authorizer.claims['sub'], 
-      event.pathParameters.postId, 
+      admin_market_functions.update_market_post(event.requestContext.authorizer.claims['sub'],
+      event.pathParameters.postId,
       event.body).then((postId) => {
         callback(null, lambdaRouter.builResponse(200, {
           postId,
@@ -288,7 +330,7 @@ exports.main = (event, context, callback) => {
       });
     }
   );
-  
+
   /**
    * transit market post status
    */

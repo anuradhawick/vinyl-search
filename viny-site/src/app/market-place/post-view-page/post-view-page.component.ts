@@ -5,6 +5,7 @@ import { AuthService } from '../../shared-modules/auth/auth.service';
 import * as _ from 'lodash';
 import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
 import { MatDialog } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-post-view-page',
@@ -63,6 +64,7 @@ export class PostViewPageComponent implements OnInit {
   constructor(public route: ActivatedRoute,
               private marketService: MarketService,
               public auth: AuthService,
+              private toastr: ToastrService,
               public dialog: MatDialog) {
 
   }
@@ -85,8 +87,8 @@ export class PostViewPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (!_.isEmpty(result)) {
-        // TODO
-        alert('Reported Successfully');
+        this.marketService.report_post(this.postObject.id, {description: result})
+        this.toastr.success(`Records saved successfully`, 'Success');
       }
     });
   }

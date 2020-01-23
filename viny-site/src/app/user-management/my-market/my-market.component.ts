@@ -45,7 +45,6 @@ export class MyMarketComponent implements OnInit {
     this.loader.show();
     this.userService.get_market_posts({limit: this.limit, skip: this.skip}).then((records: any) => {
       this.posts = records.posts;
-      console.log(this.posts)
       this.skip = records.skip;
       this.limit = records.limit;
       this.count = records.count;
@@ -64,6 +63,25 @@ export class MyMarketComponent implements OnInit {
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
+  }
+
+  markAsSold(id) {
+    this.userService.mark_selling_item_sold(id).then(() => {
+      this.loadPosts();
+      this.toastr.success('Item marked as sold successfully', 'Success');
+    });
+    // const modal = this.dialog.open(ForumShouldDeleteModalComponent);
+    //
+    // modal.afterClosed().subscribe((ok) => {
+    //   if (ok) {
+    //     this.forumService.delete_post(id).then(() => {
+    //       this.loadPosts();
+    //       this.toastr.success('Forum item deleted successfully', 'Success');
+    //     }).catch(() => {
+    //       this.toastr.error('Request failed. Try again later!', 'Error');
+    //     });
+    //   }
+    // });
   }
 
   delete(id) {

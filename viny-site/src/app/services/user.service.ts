@@ -73,4 +73,14 @@ export class UserService {
       })
     }).toPromise();
   }
+
+  async mark_selling_item_sold(id) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'users/market/' + id + '/sold', {}, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }
