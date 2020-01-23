@@ -42,7 +42,7 @@ search_posts = async (query_params) => {
             {
               saleType: {
                 $eq: 'gear'
-              } 
+              }
             },
             {
               saleSubtype: {
@@ -56,7 +56,7 @@ search_posts = async (query_params) => {
             {
               saleType: {
                 $eq: 'material'
-              } 
+              }
             },
             {
               saleSubtype: {
@@ -327,6 +327,27 @@ mark_as_sold = async (uid, newSellingItem) => {
 
 };
 
+report_marketplace_add = async (reporterUid, postId, report) => {
+  const db = await db_util.connect_db();
+  const item = await db.collection('selling_items').findOne({id: ObjectID(postId), latest: true});
+
+  // if (!_.isEmpty(item)) {
+  ownerUid = item.ownerUid;
+  // }
+
+  _.assign(report, {reporterUid, createdAt: new Date()});
+  _.assign(report, {id: new ObjectID()});
+  _.assign(report, {ownerUid: ownerUid});
+  _.assign(report, {type: 'report'});
+  _.assign(report, {resolved: false});
+  _.assign(report, {latest: true});
+
+  await db.collection('reports').insertOne(report);
+
+  return {reportId: report.id};
+
+};
+
 // update_record = async (reviserUid, recordId, record) => {
 //   const db = await db_util.connect_db();
 //   const newImages = await Promise.all(_.map(record.images, (image) => {
@@ -385,6 +406,7 @@ module.exports = {
   fetch_posts,
   fetch_post,
   new_sell,
+  report_marketplace_add,
   // update_record,
   // fetch_history,
   // fetch_revision

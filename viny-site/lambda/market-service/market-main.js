@@ -26,10 +26,10 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
     }
   );
-  
+
   /**
    * get posts
    */
@@ -49,10 +49,10 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
     }
   );
-  
+
   /**
    * get post
    */
@@ -72,7 +72,7 @@ exports.main = (event, context, callback) => {
           success: false
         }))
       });
-  
+
     }
   );
 
@@ -84,6 +84,31 @@ exports.main = (event, context, callback) => {
     '/',
     (event, context, callback) => {
       selling_functions.new_sell(
+        event.requestContext.authorizer.claims['sub'],
+        event.body
+      ).then((id) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          ...id,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+    }
+  );
+
+  /**
+   * report add
+   */
+  router.route(
+    'POST',
+    '/{postId}/report',
+    (event, context, callback) => {
+      selling_functions.report_marketplace_add(
         event.requestContext.authorizer.claims['sub'],
         event.body
       ).then((id) => {
