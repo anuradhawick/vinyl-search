@@ -75,6 +75,20 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
+          method: get
+          path: reports
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: post
+          path: reports/{reportId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
           method: any
           path: market/{postId}
           cors: true

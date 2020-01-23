@@ -21,7 +21,8 @@ const pending_market_posts = async (query_params) => {
       $match: {
         approved: false,
         latest: true,
-        rejected: false
+        rejected: false,
+        sold: false
       }
     },
     {

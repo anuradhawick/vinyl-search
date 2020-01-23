@@ -14,11 +14,11 @@
         <a target="_blank" (click)="approve(p.id)" mat-button>
           <mat-icon>done</mat-icon>
         </a>
+        <a mat-button>
+          <mat-icon (click)="reject(p.id)">close</mat-icon>
+        </a>
         <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
           <mat-icon>open_in_new</mat-icon>
-        </a>
-        <a mat-button>
-          <mat-icon (click)="reject(p.id)">delete</mat-icon>
         </a>
       </div>
     </mat-list-item>

@@ -123,6 +123,30 @@ exports.main = (event, context, callback) => {
     }
   );
 
+
+  /**
+   * mark selling item as sold
+   */
+  router.route(
+    'POST',
+    '/market/{postId}/sold',
+    (event, context, callback) => {
+      user_functions.mark_selling_item_as_sold(event.requestContext.authorizer.claims['sub'], event.pathParameters.postId)
+        .then((user) => {
+          callback(null, lambdaRouter.builResponse(200, {
+            ...user,
+            success: true
+          }))
+        }).catch((e) => {
+        console.error(e);
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+    }
+  );
+
   /**
    * delete record
    */

@@ -8,7 +8,6 @@ const Jimp = require('jimp');
 const s3 = new S3();
 
 search_posts = async (query_params) => {
-  console.log(query_params)
   const materials = JSON.parse(_.get(query_params, 'material', '[]'));
   const gears = JSON.parse(_.get(query_params, 'gear', '[]'));
   const limit = _.parseInt(_.get(query_params, 'limit', 30));
@@ -19,8 +18,9 @@ search_posts = async (query_params) => {
   // add expiry date restriction
   const match = {
     $match: {
-      latest: true,
-      approved: true
+      approved: true,
+      sold: false,
+      rejected: false
     }
   };
 
@@ -158,7 +158,6 @@ fetch_posts = async (query_params) => {
   const data = await db.collection('selling_items').aggregate([
     {
       $match: {
-        latest: true,
         approved: true,
         sold: false,
         rejected: false

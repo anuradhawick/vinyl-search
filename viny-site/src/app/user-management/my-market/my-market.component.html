@@ -12,8 +12,8 @@
         <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
           <mat-icon>open_in_new</mat-icon>
         </a>
-        <a mat-button>
-          <mat-icon (click)="delete(p.id)">delete</mat-icon>
+        <a *ngIf="!p.sold" mat-button>
+          <mat-icon (click)="markAsSold(p._id)">done</mat-icon>
         </a>
       </div>
     </mat-list-item>

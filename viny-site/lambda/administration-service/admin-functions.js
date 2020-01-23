@@ -147,7 +147,7 @@ const get_all_records = async (query_params) => {
 
   records.records = _.map(records.records, record => {
     record.images = _.map(record.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
     });
     return record;
   });
@@ -297,6 +297,87 @@ const delete_forum_post = async (postId) => {
   return true;
 };
 
+const get_user_reports = async (query_params) => {
+  const limit = _.parseInt(_.get(query_params, 'limit', 5));
+  const skip = _.parseInt(_.get(query_params, 'skip', 0));
+
+  const db = await db_util.connect_db();
+
+  const data = await db.collection('reports').aggregate([
+    {
+      $facet: {
+        data: [{$count: "total"}],
+        reports: [
+          {
+            $match: {
+              resolved: false
+            }
+          },
+          {
+            $sort: {
+              createdAt: -1
+            }
+          },
+          {
+            $skip: skip
+          },
+          {
+            $limit: limit
+          },
+          {
+            $addFields: {
+              id: "$_id"
+            }
+          },
+          {
+            $project: {
+              description: 1,
+              type: 1,
+              targetId: 1,
+              createdAt: 1,
+              id: 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {count: {$arrayElemAt: ["$data", 0]}}
+    },
+    {
+      $addFields: {
+        count: "$count.total",
+        limit: limit,
+        skip: skip
+      }
+    },
+    {
+      $project: {
+        data: 0
+      }
+    }
+  ]).toArray();
+
+  return data[0];
+};
+
+const resolve_user_reports = async (reportId) => {
+  const db = await db_util.connect_db();
+
+  await db.collection('reports').findOneAndUpdate(
+    {
+      _id: ObjectID(reportId)
+    },
+    {
+      $set: {
+        resolved: true
+      }
+    }
+  );
+
+  return true;
+};
+
 module.exports = {
   get_user_by_uid,
   get_admin_users,
@@ -305,5 +386,7 @@ module.exports = {
   get_all_records,
   delete_record,
   get_all_forum_posts,
-  delete_forum_post
+  delete_forum_post,
+  get_user_reports,
+  resolve_user_reports
 };

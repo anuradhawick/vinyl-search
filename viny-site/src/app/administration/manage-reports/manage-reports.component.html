@@ -1,15 +1,18 @@
 <hr>
-<div class="container col-sm-12">
-  <h3>All Ads</h3>
+<div class="container col-sm-8">
+  <h3>Manage User Reports</h3>
   <hr>
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
+      <img matListAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matLine>{{p.description}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
       <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
+        <a target="_blank" [routerLink]="p.link" mat-button>
           <mat-icon>open_in_new</mat-icon>
+        </a>
+        <a mat-button>
+          <mat-icon (click)="resolveReport(p._id)">done</mat-icon>
         </a>
       </div>
     </mat-list-item>

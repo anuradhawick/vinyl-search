@@ -45,4 +45,14 @@ export class MarketService {
       params
     });
   }
+
+  async report_post(postId, report) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'market/' + postId + '/report', report, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
 }
