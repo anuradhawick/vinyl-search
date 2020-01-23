@@ -29,6 +29,13 @@ functions:
               name: vinyl-authorizer
               arn:  ${self:custom.config.userpool_authorizer_arn}
         - http:
+            method: post
+            path: /{postId}
+            cors: true
+            authorizer:
+              name: vinyl-authorizer
+              arn:  ${self:custom.config.userpool_authorizer_arn}
+        - http:
             method: get
             path: search
             cors: true

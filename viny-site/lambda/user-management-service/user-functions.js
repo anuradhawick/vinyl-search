@@ -176,7 +176,7 @@ const get_user_forum_posts = async (uid, query_params) => {
 };
 
 const get_user_market_posts = async (uid, query_params) => {
-  
+
   const limit = _.parseInt(_.get(query_params, 'limit', 5));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
 
@@ -209,7 +209,9 @@ const get_user_market_posts = async (uid, query_params) => {
               createdAt: 1,
               chosenImage: 1,
               images: 1,
-              id: 1
+              id: 1,
+              approved: 1,
+              rejected: 1
             }
           }
         ]
