@@ -8,7 +8,8 @@ import { environment } from '../../environments/environment';
 })
 export class MarketService {
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService) {
+  }
 
   async save_post(post) {
     const token = await this.auth.getToken();
@@ -36,8 +37,14 @@ export class MarketService {
     });
   }
 
-  fetch_post(postId) {
-    return this.http.get(environment.api_gateway + 'market/' + postId);
+  async fetch_post(postId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.get(environment.api_gateway + 'market/' + postId, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
   }
 
   search_posts(params) {

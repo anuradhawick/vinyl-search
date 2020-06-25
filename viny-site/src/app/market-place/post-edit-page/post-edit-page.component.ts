@@ -34,7 +34,7 @@ export class PostEditPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postId = _.get(map, 'params.postId', null);
-      this.marketService.fetch_post(postId).toPromise().then((data) => {
+      this.marketService.fetch_post(postId).then((data) => {
         this.postObject = data;
       });
     });
