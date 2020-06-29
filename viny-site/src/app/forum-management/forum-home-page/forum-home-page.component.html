@@ -68,7 +68,7 @@
       <div class="card-header">
         <div class="row">
           <div class="col-sm-1">
-            <img src="{{post.ownerPic}}" style="max-width: 64px; max-height: 64px" class="mr-3" alt="...">
+            <img src="{{post.ownerPic}}" (error)="post.ownerPic='/assets/images/records-new-sample.svg'" style="max-width: 64px; max-height: 64px" class="mr-3" alt="...">
           </div>
           <div class="col-sm-11">
             <a routerLink="/forum/{{post.id}}/view"><h3 class="card-title">{{post.postTitle}}</h3></a>
