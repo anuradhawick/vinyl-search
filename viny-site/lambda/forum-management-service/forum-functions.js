@@ -16,11 +16,35 @@ const retrieve_post = async (postId) => {
   return post;
 };
 
+const retrieve_post_comments = async (postId) => {
+  const db = await db_util.connect_db();
+  const comments = await db.collection('forum_posts').aggregate([
+    {
+      $match: {
+        comment: true,
+        comment_for: ObjectID(postId)
+      }
+    },
+    {
+      $sort: {
+        createdAt: 1
+      }
+    }
+  ]).toArray();
+
+  return comments;
+};
+
 const retrieve_posts = async (queryStringParameters) => {
   const limit = _.parseInt(_.get(queryStringParameters, 'limit', 50));
   const skip = _.parseInt(_.get(queryStringParameters, 'skip', 0));
   const db = await db_util.connect_db();
   const posts = await db.collection('forum_posts').aggregate([
+      {
+        $match: {
+          comment: false
+        }
+      },
       {
         $sort: {
           createdAt: -1
@@ -190,6 +214,8 @@ const save_post = async (uid, post, postId) => {
   const $ = cheerio.load(post.postHTML);
   const images = [];
   const allimages = [];
+  const comment = _.get(post, "comment", false);
+  const comment_for = postId;
 
   _.forEach($('img'), (v, k) => {
     const list = v.attribs.src.split('/');
@@ -226,7 +252,7 @@ const save_post = async (uid, post, postId) => {
 
   await imageProcess;
 
-  if (!_.isEmpty(postId)) {
+  if (!_.isEmpty(postId) && !comment) {
     const data = await db.collection('forum_posts').findOneAndUpdate(
       {
         _id: ObjectID(postId),
@@ -281,6 +307,13 @@ const save_post = async (uid, post, postId) => {
     }
 
     return postId;
+  } else if (comment) {
+    _.assign(post, {ownerUid, createdAt: new Date(), comment: true, comment_for: ObjectID(comment_for)});
+    _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
+
+    await db.collection('forum_posts').insertOne(post);
+
+    return post._id;
   } else {
     _.assign(post, {ownerUid, createdAt: new Date()});
     _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
@@ -335,5 +368,6 @@ module.exports = {
   retrieve_posts,
   save_post,
   delete_post,
-  search_posts
+  search_posts,
+  retrieve_post_comments
 };

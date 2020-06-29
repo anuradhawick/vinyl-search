@@ -11,3 +11,8 @@ uid = sub
 image format
 ------------
 json: {bucket, prefix, filename}
+
+
+Deployment
+----------
+serverless deploy --stage prod --service forum-management-service

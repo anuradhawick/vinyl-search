@@ -38,8 +38,8 @@ export class ForumEditPageComponent implements OnInit {
       const postId = _.get(map, 'params.postId', null);
       this.postId = postId;
       if (_.isEmpty(postId)) {
-        this.title = 'Untitled forum post';
-        this.data = '<h1>Say it loud!</h1>Start editing here<p></p><p></p><p></p><p></p>';
+        this.title = '';
+        this.data = '';
         this.hideView = false;
         return;
       }

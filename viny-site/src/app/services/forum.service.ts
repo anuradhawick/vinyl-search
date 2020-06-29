@@ -21,6 +21,10 @@ export class ForumService {
     return this.http.get(environment.api_gateway + 'forum/' + postId);
   }
 
+  fetch_post_comments(postId) {
+    return this.http.get(environment.api_gateway + 'forum/' + postId + '/comments');
+  }
+
   search_posts(params) {
     return this.http.get(environment.api_gateway + 'forum/', {
       params
@@ -31,6 +35,26 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'forum/', post, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
+  async comment_post(postId, comment) {
+    const token = await this.auth.getToken();
+
+    return await this.http.post(environment.api_gateway + 'forum/' + postId + '/comments', comment, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
+  }
+
+  async comment_delete(postId, commentId) {
+    const token = await this.auth.getToken();
+
+    return await this.http.delete(environment.api_gateway + 'forum/' + postId + '/comments/' + commentId, {
       headers: new HttpHeaders({
         'Authorization': token
       })

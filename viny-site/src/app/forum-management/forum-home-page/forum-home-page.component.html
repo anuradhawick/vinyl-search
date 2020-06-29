@@ -1,7 +1,15 @@
 <div class="main main-raised">
+  <p>
+    <button mat-raised-button class="btn-block btn-success"
+        matBadgePosition="before" matBadgeColor="accent">
+      Replying to forum posts are now available
+    </button>
+  </p>
   <br>
   <div class="ml-5 mr-5 mt-3 mb-3">
+
     <div class="row">
+
       <div class="col-sm-6 col-9">
         <div class="input-group">
           <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"

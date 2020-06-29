@@ -18,6 +18,7 @@ export class ForumEditorComponentComponent implements OnInit {
   @Input() data;
   @Output() dataChange = new EventEmitter();
   @Input() editorDisabled;
+  @Input() is_reply = false;
 
 
   constructor() {

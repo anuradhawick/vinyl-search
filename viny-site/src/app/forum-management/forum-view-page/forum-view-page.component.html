@@ -18,6 +18,39 @@
         </button>
       </div>
     </div>
+    <div class="mt-3 col-sm-7 offset-3">
+      <app-loader #commentloader></app-loader>
+    </div>
+    <div class="mt-3 col-sm-7 offset-3" *ngIf="comments.length>0">
+      <div *ngFor="let comment of comments">
+        <ckeditor [editor]="Editor" [(ngModel)]="comment.postHTML" [config]="{toolbar: false}" [disabled]="true"></ckeditor>
+        <div *ngIf="(user | async) && post && (user | async).uid===comment.ownerUid">
+          <button mat-raised-button type="button" data-toggle="modal" data-target="#deleteComment" (click)="deleteComment(comment._id)">
+            Delete
+          </button>
+        </div>
+        <hr>
+      </div>
+    </div>
+
+    <div class="mt-3 col-sm-7 offset-3" *ngIf="!((user | async) && post)">
+      Please login to comment on this post!
+    </div>
+    <div class="mt-3 col-sm-7 offset-3" *ngIf="(user | async) && post && enableCommentSection">
+      <app-forum-editor-component [is_reply]="true" [(data)]="comment_data"></app-forum-editor-component>
+    </div>
+    <div class="mt-3 col-sm-7 offset-3" *ngIf="(user | async) && post && enableCommentSection">
+      <button mat-raised-button [disabled]="imageProgress > 0 || editorDisabled" type="button"
+              data-toggle="modal" data-target="#exampleModal" (click)="discardComment()">
+        Discard
+      </button>
+      <button mat-raised-button color="primary" class="ml-1" type="button" [disabled]="imageProgress > 0 || editorDisabled"
+              (click)="saveComment()">
+          <span id="saveLoader" [hidden]="!(imageProgress > 0 || editorDisabled)" class="spinner-grow spinner-grow-sm"
+                role="status" aria-hidden="true"></span>
+        Save Comment
+      </button>
+    </div>
   </div>
   <br>
 </div>
@@ -43,4 +76,5 @@
     </div>
   </div>
 </div>
+
 

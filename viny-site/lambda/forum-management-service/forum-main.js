@@ -30,6 +30,28 @@ exports.main = (event, context, callback) => {
   );
 
   /**
+   * get post comments
+   */
+  router.route(
+    'GET',
+    '/{postId}/comments',
+    (event, context, callback) => {
+      forum_functions.retrieve_post_comments(event.pathParameters.postId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          comments: data,
+          success: true
+        }))
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          records: "ERROR",
+          success: false
+        }))
+      });
+    }
+  );
+
+  /**
    * get posts
    */
   router.route(
@@ -116,6 +138,27 @@ exports.main = (event, context, callback) => {
   );
 
   /**
+   * comment post
+   */
+  router.route(
+    'POST',
+    '/{postId}/comments',
+    (event, context, callback) => {
+      forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          postId: data,
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+
+  /**
    * delete post
    */
   router.route(
@@ -134,4 +177,24 @@ exports.main = (event, context, callback) => {
       });
     }
   );
-}
+
+  /**
+   * delete comment on a post
+   */
+  router.route(
+    'DELETE',
+    '/{postId}/comments/{commentId}',
+    (event, context, callback) => {
+      forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.commentId).then((data) => {
+        callback(null, lambdaRouter.builResponse(200, {
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e)
+        callback(null, lambdaRouter.builResponse(500, {
+          success: false
+        }));
+      });
+    }
+  );
+};

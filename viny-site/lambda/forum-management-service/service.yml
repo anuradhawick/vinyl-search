@@ -23,6 +23,10 @@ functions:
           cors: true
       - http:
           method: get
+          path: /{postId}/comments
+          cors: true
+      - http:
+          method: get
           path: /
           cors: true
       - http:
@@ -44,8 +48,22 @@ functions:
             name: vinyl-authorizer
             arn:  ${self:custom.config.userpool_authorizer_arn}
       - http:
+          method: post
+          path: /{postId}/comments
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
           method: delete
           path: /{postId}
+          cors: true
+          authorizer:
+            name: vinyl-authorizer
+            arn:  ${self:custom.config.userpool_authorizer_arn}
+      - http:
+          method: delete
+          path: /{postId}/comments/{commentId}
           cors: true
           authorizer:
             name: vinyl-authorizer

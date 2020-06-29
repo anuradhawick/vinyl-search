@@ -1,10 +1,13 @@
+<div *ngIf="is_reply" class="">
+    <h3>Add your Comment</h3>
+</div>
 <div class="input-group">
-  <div class="input-group-prepend">
+  <div *ngIf="!is_reply" class="input-group-prepend">
     <div class="input-group-text">
       <i class="material-icons">text_fields</i>
     </div>
   </div>
-  <input name="forum-editor-title" [(ngModel)]="title" (ngModelChange)="titleChange.emit($event)" class="form-control" aria-label="With textarea" [disabled]="editorDisabled" required/>
+  <input aria-required="true" name="forum-editor-title" *ngIf="!is_reply" [(ngModel)]="title" (ngModelChange)="titleChange.emit($event)" class="form-control" aria-label="With textarea" [disabled]="editorDisabled" required/>
 </div>
 <hr>
 <ckeditor name="forum-editor-data" [editor]="Editor" [(ngModel)]="data" (ready)="onReady($event)" [disabled]="editorDisabled" (ngModelChange)="dataChange.emit($event)"></ckeditor>
