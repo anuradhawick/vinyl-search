@@ -1,10 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
+import * as _ from 'lodash';
 
 declare const $: any;
 declare const window: any;
@@ -119,8 +120,13 @@ export class AuthService {
     });
   }
 
-  login(customState = '') {
-    this.customState = customState;
+  login(customeState = null) {
+    if (_.isEmpty(customeState)) {
+      this.customState = JSON.stringify([this.router.routerState.snapshot.url]);
+    } else {
+      this.customState = customeState;
+    }
+
     $('#loginModal').modal('show');
   }
 
