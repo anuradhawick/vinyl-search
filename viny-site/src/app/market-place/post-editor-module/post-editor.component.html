@@ -6,10 +6,10 @@
         <div class="sq-container">
           <div class="sq-content">
             <div>
-              <ngx-image-viewer [config]="imgvconfig"
+              <app-image-viewer [config]="imgvconfig"
                                 [src]="_.isEmpty(postObject.images) && ['/assets/images/records-new-sample.svg'] || postObject.images"
                                 [(index)]="postObject.chosenImage"
-                                (customEvent)="handleEvent($event)"></ngx-image-viewer>
+                                (customEvent)="handleEvent($event)"></app-image-viewer>
             </div>
           </div>
         </div>

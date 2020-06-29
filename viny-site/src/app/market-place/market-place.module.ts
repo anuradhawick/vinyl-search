@@ -6,7 +6,6 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
 import { NewPostComponent } from './new-post/new-post.component';
-import { ImageViewerModule } from 'ngx-image-viewer';
 import { PostViewPageComponent } from './post-view-page/post-view-page.component';
 import { PostEditorModule } from './post-editor-module/post-editor-module.module';
 import { ReportModalComponent } from './modals/report-modal/report-modal.component';
@@ -15,7 +14,6 @@ import { PostEditPageComponent } from './post-edit-page/post-edit-page.component
 @NgModule({
   declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent, ReportModalComponent, PostEditPageComponent],
   imports: [
-    ImageViewerModule,
     CommonModule,
     MarketPlaceRoutingModule,
     FormsModule,

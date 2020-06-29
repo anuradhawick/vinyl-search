@@ -1,0 +1,43 @@
+<div [appToggleFullscreen]="fullscreen" class="img-container" [style.backgroundColor]="config.containerBackgroundColor"
+     (wheel)="scrollZoom($event)" (dragover)="onDragOver($event)">
+  <img [src]="src[index]" [ngStyle]="style" alt="Image not found..." (dragstart)="onDragStart($event)" (load)="onLoad()" (loadstart)="onLoadStart()"/>
+  <!-- Div below will be used to hide the 'ghost' image when dragging -->
+  <div></div>
+  <div class="spinner-overlay" *ngIf="loading">
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+
+  <button mat-mini-fab type="button" [ngClass]="config.btnClass" color="primary" *ngIf="config.btnShow.rotateCounterClockwise" (click)="rotateCounterClockwise()">
+    <mat-icon>{{config.btnIcons.rotateCounterClockwise}}</mat-icon>
+  </button>
+  <button mat-mini-fab type="button" [ngClass]="config.btnClass" color="primary" *ngIf="config.btnShow.rotateClockwise" (click)="rotateClockwise()">
+    <mat-icon>{{config.btnIcons.rotateClockwise}}</mat-icon>
+  </button>
+
+  <button mat-mini-fab type="button" [ngClass]="config.btnClass" color="primary" *ngIf="config.btnShow.zoomOut" (click)="zoomOut()">
+    <mat-icon>{{config.btnIcons.zoomOut}}</mat-icon>
+  </button>
+  <button mat-mini-fab type="button" [ngClass]="config.btnClass" color="primary" *ngIf="config.btnShow.zoomIn" (click)="zoomIn()">
+    <mat-icon>{{config.btnIcons.zoomIn}}</mat-icon>
+  </button>
+
+  <button mat-mini-fab type="button" [ngClass]="config.btnClass" color="primary" *ngFor="let cBtn of config.customBtns" (click)="fireCustomEvent(cBtn.name, index)">
+    <mat-icon>{{cBtn.icon}}</mat-icon>
+  </button>
+
+  <button mat-mini-fab type="button" id="ngx-fs-btn" [ngClass]="config.btnClass" color="primary" (click)="toggleFullscreen()" *ngIf="config.allowFullscreen">
+    <mat-icon *ngIf="fullscreen">{{config.btnIcons.fullscreenExit}}</mat-icon>
+    <mat-icon *ngIf="!fullscreen">{{config.btnIcons.fullscreen}}</mat-icon>
+  </button>
+
+  <div class="nav-button-container" *ngIf="src.length > 1">
+    <button mat-mini-fab [ngClass]="config.btnClass" color="primary" type="button"  (click)="prevImage($event)" [disabled]="index === 0">
+      <mat-icon>{{config.btnIcons.prev}}</mat-icon>
+    </button>
+    <button mat-mini-fab [ngClass]="config.btnClass" color="primary" type="button" (click)="nextImage($event)" [disabled]="index === src.length - 1">
+      <mat-icon>{{config.btnIcons.next}}</mat-icon>
+    </button>
+  </div>
+</div>

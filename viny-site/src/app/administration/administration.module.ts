@@ -15,7 +15,6 @@ import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
 import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
-import { ImageViewerModule } from 'ngx-image-viewer';
 import { PostEditorModule } from '../market-place/post-editor-module/post-editor-module.module';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
 
@@ -37,7 +36,6 @@ import { ManageReportsComponent } from './manage-reports/manage-reports.componen
     CommonModule,
     AdministrationRoutingModule,
     SharedModules,
-    ImageViewerModule,
     PostEditorModule
   ],
   providers: [AdminService],

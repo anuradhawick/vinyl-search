@@ -6,12 +6,15 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
-  MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatSelectModule, MatTreeModule
+  MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule,
+  MatTreeModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
 
 @NgModule({
-  declarations: [LoaderComponent],
+  declarations: [LoaderComponent, ImageViewerComponent, ToggleFullscreenDirective],
   providers: [],
   imports: [
     CommonModule,
@@ -34,10 +37,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatTreeModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     CommonModule,
+    ToggleFullscreenDirective,
     LoaderComponent,
+    ImageViewerComponent,
     MatButtonModule,
     MatBadgeModule,
     MatChipsModule,
@@ -56,7 +62,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatListModule,
     MatMenuModule,
     MatTreeModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModules {

@@ -9,7 +9,6 @@ import { RecordsEditorComponentComponent } from './records-editor-component/reco
 import { RecordsUpdatePageComponent } from './records-update-page/records-update-page.component';
 import { RecordsRevisionViewPageComponent } from './records-revision-view-page/records-revision-view-page.component';
 import { FormsModule } from '@angular/forms';
-import { ImageViewerModule } from 'ngx-image-viewer';
 import { SharedModules } from '../shared-modules/shared.module';
 import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
 
@@ -28,7 +27,6 @@ import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error
     CommonModule,
     RecordsManagementRoutingModule,
     FormsModule,
-    ImageViewerModule,
     SharedModules
   ],
   providers: [
