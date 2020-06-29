@@ -128,19 +128,22 @@ export class ForumViewPageComponent implements OnInit {
   }
 
   deleteComment(id) {
-    this.comments = [];
-    this.commentLoader.show();
-    this.enableCommentSection = false;
+    // this.comments = [];
+    // this.commentLoader.show();
+    // this.enableCommentSection = false;
+    //
+    // const data = this.forumService.delete_post(id);
+    //
+    // data.then(() => {
+    //   this.loader.hide();
+    //   this.toastr.success(`Comment submitted successfully`, 'Success');
+    //   this.loadComments();
+    // }, () => {
+    //   this.toastr.error(`Saving failed! Please try again later`, 'Error');
+    //   this.enableCommentSection = true;
+    // });
 
-    const data = this.forumService.delete_post(id);
-
-    data.then(() => {
-      this.loader.hide();
-      this.toastr.success(`Comment submitted successfully`, 'Success');
-      this.loadComments();
-    }, () => {
-      this.toastr.error(`Saving failed! Please try again later`, 'Error');
-      this.enableCommentSection = true;
-    });
+    // TODO
+    this.toastr.warning(`This feature is under construction.`, 'Ops!');
   }
 }
