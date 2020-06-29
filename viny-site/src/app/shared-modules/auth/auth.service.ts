@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
@@ -22,6 +22,7 @@ export class AuthService {
   public isLoggedIn = false;
   private autoLogin;
   private customState: any = '';
+  private profileLoaded = false;
 
   constructor(private route: ActivatedRoute,
               private zone: NgZone,
@@ -37,6 +38,39 @@ export class AuthService {
       }
     });
 
+    Hub.listen('auth', ({payload: {event, data}}) => {
+      console.log(event, data)
+      switch (event) {
+        case 'signIn':
+          console.log('Login success');
+          Auth.currentAuthenticatedUser().then((u) => {
+            this.processUser(u);
+          });
+          break;
+        case 'signOut':
+          console.log('Logout success');
+          this.isLoggedIn = false;
+          this.user = null;
+          this.autoLogin = false;
+
+          break;
+        case 'customOAuthState':
+          this.isLoggedIn = true;
+          this.customState = JSON.parse(decodeURIComponent(data));
+          this.zone.run(() => this.router.navigate(this.customState));
+          Auth.currentAuthenticatedUser().then((u) => {
+            this.processUser(u);
+          });
+          break;
+        case 'signIn_failure':
+          break;
+        case 'cognitoHostedUI_failure':
+          break;
+        case 'customState_failure':
+          break;
+      }
+    });
+
     this.autoLogin = new Promise((resolve, reject) => {
       Auth.currentAuthenticatedUser().then((u) => {
         this.processUser(u);
@@ -44,40 +78,15 @@ export class AuthService {
       }).catch((e) => {
         resolve(false);
       });
-
-      Hub.listen('auth', ({payload: {event, data}}) => {
-        console.log(event, data)
-        switch (event) {
-          case 'signIn':
-            console.log('Login success');
-            Auth.currentAuthenticatedUser().then((u) => {
-              this.processUser(u);
-              resolve(true);
-            });
-            break;
-          case 'signOut':
-            console.log('Logout success');
-            this.isLoggedIn = false;
-            this.user = null;
-            this.autoLogin = false;
-            resolve(false);
-            break;
-          case 'customOAuthState':
-            this.customState = JSON.parse(decodeURIComponent(data));
-            Auth.currentAuthenticatedUser().then((u) => {
-              this.processUser(u);
-              resolve(true);
-              this.zone.run(() => this.router.navigate(this.customState));
-            });
-            break;
-        }
-      });
     });
   }
 
   processUser(u) {
-    console.log(u);
-    console.log(u.signInUserSession.idToken.jwtToken);
+    // console.log(u);
+    // console.log(u.signInUserSession.idToken.jwtToken);
+    if (this.profileLoaded) {
+      return;
+    }
     this.zone.run(async () => {
       this.isLoggedIn = true;
       this.user.next(await this.http.get(environment.api_gateway + 'users/', {
@@ -85,6 +94,7 @@ export class AuthService {
           'Authorization': await this.getToken()
         })
       }).toPromise());
+      this.profileLoaded = true;
     });
   }
 

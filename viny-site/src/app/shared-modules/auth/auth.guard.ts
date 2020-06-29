@@ -18,12 +18,9 @@ export class AuthGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       if (!this.auth.isLoggedIn) {
         this.auth.login(JSON.stringify([state.url]));
+      } else {
+        resolve(true);
       }
-      this.user.subscribe((user: any) => {
-        if (user) {
-          resolve(true);
-        }
-      });
     });
   }
 }
