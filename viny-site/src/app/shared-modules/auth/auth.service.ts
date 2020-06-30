@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import Amplify, { Auth, Hub } from 'aws-amplify';
+import { Auth, Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -9,9 +9,6 @@ import * as _ from 'lodash';
 
 declare const $: any;
 declare const window: any;
-
-Amplify.configure(environment.aws_config);
-Auth.configure({oauth: environment.oauth});
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +27,7 @@ export class AuthService {
               private router: Router) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
+        console.log('INVALID REQUEST', params.error_description);
         if (params.error_description === 'PreSignUp failed with error Google. ') {
           this.loginFacebook();
         } else if (params.error_description === 'PreSignUp failed with error Facebook. ') {
