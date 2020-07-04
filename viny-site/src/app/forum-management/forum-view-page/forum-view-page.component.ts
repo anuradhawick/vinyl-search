@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/auth/auth.service';
 import { ForumService } from '../../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material';
+import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 
 
 @Component({
@@ -33,7 +35,8 @@ export class ForumViewPageComponent implements OnInit {
               private forumService: ForumService,
               public auth: AuthService,
               private router: Router,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private dialog: MatDialog) {
     this.user = auth.user.asObservable();
   }
 
@@ -128,22 +131,32 @@ export class ForumViewPageComponent implements OnInit {
   }
 
   deleteComment(id) {
-    // this.comments = [];
-    // this.commentLoader.show();
-    // this.enableCommentSection = false;
-    //
-    // const data = this.forumService.delete_post(id);
-    //
-    // data.then(() => {
-    //   this.loader.hide();
-    //   this.toastr.success(`Comment submitted successfully`, 'Success');
-    //   this.loadComments();
-    // }, () => {
-    //   this.toastr.error(`Saving failed! Please try again later`, 'Error');
-    //   this.enableCommentSection = true;
-    // });
+    const modal = this.dialog.open(ActionConfirmModalComponent, {
+      data: {
+        message: `Are you sure you want to delete the forum post?.`,
+        title: `Are you sure?`
+      }
+    });
 
-    // TODO
-    this.toastr.warning(`This feature is under construction.`, 'Ops!');
+    modal.afterClosed().subscribe((ok) => {
+      if (ok) {
+        this.comments = [];
+        this.commentLoader.show();
+        this.enableCommentSection = false;
+
+        const data = this.forumService.delete_post(id);
+
+        data.then(() => {
+          this.loader.hide();
+          this.toastr.success(`Comment deleted successfully`, 'Success');
+          this.loadComments();
+        }, () => {
+          this.toastr.error(`Action failed! Please try again later`, 'Error');
+          this.loadComments();
+          this.enableCommentSection = true;
+        });
+      }
+
+    });
   }
 }

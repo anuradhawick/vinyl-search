@@ -12,9 +12,15 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
+import { ActionConfirmModalComponent } from './modals/action-confirm-modal/action-confirm-modal.component';
 
 @NgModule({
-  declarations: [LoaderComponent, ImageViewerComponent, ToggleFullscreenDirective],
+  declarations: [
+    LoaderComponent,
+    ImageViewerComponent,
+    ToggleFullscreenDirective,
+    ActionConfirmModalComponent
+  ],
   providers: [],
   imports: [
     CommonModule,
@@ -63,7 +69,11 @@ import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
     MatMenuModule,
     MatTreeModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ActionConfirmModalComponent
+  ],
+  entryComponents: [
+    ActionConfirmModalComponent
   ]
 })
 export class SharedModules {
