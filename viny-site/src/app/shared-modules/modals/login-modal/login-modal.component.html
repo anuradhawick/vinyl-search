@@ -1,0 +1,21 @@
+<h1 mat-dialog-title class="text-center">Login to Vinyl.LK</h1>
+<div mat-dialog-content>
+  <img class="rounded mx-auto d-block" style="min-width: 200px; max-width: 30%" src="/assets/images/records-new-sample.svg"
+       alt="">
+  <div class="sharing-area mt-0">
+    <button (click)="login('Facebook')" class="btn btn-block btn-raised btn-facebook sharrre">
+      <i class="fa fa-facebook-square"></i> Login with Facebook
+      <div class="ripple-container"></div>
+    </button>
+    <button (click)="login('Google')" class="btn btn-block btn-raised btn-google-plus sharrre">
+      <i class="fa fa-google-plus"></i> Login with Google
+    </button>
+    <button mat-button mat-dialog-close class="btn btn-block btn-raised">Close</button>
+  </div>
+  <hr>
+</div>
+<br>
+<!--<div mat-dialog-actions>-->
+<!--<button mat-button class="btn btn-default" [mat-dialog-close]=>Cancel</button>-->
+<!--<button mat-button class="btn btn-danger" [mat-dialog-close]>Yes</button>-->
+<!--</div>-->

@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 import * as _ from 'lodash';
+import { MatDialog } from '@angular/material';
+import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
 
 declare const $: any;
 declare const window: any;
@@ -24,7 +26,8 @@ export class AuthService {
   constructor(private route: ActivatedRoute,
               private zone: NgZone,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         console.log('INVALID REQUEST', params.error_description);
@@ -135,7 +138,20 @@ export class AuthService {
       this.customState = customeState;
     }
 
-    $('#loginModal').modal('show');
+    const dialog = this.dialog.open(LoginModalComponent);
+
+    dialog.afterClosed().subscribe((result) => {
+      switch (result) {
+        case 'Facebook':
+          this.loginFacebook();
+          break;
+        case 'Google':
+          this.loginGoogle();
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   logout() {

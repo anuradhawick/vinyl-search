@@ -13,13 +13,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
 import { ActionConfirmModalComponent } from './modals/action-confirm-modal/action-confirm-modal.component';
+import { LoginModalComponent } from './modals/login-modal/login-modal.component';
 
 @NgModule({
   declarations: [
     LoaderComponent,
     ImageViewerComponent,
     ToggleFullscreenDirective,
-    ActionConfirmModalComponent
+    ActionConfirmModalComponent,
+    LoginModalComponent,
+    LoginModalComponent
   ],
   providers: [],
   imports: [
@@ -73,7 +76,8 @@ import { ActionConfirmModalComponent } from './modals/action-confirm-modal/actio
     ActionConfirmModalComponent
   ],
   entryComponents: [
-    ActionConfirmModalComponent
+    ActionConfirmModalComponent,
+    LoginModalComponent
   ]
 })
 export class SharedModules {
