@@ -29,7 +29,7 @@
 </div>
 
 <!--NEW-->
-<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
+<nav class="navbar navbar-transparent fixed-top navbar-expand-lg"
      id="sectionsNav">
   <div class="container">
     <div class="navbar-translate">
@@ -90,13 +90,15 @@
         </li>
         <ng-container *ngIf="auth.isLoggedIn; else showLogin">
           <li class="nav-item">
-            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link" href="javascript:void(0)" [routerLink]="'/admin'">
+            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link" href="javascript:void(0)"
+               [routerLink]="'/admin'">
               <i class="material-icons">security</i> Admin
             </a>
           </li>
           <li class="nav-item">
             <a *ngIf="(user | async)?.picture" class="nav-link" href="javascript:void(0)" [routerLink]="'/profile'">
-              <img *ngIf="(user | async)?.picture" class="img-thumbnail p-0 m-0" [src]="(user | async)?.picture" alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+              <img *ngIf="(user | async)?.picture" class="img-thumbnail p-0 m-0" [src]="(user | async)?.picture"
+                   alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
               Hi {{(user | async)?.given_name}}
             </a>
           </li>

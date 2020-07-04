@@ -12,17 +12,31 @@
   <base href="/">
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 </head>
 <body>
 <app-root></app-root>
 </body>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-      integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-
-<link rel="stylesheet" type="text/css"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 </html>
+
+<script>
+  window.onscroll = () => {
+    const nav = document.querySelector('#sectionsNav');
+
+    if (window.scrollY >= 100) {
+      nav.classList.remove('navbar-transparent');
+    }
+    else {
+      nav.classList.add('navbar-transparent');
+    }
+  }
+</script>
 
 <!--docs-->
 <!--https://demos.creative-tim.com/material-kit/examples/landing-page.html-->
