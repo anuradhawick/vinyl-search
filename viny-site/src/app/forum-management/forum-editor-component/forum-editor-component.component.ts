@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import uuid from 'uuid';
-import { Storage } from 'aws-amplify';
+import { Storage } from '@aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -82,6 +82,5 @@ class MyUploadAdapter {
       this.ref.imageProgress--;
       this.ref.imageProgressChange.emit(this.ref.imageProgress);
     // }
-    console.log('cancel')
   }
 }

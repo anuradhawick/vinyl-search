@@ -1,10 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Auth, Hub } from 'aws-amplify';
+import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+import { Hub } from '@aws-amplify/core';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
-import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import * as _ from 'lodash';
 
 declare const $: any;
@@ -37,7 +37,7 @@ export class AuthService {
     });
 
     Hub.listen('auth', ({payload: {event, data}}) => {
-      console.log(event, data)
+      console.log(event, data);
       switch (event) {
         case 'signIn':
           console.log('Login success');

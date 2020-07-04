@@ -1,4 +1,4 @@
-import Amplify from 'aws-amplify';
+import Amplify from '@aws-amplify/core';
 
 Amplify.configure(environment.aws_config);
 

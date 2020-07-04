@@ -8,10 +8,10 @@ import * as _ from 'lodash';
 import uuid from 'uuid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../shared-modules/auth/auth.service';
-import { Storage } from 'aws-amplify';
+import { Storage } from '@aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material';
 import { ENTER } from '@angular/cdk/keycodes';
 

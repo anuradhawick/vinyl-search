@@ -4,7 +4,7 @@ import { AuthService } from '../../shared-modules/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
-import { Storage } from 'aws-amplify';
+import { Storage } from '@aws-amplify/storage';
 import uuid from 'uuid';
 import { Observable } from 'rxjs';
 

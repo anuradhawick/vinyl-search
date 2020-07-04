@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 
-
 @Component({
   selector: 'app-forum-view-page',
   templateUrl: './forum-view-page.component.html',
@@ -32,8 +31,8 @@ export class ForumViewPageComponent implements OnInit {
 
 
   constructor(public route: ActivatedRoute,
-              private forumService: ForumService,
               public auth: AuthService,
+              private forumService: ForumService,
               private router: Router,
               private toastr: ToastrService,
               private dialog: MatDialog) {
