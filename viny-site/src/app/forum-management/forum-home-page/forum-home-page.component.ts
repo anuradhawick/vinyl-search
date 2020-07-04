@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/auth/auth.service';
-import { ForumService } from '../../services/forum.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
+import { ForumService } from '../services/forum.service';
 
 @Component({
   selector: 'app-forum-home-page',

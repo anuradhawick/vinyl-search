@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { AdminService } from '../services/admin.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';

@@ -4,8 +4,8 @@ import countriesJSON from '../../shared-modules/data/countries.json';
 import * as _ from 'lodash';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../shared-modules/auth/auth.service';
-import { RecordsService } from '../../services/records.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
+import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
 
 declare const $: any;

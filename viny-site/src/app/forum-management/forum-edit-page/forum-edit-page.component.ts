@@ -3,9 +3,8 @@ import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { Router } from '@angular/router';
-import { ForumService } from '../../services/forum.service';
+import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../shared-modules/auth/auth.service';
 
 declare const $;
 

@@ -3,7 +3,7 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
 
 @Component({

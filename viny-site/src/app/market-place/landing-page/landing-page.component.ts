@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
-import { MarketService } from '../../services/market.service';
+import { MarketService } from '../services/market.service';
 
 interface TreeNode {
   name: string;

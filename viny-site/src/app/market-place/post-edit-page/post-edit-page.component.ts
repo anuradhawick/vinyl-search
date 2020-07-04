@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MarketService } from '../../services/market.service';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { MarketService } from '../services/market.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { MatDialog } from '@angular/material';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';

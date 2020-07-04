@@ -11,6 +11,7 @@ import { RecordsRevisionViewPageComponent } from './records-revision-view-page/r
 import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
 import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
+import { RecordsService } from './services/records.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error
     SharedModules
   ],
   providers: [
+    RecordsService
   ],
   entryComponents: [
     CatalogErrorModalComponent

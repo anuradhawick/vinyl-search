@@ -12,9 +12,7 @@ import { LoginModalComponent } from '../modals/login-modal/login-modal.component
 declare const $: any;
 declare const window: any;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   public redirectUrl = null;
   public user = new ReplaySubject<any>(1);

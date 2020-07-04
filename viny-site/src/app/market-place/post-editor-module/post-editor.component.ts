@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';

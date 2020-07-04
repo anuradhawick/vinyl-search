@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/auth/auth.service';
-import { ForumService } from '../../services/forum.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
+import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
@@ -154,7 +154,7 @@ export class ForumViewPageComponent implements OnInit {
         this.commentLoader.show();
         this.enableCommentSection = false;
 
-        const data = this.forumService.delete_post(id);
+        const data = this.forumService.comment_delete(this.postId, id);
 
         data.then(() => {
           this.loader.hide();

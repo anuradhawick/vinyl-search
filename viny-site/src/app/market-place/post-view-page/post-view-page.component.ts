@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MarketService } from '../../services/market.service';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { MarketService } from '../services/market.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import * as _ from 'lodash';
 import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
 import { MatDialog } from '@angular/material';

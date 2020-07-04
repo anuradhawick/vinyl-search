@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
 import { RecordShouldDeleteModalComponent } from '../modals/record-should-delete-modal/record-should-delete-modal.component';
 import { MatDialog } from '@angular/material';

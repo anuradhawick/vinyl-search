@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RecordsService } from '../../services/records.service';
+import { RecordsService } from '../services/records.service';
 import * as _ from 'lodash';
 
 @Component({

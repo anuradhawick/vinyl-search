@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Storage } from '@aws-amplify/storage';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../shared-modules/services/user.service';
 import { environment } from '../../../environments/environment';
 
 @Component({

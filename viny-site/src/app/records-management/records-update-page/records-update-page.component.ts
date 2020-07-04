@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecordsService } from '../../services/records.service';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { RecordsService } from '../services/records.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';

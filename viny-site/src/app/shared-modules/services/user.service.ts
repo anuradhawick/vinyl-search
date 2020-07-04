@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '../shared-modules/auth/auth.service';
-import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
+import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService {
 
   constructor(private auth: AuthService, private http: HttpClient) {

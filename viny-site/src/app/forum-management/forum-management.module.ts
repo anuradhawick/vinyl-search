@@ -9,6 +9,7 @@ import { ForumEditorComponentComponent } from './forum-editor-component/forum-ed
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
+import { ForumService } from './services/forum.service';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SharedModules } from '../shared-modules/shared.module';
     ForumManagementRoutingModule,
     CKEditorModule,
     SharedModules
-  ]
+  ],
+  providers: [ForumService]
 })
 export class ForumManagementModule { }

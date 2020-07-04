@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { RecordsService } from '../../services/records.service';
+import { RecordsService } from '../services/records.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { CatalogErrorModalComponent } from '../modals/catalog-error/catalog-error.component';

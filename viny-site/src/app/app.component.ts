@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from './shared-modules/auth/auth.service';
+import { AuthService } from './shared-modules/services/auth.service';
 import * as _ from 'lodash';
 
 @Component({

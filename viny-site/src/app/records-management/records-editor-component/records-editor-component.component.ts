@@ -7,7 +7,7 @@ import descrJSON from '../../shared-modules/data/description.json';
 import * as _ from 'lodash';
 import uuid from 'uuid';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { Storage } from '@aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';

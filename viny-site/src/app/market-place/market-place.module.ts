@@ -10,6 +10,7 @@ import { PostViewPageComponent } from './post-view-page/post-view-page.component
 import { PostEditorModule } from './post-editor-module/post-editor-module.module';
 import { ReportModalComponent } from './modals/report-modal/report-modal.component';
 import { PostEditPageComponent } from './post-edit-page/post-edit-page.component';
+import { MarketService } from './services/market.service';
 
 @NgModule({
   declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent, ReportModalComponent, PostEditPageComponent],
@@ -22,6 +23,9 @@ import { PostEditPageComponent } from './post-edit-page/post-edit-page.component
   ],
   entryComponents: [
     ReportModalComponent
+  ],
+  providers: [
+    MarketService
   ]
 })
 export class MarketPlaceModule {

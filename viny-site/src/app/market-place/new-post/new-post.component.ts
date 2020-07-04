@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { MarketService } from '../../services/market.service';
+import { MarketService } from '../services/market.service';
 
 @Component({
   selector: 'app-new-post',

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MarketService {
 
   constructor(private auth: AuthService, private http: HttpClient) { }

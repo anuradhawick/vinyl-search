@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../shared-modules/auth/auth.service';
-import { environment } from '../../environments/environment';
+import { AuthService } from '../../shared-modules/services/auth.service';
+import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RecordsService {
 
   constructor(private http: HttpClient, private auth: AuthService) {

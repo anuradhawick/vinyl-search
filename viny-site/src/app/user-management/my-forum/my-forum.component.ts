@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { ForumService } from '../../services/forum.service';
+import { UserService } from '../../shared-modules/services/user.service';
+import { ForumService } from '../../forum-management/services/forum.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { ForumShouldDeleteModalComponent } from '../modals/forum-should-delete/forum-should-delete.component';

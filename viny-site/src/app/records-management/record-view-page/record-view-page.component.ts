@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import * as _ from 'lodash';
-import { RecordsService } from '../../services/records.service';
-import { AuthService } from '../../shared-modules/auth/auth.service';
+import { RecordsService } from '../services/records.service';
+import { AuthService } from '../../shared-modules/services/auth.service';
 
 @Component({
   selector: 'app-record-view-page',
