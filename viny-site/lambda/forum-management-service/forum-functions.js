@@ -263,7 +263,8 @@ const save_post = async (uid, post, postId) => {
           postHTML: post.postHTML,
           postTitle: post.postTitle,
           updatedAt: new Date(),
-          textHTML: htmlToText.fromString(post.postHTML)
+          textHTML: htmlToText.fromString(post.postHTML),
+          comment: false
         }
       },
       {
