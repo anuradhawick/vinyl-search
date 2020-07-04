@@ -65,12 +65,23 @@ export class ForumViewPageComponent implements OnInit {
     });
   }
 
-  delete() {
-    this.loader.show();
-    const data = this.forumService.delete_post(this.post.id);
-    data.then(() => {
-      this.loader.hide();
-      this.router.navigate(['/forum']);
+  deletePost() {
+    const modal = this.dialog.open(ActionConfirmModalComponent, {
+      data: {
+        message: `Are you sure you want to delete the forum post?`,
+        title: `Are you sure?`
+      }
+    });
+
+    modal.afterClosed().subscribe((ok) => {
+      if (ok) {
+        this.loader.show();
+        const data = this.forumService.delete_post(this.post.id);
+        data.then(() => {
+          this.loader.hide();
+          this.router.navigate(['/forum']);
+        });
+      }
     });
   }
 
@@ -133,7 +144,7 @@ export class ForumViewPageComponent implements OnInit {
   deleteComment(id) {
     const modal = this.dialog.open(ActionConfirmModalComponent, {
       data: {
-        message: `Are you sure you want to delete the forum post?.`,
+        message: `Are you sure you want to delete your comment?`,
         title: `Are you sure?`
       }
     });
@@ -156,7 +167,6 @@ export class ForumViewPageComponent implements OnInit {
           this.enableCommentSection = true;
         });
       }
-
     });
   }
 }
