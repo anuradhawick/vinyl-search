@@ -263,8 +263,7 @@ const save_post = async (uid, post, postId) => {
           postHTML: post.postHTML,
           postTitle: post.postTitle,
           updatedAt: new Date(),
-          textHTML: htmlToText.fromString(post.postHTML),
-          comment: false
+          textHTML: htmlToText.fromString(post.postHTML)
         }
       },
       {
@@ -316,7 +315,7 @@ const save_post = async (uid, post, postId) => {
 
     return post._id;
   } else {
-    _.assign(post, {ownerUid, createdAt: new Date()});
+    _.assign(post, {ownerUid, createdAt: new Date(), comment: false});
     _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
 
     await db.collection('forum_posts').insertOne(post);
