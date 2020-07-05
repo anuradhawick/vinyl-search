@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
-import { MatDialog } from '@angular/material';
+import { MatAccordion, MatAccordionDisplayMode, MatDialog, MatExpansionPanel } from '@angular/material';
 import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
 
 declare const $: any;
@@ -39,6 +39,7 @@ export class RecordsHomePageComponent implements OnInit {
   public countryFilters = [];
 
   public environment = environment;
+  @ViewChild(MatAccordion, {static: false}) filtersPanel: MatAccordion;
 
   constructor(public route: ActivatedRoute,
               private router: Router,
@@ -231,6 +232,8 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   activateFilters() {
+    this.filtersPanel.closeAll();
+
     const queryParams = {
       query: _.isEmpty(this.query) ? null : this.query,
       genres: _.isEmpty(this.genreFilters) ? null : this.genreFilters,
