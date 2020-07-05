@@ -182,6 +182,7 @@
         </div>
       </div>
     </div>
+    <!--Records cards-->
     <div class="col-12 col-lg-9">
       <app-loader #recordsloader></app-loader>
       <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
@@ -215,6 +216,7 @@
                        [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
       </nav>
     </div>
+    <!--End records cards-->
   </div>
 </div>
 
