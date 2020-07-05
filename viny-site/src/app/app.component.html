@@ -1,5 +1,4 @@
-<nav class="navbar navbar-transparent fixed-top navbar-expand-lg"
-     id="sectionsNav">
+<nav class="navbar navbar-transparent fixed-top navbar-expand-lg" id="sectionsNav">
   <div class="container">
     <div class="navbar-translate">
       <a class="navbar-brand card-title" href="/" style="font-size: 30px;">
@@ -20,11 +19,11 @@
             <i class="material-icons">shopping_cart</i> Marketplace
           </a>
           <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/market'" class="dropdown-item">
+            <a [routerLink]="'/market'" class="dropdown-item navbar-toggler">
               <i class="material-icons">shop</i> For Sale
             </a>
             <a *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" [routerLink]="'/market/new'"
-               class="dropdown-item">
+               class="dropdown-item navbar-toggler">
               <i class="material-icons">content_paste</i> New Sale
             </a>
           </div>
@@ -34,11 +33,11 @@
             <i class="material-icons">library_music</i> Records
           </a>
           <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/records'" class="dropdown-item">
+            <a [routerLink]="'/records'" class="dropdown-item navbar-toggler">
               <i class="material-icons">album</i> Browse Records
             </a>
             <a *ngIf="auth.isLoggedIn" [routerLink]="'/records/new'"
-               class="dropdown-item">
+               class="dropdown-item navbar-toggler">
               <i class="material-icons">content_paste</i> New Record
             </a>
           </div>
@@ -48,38 +47,38 @@
             <i class="material-icons">bookmarks</i> Forum
           </a>
           <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/forum'" class="dropdown-item">
+            <a [routerLink]="'/forum'" class="dropdown-item navbar-toggler">
               <i class="material-icons">forum</i> Browse Forum
             </a>
             <a *ngIf="auth.isLoggedIn" [routerLink]="'/forum/editor'"
-               class="dropdown-item">
+               class="dropdown-item navbar-toggler">
               <i class="material-icons">content_paste</i> New Post
             </a>
           </div>
         </li>
         <ng-container *ngIf="auth.isLoggedIn; else showLogin">
           <li class="nav-item">
-            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link" href="javascript:void(0)"
+            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link navbar-toggler" href="javascript:void(0)"
                [routerLink]="'/admin'">
               <i class="material-icons">security</i> Admin
             </a>
           </li>
           <li class="nav-item">
-            <a *ngIf="(user | async)?.picture" class="nav-link" href="javascript:void(0)" [routerLink]="'/profile'">
+            <a *ngIf="(user | async)?.picture" class="nav-link navbar-toggler" href="javascript:void(0)" [routerLink]="'/profile'">
               <img *ngIf="(user | async)?.picture" class="img-thumbnail p-0 m-0" [src]="(user | async)?.picture"
                    alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
               Hi {{(user | async)?.given_name}}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0)" (click)="auth.logout()">
+            <a class="nav-link navbar-toggler" href="javascript:void(0)" (click)="auth.logout()">
               <i class="material-icons">exit_to_app</i> Logout
             </a>
           </li>
         </ng-container>
         <ng-template #showLogin>
           <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0)" (click)="auth.login()">
+            <a class="nav-link navbar-toggler" href="javascript:void(0)" (click)="auth.login()">
               <i class="material-icons">person</i> Login/Register
             </a>
           </li>

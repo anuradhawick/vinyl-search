@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+import Auth, { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { Hub } from '@aws-amplify/core';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';

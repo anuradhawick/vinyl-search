@@ -56,13 +56,18 @@ $(document).ready(function() {
 $(document).on('click', '.navbar-toggler', function() {
   $toggle = $(this);
 
+  $('.navbar-toggler').each((i, elem) => {
+    if ($(elem).hasClass('toggled')) {
+      setTimeout(function() {
+        $(elem).removeClass('toggled')
+      }, 580);
+    }
+  });
+
   if (materialKit.misc.navbar_menu_visible == 1) {
     $('html').removeClass('nav-open');
     materialKit.misc.navbar_menu_visible = 0;
     $('#bodyClick').remove();
-    setTimeout(function() {
-      $toggle.removeClass('toggled');
-    }, 550);
 
     $('html').removeClass('nav-open-absolute');
   } else {

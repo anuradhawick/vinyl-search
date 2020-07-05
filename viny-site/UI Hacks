@@ -1,3 +1,1 @@
-ngx-image-viewer styles for .img-container img to avoid stretching
-
-height: 100%; width: 100%; object-fit: contain;
+replace session storage with localStorage
