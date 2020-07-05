@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
-import { MatAccordion, MatAccordionDisplayMode, MatDialog, MatExpansionPanel } from '@angular/material';
+import { MatAccordion, MatDialog } from '@angular/material';
 import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
 
 declare const $: any;

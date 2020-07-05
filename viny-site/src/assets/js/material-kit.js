@@ -54,8 +54,8 @@ $(document).ready(function () {
 });
 
 $(document).on('click', '.close-nav-on-click', function () {
-  $toggle.removeClass('toggled');
   $('html').removeClass('nav-open');
+  $('.navbar-toggler').removeClass('toggled');
 
   materialKit.misc.navbar_menu_visible = 0
 });
