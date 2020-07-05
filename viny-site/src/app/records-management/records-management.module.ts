@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
 import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
 import { RecordsService } from './services/records.service';
+import { ChooseFilterComponent } from './modals/choose-filter/choose-filter.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { RecordsService } from './services/records.service';
     RecordsEditorComponentComponent,
     RecordsUpdatePageComponent,
     RecordsRevisionViewPageComponent,
-    CatalogErrorModalComponent
+    CatalogErrorModalComponent,
+    ChooseFilterComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { RecordsService } from './services/records.service';
     RecordsService
   ],
   entryComponents: [
-    CatalogErrorModalComponent
+    CatalogErrorModalComponent,
+    ChooseFilterComponent
   ]
 })
 export class RecordsManagementModule {

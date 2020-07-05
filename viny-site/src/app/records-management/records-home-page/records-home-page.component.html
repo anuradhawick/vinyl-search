@@ -1,6 +1,7 @@
 <div class="main main-raised">
   <br>
   <div class="ml-5 mr-5 mt-3 mb-3">
+    <!--Search-->
     <div class="row">
       <div class="col-sm-6 col-9">
         <div class="input-group">
@@ -51,137 +52,98 @@
         </div>
       </ng-template>
     </div>
+    <!--End Search-->
   </div>
   <hr>
   <div class="row container-fluid">
     <div class="col-12 col-lg-3">
       <div class="container-fluid">
-        <div class="card">
-          <h5 class="card-header">
-            Genres
-            <button *ngIf="!_.isEmpty(genreFilters)" class="btn badge badge-pill badge-success m-1 float-right">✓
+        <!--Filters-->
+        <mat-accordion>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Filter by Genre {{genreFilters.length > 0 ? "(" + genreFilters.length + ")": ""}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <hr>
+            <button mat-raised-button color="primary" class="btn-block"
+                    (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
+              Select filters
             </button>
-          </h5>
-
-          <div class="card-body">
-            <ng-container *ngIf="!_.isEmpty(genreFilters)">
-              <mat-chip-list>
-                <mat-chip style="font-size: 10px" *ngFor="let g of genreFilters; let i = index">
-                  {{g}}
-                  <mat-icon matChipRemove (click)="genreFilters.splice(i,1); activateFilters()">cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <hr>
-            </ng-container>
-            <div class="text-center">
-              <button mat-button class="badge badge-success m-1 filter-buttons"
-                      (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
-                Select filters
-              </button>
-              <button mat-button *ngIf="!_.isEmpty(genreFilters)"
-                      class="badge badge-success btn-sm m-1  filter-buttons"
-                      (click)="genreFilters=[]; activateFilters()">
-                Clear
-                filters
-              </button>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="card">
-          <h5 class="card-header">
-            Styles
-            <button *ngIf="!_.isEmpty(styleFilters)"
-                    class="btn badge badge-pill badge-success m-1 float-right">✓
+            <button mat-raised-button *ngIf="!_.isEmpty(genreFilters)"
+                    class="btn-block" color="warn"
+                    (click)="genreFilters=[]; activateFilters()">
+              Clear filters
             </button>
-          </h5>
 
-          <div class="card-body">
-            <ng-container *ngIf="!_.isEmpty(styleFilters)">
-              <mat-chip-list>
-                <mat-chip style="font-size: 10px" *ngFor="let s of styleFilters; let i = index">{{s}}
-                  <mat-icon matChipRemove (click)="styleFilters.splice(i,1); activateFilters()">cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <hr>
-            </ng-container>
-            <div class="text-center">
-              <button mat-button class="btn badge badge-success m-1  filter-buttons"
-                      (click)="openFilter(getStyles(), 'styleFilters')">
-                Select
-                filters
-              </button>
-              <button mat-button *ngIf="!_.isEmpty(styleFilters)" class="btn badge badge-success m-1  filter-buttons"
-                      (click)="styleFilters=[]; activateFilters()">
-                Clear
-                filters
-              </button>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="card">
-          <h5 class="card-header">
-            Formats
-            <button *ngIf="!_.isEmpty(formatFilters)"
-                    class="btn badge badge-pill badge-success m-1 float-right">✓
+          </mat-expansion-panel>
+
+          <br>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Filter by Style {{styleFilters.length > 0 ? "(" + styleFilters.length + ")": ""}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <hr>
+            <button mat-raised-button color="primary" class="btn-block"
+                    (click)="openFilter(getStyles(), 'styleFilters')">
+              Select filters
             </button>
-          </h5>
+            <button mat-raised-button *ngIf="!_.isEmpty(styleFilters)"
+                    class="btn-block" color="warn"
+                    (click)="styleFilters=[]; activateFilters()">
+              Clear filters
+            </button>
+          </mat-expansion-panel>
 
-          <div class="card-body">
-            <ng-container *ngIf="!_.isEmpty(formatFilters)">
-              <mat-chip-list>
-                <mat-chip style="font-size: 10px" *ngFor="let f of formatFilters; let i = index">{{f}}
-                  <mat-icon (click)="formatFilters.splice(i,1); activateFilters()" matChipRemove>cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <hr>
-            </ng-container>
-            <div class="text-center">
-              <button class="btn badge badge-success m-1  filter-buttons"
-                      (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
+          <br>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Filter by Format {{formatFilters.length > 0 ? "(" + formatFilters.length + ")": ""}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <hr>
+            <button mat-raised-button color="primary" class="btn-block"
+                    (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
                   'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
-                Select filters
-              </button>
-              <button mat-button *ngIf="!_.isEmpty(formatFilters)" class="btn badge badge-success m-1  filter-buttons"
-                      (click)="formatFilters=[]; activateFilters()">
-                Clear filters
-              </button>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="card">
-          <h5 class="card-header">
-            Country
-            <button *ngIf="!_.isEmpty(countryFilters)"
-                    class="btn badge badge-pill badge-success m-1 float-right">✓
+              Select filters
             </button>
-          </h5>
-          <div class="card-body">
-            <ng-container *ngIf="!_.isEmpty(countryFilters)">
-              <mat-chip-list>
-                <mat-chip style="font-size: 10px" *ngFor="let c of countryFilters; let i = index">
-                  {{c}}
-                  <mat-icon matChipRemove (click)="countryFilters.splice(i,1); activateFilters()">cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <hr>
-            </ng-container>
-            <div class="text-center">
-              <button mat-button class="btn badge badge-success m-1  filter-buttons"
-                      (click)="openFilter(getCountries(), 'countryFilters')">
-                Select filters
-              </button>
-              <button mat-button *ngIf="!_.isEmpty(countryFilters)" class="btn badge badge-success m-1  filter-buttons"
-                      (click)="countryFilters=[]; activateFilters()">
-                Clear filters
-              </button>
-            </div>
-          </div>
-        </div>
+            <button mat-raised-button *ngIf="!_.isEmpty(formatFilters)"
+                    class="btn-block" color="warn"
+                    (click)="formatFilters=[]; activateFilters()">
+              Clear filters
+            </button>
+          </mat-expansion-panel>
+
+          <br>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Filter by Country {{countryFilters.length > 0 ? "(" + countryFilters.length + ")": ""}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <hr>
+            <button mat-raised-button color="primary" class="btn-block"
+                    (click)="openFilter(getCountries(), 'countryFilters')">
+              Select filters
+            </button>
+            <button mat-raised-button *ngIf="!_.isEmpty(countryFilters)"
+                    class="btn-block" color="warn"
+                    (click)="countryFilters=[]; activateFilters()">
+              Clear filters
+            </button>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+
+        </mat-accordion>
+        <br>
       </div>
     </div>
+    <!--End filters-->
     <!--Records cards-->
     <div class="col-12 col-lg-9">
       <app-loader #recordsloader></app-loader>
@@ -200,7 +162,8 @@
                     <img style="object-fit: cover"
 
                          [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
-                         class="img img-responsive"/>
+                         class="img img-responsive"
+                         (error)="r.images[r.chosenImage]=null"/>
                   </div>
                   <h6 class="m-1 text-truncate">{{r.name}}</h6>
                   <p class="m-1 text-truncate">{{r.label}}</p>
@@ -219,37 +182,3 @@
     <!--End records cards-->
   </div>
 </div>
-
-<!-- Filters Modal -->
-<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Select Filters</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <mat-chip-list>
-          <mat-chip style="font-size: 10px" *ngFor="let c of toChooseFrom; let i = index"
-                    (click)="chosenTemp.push(c); chosenTemp=_.uniq(chosenTemp)">{{c}}
-          </mat-chip>
-        </mat-chip-list>
-        <hr>
-        <mat-chip-list>
-          <mat-chip style="font-size: 10px" mat-chip *ngFor="let c of chosenTemp; let i = index">
-            {{c}}
-            <mat-icon matChipRemove (click)="chosenTemp.splice(i,1);">cancel</mat-icon>
-          </mat-chip>
-        </mat-chip-list>
-      </div>
-      <div class="modal-footer">
-        <button mat-button type="button" class="btn btn-primary" data-dismiss="modal"
-                (click)="filtersChosen(); activateFilters()">Done
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-

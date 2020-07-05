@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from './loader/loader.component';
 import {
-  MatBadgeModule, MatButtonModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatIconModule,
+  MatBadgeModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule,
+  MatExpansionModule, MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
@@ -51,7 +52,9 @@ import { AuthService } from './services/auth.service';
     MatMenuModule,
     MatTreeModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatExpansionModule
   ],
   exports: [
     CommonModule,
@@ -78,7 +81,9 @@ import { AuthService } from './services/auth.service';
     MatTreeModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    ActionConfirmModalComponent
+    ActionConfirmModalComponent,
+    MatCardModule,
+    MatExpansionModule
   ],
   entryComponents: [
     ActionConfirmModalComponent,

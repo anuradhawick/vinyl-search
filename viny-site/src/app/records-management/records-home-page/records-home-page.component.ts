@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
+import { MatDialog } from '@angular/material';
+import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
 
 declare const $: any;
 
@@ -36,18 +38,13 @@ export class RecordsHomePageComponent implements OnInit {
   public formatFilters = [];
   public countryFilters = [];
 
-  // context control
-  public chosenTemp = [];
-  public toChooseFrom = [];
-  public chosenFilter = '';
-
   public environment = environment;
-
 
   constructor(public route: ActivatedRoute,
               private router: Router,
               public auth: AuthService,
-              private recordsService: RecordsService) {
+              private recordsService: RecordsService,
+              private filterDialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -198,18 +195,39 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   openFilter(toChooseFrom, ref) {
-    this.chosenTemp = _.cloneDeep(this[ref]);
-    this.toChooseFrom = _.cloneDeep(toChooseFrom);
-    this.chosenFilter = ref;
+    const active = _.cloneDeep(this[ref]);
+    const all = _.cloneDeep(toChooseFrom);
+    let filterCriteria = '';
 
-    $('#filterModal').modal('show');
-  }
+    switch (ref) {
+      case 'genreFilters':
+        filterCriteria = 'genres';
+        break;
+      case 'styleFilters':
+        filterCriteria = 'styles';
+        break;
+      case 'countryFilters':
+        filterCriteria = 'countries';
+        break;
+      case 'formatFilters':
+        filterCriteria = 'formats';
+        break;
+    }
 
-  filtersChosen() {
-    console.log(this.chosenFilter, this.chosenTemp, this.chosenFilter)
-    this[this.chosenFilter] = this.chosenTemp;
-    this.chosenTemp = [];
-    this.chosenFilter = null;
+    const dialogRef = this.filterDialog.open(ChooseFilterComponent, {
+      data: {
+        title: `Select the ${filterCriteria}`,
+        all,
+        selected: active
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(({filters, selected}) => {
+      if (selected) {
+        this[ref] = filters;
+        this.activateFilters();
+      }
+    });
   }
 
   activateFilters() {
