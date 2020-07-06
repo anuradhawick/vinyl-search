@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
+      <div class="col-sm-6 col-3">
         <div class="float-right">
           <button mat-button type="button" class="btn btn-default" routerLink="/records/new">
             Add
@@ -42,15 +42,6 @@
            class="ml-3 mr-5 mt-2 text-dark">
         Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
       </div>
-      <ng-template #showLogin>
-        <div class="col-sm-6 col-3">
-          <div class="float-right">
-            <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
-              Login!
-            </button>
-          </div>
-        </div>
-      </ng-template>
     </div>
     <!--End Search-->
   </div>

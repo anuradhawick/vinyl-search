@@ -5,6 +5,8 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material';
+import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 
 declare const $;
 
@@ -28,7 +30,8 @@ export class ForumEditPageComponent implements OnInit {
   constructor(public route: ActivatedRoute,
               private forumService: ForumService,
               private router: Router,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private confirmDialog: MatDialog) {
 
   }
 
@@ -101,7 +104,22 @@ export class ForumEditPageComponent implements OnInit {
   }
 
   discardPost() {
-    this.router.navigate(['/forum']);
+    if (!_.isEmpty(this.title) || !_.isEmpty(this.data)) {
+      const dialogRef = this.confirmDialog.open(ActionConfirmModalComponent, {
+        data: {
+          title: 'Are you sure?',
+          message: 'You are about to discard your post.'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((ok) => {
+        if (ok) {
+          this.router.navigate(['/forum']);
+        }
+      });
+    } else {
+      this.router.navigate(['/forum']);
+    }
   }
 
 }

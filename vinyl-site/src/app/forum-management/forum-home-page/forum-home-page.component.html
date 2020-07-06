@@ -34,22 +34,14 @@
           </div>
         </div>
       </div>
-      <div *ngIf="auth.user; else showLogin" class="col-sm-6 col-3">
+      <div class="col-sm-6 col-3">
         <div class="float-right">
           <button mat-button type="button" class="btn btn-default m-1" routerLink="/forum/editor">
             New
           </button>
         </div>
       </div>
-      <ng-template #showLogin>
-        <div class="col-sm-6 col-3">
-          <div class="float-right">
-            <button mat-button type="button" class="btn btn-success m-1" (click)="auth.login()">
-              Login!
-            </button>
-          </div>
-        </div>
-      </ng-template>
+
     </div>
   </div>
   <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
