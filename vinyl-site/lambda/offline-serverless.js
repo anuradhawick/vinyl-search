@@ -13,7 +13,7 @@ const services = [
 
 // Start `serverless offline` for each service
 services.forEach(service => {
-  const child = spawn('serverless', ['offline', 'start', '--stage', 'dev', '--noTimeout', '--port', service.port, '--service', service.path], {cwd: './'});
+  const child = spawn('serverless', ['offline', 'start', '--stage', 'dev', '--noTimeout', '--httpPort', service.port, '--service', service.path, '----lambdaPort', 10 + service.port, '--noPrependStageInUrl'], {cwd: './'});
   child.stdout.setEncoding('utf8');
   child.stdout.on('data', chunk => console.log(chunk));
   child.stderr.on('data', chunk => console.log(chunk));

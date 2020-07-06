@@ -39,16 +39,16 @@ export class ForumViewPageComponent implements OnInit {
               private dialog: MatDialog,
               private tagService: TitleTagService) {
     this.user = auth.user.asObservable();
-  }
-
-  ngOnInit() {
-    this.tagService.setTitle('Vinyl.LK: Sri Lanka\'s largest records database');
+    this.tagService.setTitle('Vinyl.LK: The Forum');
     this.tagService.setSocialMediaTags(
       'http://www.vinyl.lk',
       'Vinyl.LK: Sri Lanka\'s largest records database',
       'Vinyl forum to talk about music, gear and many more!',
       'https://www.vinyl.lk/assets/images/social.jpeg'
     );
+  }
+
+  ngOnInit() {
     this.loader.show();
     this.commentLoader.show();
 

@@ -38,11 +38,12 @@ export class TitleTagService {
 
   private setTags(tags: MetaTag[]): void {
     tags.forEach(siteTag => {
-      const tag = siteTag.isFacebook ? this.metaService.getTag(`property='${siteTag.name}'`) : this.metaService.getTag(`name='${siteTag.name}'`);
+      const tag = siteTag.isFacebook ? this.metaService.removeTag(`property='${siteTag.name}'`) : this.metaService.removeTag(`name='${siteTag.name}'`);
       if (siteTag.isFacebook) {
-        this.metaService.updateTag({property: siteTag.name, content: siteTag.value});
+        console.log("updating")
+        this.metaService.updateTag({property: siteTag.name, content: siteTag.value}, `property="${siteTag.name}"`);
       } else {
-        this.metaService.updateTag({name: siteTag.name, content: siteTag.value});
+        this.metaService.updateTag({name: siteTag.name, content: siteTag.value}, `name="${siteTag.name}"`);
       }
     });
   }
