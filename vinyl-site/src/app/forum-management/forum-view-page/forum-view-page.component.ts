@@ -8,6 +8,7 @@ import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
+import { TitleTagService } from '../../shared-modules/services/title-tag.service';
 
 @Component({
   selector: 'app-forum-view-page',
@@ -35,11 +36,19 @@ export class ForumViewPageComponent implements OnInit {
               private forumService: ForumService,
               private router: Router,
               private toastr: ToastrService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private tagService: TitleTagService) {
     this.user = auth.user.asObservable();
   }
 
   ngOnInit() {
+    this.tagService.setTitle('Vinyl.LK: Sri Lanka\'s largest records database');
+    this.tagService.setSocialMediaTags(
+      'http://www.vinyl.lk',
+      'Vinyl.LK: Sri Lanka\'s largest records database',
+      'Vinyl forum to talk about music, gear and many more!',
+      'https://www.vinyl.lk/assets/images/social.jpeg'
+    );
     this.loader.show();
     this.commentLoader.show();
 

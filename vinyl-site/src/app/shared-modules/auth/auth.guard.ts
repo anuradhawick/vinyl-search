@@ -17,6 +17,7 @@ export class AuthGuard implements CanActivate {
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return new Promise((resolve, reject) => {
       if (!this.auth.isLoggedIn) {
+        localStorage.setItem('next_url', state.url);
         this.auth.login(JSON.stringify([state.url]));
       } else {
         resolve(true);

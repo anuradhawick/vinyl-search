@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './shared-modules/services/auth.service';
 import * as _ from 'lodash';
+import { TitleTagService } from './shared-modules/services/title-tag.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,14 @@ export class AppComponent {
   public _ = _;
   public user = null;
 
-  constructor(public auth: AuthService) {
+  constructor(public auth: AuthService, private tagService: TitleTagService) {
     this.user = auth.user.asObservable();
+    this.tagService.setTitle('Vinyl.LK: Sri Lanka\'s largest records database');
+    this.tagService.setSocialMediaTags(
+      'http://www.vinyl.lk',
+      'Vinyl.LK: Sri Lanka\'s largest records database',
+      'Join today to enjoy generations of classic music',
+      'https://www.vinyl.lk/assets/images/social.jpeg'
+    );
   }
 }
