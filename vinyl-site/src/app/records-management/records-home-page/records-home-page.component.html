@@ -55,107 +55,105 @@
     <!--End Search-->
   </div>
   <hr>
-  <div class="row container-fluid">
+  <div class="row container-fluid m-0">
     <div class="col-12 col-lg-3">
-      <div class="container-fluid">
-        <!--Filters-->
-        <mat-accordion multi>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Filter by Genre {{genreFilters.length > 0 ? "(" + genreFilters.length + ")": ""}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <hr>
-            <button mat-raised-button color="primary" class="btn-block"
-                    (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
-              Select filters
-            </button>
-            <button mat-raised-button *ngIf="!_.isEmpty(genreFilters)"
-                    class="btn-block" color="warn"
-                    (click)="genreFilters=[]; activateFilters()">
-              Clear filters
-            </button>
+      <!--Filters-->
+      <mat-accordion multi>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Filter by Genre {{genreFilters.length > 0 ? "(" + genreFilters.length + ")": ""}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <hr>
+          <button mat-raised-button color="primary" class="btn-block"
+                  (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
+            Select filters
+          </button>
+          <button mat-raised-button *ngIf="!_.isEmpty(genreFilters)"
+                  class="btn-block" color="warn"
+                  (click)="genreFilters=[]; activateFilters()">
+            Clear filters
+          </button>
 
-          </mat-expansion-panel>
+        </mat-expansion-panel>
 
-          <br>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Filter by Style {{styleFilters.length > 0 ? "(" + styleFilters.length + ")": ""}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <hr>
-            <button mat-raised-button color="primary" class="btn-block"
-                    (click)="openFilter(getStyles(), 'styleFilters')">
-              Select filters
-            </button>
-            <button mat-raised-button *ngIf="!_.isEmpty(styleFilters)"
-                    class="btn-block" color="warn"
-                    (click)="styleFilters=[]; activateFilters()">
-              Clear filters
-            </button>
-          </mat-expansion-panel>
-
-          <br>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Filter by Format {{formatFilters.length > 0 ? "(" + formatFilters.length + ")": ""}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <hr>
-            <button mat-raised-button color="primary" class="btn-block"
-                    (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
-                  'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
-              Select filters
-            </button>
-            <button mat-raised-button *ngIf="!_.isEmpty(formatFilters)"
-                    class="btn-block" color="warn"
-                    (click)="formatFilters=[]; activateFilters()">
-              Clear filters
-            </button>
-          </mat-expansion-panel>
-
-          <br>
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Filter by Country {{countryFilters.length > 0 ? "(" + countryFilters.length + ")": ""}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <hr>
-            <button mat-raised-button color="primary" class="btn-block"
-                    (click)="openFilter(getCountries(), 'countryFilters')">
-              Select filters
-            </button>
-            <button mat-raised-button *ngIf="!_.isEmpty(countryFilters)"
-                    class="btn-block" color="warn"
-                    (click)="countryFilters=[]; activateFilters()">
-              Clear filters
-            </button>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-
-        </mat-accordion>
         <br>
-      </div>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Filter by Style {{styleFilters.length > 0 ? "(" + styleFilters.length + ")": ""}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <hr>
+          <button mat-raised-button color="primary" class="btn-block"
+                  (click)="openFilter(getStyles(), 'styleFilters')">
+            Select filters
+          </button>
+          <button mat-raised-button *ngIf="!_.isEmpty(styleFilters)"
+                  class="btn-block" color="warn"
+                  (click)="styleFilters=[]; activateFilters()">
+            Clear filters
+          </button>
+        </mat-expansion-panel>
+
+        <br>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Filter by Format {{formatFilters.length > 0 ? "(" + formatFilters.length + ")": ""}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <hr>
+          <button mat-raised-button color="primary" class="btn-block"
+                  (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
+                  'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
+            Select filters
+          </button>
+          <button mat-raised-button *ngIf="!_.isEmpty(formatFilters)"
+                  class="btn-block" color="warn"
+                  (click)="formatFilters=[]; activateFilters()">
+            Clear filters
+          </button>
+        </mat-expansion-panel>
+
+        <br>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Filter by Country {{countryFilters.length > 0 ? "(" + countryFilters.length + ")": ""}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <hr>
+          <button mat-raised-button color="primary" class="btn-block"
+                  (click)="openFilter(getCountries(), 'countryFilters')">
+            Select filters
+          </button>
+          <button mat-raised-button *ngIf="!_.isEmpty(countryFilters)"
+                  class="btn-block" color="warn"
+                  (click)="countryFilters=[]; activateFilters()">
+            Clear filters
+          </button>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+
+      </mat-accordion>
+      <br>
     </div>
     <!--End filters-->
     <!--Records cards-->
     <div class="col-12 col-lg-9">
       <app-loader #recordsloader></app-loader>
-      <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
-        <mat-paginator showFirstLastButtons [length]="count"
-                       [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
-      </nav>
+      <!--<nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">-->
+        <!--<mat-paginator showFirstLastButtons [length]="count"-->
+                       <!--[pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>-->
+      <!--</nav>-->
       <div class="container">
         <div *ngIf="records | async as records" class="row">
 
-          <div *ngFor="let r of records.records" class="col-lg-2 col-sm-4 col-6 p-2">
-            <div class="card m-0 w-100">
+          <div *ngFor="let r of records.records" class="col-lg-2 col-sm-4 col-6 pb-2 pr-2 pl-2 pt-0">
+            <div class="card m-0 w-100" style="border-radius: 0 !important;">
               <div class="">
                 <a [routerLink]="['/records', r.id, 'view']" class="thumbnail">
                   <div class="image" style="background-color: #d5d5d5">
