@@ -12,7 +12,8 @@
     "serve:ssr": "npm run dev:ssr && serverless offline start --httpPort 4200 --stage dev --noPrependStageInUrl --lambdaPort 4201",
     "dev:ssr": "ng build --output-hashing=none && ng run vinyl-site:server --bundleDependencies all && npm run compile:server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod --output-hashing=none && ng run vinyl-site:server:production --bundleDependencies all"
+    "build:client-and-server-bundles": "ng build --prod --output-hashing=none && ng run vinyl-site:server:production --bundleDependencies all",
+    "build:deploy:prod": "npm run build:ssr && serverless deploy --stage prod"
   },
   "private": true,
   "dependencies": {
@@ -34,6 +35,7 @@
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
     "@ckeditor/ckeditor5-build-inline": "^12.4.0",
     "@ng-bootstrap/ng-bootstrap": "^4.2.2",
+    "@nguniversal/common": "^10.0.1",
     "@nguniversal/express-engine": "^8.2.6",
     "@nguniversal/module-map-ngfactory-loader": "v8.2.6",
     "aws-serverless-express": "^3.3.8",

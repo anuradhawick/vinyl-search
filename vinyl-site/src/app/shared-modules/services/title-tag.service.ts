@@ -40,7 +40,6 @@ export class TitleTagService {
     tags.forEach(siteTag => {
       const tag = siteTag.isFacebook ? this.metaService.removeTag(`property='${siteTag.name}'`) : this.metaService.removeTag(`name='${siteTag.name}'`);
       if (siteTag.isFacebook) {
-        console.log("updating")
         this.metaService.updateTag({property: siteTag.name, content: siteTag.value}, `property="${siteTag.name}"`);
       } else {
         this.metaService.updateTag({name: siteTag.name, content: siteTag.value}, `name="${siteTag.name}"`);

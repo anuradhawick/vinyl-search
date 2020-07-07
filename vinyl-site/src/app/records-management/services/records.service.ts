@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { environment } from '../../../environments/environment';
+import { shareReplay } from 'rxjs/internal/operators';
 
 @Injectable()
 export class RecordsService {
@@ -32,7 +33,7 @@ export class RecordsService {
   fetch_records(params) {
     return this.http.get(environment.api_gateway + 'records', {
       params
-    });
+    }).pipe(shareReplay(1));
   }
 
   async fetch_record_history(recordId) {
@@ -42,13 +43,13 @@ export class RecordsService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   search_records(params) {
     return this.http.get(environment.api_gateway + 'records/search', {
       params
-    });
+    }).pipe(shareReplay(1));
   }
 
   async fetch_record(recordId) {
@@ -58,7 +59,7 @@ export class RecordsService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   async fetch_record_revision(recordId, revisionId) {
@@ -68,6 +69,6 @@ export class RecordsService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 }

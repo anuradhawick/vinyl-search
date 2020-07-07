@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModules } from './shared-modules/shared.module';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SharedModules } from './shared-modules/shared.module';
     ToastrModule.forRoot({
       preventDuplicates: true,
     }),
+    TransferHttpCacheModule
   ],
   providers: [
   ],

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { shareReplay } from 'rxjs/internal/operators';
 
 @Injectable()
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   async update_profile(user) {
@@ -37,7 +38,7 @@ export class UserService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   async get_forum_posts(params) {
@@ -48,7 +49,7 @@ export class UserService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   async get_market_posts(params) {
@@ -59,7 +60,7 @@ export class UserService {
       headers: new HttpHeaders({
         'Authorization': token
       })
-    }).toPromise();
+    }).pipe(shareReplay(1)).toPromise();
   }
 
   async delete_record(id) {

@@ -17,7 +17,7 @@ export class AuthService {
   public redirectUrl = null;
   public user = new ReplaySubject<any>(1);
   public isLoggedIn = false;
-  private autoLogin;
+  public autoLogin;
   private customState: any = '';
   private profileLoaded = false;
 
@@ -51,10 +51,10 @@ export class AuthService {
           this.isLoggedIn = false;
           this.user = null;
           this.autoLogin = false;
+          this.profileLoaded = false;
 
           break;
         case 'customOAuthState':
-          this.isLoggedIn = true;
           this.customState = JSON.parse(decodeURIComponent(data));
           this.zone.run(() => this.router.navigate(this.customState));
           Auth.currentAuthenticatedUser().then((u) => {
@@ -81,11 +81,11 @@ export class AuthService {
   }
 
   processUser(u) {
-    // console.log(u);
-    // console.log(u.signInUserSession.idToken.jwtToken);
     if (this.profileLoaded) {
       return;
     }
+    this.isLoggedIn = true;
+
     this.zone.run(async () => {
       this.isLoggedIn = true;
       this.user.next(await this.http.get(environment.api_gateway + 'users/', {

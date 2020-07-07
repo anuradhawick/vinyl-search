@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 
 @Component({
   selector: 'app-loader',
@@ -8,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LoaderComponent implements OnInit {
   @Input() public hidden;
 
-  constructor() {
+  constructor(@Inject(PLATFORM_ID) private platformId: any) {
     this.hidden = true;
   }
 
@@ -16,15 +17,23 @@ export class LoaderComponent implements OnInit {
   }
 
   show() {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
     this.hidden = false;
   }
 
   hide() {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
     this.hidden = true;
   }
 
   isHidden() {
+    if (isPlatformServer(this.platformId)) {
+      return true;
+    }
     return this.hidden;
   }
-
 }
