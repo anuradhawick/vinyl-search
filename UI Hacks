@@ -1,4 +1,0 @@
-replace session storage with localStorage
-
-
-"deploy:prod": "ng build --prod --output-hashing=none && aws s3 sync dist s3://www.vinyl.lk && aws cloudfront create-invalidation --distribution-id EMGV8ZO333C6V --paths '/*'",
