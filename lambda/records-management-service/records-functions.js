@@ -143,7 +143,11 @@ search_records = async (query_params) => {
 
   records.records = _.map(records.records, record => {
     record.images = _.map(record.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      if (process.env.STAGE === 'prod') {
+        return `https://cdn.vinyl.lk/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      } else {
+        return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      }
     });
     return record;
   });
@@ -209,7 +213,11 @@ fetch_records = async (query_params) => {
 
   records.records = _.map(records.records, record => {
     record.images = _.map(record.images, image => {
-      return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      if (process.env.STAGE === 'prod') {
+        return `https://cdn.vinyl.lk/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      } else {
+        return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/thumbnails/${path.parse(image).name}.jpeg`
+      }
     });
     return record;
   });
@@ -222,8 +230,13 @@ fetch_record = async (recordId) => {
   const data = await db.collection('records').findOne({id: ObjectID(recordId), latest: true});
 
   data.images = _.map(data.images, image => {
-    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`
-  });
+      if (process.env.STAGE === 'prod') {
+        return `https://cdn.vinyl.lk/records-images/watermarked/${path.parse(image).name}.jpeg`;
+      } else {
+        return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`;
+      }
+    }
+  );
 
   return data;
 };
@@ -264,7 +277,11 @@ fetch_revision = async (revisionId) => {
   const revision = data[0];
 
   revision.images = _.map(revision.images, image => {
-    return  `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`
+    if (process.env.STAGE === 'prod') {
+      return `https://cdn.vinyl.lk/records-images/watermarked/${path.parse(image).name}.jpeg`;
+    } else {
+      return `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/records-images/watermarked/${path.parse(image).name}.jpeg`;
+    }
   });
 
   return revision;
@@ -300,8 +317,7 @@ create_watermarks = async (key) => {
   const img2 = img.clone();
 
   let watermark;
-  if (watermarkImageCache)
-  {
+  if (watermarkImageCache) {
     watermark = watermarkImageCache.clone();
   } else {
     watermarkImageCache = await Jimp.read(__dirname + '/wm.png');

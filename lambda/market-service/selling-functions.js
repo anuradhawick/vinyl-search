@@ -21,8 +21,9 @@ search_posts = async (query_params) => {
       approved: true,
       sold: false,
       rejected: false,
+      latest: true,
       updatedAt: {
-        $gt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+        $gt: new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000)
       }
     }
   };
@@ -164,8 +165,9 @@ fetch_posts = async (query_params) => {
         approved: true,
         sold: false,
         rejected: false,
+        latest: true,
         updatedAt: {
-          $gt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+          $gt: new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000)
         }
       }
     },
@@ -317,19 +319,13 @@ update_post = async (uid, postId, updatedBody) => {
     });
   }));
 
-  const d = await db.collection('selling_items').findOne({
-    ownerUid,
-    id: ObjectID(postId),
-    approved: false,
-    rejected: false
-  });
-
   await db.collection('selling_items').updateOne(
     {
       ownerUid,
       id: ObjectID(postId),
       approved: false,
-      rejected: false
+      rejected: false,
+      latest: true,
     },
     {
       $set: {

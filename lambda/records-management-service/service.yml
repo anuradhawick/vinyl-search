@@ -16,6 +16,7 @@ functions:
       MONGODB_ATLAS_CLUSTER_URI: ${self:custom.env.MONGODB_ATLAS_CLUSTER_URI}
       BUCKET_NAME: ${self:custom.env.BUCKET_NAME}
       BUCKET_REGION: ${self:custom.env.BUCKET_REGION}
+      STAGE: ${self:custom.env.STAGE}
     timeout: 20
     events:
       - http:

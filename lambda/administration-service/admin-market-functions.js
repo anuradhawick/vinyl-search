@@ -447,6 +447,7 @@ const update_market_post = async (reviserUid, postId, post) => {
 
   _.assign(post, {reviserUid, createdAt: new Date()});
   _.assign(post, {id: ObjectID(post.id)});
+  _.assign(post, {updatedAt: new Date()});
   _.assign(post, {latest: true});
   _.assign(post, {images: newImages});
 

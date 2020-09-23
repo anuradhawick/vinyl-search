@@ -19,6 +19,7 @@
     "mongodb": "^3.2.6"
   },
   "devDependencies": {
+    "nodemon": "^2.0.4",
     "serverless": "^1.74.1",
     "serverless-offline": "^6.4.0"
   }
