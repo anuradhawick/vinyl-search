@@ -56,3 +56,8 @@ aws-exports.js
 awsconfiguration.json
 .serverless
 /.idea/
+
+# terraform
+.terraform*
+builds*
+*.tfvars

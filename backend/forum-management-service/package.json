@@ -1,0 +1,17 @@
+{
+  "name": "forum-management-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "forum-main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "html-to-text": "^9.0.5",
+    "lodash": "^4.17.21",
+    "mongodb": "5.5"
+  }
+}

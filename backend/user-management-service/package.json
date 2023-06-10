@@ -1,0 +1,17 @@
+{
+  "name": "user-management-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "user-main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "esbuild": "0.17.19",
+    "lodash": "^4.17.21",
+    "mongodb": "5.5"
+  }
+}
