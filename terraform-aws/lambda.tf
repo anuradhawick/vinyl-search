@@ -85,6 +85,7 @@ module "lambda-market-service" {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
+    CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
     NODE_OPTIONS              = "--enable-source-maps"
   }
   source_path = [

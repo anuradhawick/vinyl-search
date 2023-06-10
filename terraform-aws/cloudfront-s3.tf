@@ -24,10 +24,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   # aliases = ["mysite.example.com", "yoursite.example.com"]
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "vinyl-lk-s3-origin-id-${terraform.workspace}"
-    cache_policy_id = data.aws_cloudfront_cache_policy.s3_distribution.id
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "vinyl-lk-s3-origin-id-${terraform.workspace}"
+    cache_policy_id        = data.aws_cloudfront_cache_policy.s3_distribution.id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
   }

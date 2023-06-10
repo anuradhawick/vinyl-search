@@ -261,7 +261,7 @@ resource "aws_api_gateway_method" "get_forum_id_comments_id" {
   authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
 
   request_parameters = {
-    "method.request.path.postId"   = true
+    "method.request.path.postId"    = true
     "method.request.path.commentId" = true
   }
 }
@@ -290,7 +290,7 @@ resource "aws_api_gateway_method" "delete_forum_id_comments_id" {
   authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
 
   request_parameters = {
-    "method.request.path.postId"   = true
+    "method.request.path.postId"    = true
     "method.request.path.commentId" = true
   }
 }
