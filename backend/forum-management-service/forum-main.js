@@ -1,27 +1,27 @@
-'use strict';
-const lambdaRouter = require('../utils/lambda-router');
-const forum_functions = require('./forum-functions');
+import { Router, builResponse } from './utils/lambda-router.js';
+import * as forum_functions from './forum-functions.js';
 
-exports.main = (event, context, callback) => {
+
+export const main = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const router = new lambdaRouter.Router(event, context, callback);
+  const router = new Router(event, context, callback);
 
   /**
    * get post
    */
   router.route(
     'GET',
-    '/{postId}',
+    '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.retrieve_post(event.pathParameters.postId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           post: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           records: "ERROR",
           success: false
         }))
@@ -34,16 +34,16 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/{postId}/comments',
+    '/forum/{postId}/comments',
     (event, context, callback) => {
       forum_functions.retrieve_post_comments(event.pathParameters.postId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           comments: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           records: "ERROR",
           success: false
         }))
@@ -56,16 +56,16 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/',
+    '/forum',
     (event, context, callback) => {
       forum_functions.retrieve_posts(event.queryStringParameters).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           records: "ERROR",
           success: false
         }))
@@ -78,16 +78,16 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/search',
+    '/forum/search',
     (event, context, callback) => {
       forum_functions.search_posts(event.queryStringParameters).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }))
       });
@@ -99,17 +99,17 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/',
+    '/forum',
     (event, context, callback) => {
       console.log(event.requestContext.authorizer.claims)
       forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, null).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           postId: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }))
       });
@@ -121,16 +121,16 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/{postId}',
+    '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           postId: data,
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }));
       });
@@ -142,16 +142,16 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/{postId}/comments',
+    '/forum/{postId}/comments',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           postId: data,
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }));
       });
@@ -163,15 +163,15 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/{postId}',
+    '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.postId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }));
       });
@@ -183,15 +183,15 @@ exports.main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/{postId}/comments/{commentId}',
+    '/forum/{postId}/comments/{commentId}',
     (event, context, callback) => {
       forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.commentId).then((data) => {
-        callback(null, lambdaRouter.builResponse(200, {
+        callback(null, builResponse(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, lambdaRouter.builResponse(500, {
+        callback(null, builResponse(500, {
           success: false
         }));
       });

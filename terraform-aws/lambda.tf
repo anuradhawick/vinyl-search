@@ -59,6 +59,8 @@ module "lambda-forum-service" {
       path = "${path.module}/../backend/forum-management-service",
       commands = [
         "npm install",
+        "./node_modules/.bin/esbuild --sourcemap --bundle forum-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
+        "cd dist",
         ":zip"
       ]
     }

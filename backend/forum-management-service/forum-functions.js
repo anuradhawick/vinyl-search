@@ -1,32 +1,32 @@
-const _ = require('lodash');
-const db_util = require('../utils/db-util');
-const ObjectID = require('mongodb').ObjectID;
-const htmlToText = require('html-to-text');
-const S3 = require('aws-sdk').S3;
-const cheerio = require('cheerio');
+import _ from 'lodash';
+import { ObjectId } from 'mongodb';
+import { S3Client } from '@aws-sdk/client-s3';
+import { connect_db } from './utils/db-util.js';
+import { convert} from 'html-to-text';
+import * as cheerio from 'cheerio';
 
 
-const s3 = new S3();
+const s3 = new S3Client();
 const BUCKET_NAME = process.env.BUCKET_NAME
 const CDN_DOMAIN = process.env.CDN_DOMAIN
 
 
-const retrieve_post = async (postId) => {
-  const db = await db_util.connect_db();
-  const post = await db.collection('forum_posts').findOne({_id: ObjectID(postId)});
+export async function retrieve_post(postId) {
+  const db = await connect_db();
+  const post = await db.collection('forum_posts').findOne({ _id: new ObjectId(postId) });
 
-  _.assign(post, {id: post._id});
+  _.assign(post, { id: post._id });
 
   return post;
 };
 
-const retrieve_post_comments = async (postId) => {
-  const db = await db_util.connect_db();
+export async function retrieve_post_comments(postId) {
+  const db = await connect_db();
   const comments = await db.collection('forum_posts').aggregate([
     {
       $match: {
         comment: true,
-        comment_for: ObjectID(postId)
+        comment_for: new ObjectId(postId)
       }
     },
     {
@@ -39,181 +39,181 @@ const retrieve_post_comments = async (postId) => {
   return comments;
 };
 
-const retrieve_posts = async (queryStringParameters) => {
+export async function retrieve_posts(queryStringParameters) {
   const limit = _.parseInt(_.get(queryStringParameters, 'limit', 50));
   const skip = _.parseInt(_.get(queryStringParameters, 'skip', 0));
-  const db = await db_util.connect_db();
+  const db = await connect_db();
   const posts = await db.collection('forum_posts').aggregate([
-      {
-        $match: {
-          comment: false
-        }
-      },
-      {
-        $sort: {
-          createdAt: -1
-        }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'ownerUid',
-          foreignField: 'uid',
-          as: 'user'
-        }
-      },
-      {
-        $addFields: {
-          ownerName: "$user.name",
-          ownerPic: "$user.picture",
-          id: "$_id",
-        }
-      },
-      {
-        $addFields: {
-          ownerName: {$arrayElemAt: ["$ownerName", 0]},
-          ownerPic: {$arrayElemAt: ["$ownerPic", 0]},
-        }
-      },
-      {
-        $facet: {
-          data: [{$count: "total"}],
-          posts: [
-            {
-              $skip: skip
-            },
-            {
-              $limit: limit
-            },
-            {
-              $project: {
-                user: 0,
-                _id: 0,
-                postHTML: 0,
-                textHTML: 0
-              }
-            }
-          ]
-        }
-      },
-      {
-        $addFields: {
-          count: {$arrayElemAt: ["$data", 0]}
-        }
-      },
-      {
-        $project: {
-          data: 0,
-        }
-      },
-      {
-        $addFields: {
-          count: "$count.total",
-          skip: skip,
-          limit: limit
-        }
+    {
+      $match: {
+        comment: false
       }
+    },
+    {
+      $sort: {
+        createdAt: -1
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'ownerUid',
+        foreignField: 'uid',
+        as: 'user'
+      }
+    },
+    {
+      $addFields: {
+        ownerName: "$user.name",
+        ownerPic: "$user.picture",
+        id: "$_id",
+      }
+    },
+    {
+      $addFields: {
+        ownerName: { $arrayElemAt: ["$ownerName", 0] },
+        ownerPic: { $arrayElemAt: ["$ownerPic", 0] },
+      }
+    },
+    {
+      $facet: {
+        data: [{ $count: "total" }],
+        posts: [
+          {
+            $skip: skip
+          },
+          {
+            $limit: limit
+          },
+          {
+            $project: {
+              user: 0,
+              _id: 0,
+              postHTML: 0,
+              textHTML: 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {
+        count: { $arrayElemAt: ["$data", 0] }
+      }
+    },
+    {
+      $project: {
+        data: 0,
+      }
+    },
+    {
+      $addFields: {
+        count: "$count.total",
+        skip: skip,
+        limit: limit
+      }
+    }
 
-    ]
+  ]
   ).toArray();
 
   return posts[0];
 };
 
-const search_posts = async (queryStringParameters) => {
+export async function search_posts(queryStringParameters) {
   const limit = _.parseInt(_.get(queryStringParameters, 'limit', 50));
   const skip = _.parseInt(_.get(queryStringParameters, 'skip', 0));
   const query = _.get(queryStringParameters, 'query', '');
-  const db = await db_util.connect_db();
+  const db = await connect_db();
   const posts = await db.collection('forum_posts').aggregate([
-      {
-        $match: {
-          $text: {
-            $search: query
-          }
+    {
+      $match: {
+        $text: {
+          $search: query
         }
-      },
-      {
-        $addFields: {
-          score: {
-            $meta: "textScore"
-          }
-        }
-
-      },
-      {
-        $sort: {
-          "score": 1
-        }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'ownerUid',
-          foreignField: 'uid',
-          as: 'user'
-        }
-      },
-      {
-        $addFields: {
-          ownerName: "$user.name",
-          ownerPic: "$user.picture",
-          id: "$_id",
-        }
-      },
-      {
-        $addFields: {
-          ownerName: {$arrayElemAt: ["$ownerName", 0]},
-          ownerPic: {$arrayElemAt: ["$ownerPic", 0]},
-        }
-      },
-      {
-        $facet: {
-          data: [{$count: "total"}],
-          posts: [
-            {
-              $skip: skip
-            },
-            {
-              $limit: limit
-            },
-            {
-              $project: {
-                user: 0,
-                _id: 0,
-                postHTML: 0,
-                textHTML: 0
-              }
-            }
-          ]
-        }
-      },
-      {
-        $addFields: {
-          count: {$arrayElemAt: ["$data", 0]}
-        }
-      },
-      {
-        $project: {
-          data: 0,
-        }
-      },
-      {
-        $addFields: {
-          count: "$count.total",
-          skip: skip,
-          limit: limit
+      }
+    },
+    {
+      $addFields: {
+        score: {
+          $meta: "textScore"
         }
       }
 
-    ]
+    },
+    {
+      $sort: {
+        "score": 1
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'ownerUid',
+        foreignField: 'uid',
+        as: 'user'
+      }
+    },
+    {
+      $addFields: {
+        ownerName: "$user.name",
+        ownerPic: "$user.picture",
+        id: "$_id",
+      }
+    },
+    {
+      $addFields: {
+        ownerName: { $arrayElemAt: ["$ownerName", 0] },
+        ownerPic: { $arrayElemAt: ["$ownerPic", 0] },
+      }
+    },
+    {
+      $facet: {
+        data: [{ $count: "total" }],
+        posts: [
+          {
+            $skip: skip
+          },
+          {
+            $limit: limit
+          },
+          {
+            $project: {
+              user: 0,
+              _id: 0,
+              postHTML: 0,
+              textHTML: 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {
+        count: { $arrayElemAt: ["$data", 0] }
+      }
+    },
+    {
+      $project: {
+        data: 0,
+      }
+    },
+    {
+      $addFields: {
+        count: "$count.total",
+        skip: skip,
+        limit: limit
+      }
+    }
+
+  ]
   ).toArray();
 
   return posts[0];
 };
 
-const save_post = async (uid, post, postId) => {
-  const db = await db_util.connect_db();
+export async function save_post(uid, post, postId) {
+  const db = await connect_db();
   const ownerUid = uid;
   const $ = cheerio.load(post.postHTML);
   const images = [];
@@ -243,13 +243,13 @@ const save_post = async (uid, post, postId) => {
     };
     return new Promise((resolve, reject) => {
       s3.copyObject(params, (err, data) => {
-          if (err) {
-            reject(err)
-          }
-          else {
-            resolve()
-          }
+        if (err) {
+          reject(err)
         }
+        else {
+          resolve()
+        }
+      }
       );
     });
   }));
@@ -259,7 +259,7 @@ const save_post = async (uid, post, postId) => {
   if (!_.isEmpty(postId) && !comment) {
     const data = await db.collection('forum_posts').findOneAndUpdate(
       {
-        _id: ObjectID(postId),
+        _id: new ObjectId(postId),
         ownerUid: uid
       },
       {
@@ -267,7 +267,7 @@ const save_post = async (uid, post, postId) => {
           postHTML: post.postHTML,
           postTitle: post.postTitle,
           updatedAt: new Date(),
-          textHTML: htmlToText.fromString(post.postHTML)
+          textHTML: convert(post.postHTML)
         }
       },
       {
@@ -296,13 +296,13 @@ const save_post = async (uid, post, postId) => {
         };
         return new Promise((resolve, reject) => {
           s3.deleteObject(params, (err, data) => {
-              if (err) {
-                resolve();
-              }
-              else {
-                resolve()
-              }
+            if (err) {
+              resolve();
             }
+            else {
+              resolve()
+            }
+          }
           );
         });
       }));
@@ -312,15 +312,15 @@ const save_post = async (uid, post, postId) => {
 
     return postId;
   } else if (comment) {
-    _.assign(post, {ownerUid, createdAt: new Date(), comment: true, comment_for: ObjectID(comment_for)});
-    _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
+    _.assign(post, { ownerUid, createdAt: new Date(), comment: true, comment_for: new ObjectId(comment_for) });
+    _.assign(post, { textHTML: convert(post.postHTML) });
 
     await db.collection('forum_posts').insertOne(post);
 
     return post._id;
   } else {
-    _.assign(post, {ownerUid, createdAt: new Date(), comment: false});
-    _.assign(post, {textHTML: htmlToText.fromString(post.postHTML)});
+    _.assign(post, { ownerUid, createdAt: new Date(), comment: false });
+    _.assign(post, { textHTML: convert(post.postHTML) });
 
     await db.collection('forum_posts').insertOne(post);
 
@@ -328,9 +328,9 @@ const save_post = async (uid, post, postId) => {
   }
 };
 
-const delete_post = async (uid, postId) => {
-  const db = await db_util.connect_db();
-  const post = await db.collection('forum_posts').findOne({_id: ObjectID(postId)});
+export async function delete_post(uid, postId) {
+  const db = await connect_db();
+  const post = await db.collection('forum_posts').findOne({ _id: new ObjectId(postId) });
   const $ = cheerio.load(post.postHTML);
   const images = [];
 
@@ -346,32 +346,23 @@ const delete_post = async (uid, postId) => {
     };
     return new Promise((resolve, reject) => {
       s3.deleteObject(params, (err, data) => {
-          if (err) {
-            resolve();
-          }
-          else {
-            resolve()
-          }
+        if (err) {
+          resolve();
         }
+        else {
+          resolve()
+        }
+      }
       );
     });
   }));
 
   const removePost = db.collection('forum_posts').findOneAndDelete({
-    _id: ObjectID(postId),
+    _id: new ObjectId(postId),
     ownerUid: uid
   });
 
   await Promise.all([removeImages, removePost]);
 
   return true;
-};
-
-module.exports = {
-  retrieve_post,
-  retrieve_posts,
-  save_post,
-  delete_post,
-  search_posts,
-  retrieve_post_comments
 };
