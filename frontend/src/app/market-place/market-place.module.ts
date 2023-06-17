@@ -13,16 +13,19 @@ import { PostEditPageComponent } from './post-edit-page/post-edit-page.component
 import { MarketService } from './services/market.service';
 
 @NgModule({
-  declarations: [LandingPageComponent, NewPostComponent, PostViewPageComponent, ReportModalComponent, PostEditPageComponent],
+  declarations: [
+    LandingPageComponent,
+    NewPostComponent,
+    PostViewPageComponent,
+    ReportModalComponent,
+    PostEditPageComponent
+  ],
   imports: [
     CommonModule,
     MarketPlaceRoutingModule,
     FormsModule,
     SharedModules,
     PostEditorModule
-  ],
-  entryComponents: [
-    ReportModalComponent
   ],
   providers: [
     MarketService

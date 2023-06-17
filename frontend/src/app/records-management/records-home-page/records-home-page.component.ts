@@ -1,14 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import genresJSON from '../../shared-modules/data/genres.json';
-import countriesJSON from '../../shared-modules/data/countries.json';
 import * as _ from 'lodash';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
-import { MatAccordion, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatAccordion } from '@angular/material/expansion';
 import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
+import { Observable } from 'rxjs';
+// @ts-ignore
+import genresJSON from '../../shared-modules/data/genres.json';
+// @ts-ignore
+import countriesJSON from '../../shared-modules/data/countries.json';
 
 declare const $: any;
 
@@ -20,17 +24,18 @@ declare const $: any;
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
   public objectKeys = Object.keys;
-  @ViewChild('recordsloader', {static: true}) loader: LoaderComponent;
+  @ViewChild('recordsloader', { static: true })
+  loader!: LoaderComponent;
   // context control
-  public records = null;
+  public records: any = null;
   public skip = 0;
   public limit = 30;
   public count = 0;
   public page = 1;
-  public autocomplete = null;
+  public autocomplete: Observable<any> = new Observable();
   public _ = _;
-  public query = null;
-  public component = this;
+  public query: any = null;
+  public component: any = this;
 
   // page filters
   public genreFilters = [];
@@ -39,13 +44,14 @@ export class RecordsHomePageComponent implements OnInit {
   public countryFilters = [];
 
   public environment = environment;
-  @ViewChild(MatAccordion, {static: false}) filtersPanel: MatAccordion;
+  @ViewChild(MatAccordion, { static: false })
+  filtersPanel!: MatAccordion;
 
   constructor(public route: ActivatedRoute,
-              private router: Router,
-              public auth: AuthService,
-              private recordsService: RecordsService,
-              private filterDialog: MatDialog) {
+    private router: Router,
+    public auth: AuthService,
+    private recordsService: RecordsService,
+    private filterDialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -89,9 +95,9 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   getStyles() {
-    let styles = [];
-    _.each(this.objectKeys(genresJSON), (g) => {
-      styles = _.concat(genresJSON[g], styles);
+    let styles: any = [];
+    _.each(this.objectKeys(genresJSON), (g: string) => {
+      styles = _.concat(_.get(genresJSON, g, []), styles);
     });
 
     return _.uniq(styles);
@@ -101,12 +107,12 @@ export class RecordsHomePageComponent implements OnInit {
     return _.map(countriesJSON, (c) => c.name);
   }
 
-  loadAutoComplete(event) {
+  loadAutoComplete(event: any) {
     const query: string = _.trim(event.target.value);
     let newquery = '';
 
     if (_.isEmpty(query) || query.length < 3) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
       return;
     } else {
       const qarray = _.split(query, ' ');
@@ -121,19 +127,19 @@ export class RecordsHomePageComponent implements OnInit {
       });
     }
 
-    this.autocomplete = this.recordsService.search_records({limit: 5, skip: 0, query: _.trim(newquery)});
+    this.autocomplete = this.recordsService.search_records({ limit: 5, skip: 0, query: _.trim(newquery) });
   }
 
   exitSearch() {
     setTimeout(() => {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
     }, 500);
   }
 
   search() {
     const query = _.trim(this.query);
     if (_.isEmpty(query)) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
       return;
     }
     this.router.navigate([], {
@@ -184,7 +190,7 @@ export class RecordsHomePageComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.records = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -195,8 +201,8 @@ export class RecordsHomePageComponent implements OnInit {
     });
   }
 
-  openFilter(toChooseFrom, ref) {
-    const active = _.cloneDeep(this[ref]);
+  openFilter(toChooseFrom: any, ref: any) {
+    const active = _.cloneDeep(_.get(this, ref));
     const all = _.cloneDeep(toChooseFrom);
     let filterCriteria = '';
 
@@ -223,9 +229,9 @@ export class RecordsHomePageComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(({filters, selected}) => {
+    dialogRef.afterClosed().subscribe(({ filters, selected }) => {
       if (selected) {
-        this[ref] = filters;
+        _.set(this, ref, filters);
         this.activateFilters();
       }
     });

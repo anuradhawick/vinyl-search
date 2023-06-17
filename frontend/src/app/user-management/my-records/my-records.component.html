@@ -1,21 +1,24 @@
 <hr>
 <app-loader #loader></app-loader>
-<div class="col-sm-10 offset-1">
+<div class="container col-sm-8">
   <mat-list role="list">
     <mat-list-item *ngFor="let r of records" role="listitem">
-      <img matListAvatar [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{r.name}} - {{r.label}} - {{r.catalogNo}}</h3>
-      <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" [routerLink]="['/records',r.id,'view']" mat-button>
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-        <a mat-button>
-          <mat-icon (click)="delete(r.id)">delete</mat-icon>
-        </a>
-      </div>
+      <img matListItemAvatar [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matListItemTitle>{{r.name}}</h3>
+      <p matListItemLine>{{r.label}} - {{r.catalogNo}}
+        <span style="float: right;">
+          <a mat-icon-button target="_blank" color="primary" [routerLink]="['/records',r.id,'view']">
+            <mat-icon style="vertical-align: baseline !important;">open_in_new</mat-icon>
+          </a>
+          <button mat-icon-button color="primary" (click)="delete(r.id)">
+            <mat-icon (click)="delete(r.id)">delete</mat-icon>
+          </button>
+        </span>
+      </p>
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

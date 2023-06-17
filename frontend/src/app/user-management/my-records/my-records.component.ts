@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
 import { RecordShouldDeleteModalComponent } from '../modals/record-should-delete-modal/record-should-delete-modal.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,18 +13,20 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./my-records.component.css']
 })
 export class MyRecordsComponent implements OnInit {
-  @ViewChild('loader', {static: true}) loader: LoaderComponent;
+  @ViewChild('loader', { static: true }) loader!: LoaderComponent;
   public records = null;
   public skip = 0;
   public limit = 10;
   public count = 0;
   public page = 1;
 
-  constructor(private route: ActivatedRoute,
-              private userService: UserService,
-              private router: Router,
-              private dialog: MatDialog,
-              private toastr: ToastrService) {
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private router: Router,
+    private toastr: ToastrService,
+    @Inject(MatDialog) private dialog: MatDialog
+  ) {
   }
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class MyRecordsComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService.get_records({limit: this.limit, skip: this.skip}).then((records: any) => {
+    this.userService.get_records({ limit: this.limit, skip: this.skip }).then((records: any) => {
       this.records = records.records;
       this.skip = records.skip;
       this.limit = records.limit;
@@ -52,7 +54,7 @@ export class MyRecordsComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.records = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -63,7 +65,7 @@ export class MyRecordsComponent implements OnInit {
     });
   }
 
-  delete(id) {
+  delete(id: string) {
     const modal = this.dialog.open(RecordShouldDeleteModalComponent);
 
     modal.afterClosed().subscribe((ok) => {

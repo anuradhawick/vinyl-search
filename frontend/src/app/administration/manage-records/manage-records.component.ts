@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../services/admin.service';
 import * as _ from 'lodash';
 import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-records',
@@ -20,10 +20,10 @@ export class ManageRecordsComponent implements OnInit {
   public page = 1;
 
   constructor(private route: ActivatedRoute,
-              private adminService: AdminService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
+    private adminService: AdminService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class ManageRecordsComponent implements OnInit {
   loadPosts() {
     this.records = null;
     this.loading = true;
-    this.adminService.fetch_records({limit: this.limit, skip: this.skip}).then((records: any) => {
+    this.adminService.fetch_records({ limit: this.limit, skip: this.skip }).then((records: any) => {
       this.records = records.records;
       this.skip = records.skip;
       this.limit = records.limit;
@@ -50,7 +50,7 @@ export class ManageRecordsComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.records = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -61,8 +61,8 @@ export class ManageRecordsComponent implements OnInit {
     });
   }
 
-  delete(id) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to delete the record entry?. All its previous version will be deleted as well.`}});
+  delete(id: any) {
+    const modal = this.dialog.open(AdminActionConfirmModalComponent, { data: { message: `Are you sure you want to delete the record entry?. All its previous version will be deleted as well.` } });
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {

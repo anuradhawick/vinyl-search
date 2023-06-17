@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  private user: Observable<any> = null;
+  private user!: Observable<any>;
 
   constructor(private auth: AuthService, @Inject(PLATFORM_ID) private platformId: any) {
   }
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
       if (isPlatformServer(this.platformId)) {
         resolve(true);
       } else if (!this.auth.isLoggedIn) {
-        this.auth.autoLogin.then((login) => {
+        this.auth.autoLogin.then((login: any) => {
           if (!login) {
             this.auth.login(JSON.stringify([state.url]));
             resolve(false);

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { MarketService } from '../services/market.service';
 
@@ -12,9 +12,9 @@ import { MarketService } from '../services/market.service';
   styleUrls: ['./new-post.component.css']
 })
 export class NewPostComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: PostEditorComponent;
-  @ViewChild('loader', {static: false}) loader: LoaderComponent;
-  private ready = true;
+  @ViewChild('editor', {static: false}) editor!: PostEditorComponent;
+  @ViewChild('loader', {static: false}) loader!: LoaderComponent;
+  ready = true;
 
   public testPost = {
     chosenImage: 0,
@@ -64,7 +64,7 @@ export class NewPostComponent implements OnInit {
     }
   }
 
-  readyChange(event) {
+  readyChange(event: any) {
     this.ready = event;
   }
 

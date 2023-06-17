@@ -5,10 +5,10 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 
-declare const $;
+declare const $: any;
 
 @Component({
   selector: 'app-forum-edit-page',
@@ -21,9 +21,9 @@ export class ForumEditPageComponent implements OnInit {
   public editorDisabled = false;
   public post = null;
   public hideView = true;
-  @ViewChild('editorloader', {static: true}) loader: LoaderComponent;
+  @ViewChild('editorloader', {static: true}) loader!: LoaderComponent;
   public newMode = true;
-  public postId = null;
+  public postId: string = '';
   public imageProgress = 0;
 
 

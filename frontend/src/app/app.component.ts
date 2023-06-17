@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from './shared-modules/services/auth.service';
-import * as _ from 'lodash';
 import { TitleTagService } from './shared-modules/services/title-tag.service';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { TitleTagService } from './shared-modules/services/title-tag.service';
 })
 export class AppComponent {
   public _ = _;
-  public user = null;
+  public user: Observable<any>;
 
   constructor(public auth: AuthService, private tagService: TitleTagService) {
     this.user = auth.user.asObservable();

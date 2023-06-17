@@ -40,7 +40,6 @@ import { MarketService } from './services/market.service';
     PostEditorModule
   ],
   providers: [AdminService, MarketService],
-  entryComponents: [AdminActionConfirmModalComponent]
 })
 export class AdministrationModule {
 }

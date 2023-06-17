@@ -1,15 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from './loader/loader.component';
-import {
-  MatBadgeModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule,
-  MatExpansionModule, MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatOptionModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule,
-  MatTreeModule
-} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
@@ -17,6 +8,24 @@ import { ActionConfirmModalComponent } from './modals/action-confirm-modal/actio
 import { LoginModalComponent } from './modals/login-modal/login-modal.component';
 import { UserService } from './services/user.service';
 import { AuthService } from './services/auth.service';
+// material
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -40,7 +49,7 @@ import { AuthService } from './services/auth.service';
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatOptionModule,
+    MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
     MatDialogModule,
@@ -68,7 +77,7 @@ import { AuthService } from './services/auth.service';
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatOptionModule,
+    MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
     MatDialogModule,
@@ -84,10 +93,6 @@ import { AuthService } from './services/auth.service';
     ActionConfirmModalComponent,
     MatCardModule,
     MatExpansionModule
-  ],
-  entryComponents: [
-    ActionConfirmModalComponent,
-    LoginModalComponent
   ]
 })
 export class SharedModules {

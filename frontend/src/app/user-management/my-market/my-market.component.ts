@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
 
@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 })
 export class MyMarketComponent implements OnInit {
 
-  @ViewChild('loader', {static: true}) loader: LoaderComponent;
+  @ViewChild('loader', { static: true }) loader!: LoaderComponent;
   public posts = null;
   public skip = 0;
   public limit = 10;
@@ -22,11 +22,12 @@ export class MyMarketComponent implements OnInit {
   public _ = _;
 
   constructor(private route: ActivatedRoute,
-              private userService: UserService,
-              private router: Router,
-              // private marketService: ForumService,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
+    private userService: UserService,
+    private router: Router,
+    // private marketService: ForumService,
+    private toastr: ToastrService,
+    // private dialog: MatDialog
+  ) {
   }
 
   ngOnInit() {
@@ -43,7 +44,7 @@ export class MyMarketComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService.get_market_posts({limit: this.limit, skip: this.skip}).then((records: any) => {
+    this.userService.get_market_posts({ limit: this.limit, skip: this.skip }).then((records: any) => {
       this.posts = records.posts;
       this.skip = records.skip;
       this.limit = records.limit;
@@ -54,7 +55,7 @@ export class MyMarketComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -65,7 +66,7 @@ export class MyMarketComponent implements OnInit {
     });
   }
 
-  markAsSold(id) {
+  markAsSold(id: string) {
     this.userService.mark_selling_item_sold(id).then(() => {
       this.loadPosts();
       this.toastr.success('Item marked as sold successfully', 'Success');
@@ -84,7 +85,7 @@ export class MyMarketComponent implements OnInit {
     // });
   }
 
-  delete(id) {
+  delete(id: string) {
     // const modal = this.dialog.open(ForumShouldDeleteModalComponent);
     //
     // modal.afterClosed().subscribe((ok) => {

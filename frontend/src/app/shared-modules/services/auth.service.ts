@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { Hub } from '@aws-amplify/core';
 import { environment } from '../../../environments/environment';
@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 import * as _ from 'lodash';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
 
 declare const $: any;
@@ -15,17 +15,17 @@ declare const window: any;
 @Injectable()
 export class AuthService {
   public redirectUrl = null;
-  public user = new ReplaySubject<any>(1);
-  public isLoggedIn = false;
-  public autoLogin;
+  public user: any = new ReplaySubject<any>(1);
+  public isLoggedIn: boolean = false;
+  public autoLogin: any;
   private customState: any = '';
-  private profileLoaded = false;
+  private profileLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private zone: NgZone,
               private http: HttpClient,
               private router: Router,
-              private dialog: MatDialog) {
+              @Inject(MatDialog) private dialog: MatDialog) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         console.log('INVALID REQUEST', params.error_description);
@@ -83,7 +83,7 @@ export class AuthService {
     });
   }
 
-  processUser(u) {
+  processUser(u: any) {
     if (this.profileLoaded) {
       return;
     }
@@ -109,7 +109,7 @@ export class AuthService {
     }
   }
 
-  setUser(user) {
+  setUser(user: any) {
     this.user.next(user);
   }
 
@@ -132,7 +132,7 @@ export class AuthService {
     });
   }
 
-  login(customeState = null) {
+  login(customeState: any = null) {
     if (_.isEmpty(customeState)) {
       this.customState = JSON.stringify([this.router.routerState.snapshot.url]);
     } else {

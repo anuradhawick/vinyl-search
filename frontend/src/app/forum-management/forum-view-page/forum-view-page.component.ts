@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 import { TitleTagService } from '../../shared-modules/services/title-tag.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-forum-view-page',
@@ -16,28 +17,28 @@ import { TitleTagService } from '../../shared-modules/services/title-tag.service
   styleUrls: ['./forum-view-page.component.css']
 })
 export class ForumViewPageComponent implements OnInit {
-  public post;
-  @ViewChild('postloader', {static: true}) loader: LoaderComponent;
-  @ViewChild('commentloader', {static: true}) commentLoader: LoaderComponent;
+  public post: any = null;
+  @ViewChild('postloader', { static: true }) loader!: LoaderComponent;
+  @ViewChild('commentloader', { static: true }) commentLoader!: LoaderComponent;
   public Editor = ClassicEditor;
   public title = '';
-  public data = '';
-  public user = null;
+  public data: any = '';
+  public user: Observable<any>;
   public editorDisabled = false;
   public imageProgress = 0;
   public comment_data = '';
-  public comments = [];
+  public comments: any = [];
   public enableCommentSection = false;
-  private postId;
+  private postId: string = '';
 
 
   constructor(public route: ActivatedRoute,
-              public auth: AuthService,
-              private forumService: ForumService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog,
-              private tagService: TitleTagService) {
+    public auth: AuthService,
+    private forumService: ForumService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+    private tagService: TitleTagService) {
     this.user = auth.user.asObservable();
     this.tagService.setTitle('Vinyl.LK: The Forum');
     this.tagService.setSocialMediaTags(
@@ -149,7 +150,7 @@ export class ForumViewPageComponent implements OnInit {
     });
   }
 
-  deleteComment(id) {
+  deleteComment(id: string) {
     const modal = this.dialog.open(ActionConfirmModalComponent, {
       data: {
         message: `Are you sure you want to delete your comment?`,

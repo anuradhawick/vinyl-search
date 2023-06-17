@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-record-should-delete-modal',
@@ -8,7 +8,9 @@ import { MatDialogRef } from '@angular/material';
 })
 export class RecordShouldDeleteModalComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<RecordShouldDeleteModalComponent>) {
+  constructor(
+    @Inject(MatDialogRef<RecordShouldDeleteModalComponent>) public dialogRef: MatDialogRef<RecordShouldDeleteModalComponent>
+  ) {
   }
 
   close(): void {

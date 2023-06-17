@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PostEditorComponent } from '../../../market-place/post-editor-module/post-editor.component';
 import { AdminService } from '../../services/admin.service';
 import * as _ from 'lodash';
@@ -13,9 +13,9 @@ import { Location } from '@angular/common';
   styleUrls: ['./edit-ad.component.css']
 })
 export class EditAdComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: PostEditorComponent;
-  private ready = true;
-  public post = null;
+  @ViewChild('editor', {static: false}) editor!: PostEditorComponent;
+  public ready = true;
+  public post: any = null;
   public _ = _;
   public changesSaved = false;
 
@@ -70,7 +70,7 @@ export class EditAdComponent implements OnInit {
     this.location.back();
   }
 
-  readyChange(event) {
+  readyChange(event: any) {
     this.ready = event;
   }
 

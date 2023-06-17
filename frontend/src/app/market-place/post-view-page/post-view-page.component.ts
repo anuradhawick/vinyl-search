@@ -4,7 +4,7 @@ import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import * as _ from 'lodash';
 import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -14,8 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PostViewPageComponent implements OnInit {
   public _ = _;
-  public postObject = null;
-  public recordHistory = null;
+  public postObject: any = null;
+  public recordHistory: any = null;
   public imgvconfig = {
     zoomFactor: 0.1,
     wheelZoom: false,
@@ -30,12 +30,12 @@ export class PostViewPageComponent implements OnInit {
     }
   };
 
-  public typeMap = {
+  public typeMap: any = {
     'material': 'A/V Material',
     'gear': 'A/V Gear'
   };
 
-  public subTypeMap = {
+  public subTypeMap: any = {
     'material': {
       'phonograph': 'Phonograph Records',
       'magnetic': 'Magnetic Tapes',

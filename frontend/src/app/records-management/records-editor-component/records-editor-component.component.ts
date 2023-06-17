@@ -1,21 +1,26 @@
 import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
-import genresJSON from '../../shared-modules/data/genres.json';
-import countriesJSON from '../../shared-modules/data/countries.json';
-import speedsJSON from '../../shared-modules/data/speed.json';
-import sizesJSON from '../../shared-modules/data/size.json';
-import descrJSON from '../../shared-modules/data/description.json';
 import * as _ from 'lodash';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { Storage } from '@aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER } from '@angular/cdk/keycodes';
+// @ts-ignore
+import genresJSON from '../../shared-modules/data/genres.json';
+// @ts-ignore
+import countriesJSON from '../../shared-modules/data/countries.json';
+// @ts-ignore
+import speedsJSON from '../../shared-modules/data/speed.json';
+// @ts-ignore
+import sizesJSON from '../../shared-modules/data/size.json';
+// @ts-ignore
+import descrJSON from '../../shared-modules/data/description.json';
 
-declare const $;
+declare const $: any;
 
 @Component({
   selector: 'app-records-editor-component',
@@ -24,23 +29,24 @@ declare const $;
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;
-  public genres = [];
-  public styles = [];
+  public genres: any = [];
+  public styles: any = [];
   public countriesJSON = countriesJSON;
   public objectKeys = Object.keys;
   public _ = _;
   public descr = descrJSON;
   public sizesJSON = sizesJSON;
   public speedsJSON = speedsJSON;
-  public map = {};
+  public map: any = {};
 
-  @ViewChild('table', {static: true}) table: ElementRef;
+  @ViewChild('table', { static: true })
+  table!: ElementRef;
 
-  public recordId: string = null;
+  public recordId: string = '';
 
   // passed as prop
   @Input()
-  set record(record) {
+  set record(record: any) {
     if (!_.isEmpty(record)) {
       _.assign(this.recordObject, record);
     }
@@ -55,7 +61,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   readyStateChange = new EventEmitter<boolean>();
 
   // current entry
-  public recordObject = {
+  public recordObject: any = {
     chosenImage: 0,
     images: [],
     date: null,
@@ -86,11 +92,11 @@ export class RecordsEditorComponentComponent implements OnInit {
   // new genre related
   readonly separatorKeysCodes: number[] = [ENTER];
   // public newGenreName: string = null;
-  public newStyleNames: string = null;
+  public newStyleNames: string = '';
 
   // context control
   public uploadCount = 0;
-  public percentages = [];
+  public percentages: any = [];
 
   // image viewer config
   public imgvconfig = {
@@ -98,7 +104,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     wheelZoom: false,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
-    customBtns: [{name: 'delete', icon: 'delete'}],
+    customBtns: [{ name: 'delete', icon: 'delete' }],
     btnShow: {
       next: true,
       prev: true,
@@ -107,12 +113,12 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   };
 
-  public form;
+  public form: any;
 
   constructor(private auth: AuthService,
-              public ngZone: NgZone,
-              private toastr: ToastrService,
-              private fb: FormBuilder) {
+    public ngZone: NgZone,
+    private toastr: ToastrService,
+    private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -131,7 +137,7 @@ export class RecordsEditorComponentComponent implements OnInit {
         _.map(this.recordObject.tracks, (track) => {
           return this.fb.group({
             index: [track.index, Validators.required],
-            artists: this.fb.array(_.map(track.artists, (artist) => {
+            artists: this.fb.array(_.map(track.artists, (artist: any) => {
               return this.fb.group(
                 {
                   index: [artist.index],
@@ -139,7 +145,7 @@ export class RecordsEditorComponentComponent implements OnInit {
                 });
             })),
             title: [track.title, Validators.required],
-            credits: this.fb.array(_.map(track.credits, (credit) => {
+            credits: this.fb.array(_.map(track.credits, (credit: any) => {
               return this.fb.group({
                 index: [credit.index],
                 text: [credit.text, Validators.required]
@@ -149,13 +155,13 @@ export class RecordsEditorComponentComponent implements OnInit {
           });
         })
       ),
-      commonCredits: this.fb.array(_.map(this.recordObject.commonCredits, (credit) => {
+      commonCredits: this.fb.array(_.map(this.recordObject.commonCredits, (credit: any) => {
         return this.fb.group({
           index: [credit.index],
           text: [credit.text, Validators.required]
         });
       })),
-      songUrls: this.fb.array(_.map(this.recordObject.songUrls, (songUrl) => {
+      songUrls: this.fb.array(_.map(this.recordObject.songUrls, (songUrl: any) => {
         return this.fb.group({
           index: [songUrl.index],
           text: [songUrl.text, [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
@@ -163,25 +169,25 @@ export class RecordsEditorComponentComponent implements OnInit {
       })),
       notes: [this.recordObject.notes],
     });
-    this.form.valueChanges.subscribe((values) => {
+    this.form.valueChanges.subscribe((values: any) => {
       _.assign(this.recordObject, values);
     });
 
-    const genres = [];
+    const genres: any = [];
     _.forEach(this.genresJSON, (s, g) => {
       genres.push({
         name: g,
         styles: s
       });
     });
-    this.genres = _.concat(genres, _.map(this.recordObject.genres, (g) => {
-      return {name: g};
+    this.genres = _.concat(genres, _.map(this.recordObject.genres, (g: any) => {
+      return { name: g };
     }));
 
-    this.genres = _.sortedUniqBy(this.genres, (g) => g.name);
+    this.genres = _.sortedUniqBy(this.genres, (g: any) => g.name);
 
     $(this.table.nativeElement).sortable({
-      stop: (event) => {
+      stop: (event: any) => {
         const arr = $(this.table.nativeElement).sortable('toArray');
         this.ngZone.runOutsideAngular(() => this.resort(arr));
       }
@@ -191,10 +197,10 @@ export class RecordsEditorComponentComponent implements OnInit {
     this.loadStyles();
   }
 
-  resort(arr) {
+  resort(arr: any) {
     const new_index = _.map(arr, (item) => Number(_.split(item, '-').pop()));
     const oldTracks = _.cloneDeep(this.form.get('tracks').controls);
-    const updatedTracks = [];
+    const updatedTracks: any = [];
 
     _.each(new_index, (i) => {
       updatedTracks.push(oldTracks[i]);
@@ -211,7 +217,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     _.each(this.form.get('tracks').controls, (control: FormControl, index) => {
       const value = control.value;
 
-      _.assign(value, {index: index + 1});
+      _.assign(value, { index: index + 1 });
       control.setValue(value);
     });
   }
@@ -226,7 +232,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }));
   }
 
-  insertTrackBefore(tracks: FormArray, index) {
+  insertTrackBefore(tracks: FormArray, index: any) {
     tracks.insert(index, this.fb.group({
       index: ['', Validators.required],
       artists: this.fb.array([]),
@@ -236,7 +242,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }));
   }
 
-  insertTrackAfter(tracks: FormArray, index) {
+  insertTrackAfter(tracks: FormArray, index: any) {
     tracks.insert(index + 1, this.fb.group({
       index: ['', Validators.required],
       artists: this.fb.array([]),
@@ -253,8 +259,8 @@ export class RecordsEditorComponentComponent implements OnInit {
         name: ['', Validators.required]
       }));
 
-    _.each(track.controls, (control: FormControl, index) => {
-      control.setValue({index: index + 1, name: control.get('name').value});
+    _.each(track.controls, (control: FormControl | any, index: any) => {
+      control.setValue({ index: index + 1, name: control.get('name').value });
     });
   }
 
@@ -264,7 +270,7 @@ export class RecordsEditorComponentComponent implements OnInit {
       text: ['', Validators.required]
     }));
 
-    _.each(credits.controls, (control: FormControl, index) => {
+    _.each(credits.controls, (control: FormControl | any, index) => {
       control.setValue({
         index: index + 1,
         text: control.get('text').value
@@ -278,7 +284,7 @@ export class RecordsEditorComponentComponent implements OnInit {
       text: ['', [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
     }));
 
-    _.each(songUrls.controls, (control: FormControl, index) => {
+    _.each(songUrls.controls, (control: FormControl | any, index) => {
       control.setValue({
         index: index + 1,
         text: control.get('text').value
@@ -292,20 +298,16 @@ export class RecordsEditorComponentComponent implements OnInit {
       text: ['', Validators.required]
     }));
 
-    _.each(track.controls, (control: FormControl, index) => {
-      control.setValue({index: index + 1, text: control.get('text').value});
+    _.each(track.controls, (control: FormControl | any, index) => {
+      control.setValue({ index: index + 1, text: control.get('text').value });
     });
   }
 
   addGenre(event: MatChipInputEvent) {
-    const input = event.input;
-    const value = event.value;
-    const candidateGenre: string = _.trim(_.get(event, 'value', '')).replace(/\w+/g, _.capitalize);
+    const candidateGenre: string = (event.value || '').trim();
 
     // Reset the input value
-    if (input) {
-      input.value = '';
-    }
+    event.chipInput!.clear();
 
     if (candidateGenre.length < 1) {
       return;
@@ -328,28 +330,35 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addStyle(event: MatChipInputEvent) {
-    const input = event.input;
-    const value = event.value;
-    const newStyle: string = _.trim(_.get(event, 'value', '')).replace(/\w+/g, _.capitalize);
+    const newStyle: string = (event.value || '').trim().replace(/\w+/g, _.capitalize);
 
     // Reset the input value
-    if (input) {
-      input.value = '';
-    }
+    event.chipInput!.clear();
+
 
     if (newStyle.length < 1) {
       return;
     }
 
-    this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, [newStyle]));
-    this.toastr.success(`Styles were added successfully`, 'Success');
+    const found = _.find(this.styles, (style) => {
+      return style === newStyle;
+    });
+
+    if (found) {
+      this.toastr.error(`Style ${newStyle} already exists`, 'Error');
+    } else {
+      this.styles.push(newStyle);
+      this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, [newStyle]));
+      this.toastr.success(`Styles were added successfully`, 'Success');
+
+    }
   }
 
   getReleaseData() {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);
-        control.markAsTouched({onlySelf: true});
+        control.markAsTouched({ onlySelf: true });
       });
       return false;
     } else if (this.uploadCount > 0) {
@@ -360,7 +369,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     return this.recordObject;
   }
 
-  addImage(event) {
+  addImage(event: any) {
     if (!this.auth.isLoggedIn) {
       this.toastr.warning('Please login before continue', 'Warning');
       return;
@@ -424,7 +433,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     // }
   }
 
-  handleEvent(event) {
+  handleEvent(event: any) {
     switch (event.name) {
       case 'delete':
         this.deleteImage(event.imageIndex);
@@ -432,7 +441,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   }
 
-  selectGenre(genre, remove) {
+  selectGenre(genre: any, remove: any = false) {
     if (remove) {
       _.remove(this.recordObject.genres, (item) => {
         return item === genre;
@@ -462,7 +471,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     });
   }
 
-  selectStyle(style, remove) {
+  selectStyle(style: any, remove: any = false) {
     if (remove) {
       _.remove(this.recordObject.styles, (item) => {
         return item === style;
@@ -476,7 +485,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   }
 
-  selectDescr(descr, remove) {
+  selectDescr(descr: any, remove: any = false) {
     if (remove) {
       _.remove(this.recordObject.descriptions, (item) => {
         return item === descr;
@@ -490,7 +499,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     }
   }
 
-  deleteImage(index) {
+  deleteImage(index: any) {
     const removeItem = this.recordObject.images[index];
     this.recordObject.chosenImage = 0;
     _.remove(this.recordObject.images, (item) => _.isEqual(item, removeItem));

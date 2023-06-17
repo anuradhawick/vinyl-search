@@ -3,22 +3,26 @@
 <div class="col-sm-10 offset-1">
   <mat-list role="list">
     <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
-      <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" *ngIf="!p.approved && !p.rejected" [routerLink]="['/market',p.id,'edit']" mat-button>
-          <mat-icon>edit</mat-icon>
-        </a>
-        <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-        <a *ngIf="!p.sold" mat-button>
-          <mat-icon (click)="markAsSold(p._id)">done</mat-icon>
-        </a>
-      </div>
+      <img matListItemAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matListItemTitle>{{p.name}}</h3>
+      <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
+        <span style="float: right;">
+          <a mat-icon-button target="_blank" color="primary" *ngIf="!p.approved && !p.rejected"
+            [routerLink]="['/market',p.id,'edit']">
+            <mat-icon style="vertical-align: baseline !important;">edit</mat-icon>
+          </a>
+          <a mat-icon-button target="_blank" color="primary" [routerLink]="['/market',p.id,'view']">
+            <mat-icon style="vertical-align: baseline !important;">open_in_new</mat-icon>
+          </a>
+          <button mat-icon-button color="primary" *ngIf="!p.sold" (click)="markAsSold(p._id)">
+            <mat-icon>done</mat-icon>
+          </button>
+        </span>
+      </p>
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

@@ -19,7 +19,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async remove_admin(uid) {
+  async remove_admin(uid: string) {
     const token = await this.auth.getToken();
 
     return await this.http.delete(environment.api_gateway + 'admin/admin-users/' + uid, {
@@ -29,7 +29,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async create_admin(email) {
+  async create_admin(email: string) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'admin/admin-users/' + email, {}, {
@@ -39,7 +39,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async fetch_records(params) {
+  async fetch_records(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'admin/records', {
@@ -50,7 +50,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async delete_record(recordId) {
+  async delete_record(recordId: string) {
     const token = await this.auth.getToken();
 
     return await this.http.delete(environment.api_gateway + 'admin/records/' + recordId, {
@@ -60,7 +60,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async fetch_forum(params) {
+  async fetch_forum(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'admin/forum', {
@@ -71,7 +71,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async delete_forum(postId) {
+  async delete_forum(postId: string) {
     const token = await this.auth.getToken();
 
     return await this.http.delete(environment.api_gateway + 'admin/forum/' + postId, {
@@ -81,7 +81,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async get_market_post(postId) {
+  async get_market_post(postId: string) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'admin/market/' + postId, {
@@ -91,7 +91,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async update_market_post(post) {
+  async update_market_post(post: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'admin/market/' + post.id, post, {
@@ -101,7 +101,7 @@ export class AdminService {
     }).toPromise();
   }
 
-  async fetch_reports(params) {
+  async fetch_reports(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'admin/reports', {
@@ -112,10 +112,10 @@ export class AdminService {
     }).toPromise();
   }
 
-  async resolve_report(reportId) {
+  async resolve_report(reportId: string) {
     const token = await this.auth.getToken();
 
-    return await this.http.post(environment.api_gateway + 'admin/reports/' + reportId, {resolved: true}, {
+    return await this.http.post(environment.api_gateway + 'admin/reports/' + reportId, { resolved: true }, {
       headers: new HttpHeaders({
         'Authorization': token
       })

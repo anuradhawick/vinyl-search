@@ -34,10 +34,6 @@ import { ChooseFilterComponent } from './modals/choose-filter/choose-filter.comp
   ],
   providers: [
     RecordsService
-  ],
-  entryComponents: [
-    CatalogErrorModalComponent,
-    ChooseFilterComponent
   ]
 })
 export class RecordsManagementModule {

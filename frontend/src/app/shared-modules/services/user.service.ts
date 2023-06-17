@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { shareReplay } from 'rxjs/internal/operators';
+import { shareReplay } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -20,7 +20,7 @@ export class UserService {
     }).pipe(shareReplay(1)).toPromise();
   }
 
-  async update_profile(user) {
+  async update_profile(user: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'users/', user, {
@@ -30,7 +30,7 @@ export class UserService {
     }).toPromise();
   }
 
-  async get_records(params) {
+  async get_records(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'users/records', {
@@ -41,7 +41,7 @@ export class UserService {
     }).pipe(shareReplay(1)).toPromise();
   }
 
-  async get_forum_posts(params) {
+  async get_forum_posts(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'users/forum', {
@@ -52,7 +52,7 @@ export class UserService {
     }).pipe(shareReplay(1)).toPromise();
   }
 
-  async get_market_posts(params) {
+  async get_market_posts(params: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'users/market', {
@@ -63,7 +63,7 @@ export class UserService {
     }).pipe(shareReplay(1)).toPromise();
   }
 
-  async delete_record(id) {
+  async delete_record(id: any) {
     const token = await this.auth.getToken();
 
     return await this.http.delete(environment.api_gateway + 'users/records/' + id, {
@@ -73,7 +73,19 @@ export class UserService {
     }).toPromise();
   }
 
-  async mark_selling_item_sold(id) {
+  async delete_forum_post(id: any) {
+    // TODO implement this in API gateway
+    // const token = await this.auth.getToken();
+
+    // return await this.http.delete(environment.api_gateway + 'users/forum/' + id, {
+    //   headers: new HttpHeaders({
+    //     'Authorization': token
+    //   })
+    // }).toPromise();
+    return true;
+  }
+
+  async mark_selling_item_sold(id: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'users/market/' + id + '/sold', {}, {

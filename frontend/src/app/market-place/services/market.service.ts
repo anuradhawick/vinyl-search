@@ -9,7 +9,7 @@ export class MarketService {
   constructor(private http: HttpClient, private auth: AuthService) {
   }
 
-  async save_post(post) {
+  async save_post(post: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'market', post, {
@@ -19,7 +19,7 @@ export class MarketService {
     }).toPromise();
   }
 
-  async update_post(post) {
+  async update_post(post: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'market/' + post.id, post, {
@@ -29,13 +29,13 @@ export class MarketService {
     }).toPromise();
   }
 
-  fetch_posts(params) {
+  fetch_posts(params: any) {
     return this.http.get(environment.api_gateway + 'market', {
       params
     });
   }
 
-  async fetch_post(postId) {
+  async fetch_post(postId: any) {
     const token = await this.auth.getToken();
 
     return await this.http.get(environment.api_gateway + 'market/' + postId, {
@@ -45,13 +45,13 @@ export class MarketService {
     }).toPromise();
   }
 
-  search_posts(params) {
+  search_posts(params: any) {
     return this.http.get(environment.api_gateway + 'market/search', {
       params
     });
   }
 
-  async report_post(postId, report) {
+  async report_post(postId: any, report: any) {
     const token = await this.auth.getToken();
 
     return await this.http.post(environment.api_gateway + 'market/' + postId + '/report', report, {
