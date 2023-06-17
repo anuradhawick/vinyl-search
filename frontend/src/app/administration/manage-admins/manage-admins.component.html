@@ -2,17 +2,20 @@
 <div class="container col-sm-8">
   <h3>Administrators</h3>
   <hr>
-  <div class="col-sm-10 offset-1">
+  <div>
     <app-loader [hidden]="!loading"></app-loader>
-    <mat-list role="list">
-      <mat-list-item *ngFor="let admin of admins" role="listitem">
-        <img matListAvatar [src]="admin.picture" alt="Admin avatar">
-        <h3 matLine>{{admin.name}}</h3>
-        <div class="row float-right" style="flex-wrap: nowrap;">
-          <a mat-button>
-            <mat-icon (click)="removeAdmin(admin.uid)">delete</mat-icon>
-          </a>
-        </div>
+    <mat-list>
+      <mat-list-item *ngFor="let admin of admins">
+        <img matListItemAvatar [src]="admin.picture" alt="Admin avatar">
+        <h3 matListItemTitle>{{admin.name}}</h3>
+        <p matListItemLine>{{admin.email}}
+
+          <span style="float: right;">
+            <button mat-icon-button color="primary" (click)="removeAdmin(admin.uid)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </p>
       </mat-list-item>
     </mat-list>
   </div>
@@ -26,6 +29,7 @@
     </mat-form-field>
   </div>
   <button *ngIf="!form.controls['email'].invalid || form.dirty" mat-raised-button (click)="cancel()">Clear</button>
-  <button *ngIf="!form.controls['email'].invalid" mat-raised-button color="primary" class="ml-1" (click)="createAdmin()">Make Admin</button>
+  <button *ngIf="!form.controls['email'].invalid" mat-raised-button color="primary" class="ml-1"
+    (click)="createAdmin()">Make Admin</button>
 </div>
 <br>

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home/home-page/home-page.component';
 import { AuthGuard } from './shared-modules/auth/auth.guard';
 import { AdminGuard } from './shared-modules/auth/admin.guard';
@@ -8,10 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent
-  },
-  {
-    path: 'privacy-policy',
-    loadChildren: () => import('./pages/privacy-policy-page/privacy-policy-page.module').then(mod => mod.PrivacyPolicyPageModule)
   },
   {
     path: 'forum',
@@ -27,20 +23,23 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'market',
+    loadChildren: () => import('./market-place/market-place.module').then(mod => mod.MarketPlaceModule),
+    canActivate: []
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./administration/administration.module').then(mod => mod.AdministrationModule),
     canActivate: [AuthGuard, AdminGuard]
   },
   {
-    path: 'market',
-    loadChildren: () => import('./market-place/market-place.module').then(mod => mod.MarketPlaceModule),
-    canActivate: []
-  }
+    path: 'privacy-policy',
+    loadChildren: () => import('./pages/privacy-policy-page/privacy-policy-page.module').then(mod => mod.PrivacyPolicyPageModule)
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

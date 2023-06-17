@@ -11,12 +11,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./records-update-page.component.css']
 })
 export class RecordsUpdatePageComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: RecordsEditorComponentComponent;
+  @ViewChild(RecordsEditorComponentComponent)
+  editor!: RecordsEditorComponentComponent;
 
   public _ = _;
-  public recordObject = null;
-  public ready = true;
-  public revisionComments = null;
+  public recordObject: any = null;
+  public ready: boolean = true;
+  public revisionComments: any = null;
 
   constructor(public route: ActivatedRoute,
               private recordsService: RecordsService,
@@ -66,7 +67,7 @@ export class RecordsUpdatePageComponent implements OnInit {
     }
   }
 
-  readyChange(event) {
+  readyChange(event: any) {
     this.ready = event;
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { AdminService } from '../services/admin.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -10,9 +10,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./manage-admins.component.css']
 })
 export class ManageAdminsComponent implements OnInit {
-  public admins = [];
+  public admins: any = [];
   public loading = true;
-  public form = null;
+  public form: FormGroup;
 
   constructor(public auth: AuthService,
               private adminService: AdminService,
@@ -36,7 +36,7 @@ export class ManageAdminsComponent implements OnInit {
     });
   }
 
-  removeAdmin(uid) {
+  removeAdmin(uid: any) {
     this.adminService.remove_admin(uid).then((res: any) => {
       if (res.success) {
         this.toastr.success('Admin removed successfully', 'Success');
@@ -49,7 +49,7 @@ export class ManageAdminsComponent implements OnInit {
 
   createAdmin() {
     if (!this.form.invalid) {
-      const email = this.form.get('email').value;
+      const email = this.form.get('email')!.value;
       this.adminService.create_admin(email).then((res: any) => {
         if (res.success) {
           this.toastr.success('Admin created successfully', 'Success');

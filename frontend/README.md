@@ -1,89 +1,27 @@
-# Vinyl.LK
+# VinylLk
 
-Angular and AWS Lambda project of Vinyl.LK 
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.5.
 
 ## Development server
 
-```
-# ui at port 4200
-ng serve
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-# serverless offline
-cd lambda
-node offline-serverless.js
+## Code scaffolding
 
-#OR
-cd lambda
-npm start
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-```
+## Build
 
-## Development SSR
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-```
-npm run serve:ssr
-```
+## Running unit tests
 
-## Deployment of Angular
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-```
-npm run build:deploy:prod
-```
+## Running end-to-end tests
 
-## Deployment of Backend Lambdas
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-```
-serverless deploy --stage prod --service <SERVICE FOLDER>
-```
+## Further help
 
-## Environment Variables Angular
-
-
-File `./src/environment/environment.prod.ts` or `./src/environment/environment.ts`
-
-```js
-export const environment = {
-  production: false,
-  aws_config: {
-    Auth: {
-      identityPoolId: '',
-      region: '',
-      userPoolId: '',
-      userPoolWebClientId: '',
-      mandatorySignIn: false,
-      oauth: {
-        domain: '',
-        scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
-        redirectSignIn: 'http://localhost:4200/',
-        redirectSignOut: 'http://localhost:4200/',
-        responseType: 'code',
-        code_challenge: null
-      },
-    },
-    Storage: {
-      AWSS3: {
-        bucket: '',
-        region: '',
-      }
-    }
-  },
-  api_gateway: ''
-};
-```
-
-## Environment Variables for Backend Lambdas
-
-These variables are shared with the SSR lambda for Angular app.
-
-```yaml
-config:
-  service: 
-  region: 
-  userpool_authorizer_arn: arn:
-  user_pool_id: 
-env:
-  MONGODB_ATLAS_CLUSTER_URI: mongodb://localhost:27017
-  BUCKET_NAME: 
-  BUCKET_REGION: 
-
-```
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

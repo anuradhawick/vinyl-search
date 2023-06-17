@@ -12,9 +12,9 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 })
 export class RecordViewPageComponent implements OnInit {
   public _ = _;
-  public recordObject = null;
-  public recordHistory = null;
-  public imgvconfig = {
+  public recordObject: any = null;
+  public recordHistory: any = null;
+  public imgvconfig: any = {
     zoomFactor: 0.1,
     wheelZoom: false,
     allowFullscreen: true,

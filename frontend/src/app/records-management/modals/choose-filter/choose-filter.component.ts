@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import * as _ from 'lodash';
 
 @Component({
@@ -8,7 +8,7 @@ import * as _ from 'lodash';
   styleUrls: ['./choose-filter.component.css']
 })
 export class ChooseFilterComponent implements OnInit {
-  public selected = [];
+  public selected: Array<string> = [];
   public _ = _;
 
   constructor(private dialogRef: MatDialogRef<ChooseFilterComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -18,20 +18,21 @@ export class ChooseFilterComponent implements OnInit {
   ngOnInit() {
   }
 
-  isSelected(filter) {
-    return _.isEmpty(_.find(this.selected, (item) => item === filter));
+  isSelected(filter: string) {
+    return _.findIndex(this.selected, (item) => item === filter) !== -1;
   }
 
-  toggleFilter(filter) {
+  toggleFilter(filter: string) {
     if (_.find(this.selected, (item) => item === filter)) {
       _.remove(this.selected, (item) => item === filter);
     } else {
       this.selected.push(filter);
     }
+    console.log(filter, this.selected)
   }
 
-  done(filters, selected) {
-    this.dialogRef.close({filters, selected});
+  done(filters: any, selected: any) {
+    this.dialogRef.close({ filters, selected });
   }
 
 }

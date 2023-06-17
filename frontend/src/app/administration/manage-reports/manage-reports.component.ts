@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 
 @Component({
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 })
 export class ManageReportsComponent implements OnInit {
   public loading = true;
-  public posts = null;
+  public posts: any = null;
   public skip = 0;
   public limit = 10;
   public count = 0;
@@ -20,10 +20,10 @@ export class ManageReportsComponent implements OnInit {
   public _ = _;
 
   constructor(private route: ActivatedRoute,
-              private adminService: AdminService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
+    private adminService: AdminService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -40,11 +40,11 @@ export class ManageReportsComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminService.fetch_reports({limit: this.limit, skip: this.skip}).then((records: any) => {
+    this.adminService.fetch_reports({ limit: this.limit, skip: this.skip }).then((records: any) => {
       this.posts = records.reports;
       this.posts = _.map(this.posts, (post: any) => {
         if (post.type === 'report_selling_ad') {
-          _.assign(post, {link: '/market/' + post.targetId + '/view'});
+          _.assign(post, { link: '/market/' + post.targetId + '/view' });
         }
 
         return post;
@@ -58,7 +58,7 @@ export class ManageReportsComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -69,7 +69,7 @@ export class ManageReportsComponent implements OnInit {
     });
   }
 
-  resolveReport(reportId) {
+  resolveReport(reportId: string) {
     this.adminService.resolve_report(reportId).then(() => {
       this.toastr.success('Resolved successfully', 'Success');
       this.loadPosts();

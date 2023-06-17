@@ -14,4 +14,7 @@ import { PrivacyPolicyPageComponent } from './privacy-policy-page.component';
   ]
 })
 export class PrivacyPolicyPageModule {
+  constructor () {
+    console.log("working")
+  }
 }

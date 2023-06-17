@@ -5,19 +5,22 @@
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{p.postTitle}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
-      <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" [routerLink]="['/forum',p.id,'view']" mat-button>
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-        <a mat-button>
-          <mat-icon (click)="delete(p.id)">delete</mat-icon>
-        </a>
-      </div>
+      <img matListItemAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matListItemTitle>{{p.postTitle}}</h3>
+      <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
+        <span style="float: right;">
+          <a mat-icon-button target="_blank" color="primary" [routerLink]="['/forum',p.id,'view']">
+            <mat-icon style="vertical-align: baseline !important;">open_in_new</mat-icon>
+          </a>
+          <button mat-icon-button color="primary" (click)="delete(p.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </span>
+      </p>
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

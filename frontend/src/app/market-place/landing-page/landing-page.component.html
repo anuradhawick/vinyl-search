@@ -37,7 +37,7 @@
           </button>
         </div>
       </div>
-      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
+      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
            class="ml-3 mr-5 mt-2 text-dark">
         Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/market']">cancel</a>)
       </div>

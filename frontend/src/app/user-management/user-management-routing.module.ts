@@ -13,7 +13,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'update-profile'
+        redirectTo: 'update-profile',
+        pathMatch: 'full'
       },
       {
         path: 'records',

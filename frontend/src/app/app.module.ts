@@ -1,16 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './home/home-page/home-page.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
-import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule } from '@angular/common/http';
 import { SharedModules } from './shared-modules/shared.module';
-import { TransferHttpCacheModule } from '@nguniversal/common';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -19,20 +16,15 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
   ],
   imports: [
     SharedModules,
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    BrowserAnimationsModule,
+    BrowserModule,
     AppRoutingModule,
-    NgbModule,
     HttpClientModule,
-    CommonModule,
+    BrowserAnimationsModule,
     ToastrModule.forRoot({
       preventDuplicates: true,
     }),
-    TransferHttpCacheModule
   ],
-  providers: [
-  ],
-  bootstrap: [AppComponent],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

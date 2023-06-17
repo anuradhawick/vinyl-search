@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
@@ -55,7 +55,7 @@ export class PendingAdsComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -66,7 +66,7 @@ export class PendingAdsComponent implements OnInit {
     });
   }
 
-  approve(id) {
+  approve(id: string) {
     const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
 
     modal.afterClosed().subscribe((ok) => {
@@ -83,7 +83,7 @@ export class PendingAdsComponent implements OnInit {
     });
   }
 
-  edit(id) {
+  edit(id: string) {
     // const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
     //
     // modal.afterClosed().subscribe((ok) => {
@@ -100,7 +100,7 @@ export class PendingAdsComponent implements OnInit {
     // });
   }
 
-  reject(id) {
+  reject(id: string) {
     const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to reject?.`}});
 
     modal.afterClosed().subscribe((ok) => {

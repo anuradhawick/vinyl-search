@@ -8,7 +8,7 @@ interface ImageViewerConfig {
   allowFullscreen?: boolean;
   allowKeyboardNavigation?: boolean;
 
-  btnShow?: {
+  btnShow: {
     zoomIn?: boolean;
     zoomOut?: boolean;
     rotateClockwise?: boolean;
@@ -40,7 +40,7 @@ class CustomEvent {
   name: string;
   imageIndex: number;
 
-  constructor(name, imageIndex) {
+  constructor(name: any, imageIndex: any) {
     this.name = name;
     this.imageIndex = imageIndex;
   }
@@ -82,13 +82,13 @@ const DEFAULT_CONFIG: ImageViewerConfig = {
 export class ImageViewerComponent implements OnInit {
 
   @Input()
-  src: string[];
+  src: string[] = [];
 
   @Input()
   index = 0;
 
   @Input()
-  config: ImageViewerConfig;
+  config: ImageViewerConfig = DEFAULT_CONFIG;
 
   @Output()
   indexChange: EventEmitter<number> = new EventEmitter();
@@ -106,8 +106,8 @@ export class ImageViewerComponent implements OnInit {
   private rotation = 0;
   private translateX = 0;
   private translateY = 0;
-  private prevX: number;
-  private prevY: number;
+  private prevX: number = 0;
+  private prevY: number = 0;
   private hovered = false;
 
   constructor( @Optional() @Inject('config') public moduleConfig: ImageViewerConfig) { }
@@ -119,7 +119,7 @@ export class ImageViewerComponent implements OnInit {
   }
 
   @HostListener('window:keyup.ArrowRight',  ['$event'])
-  nextImage(event) {
+  nextImage(event: any) {
     if (this.canNavigate(event) && this.index < this.src.length - 1) {
       this.loading = true;
       this.index++;
@@ -129,7 +129,7 @@ export class ImageViewerComponent implements OnInit {
   }
 
   @HostListener('window:keyup.ArrowLeft', ['$event'])
-  prevImage(event) {
+  prevImage(event: any) {
     if (this.canNavigate(event) && this.index > 0) {
       this.loading = true;
       this.index--;
@@ -139,22 +139,23 @@ export class ImageViewerComponent implements OnInit {
   }
 
   zoomIn() {
-    this.scale *= (1 + this.config.zoomFactor);
+    this.scale *= (1 + this.config.zoomFactor!);
     this.updateStyle();
   }
 
   zoomOut() {
-    if (this.scale > this.config.zoomFactor) {
-      this.scale /= (1 + this.config.zoomFactor);
+    if (this.scale > this.config.zoomFactor!) {
+      this.scale /= (1 + this.config.zoomFactor!);
     }
     this.updateStyle();
   }
 
-  scrollZoom(evt) {
+  scrollZoom(evt: any) {
     if (this.config.wheelZoom) {
       evt.deltaY > 0 ? this.zoomOut() : this.zoomIn();
       return false;
     }
+    return;
   }
 
   rotateClockwise() {
@@ -175,7 +176,7 @@ export class ImageViewerComponent implements OnInit {
     this.loading = true;
   }
 
-  onDragOver(evt) {
+  onDragOver(evt: any) {
     this.translateX += (evt.clientX - this.prevX);
     this.translateY += (evt.clientY - this.prevY);
     this.prevX = evt.clientX;
@@ -183,7 +184,7 @@ export class ImageViewerComponent implements OnInit {
     this.updateStyle();
   }
 
-  onDragStart(evt) {
+  onDragStart(evt: any) {
     if (evt.dataTransfer && evt.dataTransfer.setDragImage) {
       evt.dataTransfer.setDragImage(evt.target.nextElementSibling, 0, 0);
     }
@@ -206,7 +207,7 @@ export class ImageViewerComponent implements OnInit {
     this.configChange.next(this.config);
   }
 
-  fireCustomEvent(name, imageIndex) {
+  fireCustomEvent(name: any, imageIndex: any) {
     this.customEvent.emit(new CustomEvent(name, imageIndex));
   }
 

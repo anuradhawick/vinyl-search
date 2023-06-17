@@ -19,7 +19,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'home'
+        redirectTo: 'home',
+        pathMatch: 'full'
       },
       {
         path: 'home',
@@ -43,7 +44,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'pending'
+            redirectTo: 'pending',
+            pathMatch: 'full'
           },
           {
             path: 'pending',

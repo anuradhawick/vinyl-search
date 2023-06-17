@@ -9,7 +9,7 @@
                  class="form-control"
                  placeholder="Search records..." name="search-query" [(ngModel)]="query">
           <button mat-button class="btn btn-default" type="button" (click)="search()">Search</button>
-          <div *ngIf="(autocomplete | async)?.records.length > 0" style="background-color: #fff; left: 0;">
+          <div *ngIf="(autocomplete | async)?.records?.length > 0" style="background-color: #fff; left: 0;">
             <div
               style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
               <table class="table table-hover table-bordered shadow">
@@ -38,7 +38,7 @@
           </button>
         </div>
       </div>
-      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim((route.queryParams | async)?.query))"
+      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
            class="ml-3 mr-5 mt-2 text-dark">
         Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
       </div>
@@ -143,7 +143,7 @@
       <div class="container">
         <div *ngIf="records | async as records" class="row">
 
-          <div *ngFor="let r of records.records" class="col-lg-2 col-sm-4 col-6 pb-2 pr-2 pl-2 pt-0">
+          <div *ngFor="let r of _.get(records, 'records')" class="col-lg-2 col-sm-4 col-6 pb-2 pr-2 pl-2 pt-0">
             <div class="card m-0 w-100" style="border-radius: 0 !important;">
               <div class="">
                 <a [routerLink]="['/records', r.id, 'view']" class="thumbnail">

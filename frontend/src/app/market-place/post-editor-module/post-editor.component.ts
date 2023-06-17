@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { Storage } from '@aws-amplify/storage';
-import uuid from 'uuid';
+import {v4 as uuid} from 'uuid';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,7 +20,7 @@ export class PostEditorComponent implements OnInit {
   @Output() postChange = new EventEmitter();
 
   // current entry
-  public postObject = {
+  public postObject: any = {
     chosenImage: 0,
     images: [],
     name: '',
@@ -34,7 +34,7 @@ export class PostEditorComponent implements OnInit {
 
   // passed as prop
   @Input()
-  set post(record) {
+  set post(record: any) {
     if (!_.isEmpty(record)) {
       _.assign(this.postObject, record);
     }
@@ -42,7 +42,7 @@ export class PostEditorComponent implements OnInit {
 
   // context control
   public uploadCount = 0;
-  public percentages = [];
+  public percentages: any = [];
 
   // image viewer config
   public imgvconfig = {
@@ -59,7 +59,7 @@ export class PostEditorComponent implements OnInit {
     }
   };
 
-  public form;
+  public form: any;
 
   constructor(private auth: AuthService,
               public ngZone: NgZone,
@@ -77,7 +77,7 @@ export class PostEditorComponent implements OnInit {
       saleSubtype: [this.postObject.saleSubtype, Validators.required],
       isNegotiable: [this.postObject.isNegotiable]
     });
-    this.form.valueChanges.subscribe((values) => {
+    this.form.valueChanges.subscribe((values: any) => {
       _.assign(this.postObject, values);
     });
   }
@@ -101,7 +101,7 @@ export class PostEditorComponent implements OnInit {
     return this.postObject;
   }
 
-  addImage(event) {
+  addImage(event: any) {
     if (!this.auth.isLoggedIn) {
       this.toastr.warning('Please login before continue', 'Warning');
       return;
@@ -116,7 +116,7 @@ export class PostEditorComponent implements OnInit {
         this.uploadCount++;
         this.readyStateChange.emit(false);
 
-        const progressObserver = new Observable((observer) => {
+        const progressObserver = new Observable<any>((observer) => {
           Storage.put(filename, file, {
             customPrefix: {
               public: 'temp/'
@@ -150,14 +150,14 @@ export class PostEditorComponent implements OnInit {
     }
   }
 
-  deleteImage(index) {
+  deleteImage(index: number) {
     const removeItem = this.postObject.images[index];
     this.postObject.chosenImage = 0;
     _.remove(this.postObject.images, (item) => _.isEqual(item, removeItem));
   }
 
 
-  handleEvent(event) {
+  handleEvent(event: any) {
     switch (event.name) {
       case 'delete':
         this.deleteImage(event.imageIndex);

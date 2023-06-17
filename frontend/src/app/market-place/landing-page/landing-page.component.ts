@@ -4,41 +4,48 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { MarketService } from '../services/market.service';
+import { Observable } from 'rxjs';
 
 interface TreeNode {
   name: string;
-  saleType?: string;
-  saleSubtype?: string;
-  selected?: boolean;
+  saleType: string;
+  saleSubtype: string;
+  selected: boolean;
   children?: TreeNode[];
 }
 
 const TREE_DATA: TreeNode[] = [
   {
     name: 'A/V Material',
+    saleType: '',
+    saleSubtype: '',
+    selected: false,
     children: [
-      {name: 'Phonograph Records', saleType: 'material', saleSubtype: 'phonograph'},
-      {name: 'Magnetic Records', saleType: 'material', saleSubtype: 'magnetic'},
-      {name: 'Compact Discs', saleType: 'material', saleSubtype: 'compact'},
-      {name: 'Digital Material', saleType: 'material', saleSubtype: 'digital'},
-      {name: 'Other', saleType: 'material', saleSubtype: 'other'}
+      { name: 'Phonograph Records', selected: false, saleType: 'material', saleSubtype: 'phonograph' },
+      { name: 'Magnetic Records', selected: false, saleType: 'material', saleSubtype: 'magnetic' },
+      { name: 'Compact Discs', selected: false, saleType: 'material', saleSubtype: 'compact' },
+      { name: 'Digital Material', selected: false, saleType: 'material', saleSubtype: 'digital' },
+      { name: 'Other', selected: false, saleType: 'material', saleSubtype: 'other' }
     ]
   }, {
     name: 'A/V Gear',
+    saleType: '',
+    saleSubtype: '',
+    selected: false,
     children: [
-      {name: 'Amplifiers', saleType: 'gear', saleSubtype: 'amplifiers'},
-      {name: 'Pre Amplifiers', saleType: 'gear', saleSubtype: 'pre-amplifiers'},
-      {name: 'Speakers', saleType: 'gear', saleSubtype: 'speakers'},
-      {name: 'Equalizers', saleType: 'gear', saleSubtype: 'equalizers'},
-      {name: 'Mixers', saleType: 'gear', saleSubtype: 'mixers'},
-      {name: 'Tape Gear', saleType: 'gear', saleSubtype: 'tape'},
-      {name: 'Vinyl Gear', saleType: 'gear', saleSubtype: 'vinyl'},
-      {name: 'Audio Accessories', saleType: 'gear', saleSubtype: 'audio'},
-      {name: 'Video Gear', saleType: 'gear', saleSubtype: 'video'},
-      {name: 'Digital Gear', saleType: 'gear', saleSubtype: 'digital'},
-      {name: 'Other', saleType: 'gear', saleSubtype: 'other'},
+      { name: 'Amplifiers', selected: false, saleType: 'gear', saleSubtype: 'amplifiers' },
+      { name: 'Pre Amplifiers', selected: false, saleType: 'gear', saleSubtype: 'pre-amplifiers' },
+      { name: 'Speakers', selected: false, saleType: 'gear', saleSubtype: 'speakers' },
+      { name: 'Equalizers', selected: false, saleType: 'gear', saleSubtype: 'equalizers' },
+      { name: 'Mixers', selected: false, saleType: 'gear', saleSubtype: 'mixers' },
+      { name: 'Tape Gear', selected: false, saleType: 'gear', saleSubtype: 'tape' },
+      { name: 'Vinyl Gear', selected: false, saleType: 'gear', saleSubtype: 'vinyl' },
+      { name: 'Audio Accessories', selected: false, saleType: 'gear', saleSubtype: 'audio' },
+      { name: 'Video Gear', selected: false, saleType: 'gear', saleSubtype: 'video' },
+      { name: 'Digital Gear', selected: false, saleType: 'gear', saleSubtype: 'digital' },
+      { name: 'Other', selected: false, saleType: 'gear', saleSubtype: 'other' },
     ]
   }
 ];
@@ -48,6 +55,9 @@ interface FlatNode {
   expandable: boolean;
   name: string;
   level: number;
+  saleType: string;
+  saleSubtype: string;
+  selected: boolean;
 }
 
 @Component({
@@ -56,23 +66,23 @@ interface FlatNode {
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  public records = null;
+  public records: Observable<any> = new Observable<any>();
   public skip = 0;
   public limit = 30;
   public count = 0;
   public page = 1;
-  public autocomplete = null;
+  public autocomplete: Observable<any> = new Observable<any>();
   public _ = _;
-  public query = null;
+  public query: any = null;
 
   // page filters
-  public materialFilters = [];
-  public gearFilters = [];
+  public materialFilters: any = [];
+  public gearFilters: any = [];
 
   // context control
-  selectedFilters = {};
+  selectedFilters: any = {};
 
-  @ViewChild('loader', {static: true}) loader: LoaderComponent;
+  @ViewChild('loader', { static: true }) loader!: LoaderComponent;
 
   public treeControl = new FlatTreeControl<FlatNode>(
     node => node.level, node => node.expandable);
@@ -87,20 +97,24 @@ export class LandingPageComponent implements OnInit {
         saleSubtype: node.saleSubtype,
         level: level,
       };
-    }, node => node.level, node => node.expandable, node => node.children);
+    },
+    node => node.level,
+    node => node.expandable,
+    node => node.children
+  );
 
   public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private marketService: MarketService,
-              public route: ActivatedRoute,
-              private router: Router,
-              public auth: AuthService) {
+    public route: ActivatedRoute,
+    private router: Router,
+    public auth: AuthService) {
     this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
-      this.records = null;
+      this.records = new Observable<any>();
       const page = _.max([_.get(p, 'page', 1), 1]);
       this.skip = (page - 1) * this.limit;
       this.page = page;
@@ -117,11 +131,11 @@ export class LandingPageComponent implements OnInit {
         this.materialFilters = [this.materialFilters];
       }
       _.each(this.materialFilters, (f) => {
-        this.selectedFilters[`material.${f}`] =  true;
+        this.selectedFilters[`material.${f}`] = true;
       });
 
       _.each(this.gearFilters, (f) => {
-        this.selectedFilters[`gear.${f}`] =  true;
+        this.selectedFilters[`gear.${f}`] = true;
       });
 
       if (_.isEmpty(_.trim(this.query)) &&
@@ -134,12 +148,12 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  loadAutoComplete(event) {
+  loadAutoComplete(event: any) {
     const query: string = _.trim(event.target.value);
     let newquery = '';
 
     if (_.isEmpty(query) || query.length < 3) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable<any>();
       return;
     } else {
       const qarray = _.split(query, ' ');
@@ -154,19 +168,19 @@ export class LandingPageComponent implements OnInit {
       });
     }
 
-    this.autocomplete = this.marketService.search_posts({limit: 5, skip: 0, query: _.trim(newquery)});
+    this.autocomplete = this.marketService.search_posts({ limit: 5, skip: 0, query: _.trim(newquery) });
   }
 
   exitSearch() {
     setTimeout(() => {
-      this.autocomplete = null;
+      this.autocomplete = new Observable<any>();
     }, 500);
   }
 
   search() {
     const query = _.trim(this.query);
     if (_.isEmpty(query)) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable<any>();
       return;
     }
     this.router.navigate([], {
@@ -196,7 +210,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   loadSearchPage() {
-    this.records = null;
+    this.records = new Observable<any>();
     const data = this.marketService.search_posts({
       limit: this.limit,
       skip: this.skip,
@@ -215,7 +229,7 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  toggleFilter(type, subType) {
+  toggleFilter(type: any, subType: any) {
     if (type === 'material') {
       if (_.find(this.materialFilters, (i) => i === subType)) {
         _.remove(this.materialFilters, (i) => i === subType);
@@ -248,8 +262,8 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  changePage(event) {
-    this.records = null;
+  changePage(event: any) {
+    this.records = new Observable<any>();
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

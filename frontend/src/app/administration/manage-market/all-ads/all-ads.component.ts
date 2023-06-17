@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
@@ -50,7 +50,7 @@ export class AllAdsComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -61,7 +61,7 @@ export class AllAdsComponent implements OnInit {
     });
   }
 
-  delete(id) {
+  delete(id: string) {
     // const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to delete the forum post?.`}});
     //
     // modal.afterClosed().subscribe((ok) => {

@@ -4,10 +4,10 @@ import { RecordsEditorComponentComponent } from '../records-editor-component/rec
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { RecordsService } from '../services/records.service';
 import { ToastrService } from 'ngx-toastr';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CatalogErrorModalComponent } from '../modals/catalog-error/catalog-error.component';
 
-declare const $;
+declare const $: any;
 
 
 @Component({
@@ -16,10 +16,10 @@ declare const $;
   styleUrls: ['./records-edit-page.component.css'],
 })
 export class RecordsEditPageComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: RecordsEditorComponentComponent;
-  @ViewChild('loader', {static: false}) loader: LoaderComponent;
+  @ViewChild('editor', { static: false }) editor!: RecordsEditorComponentComponent;
+  @ViewChild('loader', { static: false }) loader!: LoaderComponent;
 
-  private ready = true;
+  ready = true;
   // public testRecord = {
   //   'chosenImage': 0,
   //   'images': [],
@@ -49,9 +49,9 @@ export class RecordsEditPageComponent implements OnInit {
   public record = null;
 
   constructor(private recordsService: RecordsService,
-              private router: Router,
-              private toastr: ToastrService,
-              public dialog: MatDialog) {
+    private router: Router,
+    private toastr: ToastrService,
+    public dialog: MatDialog) {
 
   }
 
@@ -76,7 +76,7 @@ export class RecordsEditPageComponent implements OnInit {
         } else {
           this.ready = true;
           this.loader.hide();
-          this.dialog.open(CatalogErrorModalComponent, {data: {id: result.originalId}});
+          this.dialog.open(CatalogErrorModalComponent, { data: { id: result.originalId } });
         }
       }, () => {
         this.ready = true;
@@ -86,7 +86,7 @@ export class RecordsEditPageComponent implements OnInit {
     }
   }
 
-  readyChange(event) {
+  readyChange(event: any) {
     this.ready = event;
   }
 }

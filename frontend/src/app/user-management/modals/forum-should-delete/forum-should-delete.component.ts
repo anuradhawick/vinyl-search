@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-forum-should-delete',
@@ -8,7 +8,9 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ForumShouldDeleteModalComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<ForumShouldDeleteModalComponent>) {
+  constructor(
+    @Inject(MatDialogRef<ForumShouldDeleteModalComponent>) public dialogRef: MatDialogRef<ForumShouldDeleteModalComponent>
+  ) {
   }
 
   close(): void {

@@ -12,21 +12,19 @@ import { RecordShouldDeleteModalComponent } from './modals/record-should-delete-
 import { MyMarketComponent } from './my-market/my-market.component';
 
 @NgModule({
-  declarations: [UserHomePageComponent,
+  declarations: [
+    UserHomePageComponent,
     MyRecordsComponent,
     MyForumComponent,
     UpdateDetailsComponent,
     ForumShouldDeleteModalComponent,
     RecordShouldDeleteModalComponent,
-    MyMarketComponent],
+    MyMarketComponent
+  ],
   imports: [
     CommonModule,
     UserManagementRoutingModule,
     SharedModules
-  ],
-  entryComponents: [
-    ForumShouldDeleteModalComponent,
-    RecordShouldDeleteModalComponent
   ]
 })
 export class UserManagementModule {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 import * as _ from 'lodash';
 
@@ -51,7 +51,7 @@ export class ManageForumComponent implements OnInit {
     });
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -62,7 +62,7 @@ export class ManageForumComponent implements OnInit {
     });
   }
 
-  delete(id) {
+  delete(id: string) {
     const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to delete the forum post?.`}});
 
     modal.afterClosed().subscribe((ok) => {

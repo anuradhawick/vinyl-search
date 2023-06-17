@@ -10,8 +10,8 @@ import * as _ from 'lodash';
 })
 export class RecordsRevisionViewPageComponent implements OnInit {
   public _ = _;
-  public recordObject = null;
-  public imgvconfig = {
+  public recordObject: any = null;
+  public imgvconfig: any = {
     zoomFactor: 0.1,
     wheelZoom: false,
     allowFullscreen: true,

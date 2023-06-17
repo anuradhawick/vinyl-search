@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { ToastrService } from 'ngx-toastr';
@@ -14,14 +14,14 @@ import * as _ from 'lodash';
   styleUrls: ['./post-edit-page.component.css']
 })
 export class PostEditPageComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor: PostEditorComponent;
-  @ViewChild('loader', {static: false}) loader: LoaderComponent;
-  public postObject = null;
+  @ViewChild('editor', {static: false}) editor!: PostEditorComponent;
+  @ViewChild('loader', {static: false}) loader!: LoaderComponent;
+  public postObject: any = null;
   public _ = _;
 
   // context control
   public postLoading = true;
-  private ready = true;
+  ready = true;
 
   constructor(public route: ActivatedRoute,
               private marketService: MarketService,
@@ -40,7 +40,7 @@ export class PostEditPageComponent implements OnInit {
     });
   }
 
-  readyChange(event) {
+  readyChange(event: any) {
     this.ready = event;
   }
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ForumService } from '../services/forum.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-forum-home-page',
@@ -16,16 +17,16 @@ export class ForumHomePageComponent implements OnInit {
   public limit = 10;
   public count = 0;
   public page = 1;
-  public autocomplete = null;
+  public autocomplete: Observable<any> = new Observable();
   public _ = _;
-  public query = null;
+  public query: string = '';
 
-  @ViewChild('forumloader', {static: true}) loader: LoaderComponent;
+  @ViewChild('forumloader', { static: true }) loader!: LoaderComponent;
 
   constructor(public forumService: ForumService,
-              public route: ActivatedRoute,
-              public router: Router,
-              public auth: AuthService) {
+    public route: ActivatedRoute,
+    public router: Router,
+    public auth: AuthService) {
 
   }
 
@@ -77,11 +78,11 @@ export class ForumHomePageComponent implements OnInit {
     });
   }
 
-  loadAutoComplete(event) {
+  loadAutoComplete(event: any) {
     const query = _.trim(event.target.value);
 
     if (_.isEmpty(query)) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
       return;
     }
 
@@ -94,11 +95,11 @@ export class ForumHomePageComponent implements OnInit {
 
   exitSearch() {
     setTimeout(() => {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
     }, 500);
   }
 
-  changePage(event) {
+  changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
       relativeTo: this.route,
@@ -112,7 +113,7 @@ export class ForumHomePageComponent implements OnInit {
   search() {
     const query = _.trim(this.query);
     if (_.isEmpty(query)) {
-      this.autocomplete = null;
+      this.autocomplete = new Observable();
       return;
     }
     this.router.navigate([], {

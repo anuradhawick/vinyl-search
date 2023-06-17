@@ -14,11 +14,11 @@ import { environment } from '../../../environments/environment';
 })
 export class UpdateDetailsComponent implements OnInit {
   public uploadImageUrl = null;
-  public uploadableFile = null;
+  public uploadableFile: any = null;
   public uploading = false;
   public uploadingProgress = 0;
-  private user = null; // TODO replace with a replay subject
-  private originalUser = null;
+  private user: any = null; // TODO replace with a replay subject
+  private originalUser: any = null;
   public form = new FormGroup(
     {
       'firstName': new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z]*$/)]),
@@ -32,7 +32,7 @@ export class UpdateDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.user.asObservable().subscribe((u) => {
+    this.auth.user.asObservable().subscribe((u: any) => {
       this.user = u;
       this.originalUser = _.cloneDeep(u);
       this.form.reset({
@@ -48,7 +48,7 @@ export class UpdateDetailsComponent implements OnInit {
     });
   }
 
-  addImage(event) {
+  addImage(event: any) {
     if (!_.isEmpty(event.target.files)) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -90,7 +90,7 @@ export class UpdateDetailsComponent implements OnInit {
       return;
     }
 
-    const file = this.uploadableFile;
+    const file: File = this.uploadableFile;
     const filename = `${this.user.uid}.${file.name.split('.').pop() || ''}`;
 
     this.uploadableFile = null;
