@@ -61,4 +61,4 @@ awsconfiguration.json
 .terraform*
 builds*
 *.tfvars
-./tests/*
+tests/*
