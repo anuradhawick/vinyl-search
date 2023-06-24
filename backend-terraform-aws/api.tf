@@ -223,8 +223,33 @@ resource "aws_api_gateway_deployment" "vinyl-lk" {
   }
 }
 
+# stage
 resource "aws_api_gateway_stage" "vinyl-lk" {
   deployment_id = aws_api_gateway_deployment.vinyl-lk.id
   rest_api_id   = aws_api_gateway_rest_api.vinyl-lk.id
   stage_name    = terraform.workspace
+}
+
+# domains
+resource "aws_api_gateway_domain_name" "vinyl-lk-api" {
+  certificate_arn = var.ACM_CERT
+  domain_name     = "${terraform.workspace == "prod" ? "api" : "devapi"}.vinyl.lk"
+}
+
+resource "aws_api_gateway_base_path_mapping" "vinyl-lk-api" {
+  api_id      = aws_api_gateway_rest_api.vinyl-lk.id
+  stage_name  = aws_api_gateway_stage.vinyl-lk.stage_name
+  domain_name = aws_api_gateway_domain_name.vinyl-lk-api.domain_name
+}
+
+resource "aws_route53_record" "vinyl-lk-api" {
+  name    = aws_api_gateway_domain_name.vinyl-lk-api.domain_name
+  type    = "A"
+  zone_id = var.R53_ZONE_ID
+
+  alias {
+    evaluate_target_health = false
+    name                   = aws_api_gateway_domain_name.vinyl-lk-api.cloudfront_domain_name
+    zone_id                = aws_api_gateway_domain_name.vinyl-lk-api.cloudfront_zone_id
+  }
 }

@@ -316,7 +316,7 @@ export const main = (event, context, callback) => {
     'POST',
     '/admin/market/{postId}',
     (event, context, callback) => {
-      admin_market_functions.update_market_post(event.requestContext.authorizer.claims['sub'],
+      admin_market_functions.update_market_post(event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.postId,
         event.body).then((postId) => {
           callback(null, builResponse(200, {

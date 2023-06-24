@@ -102,7 +102,7 @@ export const main = (event, context, callback) => {
     '/forum',
     (event, context, callback) => {
       console.log(event.requestContext.authorizer.claims)
-      forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, null).then((data) => {
+      forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, null).then((data) => {
         callback(null, builResponse(200, {
           postId: data,
           success: true
@@ -123,7 +123,7 @@ export const main = (event, context, callback) => {
     'POST',
     '/forum/{postId}',
     (event, context, callback) => {
-      forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
+      forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, event.pathParameters.postId).then((data) => {
         callback(null, builResponse(200, {
           postId: data,
           success: true
@@ -144,7 +144,7 @@ export const main = (event, context, callback) => {
     'POST',
     '/forum/{postId}/comments',
     (event, context, callback) => {
-      forum_functions.save_post(event.requestContext.authorizer.claims['sub'], event.body, event.pathParameters.postId).then((data) => {
+      forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, event.pathParameters.postId).then((data) => {
         callback(null, builResponse(200, {
           postId: data,
           success: true
@@ -165,7 +165,7 @@ export const main = (event, context, callback) => {
     'DELETE',
     '/forum/{postId}',
     (event, context, callback) => {
-      forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.postId).then((data) => {
+      forum_functions.delete_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId).then((data) => {
         callback(null, builResponse(200, {
           success: true
         }));
@@ -185,7 +185,7 @@ export const main = (event, context, callback) => {
     'DELETE',
     '/forum/{postId}/comments/{commentId}',
     (event, context, callback) => {
-      forum_functions.delete_post(event.requestContext.authorizer.claims['sub'], event.pathParameters.commentId).then((data) => {
+      forum_functions.delete_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.commentId).then((data) => {
         callback(null, builResponse(200, {
           success: true
         }));

@@ -1,139 +1,147 @@
-const db_util = require('../utils/db-util');
-const _ = require('lodash');
-const CognitoIdentityServiceProvider = require('aws-sdk').CognitoIdentityServiceProvider;
+import _ from 'lodash';
+import { connect_db } from './utils/db-util.js';
+import { CognitoIdentityProviderClient, ListUsersCommand, AdminLinkProviderForUserCommand, AdminUpdateUserAttributesCommand } from "@aws-sdk/client-cognito-identity-provider";
 
-update_user = async (uid, update) => {
-    const db = await db_util.connect_db();
-    await db.collection('users').findOneAndUpdate({uid: uid},
-        update,
-        {
-            returnOriginal: false,
-            upsert: true
-        });
-    return true
+
+const cognito = new CognitoIdentityProviderClient();
+
+const update_user = async (email, update) => {
+  const db = await connect_db();
+  return await db.collection('users').findOneAndUpdate({ email },
+    update,
+    {
+      returnOriginal: false,
+      upsert: true
+    });
 };
 
-merge_users = async (userAttributes, username) => {
-    const cognito = new CognitoIdentityServiceProvider();
-    const users = await cognito.listUsers({
-        UserPoolId: process.env.COGNITO_USER_POOL_ID,
-        Filter: `email = "${userAttributes.email}"`
-    }).promise();
+const merge_users = async (userPoolId, userAttributes, username) => {
+  const input = {
+    UserPoolId: userPoolId,
+    Filter: `email = "${userAttributes.email}"`
+  }
+  const command = new ListUsersCommand(input);
+  const response = await cognito.send(command);
 
-    if (!_.isEmpty(users.Users) && (_.split(username, '_')[0] === 'Google' || _.split(username, '_')[0] === 'Facebook')) {
-        const firstuser = _.sortBy(users.Users, (user) => new Date(user.UserCreateDate))[0];
-        const params = {
-            DestinationUser: {
-                ProviderAttributeValue: _.split(firstuser.Username, '_')[1],
-                ProviderName: _.split(firstuser.Username, '_')[0]
-            },
-            SourceUser: {
-                ProviderAttributeName: 'Cognito_Subject',
-                ProviderAttributeValue: _.split(username, '_')[1],
-                ProviderName: _.split(username, '_')[0]
-            },
-            UserPoolId: process.env.COGNITO_USER_POOL_ID
-        };
+  if (!_.isEmpty(response.Users) && (_.split(username, '_')[0] === 'Google' || _.split(username, '_')[0] === 'Facebook')) {
+    const firstuser = _.sortBy(response.Users, (user) => new Date(user.UserCreateDate))[0];
+    const input = {
+      DestinationUser: {
+        ProviderAttributeValue: _.split(firstuser.Username, '_')[1],
+        ProviderName: _.split(firstuser.Username, '_')[0]
+      },
+      SourceUser: {
+        ProviderAttributeName: 'Cognito_Subject',
+        ProviderAttributeValue: _.split(username, '_')[1],
+        ProviderName: _.split(username, '_')[0]
+      },
+      UserPoolId: userPoolId
+    };
+    const command = new AdminLinkProviderForUserCommand(input);
+    const response = await cognito.send(command);
 
-        await cognito.adminLinkProviderForUser(params).promise();
-        await update_user(_.find(firstuser.Attributes, (attr) => attr.Name === 'sub').Value,
-            {
-                $addToSet: {
-                    authProviders: _.split(username, '_')[0]
-                }
-            });
-        return true;
-    }
-    return false;
-};
-
-create_cognito_user_if_none = async (userAttributes, username) => {
-    // const cognito = new CognitoIdentityServiceProvider();
-    //
-    // const users = await cognito.listUsers({
-    //     UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    //     Filter: `email = "${userAttributes.email}"`
-    // }).promise();
-    //
-    // if (_.split(username, '_')[0] === 'Google' || _.split(username, '_')[0] === 'Facebook') {
-    //     const cognitoUser = _.filter(users.Users, (user) => user.UserStatus !== 'EXTERNAL_PROVIDER');
-    //
-    //     // if not available
-    //     if (_.isEmpty(cognitoUser)) {
-    //         const params = {
-    //             UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    //             Username: userAttributes.email,
-    //             DesiredDeliveryMediums: ["EMAIL"],
-    //             MessageAction: "SUPPRESS",
-    //             UserAttributes: [
-    //                 {
-    //                     Name: 'email',
-    //                     Value: userAttributes.email
-    //                 },
-    //             ],
-    //         };
-    //         await cognito.adminCreateUser(params).promise();
-    //     }
-    // }
-};
-
-exports.main = (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false;
-
-    console.log("EVENT: ", event);
-
-    if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
-
-        const userAttributes = event.request.userAttributes;
-        const username = event.userName;
-        const provider = _.split(username, '_')[0];
-
-        let uid = event.request.userAttributes.sub;
-        let picture = _.get(userAttributes, 'picture', '');
-
-        try {
-            if (provider === 'Facebook') {
-                picture = JSON.parse(picture).data.url;
-            }
-        } catch (e) {
-            console.error(e);
+    await update_user(_.find(firstuser.Attributes, (attr) => attr.Name === 'email').Value,
+      {
+        $addToSet: {
+          authProviders: _.split(username, '_')[0]
         }
-        const update = {
-            $set: {
-                email: userAttributes.email,
-                given_name: userAttributes.given_name,
-                family_name: userAttributes.family_name,
-                name: userAttributes.name,
-                picture,
-                updatedAt: new Date(),
-                roles: []
-            },
-            $addToSet: {
-                authProviders: provider
-            }
+      });
+  }
+};
 
-        };
+const postConfirmationHanlder = async (event) => {
+  const userPoolId = event.userPoolId
+  const userAttributes = event.request.userAttributes;
+  const username = event.userName;
+  const provider = _.split(username, '_')[0];
 
-        update_user(uid, update).then(() => {
-            callback(null, event);
-        }).catch((err) => {
-            callback(err, null);
-        });
-    } else if (event.triggerSource === 'PreSignUp_ExternalProvider') {
-        const userAttributes = event.request.userAttributes;
-        const username = event.userName;
+  let email = event.request.userAttributes.email;
+  let picture = _.get(userAttributes, 'picture', '');
 
-        merge_users(userAttributes, username).then((merged) => {
-            if (merged) {
-                callback(new Error(`${_.split(username, '_')[0] || ''}`), event);
-
-            } else {
-                callback(null, event);
-            }
-        }).catch((err) => {
-            callback(err, null);
-        });
-    } else {
-        callback(null, event);
+  try {
+    if (provider === 'Facebook') {
+      picture = JSON.parse(picture).data.url;
     }
+  } catch (e) {
+    console.error(e);
+  }
+
+  const update = {
+    $set: {
+      email: userAttributes.email,
+      given_name: userAttributes.given_name,
+      family_name: userAttributes.family_name,
+      name: userAttributes.name,
+      picture,
+      updatedAt: new Date(),
+      roles: []
+    },
+    $addToSet: {
+      authProviders: provider
+    }
+
+  };
+
+  const result = await update_user(email, update);
+  let uid = null;
+
+  if (!result.lastErrorObject.updatedExisting) {
+    uid = result.lastErrorObject.upserted.toString()
+  } else {
+    uid = result.value._id.toString()
+  }
+
+  const attributeUpdate = {
+    UserPoolId: userPoolId,
+    Username: username,
+    UserAttributes: [
+      {
+        Name: "custom:uid",
+        Value: uid,
+      }
+    ]
+  };
+  const command = new AdminUpdateUserAttributesCommand(attributeUpdate);
+  cognito.send(command);
+
+  return event;
+};
+
+const preSignUpHandler = async (event) => {
+  const userPoolId = event.userPoolId
+  const userAttributes = event.request.userAttributes;
+  const username = event.userName;
+
+  await merge_users(userPoolId, userAttributes, username)
+
+  event.response.autoConfirmUser = true
+  event.response.autoVerifyEmail = true
+  event.response.autoVerifyPhone = true
+
+  return event;
+};
+
+
+export const main = async (event, context) => {
+  console.log("EVENT: ", event);
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  const eventType = event.triggerSource
+  let response = null;
+
+  switch (eventType) {
+    case 'PostConfirmation_ConfirmSignUp':
+      response = await postConfirmationHanlder(event);
+      break;
+    case 'PreSignUp_ExternalProvider':
+      response = await preSignUpHandler(event);
+      break;
+    default:
+      response = event;
+      break;
+  }
+
+  console.log("RESPONSE: ", response);
+
+  return response;
 };

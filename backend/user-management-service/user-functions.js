@@ -35,7 +35,7 @@ export async function update_user(uid, userdata) {
     return null;
   }
 
-  const newUserData = await db.collection('users').findOneAndUpdate({ uid: uid },
+  const newUserData = await db.collection('users').findOneAndUpdate({ _id: new ObjectId(uid) },
     set_user,
     {
       returnOriginal: false,
@@ -49,7 +49,7 @@ export async function update_user(uid, userdata) {
 export async function get_user(uid) {
   const db = await connect_db();
 
-  return await db.collection('users').findOne({ uid: uid });
+  return await db.collection('users').findOne({ _id: new ObjectId(uid) });
 };
 
 export async function get_user_records(uid, query_params) {

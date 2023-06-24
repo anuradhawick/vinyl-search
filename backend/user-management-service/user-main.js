@@ -13,7 +13,8 @@ export const main = (event, context, callback) => {
     'GET',
     '/users',
     (event, context, callback) => {
-      user_functions.get_user(event.requestContext.authorizer.claims['sub'])
+      console.log(event.requestContext)
+      user_functions.get_user(event.requestContext.authorizer.claims['custom:uid'])
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -36,7 +37,7 @@ export const main = (event, context, callback) => {
     'POST',
     '/users',
     (event, context, callback) => {
-      user_functions.update_user(event.requestContext.authorizer.claims['sub'], event.body)
+      user_functions.update_user(event.requestContext.authorizer.claims['custom:uid'], event.body)
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -59,7 +60,7 @@ export const main = (event, context, callback) => {
     'GET',
     '/users/records',
     (event, context, callback) => {
-      user_functions.get_user_records(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
+      user_functions.get_user_records(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -82,7 +83,7 @@ export const main = (event, context, callback) => {
     'GET',
     '/users/forum',
     (event, context, callback) => {
-      user_functions.get_user_forum_posts(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
+      user_functions.get_user_forum_posts(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -105,7 +106,7 @@ export const main = (event, context, callback) => {
     'GET',
     '/users/market',
     (event, context, callback) => {
-      user_functions.get_user_market_posts(event.requestContext.authorizer.claims['sub'], event.queryStringParameters)
+      user_functions.get_user_market_posts(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -129,7 +130,7 @@ export const main = (event, context, callback) => {
     'POST',
     '/users/market/{postId}/sold',
     (event, context, callback) => {
-      user_functions.mark_selling_item_as_sold(event.requestContext.authorizer.claims['sub'], event.pathParameters.postId)
+      user_functions.mark_selling_item_as_sold(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId)
         .then((user) => {
           callback(null, builResponse(200, {
             ...user,
@@ -153,7 +154,7 @@ export const main = (event, context, callback) => {
     '/users/records/{recordId}',
     (event, context, callback) => {
 
-      user_functions.delete_record(event.requestContext.authorizer.claims['sub'], event.pathParameters.recordId).then((data) => {
+      user_functions.delete_record(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.recordId).then((data) => {
         callback(null, builResponse(200, {
           success: true
         }));
@@ -174,7 +175,7 @@ export const main = (event, context, callback) => {
     '/users/market/{postID}',
     (event, context, callback) => {
 
-      user_functions.delete_marketplace_ad(event.requestContext.authorizer.claims['sub'], event.pathParameters.postID).then((data) => {
+      user_functions.delete_marketplace_ad(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postID).then((data) => {
         callback(null, builResponse(200, {
           success: true
         }));

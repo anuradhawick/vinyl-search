@@ -83,7 +83,7 @@ export const main = (event, context, callback) => {
     '/market/{postId}',
     (event, context, callback) => {
       selling_functions.update_post(
-        event.requestContext.authorizer.claims['sub'],
+        event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.postId,
         event.body).then((data) => {
         callback(null, builResponse(200, {
@@ -108,7 +108,7 @@ export const main = (event, context, callback) => {
     '/market',
     (event, context, callback) => {
       selling_functions.new_sell(
-        event.requestContext.authorizer.claims['sub'],
+        event.requestContext.authorizer.claims['custom:uid'],
         event.body
       ).then((id) => {
         callback(null, builResponse(200, {
@@ -133,7 +133,7 @@ export const main = (event, context, callback) => {
     '/market/{postId}/report',
     (event, context, callback) => {
       selling_functions.report_marketplace_ad(
-        event.requestContext.authorizer.claims['sub'],
+        event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.postId,
         event.body
       ).then((id) => {
@@ -159,7 +159,7 @@ export const main = (event, context, callback) => {
   //   '/{id}',
   //   (event, context, callback) => {
   //     record_functions.update_record(
-  //       event.requestContext.authorizer.claims['sub'],
+  //       event.requestContext.authorizer.claims['custom:uid'],
   //       event.pathParameters.recordId,
   //       event.body
   //     ).then((recordId) => {

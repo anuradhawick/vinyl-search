@@ -14,12 +14,17 @@ module "lambda-admin-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
-    COGNITO_USER_POOL_ID      = "ap-southeast-1_Z23imsu3V"
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-s3-full-access.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/administration-service",
@@ -54,6 +59,11 @@ module "lambda-forum-service" {
     CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-s3-full-access.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/forum-management-service",
@@ -88,6 +98,11 @@ module "lambda-market-service" {
     CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-s3-full-access.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/market-service",
@@ -123,6 +138,11 @@ module "lambda-records-service" {
     STAGE                     = ""
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-s3-full-access.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/records-management-service",
@@ -152,9 +172,14 @@ module "lambda-user-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
-    COGNITO_USER_POOL_ID      = "ap-southeast-1_Z23imsu3V"
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-s3-full-access.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/user-management-service",
@@ -185,14 +210,20 @@ module "lambda-user-pool-triggers" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
-    COGNITO_USER_POOL_ID      = "ap-southeast-1_Z23imsu3V"
     NODE_OPTIONS              = "--enable-source-maps"
   }
+  attach_policy_jsons = true
+  policy_jsons = [
+    data.aws_iam_policy_document.lambda-user-pool-triggers.json,
+  ]
+  number_of_policy_jsons = 1
   source_path = [
     {
       path = "${path.module}/../backend/userpool-trigger-service",
       commands = [
         "npm install",
+        "./node_modules/.bin/esbuild --sourcemap --bundle user-pool-triggers.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
+        "cd dist",
         ":zip"
       ]
     }

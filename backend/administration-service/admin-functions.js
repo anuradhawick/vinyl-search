@@ -16,7 +16,7 @@ const CDN_DOMAIN = process.env.CDN_DOMAIN
 
 export async function get_user_by_uid(uid) {
   const db = await connect_db();
-  return await db.collection('users').findOne({ uid: uid })
+  return await db.collection('users').findOne({ _id: new ObjectId(uid) })
 };
 
 export async function get_admin_users() {

@@ -84,7 +84,7 @@ export const main = (event, context, callback) => {
     '/records',
     (event, context, callback) => {
       record_functions.new_record(
-        event.requestContext.authorizer.claims['sub'],
+        event.requestContext.authorizer.claims['custom:uid'],
         event.body
       ).then((recordId) => {
         callback(null, builResponse(200, {
@@ -109,7 +109,7 @@ export const main = (event, context, callback) => {
     '/records/{recordId}',
     (event, context, callback) => {
       record_functions.update_record(
-        event.requestContext.authorizer.claims['sub'],
+        event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.recordId,
         event.body
       ).then((recordId) => {
