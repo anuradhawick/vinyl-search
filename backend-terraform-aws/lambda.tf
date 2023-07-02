@@ -17,7 +17,7 @@ module "lambda-admin-service" {
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
-    CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
+    CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
     NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
@@ -56,7 +56,7 @@ module "lambda-forum-service" {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
-    CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
+    CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
     NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
@@ -95,7 +95,7 @@ module "lambda-market-service" {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
-    CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
+    CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
     NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
@@ -134,7 +134,7 @@ module "lambda-records-service" {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
-    CDN_DOMAIN                = aws_cloudfront_distribution.s3_distribution.domain_name
+    CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
     STAGE                     = ""
     NODE_OPTIONS              = "--enable-source-maps"
   }

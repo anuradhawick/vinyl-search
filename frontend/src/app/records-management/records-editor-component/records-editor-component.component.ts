@@ -390,7 +390,7 @@ export class RecordsEditorComponentComponent implements OnInit {
               observer.next(progress.loaded * 100 / progress.total);
             },
           }).then(() => {
-            const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`;
+            const url = `${environment.cdn_url}temp/${filename}`;
 
             this.recordObject.images.push(url);
             this.uploadCount--;

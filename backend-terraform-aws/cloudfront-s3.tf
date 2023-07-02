@@ -44,6 +44,22 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = var.common-tags
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = var.ACM_CERT
+    ssl_support_method  = "sni-only"
+  }
+
+  aliases = ["${terraform.workspace}cdn.vinyl.lk"]
+}
+
+# domain config
+resource "aws_route53_record" "vinyl-lk-cdn" {
+  name    = "${terraform.workspace}cdn.vinyl.lk"
+  type    = "A"
+  zone_id = var.R53_ZONE_ID
+
+  alias {
+    evaluate_target_health = false
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
   }
 }
