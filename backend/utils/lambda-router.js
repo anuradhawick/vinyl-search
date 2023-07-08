@@ -1,4 +1,5 @@
 export function Router(event, context, callback) {
+  console.log('EVENT RECEIVED', event)
   this.path = event.resource;
   this.method = event.httpMethod;
   this.callback = callback;

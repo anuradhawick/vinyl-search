@@ -357,9 +357,9 @@ export async function create_watermarks(key) {
   await Promise.all([s3.putObject(params11).promise(), s3.putObject(params12).promise()])
 };
 
-export async function new_record(uid, record) {
+export async function new_record(uid_str, record) {
+  const ownerUid = new ObjectId(uid_str);
   const db = await connect_db();
-  const ownerUid = uid;
   const exists = await db.collection('records').findOne({ catalogNo: _.trim(_.get(record, 'catalogNo', '')) });
 
   if (!_.isEmpty(exists)) {
@@ -402,7 +402,8 @@ export async function new_record(uid, record) {
   return { recordId: record.id };
 };
 
-export async function update_record(reviserUid, recordId, record) {
+export async function update_record(reviser_uid_str, recordId, record) {
+  const reviserUid = new ObjectId(reviser_uid_str);
   const db = await connect_db();
   const newImages = await Promise.all(_.map(record.images, (image) => {
     const pathstr = image.replace(/(.)*.amazonaws.com\//, '');

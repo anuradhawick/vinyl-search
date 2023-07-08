@@ -101,7 +101,6 @@ export const main = (event, context, callback) => {
     'POST',
     '/forum',
     (event, context, callback) => {
-      console.log(event.requestContext.authorizer.claims)
       forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, null).then((data) => {
         callback(null, builResponse(200, {
           postId: data,

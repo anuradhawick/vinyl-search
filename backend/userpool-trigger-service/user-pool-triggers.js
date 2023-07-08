@@ -54,8 +54,7 @@ const postConfirmationHanlder = async (event) => {
   const userAttributes = event.request.userAttributes;
   const username = event.userName;
   const provider = _.split(username, '_')[0];
-
-  let email = event.request.userAttributes.email;
+  const email = event.request.userAttributes.email;
   let picture = _.get(userAttributes, 'picture', '');
 
   try {
@@ -63,7 +62,7 @@ const postConfirmationHanlder = async (event) => {
       picture = JSON.parse(picture).data.url;
     }
   } catch (e) {
-    console.error(e);
+    console.error('Unable to extract Facebook picture', e);
   }
 
   const update = {
@@ -81,16 +80,8 @@ const postConfirmationHanlder = async (event) => {
     }
 
   };
-
   const result = await update_user(email, update);
-  let uid = null;
-
-  if (!result.lastErrorObject.updatedExisting) {
-    uid = result.lastErrorObject.upserted.toString()
-  } else {
-    uid = result.value._id.toString()
-  }
-
+  const uid = result.lastErrorObject.updatedExisting ? result.value._id.toString() : result.lastErrorObject.upserted.toString();
   const attributeUpdate = {
     UserPoolId: userPoolId,
     Username: username,
@@ -102,7 +93,7 @@ const postConfirmationHanlder = async (event) => {
     ]
   };
   const command = new AdminUpdateUserAttributesCommand(attributeUpdate);
-  cognito.send(command);
+  const response = await cognito.send(command);
 
   return event;
 };

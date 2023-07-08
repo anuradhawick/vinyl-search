@@ -90,6 +90,39 @@ resource "aws_api_gateway_method_response" "get_users_forum" {
 }
 
 #
+# API Function /users/forum/{postId}
+#
+resource "aws_api_gateway_resource" "users_forum_id" {
+  path_part   = "{postId}"
+  parent_id   = aws_api_gateway_resource.users_forum.id
+  rest_api_id = aws_api_gateway_rest_api.vinyl-lk.id
+}
+
+# DELETE
+resource "aws_api_gateway_method" "delete_users_forum_id" {
+  rest_api_id   = aws_api_gateway_resource.users_forum_id.rest_api_id
+  resource_id   = aws_api_gateway_resource.users_forum_id.id
+  http_method   = "DELETE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
+}
+
+resource "aws_api_gateway_method_response" "delete_users_forum_id" {
+  rest_api_id = aws_api_gateway_method.delete_users_forum_id.rest_api_id
+  resource_id = aws_api_gateway_method.delete_users_forum_id.resource_id
+  http_method = aws_api_gateway_method.delete_users_forum_id.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+#
 # API Function /users/records
 #
 resource "aws_api_gateway_resource" "users_records" {
@@ -248,6 +281,14 @@ module "cors-users_forum" {
   api_resource_id = aws_api_gateway_resource.users_forum.id
 }
 
+module "cors-users_forum_id" {
+  source  = "squidfunk/api-gateway-enable-cors/aws"
+  version = "0.3.3"
+
+  api_id          = aws_api_gateway_rest_api.vinyl-lk.id
+  api_resource_id = aws_api_gateway_resource.users_forum_id.id
+}
+
 module "cors-users_market" {
   source  = "squidfunk/api-gateway-enable-cors/aws"
   version = "0.3.3"
@@ -347,6 +388,28 @@ resource "aws_api_gateway_integration_response" "get_users_forum" {
   }
 
   depends_on = [aws_api_gateway_integration.get_users_forum]
+}
+
+resource "aws_api_gateway_integration" "delete_users_forum_id" {
+  rest_api_id             = aws_api_gateway_rest_api.vinyl-lk.id
+  resource_id             = aws_api_gateway_resource.users_forum_id.id
+  http_method             = aws_api_gateway_method.delete_users_forum_id.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = module.lambda-user-service.lambda_function_invoke_arn
+}
+
+resource "aws_api_gateway_integration_response" "delete_users_forum_id" {
+  rest_api_id = aws_api_gateway_integration.delete_users_forum_id.rest_api_id
+  resource_id = aws_api_gateway_integration.delete_users_forum_id.resource_id
+  http_method = aws_api_gateway_integration.delete_users_forum_id.http_method
+  status_code = aws_api_gateway_method_response.delete_users_forum_id.status_code
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  depends_on = [aws_api_gateway_integration.delete_users_forum_id]
 }
 
 resource "aws_api_gateway_integration" "get_users_market" {

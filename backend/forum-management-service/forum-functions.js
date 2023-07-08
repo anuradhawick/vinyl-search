@@ -212,9 +212,9 @@ export async function search_posts(queryStringParameters) {
   return posts[0];
 };
 
-export async function save_post(uid, post, postId) {
+export async function save_post(uid_str, post, postId) {
+  const ownerUid = new ObjectId(uid_str);
   const db = await connect_db();
-  const ownerUid = uid;
   const $ = cheerio.load(post.postHTML);
   const images = [];
   const allimages = [];
@@ -328,7 +328,8 @@ export async function save_post(uid, post, postId) {
   }
 };
 
-export async function delete_post(uid, postId) {
+export async function delete_post(uid_str, postId) {
+  const uid = new ObjectId(uid_str);
   const db = await connect_db();
   const post = await db.collection('forum_posts').findOne({ _id: new ObjectId(postId) });
   const $ = cheerio.load(post.postHTML);

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { ObjectId } from 'mongodb';
 import { S3Client } from '@aws-sdk/client-s3';
 import { connect_db } from './utils/db-util.js';
+import * as cheerio from 'cheerio';
 
 
 const s3 = new S3Client();
@@ -46,13 +47,15 @@ export async function update_user(uid, userdata) {
 };
 
 
-export async function get_user(uid) {
+export async function get_user(uid_str) {
   const db = await connect_db();
+  const uid = new ObjectId(uid_str);
 
-  return await db.collection('users').findOne({ _id: new ObjectId(uid) });
+  return await db.collection('users').findOne({ _id: uid });
 };
 
-export async function get_user_records(uid, query_params) {
+export async function get_user_records(uid_str, query_params) {
+  const uid = new ObjectId(uid_str);
   const limit = _.parseInt(_.get(query_params, 'limit', 30));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
   const db = await connect_db();
@@ -115,8 +118,8 @@ export async function get_user_records(uid, query_params) {
 };
 
 
-export async function get_user_forum_posts(uid, query_params) {
-
+export async function get_user_forum_posts(uid_str, query_params) {
+  const uid = new ObjectId(uid_str);
   const limit = _.parseInt(_.get(query_params, 'limit', 5));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
 
@@ -178,8 +181,49 @@ export async function get_user_forum_posts(uid, query_params) {
   return data[0];
 };
 
-export async function get_user_market_posts(uid, query_params) {
 
+export async function delete_forum_post(uid_str, postId) {
+  const uid = new ObjectId(uid_str);
+  const db = await connect_db();
+  const post = await db.collection('forum_posts').findOne({ _id: new ObjectId(postId) });
+  const $ = cheerio.load(post.postHTML);
+  const images = [];
+
+  _.forEach($('img'), (v, k) => {
+    images.push(v.attribs.src);
+  });
+
+  const removeImages = Promise.all(_.map(images, (image) => {
+    const filename = _.split(image, '/').pop();
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: `forum-images/${filename}`
+    };
+    return new Promise((resolve, reject) => {
+      s3.deleteObject(params, (err, data) => {
+        if (err) {
+          resolve();
+        }
+        else {
+          resolve()
+        }
+      }
+      );
+    });
+  }));
+
+  const removePost = db.collection('forum_posts').findOneAndDelete({
+    _id: new ObjectId(postId),
+    ownerUid: uid
+  });
+
+  await Promise.all([removeImages, removePost]);
+
+  return true;
+};
+
+export async function get_user_market_posts(uid_str, query_params) {
+  const uid = new ObjectId(uid_str);
   const limit = _.parseInt(_.get(query_params, 'limit', 5));
   const skip = _.parseInt(_.get(query_params, 'skip', 0));
 
@@ -241,7 +285,8 @@ export async function get_user_market_posts(uid, query_params) {
   return data[0];
 };
 
-export async function mark_selling_item_as_sold(uid, postId) {
+export async function mark_selling_item_as_sold(uid_str, postId) {
+  const uid = new ObjectId(uid_str);
   const db = await connect_db();
 
   await db.collection('selling_items').findOneAndUpdate(
@@ -258,8 +303,8 @@ export async function mark_selling_item_as_sold(uid, postId) {
 };
 
 
-export async function delete_record(uid, recordId) {
-
+export async function delete_record(uid_str, recordId) {
+  const uid = new ObjectId(uid_str);
   const db = await connect_db();
   const records = await db.collection('records').find({ id: new ObjectId(recordId) }).toArray();
 
@@ -305,8 +350,8 @@ export async function delete_record(uid, recordId) {
   return true;
 };
 
-export async function delete_marketplace_ad(uid, postID) {
-
+export async function delete_marketplace_ad(uid_str, postID) {
+  const uid = new ObjectId(uid_str);
   const db = await connect_db();
   const posts = await db.collection('selling_items').find({ id: new ObjectId(postID) }).toArray();
 

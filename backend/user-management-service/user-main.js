@@ -13,7 +13,6 @@ export const main = (event, context, callback) => {
     'GET',
     '/users',
     (event, context, callback) => {
-      console.log(event.requestContext)
       user_functions.get_user(event.requestContext.authorizer.claims['custom:uid'])
         .then((user) => {
           callback(null, builResponse(200, {
@@ -96,6 +95,27 @@ export const main = (event, context, callback) => {
             success: false
           }))
         });
+    }
+  );
+
+  /**
+   * delete record
+   */
+  router.route(
+    'DELETE',
+    '/users/forum/{postId}',
+    (event, context, callback) => {
+
+      user_functions.delete_forum_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId).then((data) => {
+        callback(null, builResponse(200, {
+          success: true
+        }));
+      }).catch((e) => {
+        console.error(e);
+        callback(null, builResponse(500, {
+          success: false
+        }));
+      });
     }
   );
 

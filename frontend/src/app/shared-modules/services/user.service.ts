@@ -74,15 +74,13 @@ export class UserService {
   }
 
   async delete_forum_post(id: any) {
-    // TODO implement this in API gateway
-    // const token = await this.auth.getToken();
+    const token = await this.auth.getToken();
 
-    // return await this.http.delete(environment.api_gateway + 'users/forum/' + id, {
-    //   headers: new HttpHeaders({
-    //     'Authorization': token
-    //   })
-    // }).toPromise();
-    return true;
+    return await this.http.delete(environment.api_gateway + 'users/forum/' + id, {
+      headers: new HttpHeaders({
+        'Authorization': token
+      })
+    }).toPromise();
   }
 
   async mark_selling_item_sold(id: any) {
