@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, CopyObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import path from 'path';
 import Jimp from 'jimp';
 import _ from 'lodash';
@@ -10,6 +10,15 @@ const s3 = new S3Client();
 const BUCKET_NAME = process.env.BUCKET_NAME
 const CDN_DOMAIN = process.env.CDN_DOMAIN
 
+
+const readS3Stream = async (s3Response) => {
+  return await new Promise((resolve, reject) => {
+    const chunks = [];
+    s3Response.Body.on("data", (chunk) => chunks.push(chunk));
+    s3Response.Body.on("end", () => resolve(Buffer.concat(chunks)));
+    s3Response.Body.on("error", reject);
+  });
+};
 
 export async function search_records(query_params) {
   const genres = JSON.parse(_.get(query_params, 'genres', '[]'));
@@ -316,8 +325,10 @@ export async function create_watermarks(key) {
     Bucket: BUCKET_NAME,
     Key: key
   };
-  const s3Obj = await s3.getObject(params).promise();
-  const img = await Jimp.read(s3Obj.Body);
+  const getS3Cmd = new GetObjectCommand(params);
+  const s3Obj = await s3.send(getS3Cmd);
+  const s3Data = await readS3Stream(s3Obj);
+  const img = await Jimp.read(s3Data);
   const img2 = img.clone();
 
   let watermark;
@@ -343,18 +354,20 @@ export async function create_watermarks(key) {
   const thumbnailPath = `${path.dirname(key)}/thumbnails/${path.parse(key).name}.jpeg`;
   const watermarkedPath = `${path.dirname(key)}/watermarked/${path.parse(key).name}.jpeg`;
 
-  const params11 = {
+  const params1 = {
     Body: await wmBuffer,
     Bucket: params.Bucket,
     Key: watermarkedPath
   };
-  const params12 = {
+  const params2 = {
     Body: await smallBuffer,
     Bucket: params.Bucket,
     Key: thumbnailPath
   };
+  const putS3Cmd1 = new PutObjectCommand(params1);
+  const putS3Cmd2 = new PutObjectCommand(params2);
 
-  await Promise.all([s3.putObject(params11).promise(), s3.putObject(params12).promise()])
+  await Promise.all([s3.send(putS3Cmd1), s3.send(putS3Cmd2)])
 };
 
 export async function new_record(uid_str, record) {
@@ -366,30 +379,17 @@ export async function new_record(uid_str, record) {
     return { recordId: false, originalId: exists.id };
   }
 
-  const newImages = await Promise.all(_.map(record.images, (image) => {
+  const newImages = await Promise.all(_.map(record.images, async (image) => {
     const filename = _.split(image, '/').pop();
     const params = {
       Bucket: BUCKET_NAME,
       CopySource: `/${BUCKET_NAME}/temp/${filename}`,
       Key: `records-images/${filename}`
     };
-    return new Promise((resolve, reject) => {
-      s3.copyObject(params, (err, data) => {
-        if (err) {
-          reject(err);
-        }
-        else {
-          // create thumbnails and watermarks
-          create_watermarks(params.Key).then(() => {
-            resolve(filename);
-          }).catch((error) => {
-            console.error('watermarking ERROR', error);
-            resolve(filename);
-          });
-        }
-      }
-      );
-    });
+    const command = new CopyObjectCommand(params);
+    await s3.send(command);
+    await create_watermarks(params.Key);
+    return filename;
   }));
 
   _.assign(record, { ownerUid, createdAt: new Date() });
@@ -405,8 +405,8 @@ export async function new_record(uid_str, record) {
 export async function update_record(reviser_uid_str, recordId, record) {
   const reviserUid = new ObjectId(reviser_uid_str);
   const db = await connect_db();
-  const newImages = await Promise.all(_.map(record.images, (image) => {
-    const pathstr = image.replace(/(.)*.amazonaws.com\//, '');
+  const newImages = await Promise.all(_.map(record.images, async (image) => {
+    const pathstr = image.replace(/(.)*.vinyl.lk\//, '');
     const list = _.split(pathstr, '/');
     const filename = list.pop();
     const pathname = list[0];
@@ -419,23 +419,10 @@ export async function update_record(reviser_uid_str, recordId, record) {
       CopySource: `/${BUCKET_NAME}/temp/${filename}`,
       Key: `records-images/${filename}`
     };
-    return new Promise((resolve, reject) => {
-      s3.copyObject(params, (err, data) => {
-        if (err) {
-          reject(image);
-        }
-        else {
-          // create thumbnails and watermarks
-          create_watermarks(params.Key).then(() => {
-            resolve(filename);
-          }).catch((error) => {
-            console.error('watermarking ERROR', error);
-            resolve(filename);
-          });
-        }
-      }
-      );
-    });
+    const command = new CopyObjectCommand(params);
+    await s3.send(command);
+    await create_watermarks(params.Key);
+    return filename;
   }));
 
   _.unset(record, '_id');

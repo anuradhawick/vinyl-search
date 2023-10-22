@@ -127,8 +127,8 @@ module "lambda-records-service" {
   handler       = "records-main.main"
   runtime       = "nodejs18.x"
   architectures = ["x86_64"]
-  memory_size   = 256
-  timeout       = 6
+  memory_size   = 512
+  timeout       = 10
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
@@ -149,6 +149,7 @@ module "lambda-records-service" {
       commands = [
         "npm install",
         "./node_modules/.bin/esbuild --sourcemap --bundle records-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
+        "cp wm.png dist",
         "cd dist",
         ":zip"
       ]

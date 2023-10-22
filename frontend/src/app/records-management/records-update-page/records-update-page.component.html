@@ -3,20 +3,18 @@
   <app-loader [hidden]="!!recordObject"></app-loader>
   <div *ngIf="recordObject">
     <app-records-editor-component (readyStateChange)="readyChange($event)" #editor
-                                  [editorTitle]="'Update release details'"
-                                  [(record)]="recordObject"></app-records-editor-component>
+      [editorTitle]="'Update release details'" [(record)]="recordObject"></app-records-editor-component>
     <div class="row container-fluid">
       <div class="col-12 col-sm-9 offset-3">
         <div class="container-fluid">
           <div class="form-group">
-            <form class="validate-comment" novalidate>
-              <h4>Revision comments</h4>
-              <textarea type="text" class="form-control" name="release-update-comments" [(ngModel)]="revisionComments"
-                        required></textarea>
-              <div class="invalid-feedback">
+            <mat-form-field class="w-100">
+              <textarea matInput placeholder="Revision comments" [formControl]="revisionComments" required>
+                </textarea>
+              <mat-error>
                 Please enter a comment describing your revision
-              </div>
-            </form>
+              </mat-error>
+            </mat-form-field>
           </div>
         </div>
       </div>
@@ -28,7 +26,7 @@
           <form>
             <div class="form-group">
               <button mat-raised-button type="button" [routerLink]="['/records',recordObject.id, 'view']"
-                      [disabled]="!ready">Discard
+                [disabled]="!ready">Discard
               </button>
               <button mat-raised-button type="button" color="primary" class="ml-1" (click)="save()" [disabled]="!ready">
                 Save
