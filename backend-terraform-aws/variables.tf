@@ -34,3 +34,11 @@ variable "GOOGLE_CLIENT_ID" {
 variable "GOOGLE_CLIENT_SECRET" {
   type = string
 }
+
+variable "FACEBOOK_CLIENT_ID" {
+  type = string
+}
+
+variable "FACEBOOK_CLIENT_SECRET" {
+  type = string
+}

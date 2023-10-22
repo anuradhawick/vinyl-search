@@ -38,7 +38,7 @@ const merge_users = async (userPoolId, userAttributes, username) => {
       UserPoolId: userPoolId
     };
     const command = new AdminLinkProviderForUserCommand(input);
-    const response = await cognito.send(command);
+    await cognito.send(command);
 
     await update_user(_.find(firstuser.Attributes, (attr) => attr.Name === 'email').Value,
       {
@@ -93,7 +93,7 @@ const postConfirmationHanlder = async (event) => {
     ]
   };
   const command = new AdminUpdateUserAttributesCommand(attributeUpdate);
-  const response = await cognito.send(command);
+  await cognito.send(command);
 
   return event;
 };

@@ -31,8 +31,7 @@ resource "aws_cognito_user_pool_client" "vinyl-lk-client" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["phone", "email", "profile", "openid", "aws.cognito.signin.user.admin"]
-  supported_identity_providers         = ["Google"]
-  # supported_identity_providers         = ["Facebook", "Google"]
+  supported_identity_providers         = ["Facebook", "Google"]
 }
 
 # google identity provider
@@ -64,6 +63,37 @@ resource "aws_cognito_identity_provider" "vinyl-lk-google-provider" {
     email       = "email"
     picture     = "picture"
     username    = "sub"
+  }
+}
+
+# facebook identity provider
+resource "aws_cognito_identity_provider" "vinyl-lk-facebook-provider" {
+  user_pool_id  = aws_cognito_user_pool.vinyl-lk.id
+  provider_name = "Facebook"
+  provider_type = "Facebook"
+
+  provider_details = {
+    authorize_scopes = "public_profile,email"
+    client_id        = var.FACEBOOK_CLIENT_ID
+    client_secret    = var.FACEBOOK_CLIENT_SECRET
+    # start
+    # not adding the below forces terraform to redeploy changes
+    attributes_url                = "https://graph.facebook.com/v17.0/me?fields="
+    attributes_url_add_attributes = "true"
+    authorize_url                 = "https://www.facebook.com/v17.0/dialog/oauth"
+    token_request_method          = "GET"
+    token_url                     = "https://graph.facebook.com/v17.0/oauth/access_token"
+    # end
+  }
+
+  attribute_mapping = {
+    birthdate   = "birthday"
+    email       = "email"
+    family_name = "last_name"
+    given_name  = "first_name"
+    name        = "name"
+    picture     = "picture"
+    username    = "id"
   }
 }
 
