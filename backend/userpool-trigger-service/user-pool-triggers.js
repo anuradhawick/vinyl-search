@@ -55,15 +55,6 @@ const postConfirmationHanlder = async (event) => {
   const username = event.userName;
   const provider = _.split(username, '_')[0];
   const email = event.request.userAttributes.email;
-  let picture = _.get(userAttributes, 'picture', '');
-
-  try {
-    if (provider === 'Facebook') {
-      picture = JSON.parse(picture).data.url;
-    }
-  } catch (e) {
-    console.error('Unable to extract Facebook picture', e);
-  }
 
   const update = {
     $set: {
@@ -71,14 +62,12 @@ const postConfirmationHanlder = async (event) => {
       given_name: userAttributes.given_name,
       family_name: userAttributes.family_name,
       name: userAttributes.name,
-      picture,
       updatedAt: new Date(),
       roles: []
     },
     $addToSet: {
       authProviders: provider
     }
-
   };
   const result = await update_user(email, update);
   const uid = result.lastErrorObject.updatedExisting ? result.value._id.toString() : result.lastErrorObject.upserted.toString();
