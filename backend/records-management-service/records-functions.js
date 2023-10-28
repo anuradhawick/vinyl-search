@@ -155,13 +155,7 @@ export async function search_records(query_params) {
   const records = data[0];
 
   records.records = _.map(records.records, record => {
-    record.images = _.map(record.images, image => {
-      if (process.env.STAGE === 'prod') {
-        return `https://cdn.vinyl.lk/records-images/thumbnails/${path.parse(image).name}.jpeg`
-      } else {
-        return `https://${CDN_DOMAIN}/records-images/thumbnails/${path.parse(image).name}.jpeg`
-      }
-    });
+    record.images = _.map(record.images, image => `https://${CDN_DOMAIN}/records-images/thumbnails/${path.parse(image).name}.jpeg`);
     return record;
   });
 
@@ -225,13 +219,7 @@ export async function fetch_records(query_params) {
   const records = data[0];
 
   records.records = _.map(records.records, record => {
-    record.images = _.map(record.images, image => {
-      if (process.env.STAGE === 'prod') {
-        return `https://cdn.vinyl.lk/records-images/thumbnails/${path.parse(image).name}.jpeg`
-      } else {
-        return `https://${CDN_DOMAIN}/records-images/thumbnails/${path.parse(image).name}.jpeg`
-      }
-    });
+    record.images = _.map(record.images, image => `https://${CDN_DOMAIN}/records-images/thumbnails/${path.parse(image).name}.jpeg`);
     return record;
   });
 
@@ -242,14 +230,7 @@ export async function fetch_record(recordId) {
   const db = await connect_db();
   const data = await db.collection('records').findOne({ id: new ObjectId(recordId), latest: true });
 
-  data.images = _.map(data.images, image => {
-    if (process.env.STAGE === 'prod') {
-      return `https://cdn.vinyl.lk/records-images/watermarked/${path.parse(image).name}.jpeg`;
-    } else {
-      return `https://${CDN_DOMAIN}/records-images/watermarked/${path.parse(image).name}.jpeg`;
-    }
-  }
-  );
+  data.images = _.map(data.images, image => `https://${CDN_DOMAIN}/records-images/watermarked/${path.parse(image).name}.jpeg`);
 
   return data;
 };
@@ -289,13 +270,7 @@ export async function fetch_revision(revisionId) {
 
   const revision = data[0];
 
-  revision.images = _.map(revision.images, image => {
-    if (process.env.STAGE === 'prod') {
-      return `https://cdn.vinyl.lk/records-images/watermarked/${path.parse(image).name}.jpeg`;
-    } else {
-      return `https://${CDN_DOMAIN}/records-images/watermarked/${path.parse(image).name}.jpeg`;
-    }
-  });
+  revision.images = _.map(revision.images, image => `https://${CDN_DOMAIN}/records-images/watermarked/${path.parse(image).name}.jpeg`);
 
   return revision;
 };
