@@ -1,12 +1,14 @@
 import _ from 'lodash';
+import path from 'path';
 import { ObjectId } from 'mongodb';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { connect_db } from './utils/db-util.js';
 import * as cheerio from 'cheerio';
 
 
 const s3 = new S3Client();
 const BUCKET_NAME = process.env.BUCKET_NAME
+const CDN_DOMAIN = process.env.CDN_DOMAIN
 
 
 export async function update_user(uid, userdata) {
@@ -111,10 +113,14 @@ export async function get_user_records(uid_str, query_params) {
         data: 0
       }
     }
-  ]).toArray();
+  ]).next();
 
-  return data[0];
+  _.each(data.records, (record) => {
+    record.images = _.map(record.images, image => `https://${CDN_DOMAIN}/records-images/thumbnails/${path.parse(image).name}.jpeg`);
+    return record;
+  });
 
+  return data;
 };
 
 
@@ -193,23 +199,14 @@ export async function delete_forum_post(uid_str, postId) {
     images.push(v.attribs.src);
   });
 
-  const removeImages = Promise.all(_.map(images, (image) => {
+  const removeImages = Promise.all(_.map(images, async (image) => {
     const filename = _.split(image, '/').pop();
     const params = {
       Bucket: BUCKET_NAME,
       Key: `forum-images/${filename}`
     };
-    return new Promise((resolve, reject) => {
-      s3.deleteObject(params, (err, data) => {
-        if (err) {
-          resolve();
-        }
-        else {
-          resolve()
-        }
-      }
-      );
-    });
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
   }));
 
   const removePost = db.collection('forum_posts').findOneAndDelete({
@@ -314,33 +311,22 @@ export async function delete_record(uid_str, recordId) {
     images = _.uniq(_.concat(images, record.images));
   });
 
-  const removeImages = Promise.all(_.map(images, (image) => {
-    const list = _.split(image, '/');
-    const filename = list.pop();
-    const pathname = list.pop();
-    const params = {
-      Bucket: BUCKET_NAME,
-      Key: `records-images/${filename}`
-    };
+  const removeImages = Promise.all(_.map(images, async (image) => {
+    const filename = _.split(image, '/').pop();
 
-    if (pathname !== 'records-images') {
-      return true;
-    }
-
-    return new Promise((resolve, reject) => {
-      s3.deleteObject(params, (err, data) => {
-        if (err) {
-          resolve();
-        }
-        else {
-          resolve()
-        }
-      }
-      );
-    });
+    await Promise.all([
+      s3.send(new DeleteObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: `records-images/${filename}`
+      })),
+      s3.send(new DeleteObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: `records-images/watermarked/${filename}`
+      }))
+    ]);
   }));
 
-  const removeRecord = db.collection('records').remove({
+  const removeRecord = db.collection('records').deleteMany({
     id: new ObjectId(recordId),
     ownerUid: uid
   });
@@ -361,7 +347,7 @@ export async function delete_marketplace_ad(uid_str, postID) {
     images = _.uniq(_.concat(images, post.images));
   });
 
-  const removeImages = Promise.all(_.map(images, (image) => {
+  const removeImages = Promise.all(_.map(images, async (image) => {
     const list = _.split(image, '/');
     const filename = list.pop();
     const pathname = list.pop();
@@ -374,17 +360,8 @@ export async function delete_marketplace_ad(uid_str, postID) {
       return true;
     }
 
-    return new Promise((resolve, reject) => {
-      s3.deleteObject(params, (err, data) => {
-        if (err) {
-          resolve();
-        }
-        else {
-          resolve()
-        }
-      }
-      );
-    });
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
   }));
 
   const removeSellingItem = db.collection('selling_items').remove({

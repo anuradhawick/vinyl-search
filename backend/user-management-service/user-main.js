@@ -60,9 +60,9 @@ export const main = (event, context, callback) => {
     '/users/records',
     (event, context, callback) => {
       user_functions.get_user_records(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
-        .then((user) => {
+        .then((records) => {
           callback(null, builResponse(200, {
-            ...user,
+            ...records,
             success: true
           }))
         }).catch((e) => {

@@ -7,7 +7,12 @@
           <div class="col-md-6 ml-auto mr-auto">
             <div *ngIf="(user | async)" class="profile">
               <div class="avatar">
-                <img [src]="(user | async)?.picture" alt="Profile picture" class="img-raised rounded-circle img-fluid">
+                <img *ngIf="(user | async)?.picture; else placeholder" [src]="(user | async)?.picture"
+                  alt="Profile picture" class="img-raised rounded-circle img-fluid">
+                <ng-template #placeholder>
+                  <img src="../../../assets/images/profile.png"
+                    alt="Profile picture" class="img-raised rounded-circle img-fluid">
+                </ng-template>
               </div>
               <div class="name">
                 <h3 class="title">{{(user | async)?.name}}</h3>

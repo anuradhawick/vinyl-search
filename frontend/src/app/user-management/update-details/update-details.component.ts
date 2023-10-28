@@ -91,7 +91,7 @@ export class UpdateDetailsComponent implements OnInit {
     }
 
     const file: File = this.uploadableFile;
-    const filename = `${this.user.uid}.${file.name.split('.').pop() || ''}`;
+    const filename = `${this.user._id}.${file.name.split('.').pop() || ''}`;
 
     this.uploadableFile = null;
     this.uploadImageUrl = null;
@@ -106,13 +106,14 @@ export class UpdateDetailsComponent implements OnInit {
         this.uploadingProgress = progress.loaded * 100 / progress.total;
       },
     }).then(() => {
-      const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/profile-pictures/${filename}`;
+      const url = `${environment.cdn_url}profile-pictures/${filename}`;
 
       this.uploading = false;
       this.userService.update_profile({
         picture: url
       }).then(() => {
         this.userService.get_profile().then((u: any) => {
+          u.picture += '?afafa'
           this.auth.setUser(u);
         });
       });

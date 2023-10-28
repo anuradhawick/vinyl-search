@@ -9,10 +9,9 @@ import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
 
-declare const $: any;
-declare const window: any;
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   public redirectUrl = null;
   public user: any = new ReplaySubject<any>(1);
@@ -22,10 +21,10 @@ export class AuthService {
   private profileLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private zone: NgZone,
-              private http: HttpClient,
-              private router: Router,
-              @Inject(MatDialog) private dialog: MatDialog) {
+    private zone: NgZone,
+    private http: HttpClient,
+    private router: Router,
+    @Inject(MatDialog) private dialog: MatDialog) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         console.log('INVALID REQUEST', params.error_description);
@@ -37,7 +36,7 @@ export class AuthService {
       }
     });
 
-    Hub.listen('auth', ({payload: {event, data}}) => {
+    Hub.listen('auth', ({ payload: { event, data } }) => {
       console.log(event, data);
       (async () => {
         console.log((await Auth.currentSession()).getIdToken().getJwtToken())
@@ -83,7 +82,7 @@ export class AuthService {
     });
   }
 
-  processUser(u: any) {
+  processUser(user: any) {
     if (this.profileLoaded) {
       return;
     }
@@ -91,12 +90,14 @@ export class AuthService {
 
     this.zone.run(async () => {
       this.isLoggedIn = true;
-      this.user.next(await this.http.get(environment.api_gateway + 'users/', {
+      this.http.get(environment.api_gateway + 'users/', {
         headers: new HttpHeaders({
           'Authorization': await this.getToken()
         })
-      }).toPromise());
-      this.profileLoaded = true;
+      }).subscribe((user) => {
+        this.user.next(user)
+        this.profileLoaded = true;
+      });
     });
   }
 
@@ -125,8 +126,7 @@ export class AuthService {
   }
 
   loginGoogle() {
-    Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google, customState: this.customState}).then(() => {
-
+    Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google, customState: this.customState }).then(() => {
     }).catch(e => {
       console.log(e);
     });

@@ -175,6 +175,7 @@ module "lambda-user-service" {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     NODE_OPTIONS              = "--enable-source-maps"
+    CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
   }
   attach_policy_jsons = true
   policy_jsons = [

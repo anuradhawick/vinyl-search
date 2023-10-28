@@ -14,7 +14,7 @@ export class AppComponent {
   public user: Observable<any>;
 
   constructor(public auth: AuthService, private tagService: TitleTagService) {
-    this.user = auth.user.asObservable();
+    this.user = auth.user;
     this.tagService.setTitle('Vinyl.LK: Sri Lanka\'s largest records database');
     this.tagService.setSocialMediaTags(
       'http://www.vinyl.lk',

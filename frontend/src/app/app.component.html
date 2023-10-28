@@ -5,7 +5,7 @@
         Vinyl.LK
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
-              aria-label="Toggle navigation">
+        aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
         <span class="navbar-toggler-icon"></span>
         <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
               <i class="material-icons">shop</i> For Sale
             </a>
             <a *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" [routerLink]="'/market/new'"
-               class="dropdown-item close-nav-on-click">
+              class="dropdown-item close-nav-on-click">
               <i class="material-icons">content_paste</i> New Sale
             </a>
           </div>
@@ -36,8 +36,7 @@
             <a [routerLink]="'/records'" class="dropdown-item close-nav-on-click">
               <i class="material-icons">album</i> Browse Records
             </a>
-            <a *ngIf="auth.isLoggedIn" [routerLink]="'/records/new'"
-               class="dropdown-item close-nav-on-click">
+            <a *ngIf="auth.isLoggedIn" [routerLink]="'/records/new'" class="dropdown-item close-nav-on-click">
               <i class="material-icons">content_paste</i> New Record
             </a>
           </div>
@@ -50,23 +49,29 @@
             <a [routerLink]="'/forum'" class="dropdown-item close-nav-on-click">
               <i class="material-icons">forum</i> Browse Forum
             </a>
-            <a *ngIf="auth.isLoggedIn" [routerLink]="'/forum/editor'"
-               class="dropdown-item close-nav-on-click">
+            <a *ngIf="auth.isLoggedIn" [routerLink]="'/forum/editor'" class="dropdown-item close-nav-on-click">
               <i class="material-icons">content_paste</i> New Post
             </a>
           </div>
         </li>
         <ng-container *ngIf="auth.isLoggedIn; else showLogin">
           <li class="nav-item">
-            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link close-nav-on-click" href="javascript:void(0)"
-               [routerLink]="'/admin'">
+            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link close-nav-on-click"
+              href="javascript:void(0)" [routerLink]="'/admin'">
               <i class="material-icons">security</i> Admin
             </a>
           </li>
           <li class="nav-item">
-            <a *ngIf="(user | async)?.picture" class="nav-link close-nav-on-click" href="javascript:void(0)" [routerLink]="'/profile'">
-              <img *ngIf="(user | async)?.picture" class="img-thumbnail p-0 m-0" [src]="(user | async)?.picture"
-                   alt="avatar" style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+            <a *ngIf="(user | async)" class="nav-link close-nav-on-click" href="javascript:void(0)"
+              [routerLink]="'/profile'">
+              <img *ngIf="(user | async)?.picture; else placeholder" class="img-thumbnail p-0 m-0"
+                [src]="(user | async)?.picture" alt="avatar"
+                style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+              <ng-template #placeholder>
+                <img class="img-thumbnail p-0 m-0"
+                  src="../assets/images/profile.png" alt="avatar"
+                  style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
+              </ng-template>
               Hi {{(user | async)?.given_name}}
             </a>
           </li>
@@ -89,7 +94,7 @@
 </nav>
 
 <div class="page-header header-filter" data-parallax="true"
-     style="background-image: url('../assets/images/profile_city.jpg'); height: 400px">
+  style="background-image: url('../assets/images/profile_city.jpg'); height: 400px">
   <div class="container">
     <div class="row">
       <div class="col-md-6">

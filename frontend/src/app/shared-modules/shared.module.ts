@@ -6,8 +6,6 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { ToggleFullscreenDirective } from './image-viewer/fullscreen.directive';
 import { ActionConfirmModalComponent } from './modals/action-confirm-modal/action-confirm-modal.component';
 import { LoginModalComponent } from './modals/login-modal/login-modal.component';
-import { UserService } from './services/user.service';
-import { AuthService } from './services/auth.service';
 // material
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,10 +33,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     ActionConfirmModalComponent,
     LoginModalComponent,
     LoginModalComponent
-  ],
-  providers: [
-    UserService,
-    AuthService
   ],
   imports: [
     CommonModule,
