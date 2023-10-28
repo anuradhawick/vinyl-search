@@ -238,7 +238,7 @@ resource "aws_api_gateway_stage" "vinyl-lk" {
 # domains
 resource "aws_api_gateway_domain_name" "vinyl-lk-api" {
   certificate_arn = var.ACM_CERT
-  domain_name     = "${terraform.workspace == "prod" ? "api" : "devapi"}.vinyl.lk"
+  domain_name     = "${terraform.workspace == "prod" ? "" : terraform.workspace}api.vinyl.lk"
 }
 
 resource "aws_api_gateway_base_path_mapping" "vinyl-lk-api" {
