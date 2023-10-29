@@ -5,7 +5,11 @@
   "projects": {
     "vinyl-lk": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -25,9 +29,7 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
-              "src/styles.css",
+              "src/styles.scss",
               "src/assets/css/material-kit.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
@@ -166,8 +168,7 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
+              "src/styles.scss",
               "src/assets/css/material-kit.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
