@@ -212,10 +212,10 @@ figure {
   margin: 0 0 1rem;
 }
 
-img {
+/* img {
   vertical-align: middle;
   border-style: none;
-}
+} */
 
 svg:not(:root) {
   overflow: hidden;
@@ -616,10 +616,10 @@ figure {
   margin: 0 0 1rem;
 }
 
-img {
+/* img {
   vertical-align: middle;
   border-style: none;
-}
+} */
 
 svg:not(:root) {
   overflow: hidden;
@@ -10938,7 +10938,7 @@ legend {
   outline: 0;
 }
 
-a {
+/* a {
   color: #9c27b0;
 }
 
@@ -10955,7 +10955,7 @@ a.text-info:focus {
 
 a .material-icons {
   vertical-align: middle;
-}
+} */
 
 .main {
   background: #FFFFFF;

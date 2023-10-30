@@ -1,113 +1,156 @@
-<nav class="navbar navbar-transparent fixed-top navbar-expand-lg" id="sectionsNav">
-  <div class="container">
-    <div class="navbar-translate">
-      <a class="navbar-brand card-title" [routerLink]="'/'" style="font-size: 30px;">
-        Vinyl.LK
+<div #navbar class="w-full fixed backdrop-blur-sm bg-slate-50 bg-opacity-70 p-4 mx-auto z-10">
+  <nav class="flex justify-between items-center">
+    <div><a class="text-2xl font-bold text-black hover:decoration-transparent" [routerLink]="'/'">VINYL.LK</a></div>
+    <div class="hidden md:flex space-x-4 lg:space-x-10">
+      <a [routerLink]="[]" [matMenuTriggerFor]="menuMarket"
+        class="text-black font-semibold hover:decoration-transparent">
+        <mat-icon class="align-middle">shopping_cart</mat-icon>Marketplace
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="navbar-toggler-icon"></span>
-        <span class="navbar-toggler-icon"></span>
-        <span class="navbar-toggler-icon"></span>
+      <mat-menu #menuMarket="matMenu">
+        <button mat-menu-item [routerLink]="['/market']" class="text-black font-semibold">
+          <mat-icon>shop</mat-icon>For Sale
+        </button>
+        <button *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" mat-menu-item
+          [routerLink]="['/market/new']" class="text-black font-semibold">
+          <mat-icon class="align-middle">content_paste</mat-icon>New Sale
+        </button>
+      </mat-menu>
+
+      <a [routerLink]="[]" [matMenuTriggerFor]="menuRecords"
+        class="text-black font-semibold hover:decoration-transparent">
+        <mat-icon class="align-middle">library_music</mat-icon>Records
+      </a>
+      <mat-menu #menuRecords="matMenu">
+        <button mat-menu-item [routerLink]="['/records']" class="text-black font-semibold">
+          <mat-icon>library_music</mat-icon>Browse Records
+        </button>
+        <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
+          <mat-icon>content_paste</mat-icon>New Sale
+        </button>
+      </mat-menu>
+
+      <a [routerLink]="[]" [matMenuTriggerFor]="menuForum"
+        class="text-black font-semibold hover:decoration-transparent">
+        <mat-icon class="align-middle">forum</mat-icon>Forum
+      </a>
+      <mat-menu #menuForum="matMenu">
+        <button mat-menu-item [routerLink]="['/forum']" class="text-black font-semibold">
+          <mat-icon>forum</mat-icon>Browse Forum
+        </button>
+        <button mat-menu-item [routerLink]="['/forum/editor']" class="text-black font-semibold">
+          <mat-icon>content_paste</mat-icon>New Post
+        </button>
+      </mat-menu>
+
+      <ng-container *ngIf="auth.isLoggedIn; else showLogin">
+        <a *ngIf="(user | async)?.roles.includes('Admin')" [routerLink]="['/admin']"
+          class="text-black font-semibold hover:decoration-transparent">
+          <mat-icon class="align-middle">security</mat-icon>Admin
+        </a>
+
+        <a [routerLink]="['/profile']" class="text-black font-semibold hover:decoration-transparent">
+          <img *ngIf="(user | async)?.picture; else placeholder"
+            class="w-[24px] h-[24px] inline border-black rounded-full border-2" [src]="(user | async)?.picture">
+          <ng-template #placeholder>
+            <mat-icon class="align-middle">account_circle</mat-icon>
+          </ng-template>
+          Hi {{(user | async)?.given_name}}
+        </a>
+
+        <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.logout()">
+          <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
+        </a>
+      </ng-container>
+      <ng-template #showLogin>
+        <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.login()">
+          <mat-icon class="align-middle">account_circle</mat-icon>Login
+        </a>
+      </ng-template>
+    </div>
+    <div class="md:hidden flex items-center">
+      <button (click)="menuOpen=!menuOpen">
+        <mat-icon *ngIf="!menuOpen; else close">menu</mat-icon>
+        <ng-template #close>
+          <mat-icon>close</mat-icon>
+        </ng-template>
       </button>
     </div>
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav ml-auto">
-        <li class="dropdown nav-item">
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i class="material-icons">shopping_cart</i> Marketplace
-          </a>
-          <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/market'" class="dropdown-item close-nav-on-click">
-              <i class="material-icons">shop</i> For Sale
-            </a>
-            <a *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" [routerLink]="'/market/new'"
-              class="dropdown-item close-nav-on-click">
-              <i class="material-icons">content_paste</i> New Sale
-            </a>
-          </div>
-        </li>
-        <li class="dropdown nav-item">
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i class="material-icons">library_music</i> Records
-          </a>
-          <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/records'" class="dropdown-item close-nav-on-click">
-              <i class="material-icons">album</i> Browse Records
-            </a>
-            <a *ngIf="auth.isLoggedIn" [routerLink]="'/records/new'" class="dropdown-item close-nav-on-click">
-              <i class="material-icons">content_paste</i> New Record
-            </a>
-          </div>
-        </li>
-        <li class="dropdown nav-item">
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i class="material-icons">bookmarks</i> Forum
-          </a>
-          <div class="dropdown-menu dropdown-with-icons">
-            <a [routerLink]="'/forum'" class="dropdown-item close-nav-on-click">
-              <i class="material-icons">forum</i> Browse Forum
-            </a>
-            <a *ngIf="auth.isLoggedIn" [routerLink]="'/forum/editor'" class="dropdown-item close-nav-on-click">
-              <i class="material-icons">content_paste</i> New Post
-            </a>
-          </div>
-        </li>
-        <ng-container *ngIf="auth.isLoggedIn; else showLogin">
-          <li class="nav-item">
-            <a *ngIf="(user | async)?.roles.includes('Admin')" class="nav-link close-nav-on-click"
-              href="javascript:void(0)" [routerLink]="'/admin'">
-              <i class="material-icons">security</i> Admin
-            </a>
-          </li>
-          <li class="nav-item">
-            <a *ngIf="(user | async)" class="nav-link close-nav-on-click" href="javascript:void(0)"
-              [routerLink]="'/profile'">
-              <img *ngIf="(user | async)?.picture; else placeholder" class="img-thumbnail p-0 m-0"
-                [src]="(user | async)?.picture" alt="avatar"
-                style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
-              <ng-template #placeholder>
-                <img class="img-thumbnail p-0 m-0"
-                  src="../assets/images/profile.png" alt="avatar"
-                  style="height: 20px; width: 20px; object-fit: cover; display: inline-block">
-              </ng-template>
-              Hi {{(user | async)?.given_name}}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link close-nav-on-click" href="javascript:void(0)" (click)="auth.logout()">
-              <i class="material-icons">exit_to_app</i> Logout
-            </a>
-          </li>
-        </ng-container>
-        <ng-template #showLogin>
-          <li class="nav-item">
-            <a class="nav-link close-nav-on-click" href="javascript:void(0)" (click)="auth.login()">
-              <i class="material-icons">person</i> Login/Register
-            </a>
-          </li>
-        </ng-template>
-      </ul>
-    </div>
-  </div>
-</nav>
+  </nav>
+  <div class="md:hidden flex flex-col space-y-2" [class.hidden]="!menuOpen">
+    <hr>
+    <a [routerLink]="[]" [matMenuTriggerFor]="menuMarket" class="text-black font-semibold hover:decoration-transparent">
+      <mat-icon class="align-middle">shopping_cart</mat-icon>Marketplace
+    </a>
+    <mat-menu #menuMarket="matMenu">
+      <button mat-menu-item [routerLink]="['/market']" class="text-black font-semibold">
+        <mat-icon>shop</mat-icon>For Sale
+      </button>
+      <button *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" mat-menu-item
+        [routerLink]="['/market/new']" class="text-black font-semibold">
+        <mat-icon class="align-middle">content_paste</mat-icon>New Sale
+      </button>
+    </mat-menu>
 
-<div class="page-header header-filter" data-parallax="true"
-  style="background-image: url('../assets/images/profile_city.jpg'); height: 400px">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h1 class="title">The Vinyl World</h1>
-      </div>
-    </div>
+    <a [routerLink]="[]" [matMenuTriggerFor]="menuRecords"
+      class="text-black font-semibold hover:decoration-transparent">
+      <mat-icon class="align-middle">library_music</mat-icon>Records
+    </a>
+    <mat-menu #menuRecords="matMenu">
+      <button mat-menu-item [routerLink]="['/records']" class="text-black font-semibold">
+        <mat-icon>library_music</mat-icon>Browse Records
+      </button>
+      <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
+        <mat-icon>content_paste</mat-icon>New Sale
+      </button>
+    </mat-menu>
+
+    <a [routerLink]="[]" [matMenuTriggerFor]="menuForum" class="text-black font-semibold hover:decoration-transparent">
+      <mat-icon class="align-middle">forum</mat-icon>Forum
+    </a>
+    <mat-menu #menuForum="matMenu">
+      <button mat-menu-item [routerLink]="['/forum']" class="text-black font-semibold">
+        <mat-icon>forum</mat-icon>Browse Forum
+      </button>
+      <button mat-menu-item [routerLink]="['/forum/editor']" class="text-black font-semibold">
+        <mat-icon>content_paste</mat-icon>New Post
+      </button>
+    </mat-menu>
+
+    <ng-container *ngIf="auth.isLoggedIn; else showLogin">
+      <a *ngIf="(user | async)?.roles.includes('Admin')" [routerLink]="['/admin']"
+        class="text-black font-semibold hover:decoration-transparent">
+        <mat-icon class="align-middle">security</mat-icon>Admin
+      </a>
+
+      <a [routerLink]="['/profile']" class="text-black font-semibold hover:decoration-transparent">
+        <img *ngIf="(user | async)?.picture; else placeholder"
+          class="w-[24px] h-[24px] inline border-black rounded-full border-2" [src]="(user | async)?.picture">
+        <ng-template #placeholder>
+          <mat-icon class="align-middle">account_circle</mat-icon>
+        </ng-template>
+        Hi {{(user | async)?.given_name}}
+      </a>
+
+      <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.logout()">
+        <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
+      </a>
+    </ng-container>
+    <ng-template #showLogin>
+      <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.login()">
+        <mat-icon class="align-middle">account_circle</mat-icon>Login
+      </a>
+    </ng-template>
+  </div>
+</div>
+<div class="bg-cover bg-center overflow-hidden h-[200px] sm:h-[400px]"
+  style="background-image: url('../assets/images/profile_city.jpg');">
+  <div class="ml-[50px] mt-[80px] sm:mt-[200px]">
+    <h1 class="text-white text-4xl sm:text-6xl font-extrabold font-serif">The Vinyl World</h1>
   </div>
 </div>
 <router-outlet></router-outlet>
-<footer class="footer footer-default">
-  <div class="container">
-    <div class="copyright">
-      &copy; The Vinyl Search | <a [routerLink]="'/privacy-policy'">Privacy</a>
-    </div>
+<footer>
+  <div class="w-full">
+    &copy; The Vinyl Search | <a [routerLink]="'/privacy-policy'">Privacy</a>
   </div>
 </footer>

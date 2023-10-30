@@ -1,54 +1,47 @@
-<div class="main main-raised">
+<div class="mt-[-60px] mx-[30px] relative bg-white rounded-md shadow-lg">
   <br>
-  <div class="ml-5 mr-5 mt-3 mb-3">
-    <!--Search-->
-    <div class="row">
-      <div class="col-sm-6 col-9 pl-0">
-        <div class="input-group">
-          <mat-form-field style="height: 60px; margin-right: 10px;">
-            <input matInput  style="margin-top: -10px;" (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)"
-              type="text" class="form-control" placeholder="Search records..." name="search-query" [(ngModel)]="query">
-          </mat-form-field>
-          <button mat-raised-button color="primary" (click)="search()">Search</button>
-          <div *ngIf="(autocomplete | async)?.records?.length > 0" style="background-color: #fff; left: 0;">
-            <div
-              style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
-              <table class="table table-hover table-bordered shadow">
-                <tbody>
-                  <tr *ngFor="let r of (autocomplete | async)?.records">
-                    <td>
-                      <a [routerLink]="['/records', r.id, 'view']">
-                        <strong>{{_.truncate(r.name, {length: 60})}}</strong>
-                        <br>
-                        <div class="blockquote-footer">
-                          {{_.truncate(r.label, {length: 60})}}
-                        </div>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+  <!--Search-->
+  <div class="mx-4 flex justify-between flex-wrap">
+    <div class="flex flex-wrap w-full">
+      <mat-form-field class="grow max-w-[500px]" style="height: 60px; margin-right: 10px;">
+        <input matInput style="margin-top: -10px;" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
+          (keyup)="loadAutoComplete($event)" type="text" class="form-control" placeholder="Search records..."
+          name="search-query" [(ngModel)]="query">
+      </mat-form-field>
+      <div class="flex justify-between grow">
+        <button mat-raised-button color="primary" (click)="search()">Search</button>
+        <button mat-raised-button color="primary" routerLink="/records/new">Add</button>
       </div>
-      <div class="col-sm-6 col-3 pr-0">
-        <div class="float-right">
-          <button mat-raised-button color="primary" routerLink="/records/new">
-            Add
-          </button>
+      <div *ngIf="(autocomplete | async)?.records?.length > 0" style="background-color: #fff; left: 0;">
+        <div
+          style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+          <table class="table table-hover table-bordered shadow">
+            <tbody>
+              <tr *ngFor="let r of (autocomplete | async)?.records">
+                <td>
+                  <a [routerLink]="['/records', r.id, 'view']">
+                    <strong>{{_.truncate(r.name, {length: 60})}}</strong>
+                    <br>
+                    <div class="blockquote-footer">
+                      {{_.truncate(r.label, {length: 60})}}
+                    </div>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
-        class="ml-3 mr-5 mt-2 text-dark">
-        Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
       </div>
     </div>
-    <!--End Search-->
+    <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
+      class="ml-3 mr-5 mt-2 text-dark">
+      Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/records']">cancel</a>)
+    </div>
   </div>
+  <!--End Search-->
   <hr>
-  <div class="row container-fluid m-0">
-    <div class="col-12 col-lg-3">
+  <div class="flex md:flex-row md:space-x-4 md:space-y-0 space-y-4 flex-col px-4">
+    <div class="w-full md:w-3/12">
       <!--Filters-->
       <mat-accordion multi>
         <mat-expansion-panel hideToggle>
@@ -58,18 +51,15 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <hr>
-          <button mat-raised-button color="primary" class="btn-block"
+          <button mat-raised-button color="primary" class="w-full"
             (click)="openFilter(objectKeys(genresJSON), 'genreFilters')">
             Select filters
           </button>
-          <button mat-raised-button *ngIf="!_.isEmpty(genreFilters)" class="btn-block" color="warn"
+          <button mat-raised-button *ngIf="!_.isEmpty(genreFilters)" class="w-full" color="warn"
             (click)="genreFilters=[]; activateFilters()">
             Clear filters
           </button>
-
         </mat-expansion-panel>
-
-        <br>
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -77,16 +67,14 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <hr>
-          <button mat-raised-button color="primary" class="btn-block" (click)="openFilter(getStyles(), 'styleFilters')">
+          <button mat-raised-button color="primary" class="w-full" (click)="openFilter(getStyles(), 'styleFilters')">
             Select filters
           </button>
-          <button mat-raised-button *ngIf="!_.isEmpty(styleFilters)" class="btn-block" color="warn"
+          <button mat-raised-button *ngIf="!_.isEmpty(styleFilters)" class="w-full" color="warn"
             (click)="styleFilters=[]; activateFilters()">
             Clear filters
           </button>
         </mat-expansion-panel>
-
-        <br>
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -94,17 +82,15 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <hr>
-          <button mat-raised-button color="primary" class="btn-block" (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
+          <button mat-raised-button color="primary" class="w-full" (click)="openFilter(['Vinyl', 'Acetate', 'Flexi-Disc', 'Lathe Cut', 'Shellac', 'CD', 'DVD', 'Mini Disc',
                   'Cassette Tape', '4-Track Cartridge', '8-Track Cartridge', 'Other/Unknown'], 'formatFilters')">
             Select filters
           </button>
-          <button mat-raised-button *ngIf="!_.isEmpty(formatFilters)" class="btn-block" color="warn"
+          <button mat-raised-button *ngIf="!_.isEmpty(formatFilters)" class="w-full" color="warn"
             (click)="formatFilters=[]; activateFilters()">
             Clear filters
           </button>
         </mat-expansion-panel>
-
-        <br>
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -112,51 +98,39 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <hr>
-          <button mat-raised-button color="primary" class="btn-block"
+          <button mat-raised-button color="primary" class="w-full"
             (click)="openFilter(getCountries(), 'countryFilters')">
             Select filters
           </button>
-          <button mat-raised-button *ngIf="!_.isEmpty(countryFilters)" class="btn-block" color="warn"
+          <button mat-raised-button *ngIf="!_.isEmpty(countryFilters)" class="w-full" color="warn"
             (click)="countryFilters=[]; activateFilters()">
             Clear filters
           </button>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-accordion>
-
-      </mat-accordion>
-      <br>
     </div>
     <!--End filters-->
     <!--Records cards-->
-    <div class="col-12 col-lg-9">
+    <div class="w-full md:w-9/12">
       <app-loader #recordsloader></app-loader>
-      <!--<nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">-->
-      <!--<mat-paginator showFirstLastButtons [length]="count"-->
-      <!--[pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>-->
-      <!--</nav>-->
-      <div class="container">
-        <div *ngIf="records | async as records" class="row">
-
-          <div *ngFor="let r of _.get(records, 'records')" class="col-lg-2 col-sm-4 col-6 pb-2 pr-2 pl-2 pt-0">
-            <div class="card m-0 w-100" style="border-radius: 0 !important;">
-              <div class="">
-                <a [routerLink]="['/records', r.id, 'view']" class="thumbnail">
-                  <div class="image" style="background-color: #d5d5d5">
-                    <img style="object-fit: cover"
-                      [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
-                      class="img img-responsive" (error)="r.images[r.chosenImage]=null" />
-                  </div>
-                  <h6 class="m-1 text-truncate">{{r.name}}</h6>
-                  <p class="m-1 text-truncate">{{r.label}}</p>
-                </a>
-              </div>
+      <div class="grid md:grid-cols-6 md:gap-4 grid-cols-3 gap-2">
+        <div *ngFor="let r of _.get((records | async), 'records')">
+          <div class="bg-white rounded-md shadow-xl h-full">
+            <div>
+              <a [routerLink]="['/records', r.id, 'view']" class="h-full w-full">
+                <div class="w-full h-full">
+                  <img [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
+                    class="min-w-full object-cover object-center h-[100px] w-[100px] rounded-t-lg" />
+                </div>
+                <p class="m-0 mx-1 font-normal text-black text-sm truncate">{{r.name}}</p>
+                <p class="m-0 mx-1  text-gray-700 text-xs truncate">{{r.label}}</p>
+              </a>
             </div>
           </div>
         </div>
       </div>
       <br>
-      <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
+      <nav *ngIf="(records | async) && count > limit">
         <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
           (page)="changePage($event)"></mat-paginator>
       </nav>
