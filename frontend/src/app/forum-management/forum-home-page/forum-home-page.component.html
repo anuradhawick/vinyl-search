@@ -1,51 +1,44 @@
-<div class="main main-raised">
+<div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
   <br>
-  <div class="ml-5 mr-5 mt-3 mb-3">
-
-    <div class="row">
-
-      <div class="col-sm-6 col-9">
-        <div class="input-group">
-          <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
-                 class="form-control"
-                 placeholder="Search forum..." aria-label="Search for posts"
-                 aria-describedby="button-addon2" name="search-query" [(ngModel)]="query">
-          <button mat-button class="btn btn-default m-1" type="button" id="button-addon2" (click)="search()">Search
-          </button>
-          <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
-            <div
-              style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
-              <table class="table table-hover table-bordered shadow">
-                <tbody>
-                <tr *ngFor="let p of (autocomplete | async)?.posts">
-                  <td>
-                    <a [routerLink]="['/forum', p.id, 'view']">
-                      <strong>{{_.truncate(p.postTitle, {length: 60})}}</strong>
-                      <br>
-                      <em>
-                        Posted by {{_.truncate(p.ownerName, {length: 60})}}
-                      </em>
-                    </a>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+  <!--Search-->
+  <div class="mx-4 flex justify-between flex-wrap">
+    <div class="flex flex-wrap w-full">
+      <mat-form-field class="grow max-w-[500px]" style="height: 60px; margin-right: 10px;">
+        <input matInput class="-translate-y-[10px]" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
+          (keyup)="loadAutoComplete($event)" type="text" placeholder="Search forum..." name="search-query"
+          [(ngModel)]="query">
+      </mat-form-field>
+      <div class="flex justify-between grow">
+        <button mat-raised-button color="primary" (click)="search()">Search</button>
+        <button mat-raised-button color="primary" routerLink="/forum/editor">
+          New
+        </button>
+      </div>
+      <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
+        <div
+          style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+          <table class="table table-hover table-bordered shadow">
+            <tbody>
+              <tr *ngFor="let p of (autocomplete | async)?.posts">
+                <td>
+                  <a [routerLink]="['/forum', p.id, 'view']">
+                    <strong>{{_.truncate(p.postTitle, {length: 60})}}</strong>
+                    <br>
+                    <em>
+                      Posted by {{_.truncate(p.ownerName, {length: 60})}}
+                    </em>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="col-sm-6 col-3">
-        <div class="float-right">
-          <button mat-button type="button" class="btn btn-default m-1" routerLink="/forum/editor">
-            New
-          </button>
-        </div>
-      </div>
-
     </div>
   </div>
+  <!--End Search-->
   <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
-       class="ml-5 mr-5 mt-1 mb-2 text-dark">
+    class="ml-5 mr-5 mt-1 mb-2 text-dark">
     Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/forum']">cancel</a>)
   </div>
   <br>
@@ -63,13 +56,6 @@
             We have enabled comment facility to provide a better user experience.
             Stay tuned for more features soon!.
           </p>
-          <!--<button mat-raised-button color="primary" class="btn-block">-->
-            <!--Technical-->
-          <!--</button>-->
-          <!--<button mat-raised-button color="warn" class="btn-block">-->
-            <!--General Discussion-->
-          <!--</button>-->
-
         </mat-expansion-panel>
       </mat-accordion>
       <br>
@@ -83,12 +69,14 @@
               <div class="row">
                 <div class="col-12 col-sm-2">
                   <img src="{{post.ownerPic}}" (error)="post.ownerPic='/assets/images/records-new-sample.svg'"
-                       style="max-width: 64px; max-height: 64px" class="rounded-circle img-fluid">
+                    style="max-width: 64px; max-height: 64px" class="rounded-circle img-fluid">
                 </div>
 
                 <div class="col-12 col-sm-10">
 
-                  <a routerLink="/forum/{{post.id}}/view"><h4 class="card-title">{{post.postTitle}}</h4></a>
+                  <a routerLink="/forum/{{post.id}}/view">
+                    <h4 class="card-title">{{post.postTitle}}</h4>
+                  </a>
                   <h6 class="card-subtitle mb-2 text-muted">By {{post.ownerName}}</h6>
                 </div>
               </div>
@@ -99,8 +87,8 @@
     </div>
   </div>
 
-  <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count"
-                   [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+  <nav *ngIf="count > limit && loader.isHidden()">
+    <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

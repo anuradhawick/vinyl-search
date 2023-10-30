@@ -1,11 +1,11 @@
-<div class="mt-[-60px] mx-[30px] relative bg-white rounded-md shadow-lg">
+<div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
   <br>
   <!--Search-->
   <div class="mx-4 flex justify-between flex-wrap">
     <div class="flex flex-wrap w-full">
       <mat-form-field class="grow max-w-[500px]" style="height: 60px; margin-right: 10px;">
-        <input matInput style="margin-top: -10px;" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
-          (keyup)="loadAutoComplete($event)" type="text" class="form-control" placeholder="Search records..."
+        <input matInput class="-translate-y-[10px]" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
+          (keyup)="loadAutoComplete($event)" type="text" placeholder="Search records..."
           name="search-query" [(ngModel)]="query">
       </mat-form-field>
       <div class="flex justify-between grow">
@@ -131,7 +131,7 @@
       </div>
       <br>
       <nav *ngIf="(records | async) && count > limit">
-        <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+        <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
           (page)="changePage($event)"></mat-paginator>
       </nav>
     </div>

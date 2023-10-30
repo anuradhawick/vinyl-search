@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { ObjectId } from 'mongodb';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, CopyObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { connect_db } from './utils/db-util.js';
-import { convert} from 'html-to-text';
+import { convert } from 'html-to-text';
 import * as cheerio from 'cheerio';
 
 
@@ -234,24 +234,15 @@ export async function save_post(uid_str, post, postId) {
 
   post.postHTML = $.html();
 
-  const imageProcess = Promise.all(_.map(images, (image) => {
+  const imageProcess = Promise.all(_.map(images, async (image) => {
     const filename = _.split(image, '/').pop();
     const params = {
       Bucket: BUCKET_NAME,
       CopySource: `/${BUCKET_NAME}/temp/${filename}`,
       Key: `forum-images/${filename}`
     };
-    return new Promise((resolve, reject) => {
-      s3.copyObject(params, (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        else {
-          resolve()
-        }
-      }
-      );
-    });
+    const command = new CopyObjectCommand(params);
+    await s3.send(command);
   }));
 
   await imageProcess;
@@ -288,23 +279,14 @@ export async function save_post(uid_str, post, postId) {
         return _.findIndex(allimages, (a) => a === i) === -1;
       });
 
-      const removeProcess = Promise.all(_.map(removedImages, (image) => {
+      const removeProcess = Promise.all(_.map(removedImages, async (image) => {
         const filename = _.split(image, '/').pop();
         const params = {
           Bucket: BUCKET_NAME,
           Key: `forum-images/${filename}`
         };
-        return new Promise((resolve, reject) => {
-          s3.deleteObject(params, (err, data) => {
-            if (err) {
-              resolve();
-            }
-            else {
-              resolve()
-            }
-          }
-          );
-        });
+        const command = new DeleteObjectCommand(params);
+        await s3.send(command);
       }));
 
       await removeProcess;
@@ -339,23 +321,14 @@ export async function delete_post(uid_str, postId) {
     images.push(v.attribs.src);
   });
 
-  const removeImages = Promise.all(_.map(images, (image) => {
+  const removeImages = Promise.all(_.map(images, async (image) => {
     const filename = _.split(image, '/').pop();
     const params = {
       Bucket: BUCKET_NAME,
       Key: `forum-images/${filename}`
     };
-    return new Promise((resolve, reject) => {
-      s3.deleteObject(params, (err, data) => {
-        if (err) {
-          resolve();
-        }
-        else {
-          resolve()
-        }
-      }
-      );
-    });
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
   }));
 
   const removePost = db.collection('forum_posts').findOneAndDelete({
