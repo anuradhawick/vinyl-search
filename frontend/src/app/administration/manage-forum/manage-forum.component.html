@@ -6,11 +6,11 @@
   <mat-list role="list">
     <mat-list-item *ngFor="let p of posts" role="listitem">
       <img matListItemAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matListItemTitle>{{p.postTitle}}</h3>
+      <h3 class="pr-[96px]" matListItemTitle>{{p.postTitle}}</h3>
       <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
-        <span style="float: right;">
+        <span class="absolute top-0 right-0 h-full pt-[12px]">
           <a mat-icon-button target="_blank" color="primary" [routerLink]="['/forum',p.id,'view']">
-            <mat-icon style="vertical-align: baseline !important;">open_in_new</mat-icon>
+            <mat-icon>open_in_new</mat-icon>
           </a>
           <button mat-icon-button color="primary" (click)="delete(p.id)">
             <mat-icon>delete</mat-icon>
@@ -20,7 +20,7 @@
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+    <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
       (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

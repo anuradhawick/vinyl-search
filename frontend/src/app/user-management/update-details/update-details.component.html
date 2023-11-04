@@ -23,7 +23,7 @@
   </div>
   <div *ngIf="uploadImageUrl===null && !uploading" class="form-group">
     <button (click)="profilePicture.click()" mat-raised-button color="primary">Upload</button>
-    <input #profilePicture id="profilePicture" type="file" class="form-control-file" (change)="addImage($event)" accept='image/*'>
+    <input #profilePicture id="profilePicture" type="file" hidden (change)="addImage($event)" accept='image/*'>
   </div>
   <br>
   <mat-progress-bar *ngIf="uploading" mode="determinate" value="{{uploadingProgress}}"></mat-progress-bar>

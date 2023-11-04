@@ -5,16 +5,19 @@
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{p.name}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
-      <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-button>
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-      </div>
+      <img matListItemAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matListItemTitle>{{p.name}}</h3>
+      <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
+        <span class="absolute top-0 right-0 h-full pt-[12px]">
+          <a target="_blank" [routerLink]="['/market',p.id,'view']" mat-icon-button color="primary">
+            <mat-icon>open_in_new</mat-icon>
+          </a>
+        </span>
+      </p>
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+    <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

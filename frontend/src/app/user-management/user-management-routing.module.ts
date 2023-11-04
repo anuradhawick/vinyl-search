@@ -13,7 +13,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'update-profile',
+        redirectTo: 'update',
         pathMatch: 'full'
       },
       {
@@ -29,7 +29,7 @@ const routes: Routes = [
         component: MyMarketComponent
       },
       {
-        path: 'update-profile',
+        path: 'update',
         component: UpdateDetailsComponent
       }
     ]

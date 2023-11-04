@@ -15,8 +15,8 @@
       </div>
 
       <div class="form-group m-0">
-        <label class="btn btn-default btn-block btn-sm" for="images"><strong>Click To Upload</strong></label>
-        <input type="file" class="custom-file-input" (change)="addImage($event)" id="images" accept='image/*' multiple>
+        <button (click)="imageupload.click()" mat-raised-button color="primary" class="w-full mt-1">Upload</button>
+        <input #imageupload type="file" hidden (change)="addImage($event)" id="images" accept='image/*' multiple>
       </div>
       <mat-progress-bar class="mb-1" *ngFor="let p of percentages" mode="determinate"
         value="{{(p | async)}}"></mat-progress-bar>

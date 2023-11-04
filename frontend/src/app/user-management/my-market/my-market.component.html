@@ -6,13 +6,13 @@
       <img matListItemAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
       <h3 matListItemTitle>{{p.name}}</h3>
       <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
-        <span style="float: right;">
+        <span class="absolute top-0 right-0 h-full pt-[12px]">
           <a mat-icon-button target="_blank" color="primary" *ngIf="!p.approved && !p.rejected"
             [routerLink]="['/market',p.id,'edit']">
-            <mat-icon style="vertical-align: baseline !important;">edit</mat-icon>
+            <mat-icon>edit</mat-icon>
           </a>
           <a mat-icon-button target="_blank" color="primary" [routerLink]="['/market',p.id,'view']">
-            <mat-icon style="vertical-align: baseline !important;">open_in_new</mat-icon>
+            <mat-icon>open_in_new</mat-icon>
           </a>
           <button mat-icon-button color="primary" *ngIf="!p.sold" (click)="markAsSold(p._id)">
             <mat-icon>done</mat-icon>
