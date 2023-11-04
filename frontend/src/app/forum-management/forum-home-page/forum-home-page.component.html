@@ -1,84 +1,82 @@
-<div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
-  <br>
-  <!--Search-->
-  <div class="mx-4 flex justify-between flex-wrap">
-    <div class="flex flex-wrap w-full">
-      <mat-form-field class="grow max-w-[500px]" style="height: 60px; margin-right: 10px;">
-        <input matInput class="-translate-y-[10px]" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
-          (keyup)="loadAutoComplete($event)" type="text" placeholder="Search forum..." name="search-query"
-          [(ngModel)]="query">
-      </mat-form-field>
-      <div class="flex justify-between grow">
-        <button mat-raised-button color="primary" (click)="search()">Search</button>
-        <button mat-raised-button color="primary" routerLink="/forum/editor">
-          New
-        </button>
-      </div>
-      <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
-        <div
-          style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
-          <table class="table table-hover table-bordered shadow">
-            <tbody>
-              <tr *ngFor="let p of (autocomplete | async)?.posts">
-                <td>
-                  <a [routerLink]="['/forum', p.id, 'view']">
-                    <strong>{{_.truncate(p.postTitle, {length: 60})}}</strong>
-                    <br>
-                    <em>
-                      Posted by {{_.truncate(p.ownerName, {length: 60})}}
-                    </em>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+<br>
+<!--Search-->
+<div class="mx-4 flex justify-between flex-wrap">
+  <div class="flex flex-wrap w-full">
+    <mat-form-field class="grow max-w-[500px]" style="height: 60px; margin-right: 10px;">
+      <input matInput class="-translate-y-[10px]" (focus)="loadAutoComplete($event)" (blur)="exitSearch()"
+        (keyup)="loadAutoComplete($event)" type="text" placeholder="Search forum..." name="search-query"
+        [(ngModel)]="query">
+    </mat-form-field>
+    <div class="flex justify-between grow">
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
+      <button mat-raised-button color="primary" routerLink="/forum/editor">
+        New
+      </button>
+    </div>
+    <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
+      <div
+        style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+        <table class="table table-hover table-bordered shadow">
+          <tbody>
+            <tr *ngFor="let p of (autocomplete | async)?.posts">
+              <td>
+                <a [routerLink]="['/forum', p.id, 'view']">
+                  <strong>{{_.truncate(p.postTitle, {length: 60})}}</strong>
+                  <br>
+                  <em>
+                    Posted by {{_.truncate(p.ownerName, {length: 60})}}
+                  </em>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <!--End Search-->
-  <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
-    class="ml-5 mr-5 mt-1 mb-2 text-dark">
-    Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/forum']">cancel</a>)
+</div>
+<!--End Search-->
+<div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
+  class="ml-5 mr-5 mt-1 mb-2 text-dark">
+  Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/forum']">cancel</a>)
+</div>
+<br>
+<div class="row container-fluid m-0">
+  <div class="col-12 col-lg-3">
+    <mat-accordion multi>
+      <mat-expansion-panel hideToggle [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Welcome to our forum!
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <hr>
+        <p>This is your arena for technical and general discussions.
+          We have enabled comment facility to provide a better user experience.
+          Stay tuned for more features soon!.
+        </p>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br>
   </div>
-  <br>
-  <div class="row container-fluid m-0">
-    <div class="col-12 col-lg-3">
-      <mat-accordion multi>
-        <mat-expansion-panel hideToggle [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Welcome to our forum!
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <hr>
-          <p>This is your arena for technical and general discussions.
-            We have enabled comment facility to provide a better user experience.
-            Stay tuned for more features soon!.
-          </p>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <br>
-    </div>
-    <div class="col-12 col-lg-9">
-      <app-loader #forumloader></app-loader>
-      <div *ngFor="let post of posts" class="mb-2">
-        <div class="card m-0">
-          <div class="card-body">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-12 col-sm-2">
-                  <img src="{{post.ownerPic}}" (error)="post.ownerPic='/assets/images/records-new-sample.svg'"
-                    style="max-width: 64px; max-height: 64px" class="rounded-circle img-fluid">
-                </div>
+  <div class="col-12 col-lg-9">
+    <app-loader #forumloader></app-loader>
+    <div *ngFor="let post of posts" class="mb-2">
+      <div class="card m-0">
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 col-sm-2">
+                <img src="{{post.ownerPic}}" (error)="post.ownerPic='/assets/images/records-new-sample.svg'"
+                  style="max-width: 64px; max-height: 64px" class="rounded-circle img-fluid">
+              </div>
 
-                <div class="col-12 col-sm-10">
+              <div class="col-12 col-sm-10">
 
-                  <a routerLink="/forum/{{post.id}}/view">
-                    <h4 class="card-title">{{post.postTitle}}</h4>
-                  </a>
-                  <h6 class="card-subtitle mb-2 text-muted">By {{post.ownerName}}</h6>
-                </div>
+                <a routerLink="/forum/{{post.id}}/view">
+                  <h4 class="card-title">{{post.postTitle}}</h4>
+                </a>
+                <h6 class="card-subtitle mb-2 text-muted">By {{post.ownerName}}</h6>
               </div>
             </div>
           </div>
@@ -86,9 +84,9 @@
       </div>
     </div>
   </div>
-
-  <nav *ngIf="count > limit && loader.isHidden()">
-    <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
-      (page)="changePage($event)"></mat-paginator>
-  </nav>
 </div>
+
+<nav *ngIf="count > limit && loader.isHidden()">
+  <mat-paginator class="bg-slate-50" showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+    (page)="changePage($event)"></mat-paginator>
+</nav>

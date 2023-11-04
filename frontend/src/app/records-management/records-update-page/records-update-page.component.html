@@ -1,39 +1,37 @@
-<div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
-  <br>
-  <app-loader [hidden]="!!recordObject"></app-loader>
-  <div *ngIf="recordObject">
-    <app-records-editor-component (readyStateChange)="readyChange($event)" #editor
-      [editorTitle]="'Update release details'" [(record)]="recordObject"></app-records-editor-component>
-    <div class="row container-fluid">
-      <div class="col-12 col-sm-9 offset-3">
-        <div class="container-fluid">
-          <div class="form-group">
-            <mat-form-field class="w-100">
-              <textarea matInput placeholder="Revision comments" [formControl]="revisionComments" required>
+<br>
+<app-loader [hidden]="!!recordObject"></app-loader>
+<div *ngIf="recordObject">
+  <app-records-editor-component (readyStateChange)="readyChange($event)" #editor
+    [editorTitle]="'Update release details'" [(record)]="recordObject"></app-records-editor-component>
+  <div class="row container-fluid">
+    <div class="col-12 col-sm-9 offset-3">
+      <div class="container-fluid">
+        <div class="form-group">
+          <mat-form-field class="w-100">
+            <textarea matInput placeholder="Revision comments" [formControl]="revisionComments" required>
                 </textarea>
-              <mat-error>
-                Please enter a comment describing your revision
-              </mat-error>
-            </mat-form-field>
-          </div>
+            <mat-error>
+              Please enter a comment describing your revision
+            </mat-error>
+          </mat-form-field>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="row col-12">
-      <div class="col-12 col-sm-9 offset-3">
-        <div class="container-fluid">
-          <form>
-            <div class="form-group">
-              <button mat-raised-button type="button" [routerLink]="['/records',recordObject.id, 'view']"
-                [disabled]="!ready">Discard
-              </button>
-              <button mat-raised-button type="button" color="primary" class="ml-1" (click)="save()" [disabled]="!ready">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
+  <div class="row col-12">
+    <div class="col-12 col-sm-9 offset-3">
+      <div class="container-fluid">
+        <form>
+          <div class="form-group">
+            <button mat-raised-button type="button" [routerLink]="['/records',recordObject.id, 'view']"
+              [disabled]="!ready">Discard
+            </button>
+            <button mat-raised-button type="button" color="primary" class="ml-1" (click)="save()" [disabled]="!ready">
+              Save
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

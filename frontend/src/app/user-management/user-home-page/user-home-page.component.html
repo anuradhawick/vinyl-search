@@ -1,44 +1,35 @@
-<div class="profile-page">
-  <div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
-    <br>
-    <div class="profile-content">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 ml-auto mr-auto">
-            <div *ngIf="(user | async)" class="profile">
-              <div class="avatar">
-                <img *ngIf="(user | async)?.picture; else placeholder" [src]="(user | async)?.picture"
-                  alt="Profile picture" class="img-raised rounded-circle img-fluid">
-                <ng-template #placeholder>
-                  <img src="../../../assets/images/profile.png"
-                    alt="Profile picture" class="img-raised rounded-circle img-fluid">
-                </ng-template>
-              </div>
-              <div class="name">
-                <h3 class="title">{{(user | async)?.name}}</h3>
-                <h6>{{(user | async)?.email}}</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <ul class="nav justify-content-center">
-          <li class="nav-item">
-            <a class="nav-link active" [routerLink]="'records'" routerLinkActive="active">My Records</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="'forum'">My Forum Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="'market'">My Marketplace</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="'update-profile'" routerLinkActive="active">Update My Profile</a>
-          </li>
-        </ul>
-        <router-outlet></router-outlet>
-        <br>
-      </div>
-    </div>
-  </div>
 
+<div *ngIf="(user | async)" class="w-full">
+  <div class="w-full lg:h-[75px] pt-4 lg:pt-0">
+    <img *ngIf="(user | async)?.picture; else placeholder" [src]="(user | async)?.picture" alt="Profile picture"
+      class="h-[150px] w-[150x] aspect-square border-solid border-2 border-black rounded-full mx-auto lg:-translate-y-[75px]">
+    <ng-template #placeholder>
+      <img src="../../../assets/images/profile.png" alt="Profile picture" class="img-raised rounded-circle img-fluid">
+    </ng-template>
+  </div>
+  <div class="w-full text-center">
+    <h3 class="font-semibold">{{(user | async)?.name}}</h3>
+    <h6 class="font-medium">{{(user | async)?.email}}</h6>
+  </div>
+</div>
+<div class="flex space-x-5 justify-center">
+  <div class="flex md:hidden">
+    <a mat-button class="flex md:hidden" (click)="scroll('left')"><mat-icon>chevron_left</mat-icon></a>
+  </div>
+  <div #hscroll class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between">
+    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'records'">
+      Records</a>
+    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'forum'">Forum
+    </a>
+    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'market'">
+      Marketplace</a>
+    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'update-profile'">
+      Profile</a>
+  </div>
+  <div class="flex md:hidden">
+    <a mat-button (click)="scroll('right')"><mat-icon>chevron_right</mat-icon></a>
+  </div>
+</div>
+<div class="m-3">
+  <router-outlet></router-outlet>
 </div>

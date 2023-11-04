@@ -113,7 +113,6 @@ export class UpdateDetailsComponent implements OnInit {
         picture: url
       }).then(() => {
         this.userService.get_profile().then((u: any) => {
-          u.picture += '?afafa'
           this.auth.setUser(u);
         });
       });

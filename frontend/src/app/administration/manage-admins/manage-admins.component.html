@@ -6,14 +6,14 @@
     <app-loader [hidden]="!loading"></app-loader>
     <mat-list>
       <mat-list-item *ngFor="let admin of admins">
-        <img matListItemAvatar [src]="admin.picture" alt="Admin avatar">
+        <img *ngIf="admin.picture; else placeholder" matListItemAvatar [src]="admin.picture" alt="Admin avatar">
+        <ng-template #placeholder>
+          <img matListItemAvatar src="../../../assets/images/profile.png" alt="Profile picture">
+        </ng-template>
         <h3 matListItemTitle>{{admin.name}}</h3>
         <p matListItemLine>{{admin.email}}
-
-          <span style="float: right;">
-            <button mat-icon-button color="primary" (click)="removeAdmin(admin.uid)">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <span class="absolute top-0 right-0 h-full pt-[12px]">
+            <button mat-icon-button color="primary" (click)="removeAdmin(admin.uid)"><mat-icon>delete</mat-icon></button>
           </span>
         </p>
       </mat-list-item>

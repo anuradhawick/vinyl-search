@@ -1,15 +1,17 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { CanActivateFn } from '@angular/router';
 
-import { AdminGuard } from './admin.guard';
+import { adminGuard } from './admin.guard';
 
-describe('AdminGuard', () => {
+describe('adminGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) => 
+      TestBed.runInInjectionContext(() => adminGuard(...guardParameters));
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [AdminGuard]
-    });
+    TestBed.configureTestingModule({});
   });
 
-  it('should ...', inject([AdminGuard], (guard: AdminGuard) => {
-    expect(guard).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(executeGuard).toBeTruthy();
+  });
 });

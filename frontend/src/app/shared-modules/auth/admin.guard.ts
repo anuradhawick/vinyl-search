@@ -1,29 +1,16 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { Auth } from 'aws-amplify';
+import * as _ from 'lodash';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AdminGuard implements CanActivate {
-  private user: Observable<any>;
+export const adminGuard: CanActivateFn = async (route, state) => {
+  const router = inject(Router);
 
-  constructor(private auth: AuthService, private router: Router) {
-    this.user = auth.user.asObservable();
+  try {
+    const user = await Auth.currentAuthenticatedUser();
+    const groups: string[] = _.get(user, 'signInUserSession.accessToken.payload.cognito:groups', [])
+    return groups.includes('Admin');
+  } catch (error) {
+    return router.parseUrl('/');
   }
-
-  canActivate(next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return new Promise((resolve, reject) => {
-      this.user.subscribe((user: any) => {
-        if (user.roles.includes('Admin')) {
-          resolve(true);
-        } else {
-          this.router.navigate(['/']);
-          resolve(false);
-        }
-      });
-    });
-  }
-}
+};

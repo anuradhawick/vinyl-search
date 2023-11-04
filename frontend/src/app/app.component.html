@@ -25,7 +25,7 @@
           <mat-icon>library_music</mat-icon>Browse Records
         </button>
         <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
-          <mat-icon>content_paste</mat-icon>New Sale
+          <mat-icon>content_paste</mat-icon>New Record
         </button>
       </mat-menu>
 
@@ -100,7 +100,7 @@
         <mat-icon>library_music</mat-icon>Browse Records
       </button>
       <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
-        <mat-icon>content_paste</mat-icon>New Sale
+        <mat-icon>content_paste</mat-icon>New Record
       </button>
     </mat-menu>
 
@@ -148,7 +148,9 @@
     <h1 class="text-white text-4xl sm:text-6xl font-extrabold font-serif">The Vinyl World</h1>
   </div>
 </div>
-<router-outlet></router-outlet>
+<div class="mt-[-60px] mx-0 sm:mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
+  <router-outlet></router-outlet>
+</div>
 <footer>
   <div class="w-full">
     &copy; The Vinyl Search | <a [routerLink]="'/privacy-policy'">Privacy</a>

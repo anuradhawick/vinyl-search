@@ -11,11 +11,14 @@ import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.com
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
+import { authGuard } from '../shared-modules/auth/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
         path: '',

@@ -18,10 +18,12 @@
   </div>
     <hr>
   <h3>Update Profile Picture</h3>
-  <img *ngIf="uploadImageUrl" [src]="uploadImageUrl" class="img-thumbnail">
+  <div class="w-full">
+    <img ngClass="max-h-[300px] aspect-square mx-auto rounded-full border-black border-2" *ngIf="uploadImageUrl" [src]="uploadImageUrl">
+  </div>
   <div *ngIf="uploadImageUrl===null && !uploading" class="form-group">
-    <label class="btn btn-default btn-sm" for="profilePicture"><strong>Click To Upload</strong></label>
-    <input id="profilePicture" type="file" class="form-control-file" (change)="addImage($event)" accept='image/*'>
+    <button (click)="profilePicture.click()" mat-raised-button color="primary">Upload</button>
+    <input #profilePicture id="profilePicture" type="file" class="form-control-file" (change)="addImage($event)" accept='image/*'>
   </div>
   <br>
   <mat-progress-bar *ngIf="uploading" mode="determinate" value="{{uploadingProgress}}"></mat-progress-bar>
