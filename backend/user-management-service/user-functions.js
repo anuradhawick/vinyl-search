@@ -11,7 +11,7 @@ const BUCKET_NAME = process.env.BUCKET_NAME
 const CDN_DOMAIN = process.env.CDN_DOMAIN
 
 
-export async function update_user(uid, userdata) {
+export async function update_user(uid_str, userdata) {
   const db = await connect_db();
 
   const set_user = {
@@ -38,7 +38,7 @@ export async function update_user(uid, userdata) {
     return null;
   }
 
-  const newUserData = await db.collection('users').findOneAndUpdate({ _id: new ObjectId(uid) },
+  const newUserData = await db.collection('users').findOneAndUpdate({ _id: new ObjectId(uid_str) },
     set_user,
     {
       returnOriginal: false,

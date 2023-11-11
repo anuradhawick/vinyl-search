@@ -1,24 +1,22 @@
 <hr>
 <app-loader #loader></app-loader>
-<div class="container col-sm-8">
-  <mat-list role="list">
-    <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListItemAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matListItemTitle>{{p.postTitle}}</h3>
-      <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
-        <span class="absolute top-0 right-0 h-full pt-[12px]">
-          <button mat-icon-button target="_blank" color="primary" [routerLink]="['/forum',p.id,'view']">
-            <mat-icon>open_in_new</mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="delete(p.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </span>
-      </p>
-    </mat-list-item>
-  </mat-list>
-  <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
-      (page)="changePage($event)"></mat-paginator>
-  </nav>
-</div>
+<mat-list role="list" class="mx-auto max-w-[800px]">
+  <mat-list-item *ngFor="let p of posts" role="listitem" class="hover:bg-slate-100">
+    <img matListItemAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
+    <h3 matListItemTitle>{{p.postTitle}}</h3>
+    <p matListItemLine>posted on: {{p.createdAt | date:'medium'}}
+      <span class="absolute top-0 right-0 h-full pt-[12px]">
+        <button mat-icon-button target="_blank" color="primary" [routerLink]="['/forum',p.id,'view']">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="delete(p.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </span>
+    </p>
+  </mat-list-item>
+</mat-list>
+<nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
+  <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+    (page)="changePage($event)"></mat-paginator>
+</nav>

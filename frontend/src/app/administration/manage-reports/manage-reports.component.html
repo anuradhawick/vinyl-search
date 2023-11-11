@@ -1,23 +1,26 @@
 <hr>
-<div class="container col-sm-8">
+<div class="container">
   <h3>Manage User Reports</h3>
   <hr>
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
-    <mat-list-item *ngFor="let p of posts" role="listitem">
-      <img matListAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
-      <h3 matLine>{{p.description}} - posted on: {{p.createdAt | date:'mediumDate'}}</h3>
-      <div class="row float-right" style="flex-wrap: nowrap;">
-        <a target="_blank" [routerLink]="p.link" mat-button>
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-        <a mat-button>
-          <mat-icon (click)="resolveReport(p._id)">done</mat-icon>
-        </a>
-      </div>
+    <mat-list-item *ngFor="let p of posts" role="listitem" class="hover:bg-slate-100">
+      <img matListItemAvatar [src]="'/assets/images/records-new-sample.svg'" alt="...">
+      <h3 matListItemTitle>{{p.description}}</h3>
+      <p matListItemLine>posted on: {{p.createdAt | date:'medium'}}
+        <span class="absolute top-0 right-0 h-full pt-[12px]">
+          <a target="_blank" [routerLink]="p.link" mat-icon-button color="primary">
+            <mat-icon>open_in_new</mat-icon>
+          </a>
+          <a mat-icon-button color="primary" [routerLink]="[]">
+            <mat-icon (click)="resolveReport(p._id)">check_circle</mat-icon>
+          </a>
+        </span>
+      </p>
     </mat-list-item>
   </mat-list>
   <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
-    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1" (page)="changePage($event)"></mat-paginator>
+    <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
+      (page)="changePage($event)"></mat-paginator>
   </nav>
 </div>

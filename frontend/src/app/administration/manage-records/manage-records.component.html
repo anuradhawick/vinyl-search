@@ -1,16 +1,16 @@
 <hr>
-<div class="container col-sm-8">
+<div class="container">
   <h3>Manage Records</h3>
   <hr>
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
-    <mat-list-item *ngFor="let r of records" role="listitem">
+    <mat-list-item *ngFor="let r of records" role="listitem" class="hover:bg-slate-100">
       <img matListItemAvatar [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
       <h3 matListItemTitle>{{r.name}}</h3>
       <p matListItemLine>{{r.label}} - {{r.catalogNo}}
         <span class="absolute top-0 right-0 h-full pt-[12px]">
           <a mat-icon-button target="_blank" color="primary" [routerLink]="['/records',r.id,'view']">
-            <mat-icon> open_in_new</mat-icon>
+            <mat-icon>open_in_new</mat-icon>
           </a>
           <button mat-icon-button color="primary" (click)="delete(r.id)">
             <mat-icon>delete</mat-icon>

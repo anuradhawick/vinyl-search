@@ -1,11 +1,11 @@
 <hr>
-<div class="container col-sm-8">
+<div class="container">
   <h3>Administrators</h3>
   <hr>
   <div>
-    <app-loader [hidden]="!loading"></app-loader>
     <mat-list>
-      <mat-list-item *ngFor="let admin of admins">
+      @for (admin of admins; track $index) {
+      <mat-list-item class="hover:bg-slate-100">
         <img *ngIf="admin.picture; else placeholder" matListItemAvatar [src]="admin.picture" alt="Admin avatar">
         <ng-template #placeholder>
           <img matListItemAvatar src="../../../assets/images/profile.png" alt="Profile picture">
@@ -13,11 +13,15 @@
         <h3 matListItemTitle>{{admin.name}}</h3>
         <p matListItemLine>{{admin.email}}
           <span class="absolute top-0 right-0 h-full pt-[12px]">
-            <button mat-icon-button color="primary" (click)="removeAdmin(admin.uid)"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button color="primary"
+              (click)="removeAdmin(admin._id, admin.name, admin.email)"><mat-icon>delete</mat-icon></button>
           </span>
         </p>
       </mat-list-item>
+      }
     </mat-list>
+    <app-loader [hidden]="!loading"></app-loader>
+
   </div>
   <hr>
   <h3>Manage Admins</h3>

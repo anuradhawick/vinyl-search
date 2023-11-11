@@ -1,13 +1,13 @@
 <hr>
-<div class="container col-sm-12">
+<div class="container">
   <h3>Approved Ads</h3>
   <hr>
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
-    <mat-list-item *ngFor="let p of posts" role="listitem">
+    <mat-list-item *ngFor="let p of posts" role="listitem" class="hover:bg-slate-100">
       <img matListItemAvatar [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
       <h3 matListItemTitle>{{p.name}}</h3>
-      <p matListItemLine>posted on: {{p.createdAt | date:'mediumDate'}}
+      <p matListItemLine>posted on: {{p.createdAt | date:'medium'}}
         <span class="absolute top-0 right-0 h-full pt-[12px]">
           <a [routerLink]="['/admin/market',p.id,'edit']" mat-icon-button color="primary">
             <mat-icon>edit</mat-icon>

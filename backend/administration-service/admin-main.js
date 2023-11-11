@@ -1,4 +1,5 @@
-import { Router, builResponse } from './utils/lambda-router.js';
+import { builResponse } from './utils/lambda-router.js';
+import { ProxyRouter } from './utils/lambda-proxy-router.js';
 import * as admin_functions from './admin-functions';
 import * as admin_market_functions from './admin-market-functions';
 import _ from 'lodash';
@@ -14,9 +15,8 @@ const is_admin = (claims) => {
 
 export const main = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  console.log(JSON.stringify(event.requestContext))
 
-  const router = new Router(event, context, callback);
+  const router = new ProxyRouter(event, context, callback);
 
   // TODO find a better way to do this
   if (!is_admin(event.requestContext.authorizer.claims)) {
@@ -28,7 +28,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/admin-users',
+    'admin-users',
     (event, context, callback) => {
       admin_functions.get_admin_users().then((data) => {
         callback(null, builResponse(200, {
@@ -49,7 +49,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/users/{userUid}',
+    'users/{userUid}',
     (event, context, callback) => {
       admin_functions.get_user_by_uid(event.pathParameters.userUid).then((data) => {
         callback(null, builResponse(200, {
@@ -69,7 +69,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/admin-users/{userUid}',
+    'admin-users/{userUid}',
     (event, context, callback) => {
       admin_functions.remove_admin(event.pathParameters.userUid).then((res) => {
         callback(null, builResponse(200, {
@@ -89,9 +89,9 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/admin-users/{userUid}', // actually we are using email here ;)
+    'admin-users/{email}',
     (event, context, callback) => {
-      admin_functions.add_admin(event.pathParameters.userUid).then((res) => {
+      admin_functions.add_admin(event.pathParameters.email).then((res) => {
         callback(null, builResponse(200, {
           success: res
         }));
@@ -109,7 +109,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/records',
+    'records',
     (event, context, callback) => {
       admin_functions.get_all_records(event.queryStringParameters).then((data) => {
         callback(null, builResponse(200, {
@@ -130,7 +130,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/records/{recordId}',
+    'records/{recordId}',
     (event, context, callback) => {
 
       admin_functions.delete_record(event.pathParameters.recordId).then((data) => {
@@ -151,7 +151,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/forum',
+    'forum',
     (event, context, callback) => {
       admin_functions.get_all_forum_posts(event.queryStringParameters).then((data) => {
         callback(null, builResponse(200, {
@@ -172,7 +172,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'DELETE',
-    '/admin/forum/{postId}',
+    'forum/{postId}',
     (event, context, callback) => {
       admin_functions.delete_forum_post(event.pathParameters.postId).then((data) => {
         callback(null, builResponse(200, {
@@ -192,7 +192,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/reports',
+    'reports',
     (event, context, callback) => {
       admin_functions.get_user_reports(event.queryStringParameters).then((data) => {
         callback(null, builResponse(200, {
@@ -213,7 +213,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/reports/{reportId}',
+    'reports/{reportId}',
     (event, context, callback) => {
       admin_functions.resolve_user_reports(event.pathParameters.reportId).then((data) => {
         callback(null, builResponse(200, {
@@ -234,7 +234,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/market',
+    'market',
     (event, context, callback) => {
       if (event.queryStringParameters.type === 'pending') {
         admin_market_functions.pending_market_posts(event.queryStringParameters).then((data) => {
@@ -293,7 +293,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'GET',
-    '/admin/market/{postId}',
+    'market/{postId}',
     (event, context, callback) => {
       admin_market_functions.get_market_post(event.pathParameters.postId).then((data) => {
         callback(null, builResponse(200, {
@@ -314,7 +314,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/market/{postId}',
+    'market/{postId}',
     (event, context, callback) => {
       admin_market_functions.update_market_post(event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.postId,
@@ -337,7 +337,7 @@ export const main = (event, context, callback) => {
    */
   router.route(
     'POST',
-    '/admin/market',
+    'market',
     (event, context, callback) => {
       admin_market_functions.market_post_action(event.body).then((data) => {
         callback(null, builResponse(200, {

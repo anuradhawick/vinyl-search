@@ -40,49 +40,39 @@
   class="ml-5 mr-5 mt-1 mb-2 text-dark">
   Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/forum']">cancel</a>)
 </div>
-<br>
-<div class="row container-fluid m-0">
-  <div class="col-12 col-lg-3">
-    <mat-accordion multi>
-      <mat-expansion-panel hideToggle [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Welcome to our forum!
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+<div class="flex flex-col md:flex-row">
+  <div class="w-full md:w-1/4 p-2">
+    <mat-card>
+      <mat-card-content>
+        <h4 class="font-medium">Welcome to our forum!</h4>
         <hr>
-        <p>This is your arena for technical and general discussions.
+        <p class="font-normal">
+          This is your arena for technical and general discussions.
           We have enabled comment facility to provide a better user experience.
           Stay tuned for more features soon!.
         </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <br>
+        <p class="font-extralight">
+          Be constructive, respectful and positive.
+        </p>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div class="col-12 col-lg-9">
+  <div class="w-full md:w-3/4 p-2">
     <app-loader #forumloader></app-loader>
-    <div *ngFor="let post of posts" class="mb-2">
-      <div class="card m-0">
-        <div class="card-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-12 col-sm-2">
-                <img src="{{post.ownerPic}}" (error)="post.ownerPic='/assets/images/records-new-sample.svg'"
-                  style="max-width: 64px; max-height: 64px" class="rounded-circle img-fluid">
-              </div>
-
-              <div class="col-12 col-sm-10">
-
-                <a routerLink="/forum/{{post.id}}/view">
-                  <h4 class="card-title">{{post.postTitle}}</h4>
-                </a>
-                <h6 class="card-subtitle mb-2 text-muted">By {{post.ownerName}}</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <mat-card>
+      <mat-card-content>
+        <mat-list class="p-0">
+          @for (post of $any(posts); track $index) {
+          <mat-list-item role="listitem" [routerLink]="[post.id, 'view']" class="hover:bg-slate-100"
+            style="cursor: pointer !important;">
+            <img matListItemAvatar src="/assets/images/records-new-sample.svg">
+            <h3 matListItemTitle>{{post.postTitle}}</h3>
+            <p matListItemLine>posted on: {{post.createdAt | date:'medium'}}</p>
+          </mat-list-item>
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
 

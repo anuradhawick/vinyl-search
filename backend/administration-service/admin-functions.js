@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { ObjectId } from 'mongodb';
 import { S3Client } from '@aws-sdk/client-s3';
 import { connect_db } from './utils/db-util.js';
-import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider"
+import { CognitoIdentityProviderClient, ListUsersCommand, AdminRemoveUserFromGroupCommand, AdminAddUserToGroupCommand } from "@aws-sdk/client-cognito-identity-provider"
 import * as cheerio from 'cheerio';
 import path from 'path';
 
@@ -13,10 +13,19 @@ const BUCKET_NAME = process.env.BUCKET_NAME
 const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID
 const CDN_DOMAIN = process.env.CDN_DOMAIN
 
+async function list_users_by_email(email) {
+  const params = {
+    UserPoolId: COGNITO_USER_POOL_ID,
+    Filter: `email = "${email}"`
+  };
+  const command = new ListUsersCommand(params);
 
-export async function get_user_by_uid(uid) {
+  return (await cognito.send(command)).Users;
+};
+
+export async function get_user_by_uid(uid_str) {
   const db = await connect_db();
-  return await db.collection('users').findOne({ _id: new ObjectId(uid) })
+  return await db.collection('users').findOne({ _id: new ObjectId(uid_str) })
 };
 
 export async function get_admin_users() {
@@ -24,70 +33,67 @@ export async function get_admin_users() {
   return await db.collection('users').find({ roles: "Admin" }).toArray();
 };
 
-export async function remove_admin(uid) {
+export async function remove_admin(uid_str) {
   const db = await connect_db();
-  const dbUser = await db.collection('users').findOne({ uid });
-  const cognitoUsers = (await cognito.listUsers({
-    UserPoolId: COGNITO_USER_POOL_ID,
-    Filter: `email = "${dbUser.email}"`
-  }).promise()).Users;
+  const dbUser = await db.collection('users').findOne({ _id: new ObjectId(uid_str) });
+  const cognitoUsers = await list_users_by_email(dbUser.email);
 
   if (_.isEmpty(cognitoUsers) || dbUser.email === 'anuradhawick@gmail.com') {
     return false;
-  } else {
-    const username = cognitoUsers[0].Username;
-
-    await cognito.adminRemoveUserFromGroup({
-      GroupName: 'Admin',
-      UserPoolId: COGNITO_USER_POOL_ID,
-      Username: username
-    }).promise();
-
-    await db.collection('users').updateOne(
-      {
-        uid, roles: "Admin"
-      },
-      {
-        $pull: {
-          roles: "Admin"
-        }
-      }
-    );
-    return true;
   }
+
+  const username = cognitoUsers[0].Username;
+  const params = {
+    GroupName: 'Admin',
+    UserPoolId: COGNITO_USER_POOL_ID,
+    Username: username
+  };
+  const command = new AdminRemoveUserFromGroupCommand(params);
+  await cognito.send(command);
+
+
+  await db.collection('users').updateOne(
+    {
+      _id: new ObjectId(uid_str), roles: "Admin"
+    },
+    {
+      $pull: {
+        roles: "Admin"
+      }
+    }
+  );
+  return true;
 };
 
 export async function add_admin(email) {
   const db = await connect_db();
-  const cognitoUsers = (await cognito.listUsers({
-    UserPoolId: COGNITO_USER_POOL_ID,
-    Filter: `email = "${email}"`
-  }).promise()).Users;
+  const cognitoUsers = await list_users_by_email(email);
 
   if (_.isEmpty(cognitoUsers)) {
     return false;
-  } else {
-    const username = cognitoUsers[0].Username;
-
-    await cognito.adminAddUserToGroup({
-      GroupName: 'Admin',
-      UserPoolId: COGNITO_USER_POOL_ID,
-      Username: username
-    }).promise();
-
-    await db.collection('users').updateOne(
-      {
-        email
-      },
-      {
-        $addToSet: {
-          roles: "Admin"
-        }
-      }
-    );
-
-    return true;
   }
+
+  const username = cognitoUsers[0].Username;
+  const params = {
+    GroupName: 'Admin',
+    UserPoolId: COGNITO_USER_POOL_ID,
+    Username: username
+  };
+  const command = new AdminAddUserToGroupCommand(params);
+  await cognito.send(command);
+
+  await db.collection('users').updateOne(
+    {
+      email
+    },
+    {
+      $addToSet: {
+        roles: "Admin"
+      }
+    }
+  );
+
+  return true;
 };
 
 export async function get_all_records(query_params) {
@@ -281,6 +287,7 @@ export async function delete_forum_post(postId) {
       Bucket: BUCKET_NAME,
       Key: `forum-images/${filename}`
     };
+    // TODO fix
     return new Promise((resolve, reject) => {
       s3.deleteObject(params, (err, data) => {
         if (err) {

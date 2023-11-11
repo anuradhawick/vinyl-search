@@ -4,5 +4,6 @@
   top: 0px;
   width: 100px;
   height: 100px;
-  background: url("/assets/images/loader.gif") center no-repeat #fff;
+  background: url("/assets/images/loader.gif");
+  @apply bg-contain;
 }

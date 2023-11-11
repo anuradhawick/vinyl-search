@@ -1,9 +1,8 @@
 <h1 mat-dialog-title>Are you sure?</h1>
 <div mat-dialog-content>
-  <p>{{data.message}}</p>
+  <p class="w-[300px]">{{data.message}}</p>
 </div>
-<br>
 <div mat-dialog-actions>
-  <button mat-button class="btn btn-default" [mat-dialog-close]="false">Cancel</button>
-  <button mat-button class="btn btn-danger" [mat-dialog-close]="true">Yes</button>
+  <button class="w-[80px]" mat-raised-button color="warn" [mat-dialog-close]="false">Cancel</button>
+  <button class="w-[80px]" mat-raised-button color="primary" [mat-dialog-close]="true">Confirm</button>
 </div>

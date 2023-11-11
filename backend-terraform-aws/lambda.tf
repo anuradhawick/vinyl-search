@@ -23,8 +23,9 @@ module "lambda-admin-service" {
   attach_policy_jsons = true
   policy_jsons = [
     data.aws_iam_policy_document.lambda-s3-full-access.json,
+    data.aws_iam_policy_document.lambda-user-pool-triggers.json,
   ]
-  number_of_policy_jsons = 1
+  number_of_policy_jsons = 2
   source_path = [
     {
       path = "${path.module}/../backend/administration-service",

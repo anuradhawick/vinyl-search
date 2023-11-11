@@ -8,7 +8,6 @@ import { SharedModules } from '../shared-modules/shared.module';
 import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
 import { ManageRecordsComponent } from './manage-records/manage-records.component';
 import { ManageForumComponent } from './manage-forum/manage-forum.component';
-import { AdminActionConfirmModalComponent } from './modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 import { ManageMarketComponent } from './manage-market/manage-market.component';
 import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
 import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
@@ -25,19 +24,19 @@ import { MarketService } from './services/market.service';
     ManageAdminsComponent,
     ManageRecordsComponent,
     ManageForumComponent,
-    AdminActionConfirmModalComponent,
     ManageMarketComponent,
     PendingAdsComponent,
     AllAdsComponent,
     ExpiredAdsComponent,
     ApprovedAdsComponent,
     EditAdComponent,
-    ManageReportsComponent],
+    ManageReportsComponent,
+  ],
   imports: [
     CommonModule,
     AdministrationRoutingModule,
     SharedModules,
-    PostEditorModule
+    PostEditorModule,
   ],
   providers: [AdminService, MarketService],
 })
