@@ -11,7 +11,7 @@ import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.com
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
-import { authGuard } from '../shared-modules/auth/auth.guard';
+import { authGuard } from '../shared-modules/guards/auth.guard';
 
 const routes: Routes = [
   {

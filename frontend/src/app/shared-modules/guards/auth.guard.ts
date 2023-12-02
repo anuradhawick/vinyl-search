@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
     await Auth.currentAuthenticatedUser();
     return true;
   } catch (error) {
-    console.log(auth);
+    // console.log(auth);
     auth.login(JSON.stringify([state.url]));
     return false;
   }

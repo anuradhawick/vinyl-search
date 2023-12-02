@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home/home-page/home-page.component';
-import { authGuard } from './shared-modules/auth/auth.guard';
-import { adminGuard } from './shared-modules/auth/admin.guard';
+import { authGuard } from './shared-modules/guards/auth.guard';
+import { adminGuard } from './shared-modules/guards/admin.guard';
 
 const routes: Routes = [
   {

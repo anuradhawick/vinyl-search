@@ -29,9 +29,9 @@ export class AppComponent {
     );
   }
 
-  @HostListener('window:scroll')
-  scrolled() {
-    if (window.scrollY > 50) {
+  @HostListener('window:scroll', ['$event'])
+  scrolled(event: Event) {
+    if ((event.currentTarget as any).scrollY > 50) {
       (this.nav.nativeElement as HTMLElement).classList.contains(
         'bg-opacity-70',
       ) &&

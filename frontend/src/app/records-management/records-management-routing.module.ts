@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RecordsHomePageComponent } from './records-home-page/records-home-page.component';
 import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.component';
-import { authGuard } from '../shared-modules/auth/auth.guard';
+import { authGuard } from '../shared-modules/guards/auth.guard';
 import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
 import { RecordsUpdatePageComponent } from './records-update-page/records-update-page.component';
 import { RecordsRevisionViewPageComponent } from './records-revision-view-page/records-revision-view-page.component';

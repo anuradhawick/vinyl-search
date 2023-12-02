@@ -1,11 +1,18 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './home/home-page/home-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  provideHttpClient,
+  withFetch,
+} from '@angular/common/http';
 import { SharedModules } from './shared-modules/shared.module';
 import { ToastrModule } from 'ngx-toastr';
 import { MatIconModule } from '@angular/material/icon';
@@ -78,6 +85,8 @@ class CustomReuseStrategy implements RouteReuseStrategy {
       provide: RouteReuseStrategy,
       useClass: CustomReuseStrategy,
     },
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
   ],
   bootstrap: [AppComponent],
 })

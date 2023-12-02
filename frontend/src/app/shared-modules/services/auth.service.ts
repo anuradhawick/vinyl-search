@@ -1,4 +1,4 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone, afterNextRender } from '@angular/core';
 import { Auth } from 'aws-amplify';
 // import { CognitoHostedUIIdentityProvider } from '@aws-amplify/ui-angular'
 import { Hub } from 'aws-amplify';
@@ -28,66 +28,69 @@ export class AuthService {
     private router: Router,
     @Inject(MatDialog) private dialog: MatDialog,
   ) {
-    route.queryParams.subscribe((params: any) => {
-      if (params.error === 'invalid_request' && params.error_description) {
-        console.log('INVALID REQUEST', params.error_description);
-        if (
-          params.error_description === 'PreSignUp failed with error Google. '
-        ) {
-          this.loginFacebook();
-        } else if (
-          params.error_description === 'PreSignUp failed with error Facebook. '
-        ) {
-          this.loginGoogle();
+    afterNextRender(() => {
+      route.queryParams.subscribe((params: any) => {
+        if (params.error === 'invalid_request' && params.error_description) {
+          console.log('INVALID REQUEST', params.error_description);
+          if (
+            params.error_description === 'PreSignUp failed with error Google. '
+          ) {
+            this.loginFacebook();
+          } else if (
+            params.error_description ===
+            'PreSignUp failed with error Facebook. '
+          ) {
+            this.loginGoogle();
+          }
         }
-      }
-    });
+      });
 
-    Hub.listen('auth', ({ payload: { event, data } }: any) => {
-      console.log(event, data);
-      (async () => {
-        console.log((await Auth.currentSession()).getIdToken().getJwtToken());
-      })();
-      switch (event) {
-        case 'signIn':
-          console.log('Login success');
-          Auth.currentAuthenticatedUser().then((u) => {
+      Hub.listen('auth', ({ payload: { event, data } }: any) => {
+        console.log(event, data);
+        (async () => {
+          console.log((await Auth.currentSession()).getIdToken().getJwtToken());
+        })();
+        switch (event) {
+          case 'signIn':
+            console.log('Login success');
+            Auth.currentAuthenticatedUser().then((u) => {
+              this.processUser(u);
+            });
+            break;
+          case 'signOut':
+            console.log('Logout success');
+            this.isLoggedIn = false;
+            this.user = null;
+            this.autoLogin = false;
+            this.profileLoaded = false;
+
+            break;
+          case 'customOAuthState':
+            this.customState = JSON.parse(decodeURIComponent(data));
+            this.zone.run(() => this.router.navigate(this.customState));
+            Auth.currentAuthenticatedUser().then((u) => {
+              this.processUser(u);
+            });
+            break;
+          case 'signIn_failure':
+            break;
+          case 'cognitoHostedUI_failure':
+            break;
+          case 'customState_failure':
+            break;
+        }
+      });
+
+      this.autoLogin = new Promise((resolve, reject) => {
+        Auth.currentAuthenticatedUser()
+          .then((u: any) => {
             this.processUser(u);
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
           });
-          break;
-        case 'signOut':
-          console.log('Logout success');
-          this.isLoggedIn = false;
-          this.user = null;
-          this.autoLogin = false;
-          this.profileLoaded = false;
-
-          break;
-        case 'customOAuthState':
-          this.customState = JSON.parse(decodeURIComponent(data));
-          this.zone.run(() => this.router.navigate(this.customState));
-          Auth.currentAuthenticatedUser().then((u) => {
-            this.processUser(u);
-          });
-          break;
-        case 'signIn_failure':
-          break;
-        case 'cognitoHostedUI_failure':
-          break;
-        case 'customState_failure':
-          break;
-      }
-    });
-
-    this.autoLogin = new Promise((resolve, reject) => {
-      Auth.currentAuthenticatedUser()
-        .then((u: any) => {
-          this.processUser(u);
-          resolve(true);
-        })
-        .catch(() => {
-          resolve(false);
-        });
+      });
     });
   }
 
