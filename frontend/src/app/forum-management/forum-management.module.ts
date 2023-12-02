@@ -16,15 +16,15 @@ import { ForumService } from './services/forum.service';
     ForumHomePageComponent,
     ForumViewPageComponent,
     ForumEditPageComponent,
-    ForumEditorComponentComponent
+    ForumEditorComponentComponent,
   ],
   imports: [
     FormsModule,
     CommonModule,
     ForumManagementRoutingModule,
     CKEditorModule,
-    SharedModules
+    SharedModules,
   ],
-  providers: [ForumService]
+  providers: [ForumService],
 })
-export class ForumManagementModule { }
+export class ForumManagementModule {}

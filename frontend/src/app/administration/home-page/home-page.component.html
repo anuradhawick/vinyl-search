@@ -1,19 +1,51 @@
-<br>
+<br />
 <div class="flex space-x-5 justify-center">
   <div class="flex md:hidden">
-    <a mat-button class="flex md:hidden" (click)="scroll('left')"><mat-icon>chevron_left</mat-icon></a>
+    <a mat-button class="flex md:hidden" (click)="scroll('left')"
+      ><mat-icon>chevron_left</mat-icon></a
+    >
   </div>
-  <div #hscroll class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between">
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'home'"
-      routerLinkActive="active">Admins</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'records'"
-      routerLinkActive="active">Records</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'forum'">Forum</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'market'">Marketplace</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'reports'">Reports</a>
+  <div
+    #hscroll
+    class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between"
+  >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'home'"
+      routerLinkActive="active"
+      >Admins</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'records'"
+      routerLinkActive="active"
+      >Records</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'forum'"
+      >Forum</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'market'"
+      >Marketplace</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'reports'"
+      >Reports</a
+    >
   </div>
   <div class="flex md:hidden">
-    <a mat-button (click)="scroll('right')"><mat-icon>chevron_right</mat-icon></a>
+    <a mat-button (click)="scroll('right')"
+      ><mat-icon>chevron_right</mat-icon></a
+    >
   </div>
 </div>
 <div class="m-3">

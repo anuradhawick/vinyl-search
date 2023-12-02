@@ -32,7 +32,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     ToggleFullscreenDirective,
     ActionConfirmModalComponent,
     LoginModalComponent,
-    LoginModalComponent
+    LoginModalComponent,
   ],
   imports: [
     CommonModule,
@@ -57,7 +57,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   exports: [
     CommonModule,
@@ -86,8 +86,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatProgressSpinnerModule,
     ActionConfirmModalComponent,
     MatCardModule,
-    MatExpansionModule
-  ]
+    MatExpansionModule,
+  ],
 })
-export class SharedModules {
-}
+export class SharedModules {}

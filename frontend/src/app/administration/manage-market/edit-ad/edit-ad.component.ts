@@ -10,34 +10,36 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-edit-ad',
   templateUrl: './edit-ad.component.html',
-  styleUrls: ['./edit-ad.component.css']
+  styleUrls: ['./edit-ad.component.css'],
 })
 export class EditAdComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor!: PostEditorComponent;
+  @ViewChild('editor', { static: false }) editor!: PostEditorComponent;
   public ready = true;
   public post: any = null;
   public _ = _;
   public changesSaved = false;
 
-  constructor(public route: ActivatedRoute,
-              private adminService: AdminService,
-              private router: Router,
-              private toastr: ToastrService,
-              public dialog: MatDialog,
-              private location: Location) {
-
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private adminService: AdminService,
+    private router: Router,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private location: Location,
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postID = _.get(map, 'params.postId', null);
       const data = this.adminService.get_market_post(postID);
 
-      data.then((post) => {
-        this.post = post;
-      }).catch(() => {
-        console.log('Error');
-      });
+      data
+        .then((post) => {
+          this.post = post;
+        })
+        .catch(() => {
+          console.log('Error');
+        });
     });
   }
 
@@ -50,19 +52,28 @@ export class EditAdComponent implements OnInit {
 
       const data = this.adminService.update_market_post(post);
 
-      data.then((result: any) => {
-        if (result.success) {
-          this.toastr.success(`Records saved successfully`, 'Success');
-          this.changesSaved = true;
+      data.then(
+        (result: any) => {
+          if (result.success) {
+            this.toastr.success(`Records saved successfully`, 'Success');
+            this.changesSaved = true;
+            this.ready = true;
+          } else {
+            this.ready = true;
+            this.toastr.error(
+              `Unable to save the records. Try again later`,
+              'Error',
+            );
+          }
+        },
+        () => {
           this.ready = true;
-        } else {
-          this.ready = true;
-          this.toastr.error(`Unable to save the records. Try again later`, 'Error');
-        }
-      }, () => {
-        this.ready = true;
-        this.toastr.error(`Unable to save the records. Try again later`, 'Error');
-      });
+          this.toastr.error(
+            `Unable to save the records. Try again later`,
+            'Error',
+          );
+        },
+      );
     }
   }
 
@@ -73,5 +84,4 @@ export class EditAdComponent implements OnInit {
   readyChange(event: any) {
     this.ready = event;
   }
-
 }

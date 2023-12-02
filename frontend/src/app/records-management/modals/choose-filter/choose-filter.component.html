@@ -1,14 +1,25 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-
   <mat-chip-listbox multiple>
-    <mat-chip-option [selected]="isSelected(c)" *ngFor="let c of data.all; let i = index"
-      (click)="toggleFilter(c)">{{c}}
+    <mat-chip-option
+      [selected]="isSelected(c)"
+      *ngFor="let c of data.all; let i = index"
+      (click)="toggleFilter(c)"
+      >{{ c }}
     </mat-chip-option>
   </mat-chip-listbox>
 </div>
-<br>
+<br />
 <div mat-dialog-actions>
-  <button mat-raised-button type="button" (click)="done([], false)">Cancel</button>
-  <button mat-raised-button type="button" color="primary" (click)="done(selected, true)">Done</button>
+  <button mat-raised-button type="button" (click)="done([], false)">
+    Cancel
+  </button>
+  <button
+    mat-raised-button
+    type="button"
+    color="primary"
+    (click)="done(selected, true)"
+  >
+    Done
+  </button>
 </div>

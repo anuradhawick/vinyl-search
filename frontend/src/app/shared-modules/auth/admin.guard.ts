@@ -8,7 +8,11 @@ export const adminGuard: CanActivateFn = async (route, state) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser();
-    const groups: string[] = _.get(user, 'signInUserSession.accessToken.payload.cognito:groups', [])
+    const groups: string[] = _.get(
+      user,
+      'signInUserSession.accessToken.payload.cognito:groups',
+      [],
+    );
     return groups.includes('Admin');
   } catch (error) {
     return router.parseUrl('/');

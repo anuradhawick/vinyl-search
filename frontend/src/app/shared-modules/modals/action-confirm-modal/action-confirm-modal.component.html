@@ -1,9 +1,13 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <p>{{data.message}}</p>
+  <p>{{ data.message }}</p>
 </div>
-<br>
+<br />
 <div mat-dialog-actions>
-  <button mat-button class="btn btn-default" [mat-dialog-close]="false">Cancel</button>
-  <button mat-button class="btn btn-danger" [mat-dialog-close]="true">Yes</button>
+  <button mat-button class="btn btn-default" [mat-dialog-close]="false">
+    Cancel
+  </button>
+  <button mat-button class="btn btn-danger" [mat-dialog-close]="true">
+    Yes
+  </button>
 </div>

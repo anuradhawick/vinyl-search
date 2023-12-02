@@ -9,10 +9,9 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-my-market',
   templateUrl: './my-market.component.html',
-  styleUrls: ['./my-market.component.css']
+  styleUrls: ['./my-market.component.css'],
 })
 export class MyMarketComponent implements OnInit {
-
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
   public posts = null;
   public skip = 0;
@@ -21,14 +20,14 @@ export class MyMarketComponent implements OnInit {
   public page = 1;
   public _ = _;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private userService: UserService,
     private router: Router,
     // private marketService: ForumService,
     private toastr: ToastrService,
     // private dialog: MatDialog
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -44,15 +43,18 @@ export class MyMarketComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService.get_market_posts({ limit: this.limit, skip: this.skip }).then((records: any) => {
-      this.posts = records.posts;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loader.hide();
-    }).catch(() => {
-      this.loader.hide();
-    });
+    this.userService
+      .get_market_posts({ limit: this.limit, skip: this.skip })
+      .then((records: any) => {
+        this.posts = records.posts;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loader.hide();
+      })
+      .catch(() => {
+        this.loader.hide();
+      });
   }
 
   changePage(event: any) {
@@ -60,7 +62,7 @@ export class MyMarketComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -99,5 +101,4 @@ export class MyMarketComponent implements OnInit {
     //   }
     // });
   }
-
 }

@@ -13,7 +13,7 @@ declare const $: any;
 @Component({
   selector: 'app-forum-edit-page',
   templateUrl: './forum-edit-page.component.html',
-  styleUrls: ['./forum-edit-page.component.css']
+  styleUrls: ['./forum-edit-page.component.css'],
 })
 export class ForumEditPageComponent implements OnInit {
   public title = '';
@@ -21,19 +21,18 @@ export class ForumEditPageComponent implements OnInit {
   public editorDisabled = false;
   public post = null;
   public hideView = true;
-  @ViewChild('editorloader', {static: true}) loader!: LoaderComponent;
+  @ViewChild('editorloader', { static: true }) loader!: LoaderComponent;
   public newMode = true;
   public postId: string = '';
   public imageProgress = 0;
 
-
-  constructor(public route: ActivatedRoute,
-              private forumService: ForumService,
-              private router: Router,
-              private toastr: ToastrService,
-              private confirmDialog: MatDialog) {
-
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private forumService: ForumService,
+    private router: Router,
+    private toastr: ToastrService,
+    private confirmDialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
@@ -69,7 +68,10 @@ export class ForumEditPageComponent implements OnInit {
       return;
     } else if (this.imageProgress > 0) {
       this.editorDisabled = false;
-      this.toastr.warning('Images are still uploading... Please wait', 'Warning');
+      this.toastr.warning(
+        'Images are still uploading... Please wait',
+        'Warning',
+      );
       return;
     }
     const object = {
@@ -81,25 +83,31 @@ export class ForumEditPageComponent implements OnInit {
     if (this.newMode) {
       const data = this.forumService.new_post(object);
 
-      data.then((result: any) => {
-        this.toastr.success(`Post saved successfully`, 'Success');
-        this.router.navigate(['/forum', result.postId, 'view']);
-        this.editorDisabled = true;
-      }, (err) => {
-        this.editorDisabled = false;
-        console.log('error ', err);
-        this.toastr.error(`Saving failed! Please try again later`, 'Error');
-      });
+      data.then(
+        (result: any) => {
+          this.toastr.success(`Post saved successfully`, 'Success');
+          this.router.navigate(['/forum', result.postId, 'view']);
+          this.editorDisabled = true;
+        },
+        (err) => {
+          this.editorDisabled = false;
+          console.log('error ', err);
+          this.toastr.error(`Saving failed! Please try again later`, 'Error');
+        },
+      );
     } else {
       const data = this.forumService.update_post(this.postId, object);
-      data.then(() => {
-        this.router.navigate(['/forum', this.postId, 'view']);
-        this.editorDisabled = true;
-      }, (err) => {
-        this.editorDisabled = false;
-        console.log('error ', err);
-        this.toastr.error(`Saving failed! Please try again later`, 'Error');
-      });
+      data.then(
+        () => {
+          this.router.navigate(['/forum', this.postId, 'view']);
+          this.editorDisabled = true;
+        },
+        (err) => {
+          this.editorDisabled = false;
+          console.log('error ', err);
+          this.toastr.error(`Saving failed! Please try again later`, 'Error');
+        },
+      );
     }
   }
 
@@ -108,8 +116,8 @@ export class ForumEditPageComponent implements OnInit {
       const dialogRef = this.confirmDialog.open(ActionConfirmModalComponent, {
         data: {
           title: 'Are you sure?',
-          message: 'You are about to discard your post.'
-        }
+          message: 'You are about to discard your post.',
+        },
       });
 
       dialogRef.afterClosed().subscribe((ok) => {
@@ -121,5 +129,4 @@ export class ForumEditPageComponent implements OnInit {
       this.router.navigate(['/forum']);
     }
   }
-
 }

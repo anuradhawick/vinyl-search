@@ -1,19 +1,35 @@
-<br>
+<br />
 <app-loader #loader></app-loader>
 <div *ngIf="loader.isHidden()">
-  <app-post-editor #editor (readyStateChange)="readyChange($event)"></app-post-editor>
+  <app-post-editor
+    #editor
+    (readyStateChange)="readyChange($event)"
+  ></app-post-editor>
   <!--<app-post-editor #editor [(post)]="testPost" (readyStateChange)="readyChange($event)"></app-post-editor>-->
 
   <div class="row col-12">
     <div class="col-12 col-sm-9 offset-3">
       <div class="container-fluid">
-        <button mat-raised-button type="button" [routerLink]="['/market']" [disabled]="!ready">Discard
+        <button
+          mat-raised-button
+          type="button"
+          [routerLink]="['/market']"
+          [disabled]="!ready"
+        >
+          Discard
         </button>
-        <button mat-raised-button type="button" class="ml-1" color="primary" (click)="save()" [disabled]="!ready">
+        <button
+          mat-raised-button
+          type="button"
+          class="ml-1"
+          color="primary"
+          (click)="save()"
+          [disabled]="!ready"
+        >
           Save
         </button>
       </div>
-      <br>
+      <br />
     </div>
   </div>
 </div>

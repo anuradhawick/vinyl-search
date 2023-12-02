@@ -9,28 +9,27 @@ import { PostEditPageComponent } from './post-edit-page/post-edit-page.component
 const routes: Routes = [
   {
     path: '',
-    component: LandingPageComponent
+    component: LandingPageComponent,
   },
   {
-    path: 'new', component: NewPostComponent,
-    canActivate: [authGuard]
+    path: 'new',
+    component: NewPostComponent,
+    canActivate: [authGuard],
   },
   {
     path: ':postId/view',
     component: PostViewPageComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: ':postId/edit',
     component: PostEditPageComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class MarketPlaceRoutingModule {
-}
+export class MarketPlaceRoutingModule {}

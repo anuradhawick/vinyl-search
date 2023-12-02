@@ -1,12 +1,26 @@
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../shared-modules/services/auth.service';
-import { Storage } from '@aws-amplify/storage';
+import { Storage } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER } from '@angular/cdk/keycodes';
 // @ts-ignore
@@ -25,7 +39,7 @@ declare const $: any;
 @Component({
   selector: 'app-records-editor-component',
   templateUrl: './records-editor-component.component.html',
-  styleUrls: ['./records-editor-component.component.css']
+  styleUrls: ['./records-editor-component.component.css'],
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;
@@ -56,7 +70,6 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   @Output() recordChange = new EventEmitter();
 
-
   @Output()
   readyStateChange = new EventEmitter<boolean>();
 
@@ -71,13 +84,15 @@ export class RecordsEditorComponentComponent implements OnInit {
     speed: null,
     size: null,
     country: null,
-    tracks: [{
-      index: null,
-      artists: [],
-      title: '',
-      credits: [],
-      duration: ''
-    }],
+    tracks: [
+      {
+        index: null,
+        artists: [],
+        title: '',
+        credits: [],
+        duration: '',
+      },
+    ],
     notes: null,
     commonCredits: [],
     songUrls: [],
@@ -109,23 +124,29 @@ export class RecordsEditorComponentComponent implements OnInit {
       next: true,
       prev: true,
       zoomIn: true,
-      zoomOut: true
-    }
+      zoomOut: true,
+    },
   };
 
   public form: any;
 
-  constructor(private auth: AuthService,
+  constructor(
+    private auth: AuthService,
     public ngZone: NgZone,
     private toastr: ToastrService,
-    private fb: FormBuilder) {
-  }
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
       name: [this.recordObject.name, Validators.required],
       mainArtist: [this.recordObject.mainArtist],
-      date: [this.recordObject.date, Validators.pattern(/([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?/)],
+      date: [
+        this.recordObject.date,
+        Validators.pattern(
+          /([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?/,
+        ),
+      ],
       label: [this.recordObject.label, Validators.required],
       catalogNo: [this.recordObject.catalogNo, Validators.required],
       country: [this.recordObject.country, Validators.required],
@@ -137,36 +158,54 @@ export class RecordsEditorComponentComponent implements OnInit {
         _.map(this.recordObject.tracks, (track) => {
           return this.fb.group({
             index: [track.index, Validators.required],
-            artists: this.fb.array(_.map(track.artists, (artist: any) => {
-              return this.fb.group(
-                {
+            artists: this.fb.array(
+              _.map(track.artists, (artist: any) => {
+                return this.fb.group({
                   index: [artist.index],
-                  name: [artist.name, Validators.required]
+                  name: [artist.name, Validators.required],
                 });
-            })),
+              }),
+            ),
             title: [track.title, Validators.required],
-            credits: this.fb.array(_.map(track.credits, (credit: any) => {
-              return this.fb.group({
-                index: [credit.index],
-                text: [credit.text, Validators.required]
-              });
-            })),
-            duration: [track.duration, Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
+            credits: this.fb.array(
+              _.map(track.credits, (credit: any) => {
+                return this.fb.group({
+                  index: [credit.index],
+                  text: [credit.text, Validators.required],
+                });
+              }),
+            ),
+            duration: [
+              track.duration,
+              Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/),
+            ],
           });
-        })
+        }),
       ),
-      commonCredits: this.fb.array(_.map(this.recordObject.commonCredits, (credit: any) => {
-        return this.fb.group({
-          index: [credit.index],
-          text: [credit.text, Validators.required]
-        });
-      })),
-      songUrls: this.fb.array(_.map(this.recordObject.songUrls, (songUrl: any) => {
-        return this.fb.group({
-          index: [songUrl.index],
-          text: [songUrl.text, [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
-        });
-      })),
+      commonCredits: this.fb.array(
+        _.map(this.recordObject.commonCredits, (credit: any) => {
+          return this.fb.group({
+            index: [credit.index],
+            text: [credit.text, Validators.required],
+          });
+        }),
+      ),
+      songUrls: this.fb.array(
+        _.map(this.recordObject.songUrls, (songUrl: any) => {
+          return this.fb.group({
+            index: [songUrl.index],
+            text: [
+              songUrl.text,
+              [
+                Validators.required,
+                Validators.pattern(
+                  /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+                ),
+              ],
+            ],
+          });
+        }),
+      ),
       notes: [this.recordObject.notes],
     });
     this.form.valueChanges.subscribe((values: any) => {
@@ -177,12 +216,15 @@ export class RecordsEditorComponentComponent implements OnInit {
     _.forEach(this.genresJSON, (s, g) => {
       genres.push({
         name: g,
-        styles: s
+        styles: s,
       });
     });
-    this.genres = _.concat(genres, _.map(this.recordObject.genres, (g: any) => {
-      return { name: g };
-    }));
+    this.genres = _.concat(
+      genres,
+      _.map(this.recordObject.genres, (g: any) => {
+        return { name: g };
+      }),
+    );
 
     this.genres = _.sortedUniqBy(this.genres, (g: any) => g.name);
 
@@ -190,7 +232,7 @@ export class RecordsEditorComponentComponent implements OnInit {
       stop: (event: any) => {
         const arr = $(this.table.nativeElement).sortable('toArray');
         this.ngZone.runOutsideAngular(() => this.resort(arr));
-      }
+      },
     });
 
     this.imageDeleteButton();
@@ -223,41 +265,50 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   appendTrack(tracks: FormArray) {
-    tracks.push(this.fb.group({
-      index: ['', Validators.required],
-      artists: this.fb.array([]),
-      title: ['', Validators.required],
-      credits: this.fb.array([]),
-      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
-    }));
+    tracks.push(
+      this.fb.group({
+        index: ['', Validators.required],
+        artists: this.fb.array([]),
+        title: ['', Validators.required],
+        credits: this.fb.array([]),
+        duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)],
+      }),
+    );
   }
 
   insertTrackBefore(tracks: FormArray, index: any) {
-    tracks.insert(index, this.fb.group({
-      index: ['', Validators.required],
-      artists: this.fb.array([]),
-      title: ['', Validators.required],
-      credits: this.fb.array([]),
-      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
-    }));
+    tracks.insert(
+      index,
+      this.fb.group({
+        index: ['', Validators.required],
+        artists: this.fb.array([]),
+        title: ['', Validators.required],
+        credits: this.fb.array([]),
+        duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)],
+      }),
+    );
   }
 
   insertTrackAfter(tracks: FormArray, index: any) {
-    tracks.insert(index + 1, this.fb.group({
-      index: ['', Validators.required],
-      artists: this.fb.array([]),
-      title: ['', Validators.required],
-      credits: this.fb.array([]),
-      duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)]
-    }));
+    tracks.insert(
+      index + 1,
+      this.fb.group({
+        index: ['', Validators.required],
+        artists: this.fb.array([]),
+        title: ['', Validators.required],
+        credits: this.fb.array([]),
+        duration: ['', Validators.pattern(/^[0-9]{1,2}:[0-9]{1,2}$/)],
+      }),
+    );
   }
 
   addArtist(track: FormArray) {
-    track.push(this.fb.group(
-      {
+    track.push(
+      this.fb.group({
         index: [''],
-        name: ['', Validators.required]
-      }));
+        name: ['', Validators.required],
+      }),
+    );
 
     _.each(track.controls, (control: FormControl | any, index: any) => {
       control.setValue({ index: index + 1, name: control.get('name').value });
@@ -265,38 +316,52 @@ export class RecordsEditorComponentComponent implements OnInit {
   }
 
   addCommonCredit(credits: FormArray) {
-    credits.push(this.fb.group({
-      index: [''],
-      text: ['', Validators.required]
-    }));
+    credits.push(
+      this.fb.group({
+        index: [''],
+        text: ['', Validators.required],
+      }),
+    );
 
     _.each(credits.controls, (control: FormControl | any, index) => {
       control.setValue({
         index: index + 1,
-        text: control.get('text').value
+        text: control.get('text').value,
       });
     });
   }
 
   addSongUrl(songUrls: FormArray) {
-    songUrls.push(this.fb.group({
-      index: [''],
-      text: ['', [Validators.required, Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)]]
-    }));
+    songUrls.push(
+      this.fb.group({
+        index: [''],
+        text: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+            ),
+          ],
+        ],
+      }),
+    );
 
     _.each(songUrls.controls, (control: FormControl | any, index) => {
       control.setValue({
         index: index + 1,
-        text: control.get('text').value
+        text: control.get('text').value,
       });
     });
   }
 
   addCredit(track: FormArray) {
-    track.push(this.fb.group({
-      index: [''],
-      text: ['', Validators.required]
-    }));
+    track.push(
+      this.fb.group({
+        index: [''],
+        text: ['', Validators.required],
+      }),
+    );
 
     _.each(track.controls, (control: FormControl | any, index) => {
       control.setValue({ index: index + 1, text: control.get('text').value });
@@ -322,19 +387,23 @@ export class RecordsEditorComponentComponent implements OnInit {
     } else {
       this.genres.push({
         name: candidateGenre,
-        styles: []
+        styles: [],
       });
       this.recordObject.genres.push(candidateGenre);
-      this.toastr.success(`Genre ${candidateGenre} added successfully`, 'Success');
+      this.toastr.success(
+        `Genre ${candidateGenre} added successfully`,
+        'Success',
+      );
     }
   }
 
   addStyle(event: MatChipInputEvent) {
-    const newStyle: string = (event.value || '').trim().replace(/\w+/g, _.capitalize);
+    const newStyle: string = (event.value || '')
+      .trim()
+      .replace(/\w+/g, _.capitalize);
 
     // Reset the input value
     event.chipInput!.clear();
-
 
     if (newStyle.length < 1) {
       return;
@@ -348,21 +417,25 @@ export class RecordsEditorComponentComponent implements OnInit {
       this.toastr.error(`Style ${newStyle} already exists`, 'Error');
     } else {
       this.styles.push(newStyle);
-      this.recordObject.styles = _.sortedUniq(_.concat(this.recordObject.styles, [newStyle]));
+      this.recordObject.styles = _.sortedUniq(
+        _.concat(this.recordObject.styles, [newStyle]),
+      );
       this.toastr.success(`Styles were added successfully`, 'Success');
-
     }
   }
 
   getReleaseData() {
     if (this.form.invalid) {
-      Object.keys(this.form.controls).forEach(field => {
+      Object.keys(this.form.controls).forEach((field) => {
         const control = this.form.get(field);
         control.markAsTouched({ onlySelf: true });
       });
       return false;
     } else if (this.uploadCount > 0) {
-      this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');
+      this.toastr.warning(
+        `Images are still being uploaded. Please wait!`,
+        'Warning',
+      );
       return false;
     }
 
@@ -384,31 +457,36 @@ export class RecordsEditorComponentComponent implements OnInit {
         const progressObserver = new Observable((observer) => {
           Storage.put(filename, file, {
             customPrefix: {
-              public: 'temp/'
+              public: 'temp/',
             },
-            progressCallback(progress) {
-              observer.next(progress.loaded * 100 / progress.total);
+            progressCallback(progress: any) {
+              observer.next((progress.loaded * 100) / progress.total);
             },
-          }).then(() => {
-            const url = `${environment.cdn_url}temp/${filename}`;
+          })
+            .then(() => {
+              const url = `${environment.cdn_url}temp/${filename}`;
 
-            this.recordObject.images.push(url);
-            this.uploadCount--;
-            if (this.uploadCount === 0) {
-              this.readyStateChange.emit(true);
-            }
-            observer.complete();
-            _.remove(this.percentages, (p) => p === progressObserver);
-            this.imageDeleteButton();
-          }).catch((e) => {
-            this.toastr.error('Image upload failed! Are you online?', 'Error');
-            this.uploadCount--;
-            _.remove(this.percentages, (p) => p === progressObserver);
-            if (this.uploadCount === 0) {
-              this.readyStateChange.emit(true);
-            }
-            observer.complete();
-          });
+              this.recordObject.images.push(url);
+              this.uploadCount--;
+              if (this.uploadCount === 0) {
+                this.readyStateChange.emit(true);
+              }
+              observer.complete();
+              _.remove(this.percentages, (p) => p === progressObserver);
+              this.imageDeleteButton();
+            })
+            .catch(() => {
+              this.toastr.error(
+                'Image upload failed! Are you online?',
+                'Error',
+              );
+              this.uploadCount--;
+              _.remove(this.percentages, (p) => p === progressObserver);
+              if (this.uploadCount === 0) {
+                this.readyStateChange.emit(true);
+              }
+              observer.complete();
+            });
         });
         this.percentages.push(progressObserver);
       });
@@ -446,7 +524,9 @@ export class RecordsEditorComponentComponent implements OnInit {
       _.remove(this.recordObject.genres, (item) => {
         return item === genre;
       });
-      _.each(this.map[genre], s => _.remove(this.recordObject.styles, (x) => s === x));
+      _.each(this.map[genre], (s) =>
+        _.remove(this.recordObject.styles, (x) => s === x),
+      );
       delete this.map[genre];
     } else {
       if (_.isEmpty(genre)) {
@@ -465,7 +545,11 @@ export class RecordsEditorComponentComponent implements OnInit {
     const allgenres = this.genres;
 
     _.each(genres, (genre) => {
-      const styles = _.get(_.find(allgenres, (g) => g.name === genre), 'styles', []);
+      const styles = _.get(
+        _.find(allgenres, (g) => g.name === genre),
+        'styles',
+        [],
+      );
       this.map[genre] = styles;
       this.styles = _.uniq(this.styles.concat(styles)).sort();
     });

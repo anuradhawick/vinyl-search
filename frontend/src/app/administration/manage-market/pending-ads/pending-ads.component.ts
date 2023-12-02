@@ -9,7 +9,7 @@ import { AdminActionConfirmModalComponent } from '../../modals/admin-action-conf
 @Component({
   selector: 'app-pending-ads',
   templateUrl: './pending-ads.component.html',
-  styleUrls: ['./pending-ads.component.css']
+  styleUrls: ['./pending-ads.component.css'],
 })
 export class PendingAdsComponent implements OnInit {
   public loading = true;
@@ -19,12 +19,13 @@ export class PendingAdsComponent implements OnInit {
   public count = 0;
   public page = 1;
 
-  constructor(private route: ActivatedRoute,
-              private adminMarketService: MarketService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private adminMarketService: MarketService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -40,19 +41,22 @@ export class PendingAdsComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminMarketService.fetch_posts_by_type({
-      limit: this.limit,
-      skip: this.skip,
-      type: 'pending'
-    }).then((records: any) => {
-      this.posts = records.posts;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loading = false;
-    }).catch(() => {
-      this.loading = false;
-    });
+    this.adminMarketService
+      .fetch_posts_by_type({
+        limit: this.limit,
+        skip: this.skip,
+        type: 'pending',
+      })
+      .then((records: any) => {
+        this.posts = records.posts;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   changePage(event: any) {
@@ -60,14 +64,16 @@ export class PendingAdsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
   }
 
   approve(id: string) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to approve?.`}});
+    const modal = this.dialog.open(AdminActionConfirmModalComponent, {
+      data: { message: `Are you sure you want to approve?.` },
+    });
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
@@ -101,7 +107,9 @@ export class PendingAdsComponent implements OnInit {
   }
 
   reject(id: string) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to reject?.`}});
+    const modal = this.dialog.open(AdminActionConfirmModalComponent, {
+      data: { message: `Are you sure you want to reject?.` },
+    });
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {

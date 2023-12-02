@@ -6,21 +6,22 @@ import { ForumEditPageComponent } from './forum-edit-page/forum-edit-page.compon
 import { authGuard } from '../shared-modules/auth/auth.guard';
 
 const routes: Routes = [
-  {path: '', component: ForumHomePageComponent},
-  {path: ':postId/view', component: ForumViewPageComponent},
+  { path: '', component: ForumHomePageComponent },
+  { path: ':postId/view', component: ForumViewPageComponent },
   {
-    path: 'editor', component: ForumEditPageComponent,
-    canActivate: [authGuard]
+    path: 'editor',
+    component: ForumEditPageComponent,
+    canActivate: [authGuard],
   },
   {
-    path: ':postId/edit', component: ForumEditPageComponent,
-    canActivate: [authGuard]
+    path: ':postId/edit',
+    component: ForumEditPageComponent,
+    canActivate: [authGuard],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ForumManagementRoutingModule {
-}
+export class ForumManagementRoutingModule {}

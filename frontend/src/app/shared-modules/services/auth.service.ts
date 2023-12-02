@@ -1,6 +1,7 @@
 import { Inject, Injectable, NgZone } from '@angular/core';
-import { Auth, CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-import { Hub } from '@aws-amplify/core';
+import { Auth } from 'aws-amplify';
+// import { CognitoHostedUIIdentityProvider } from '@aws-amplify/ui-angular'
+import { Hub } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   public redirectUrl = null;
@@ -20,27 +21,33 @@ export class AuthService {
   private customState: any = '';
   private profileLoaded: boolean = false;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private zone: NgZone,
     private http: HttpClient,
     private router: Router,
-    @Inject(MatDialog) private dialog: MatDialog) {
+    @Inject(MatDialog) private dialog: MatDialog,
+  ) {
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         console.log('INVALID REQUEST', params.error_description);
-        if (params.error_description === 'PreSignUp failed with error Google. ') {
+        if (
+          params.error_description === 'PreSignUp failed with error Google. '
+        ) {
           this.loginFacebook();
-        } else if (params.error_description === 'PreSignUp failed with error Facebook. ') {
+        } else if (
+          params.error_description === 'PreSignUp failed with error Facebook. '
+        ) {
           this.loginGoogle();
         }
       }
     });
 
-    Hub.listen('auth', ({ payload: { event, data } }) => {
+    Hub.listen('auth', ({ payload: { event, data } }: any) => {
       console.log(event, data);
       (async () => {
-        console.log((await Auth.currentSession()).getIdToken().getJwtToken())
-      })()
+        console.log((await Auth.currentSession()).getIdToken().getJwtToken());
+      })();
       switch (event) {
         case 'signIn':
           console.log('Login success');
@@ -73,12 +80,14 @@ export class AuthService {
     });
 
     this.autoLogin = new Promise((resolve, reject) => {
-      Auth.currentAuthenticatedUser().then((u) => {
-        this.processUser(u);
-        resolve(true);
-      }).catch((e) => {
-        resolve(false);
-      });
+      Auth.currentAuthenticatedUser()
+        .then((u: any) => {
+          this.processUser(u);
+          resolve(true);
+        })
+        .catch(() => {
+          resolve(false);
+        });
     });
   }
 
@@ -90,14 +99,16 @@ export class AuthService {
 
     this.zone.run(async () => {
       this.isLoggedIn = true;
-      this.http.get(environment.api_gateway + 'users/', {
-        headers: new HttpHeaders({
-          'Authorization': await this.getToken()
+      this.http
+        .get(environment.api_gateway + 'users/', {
+          headers: new HttpHeaders({
+            Authorization: await this.getToken(),
+          }),
         })
-      }).subscribe((user) => {
-        this.user.next(user)
-        this.profileLoaded = true;
-      });
+        .subscribe((user) => {
+          this.user.next(user);
+          this.profileLoaded = true;
+        });
     });
   }
 
@@ -116,20 +127,24 @@ export class AuthService {
 
   loginFacebook() {
     Auth.federatedSignIn({
-      provider: CognitoHostedUIIdentityProvider.Facebook,
-      customState: this.customState
-    }).then(() => {
-
-    }).catch(e => {
-      console.log(e);
-    });
+      provider: 'Facebook' as any,
+      customState: this.customState,
+    })
+      .then(() => {})
+      .catch((e: any) => {
+        console.log(e);
+      });
   }
 
   loginGoogle() {
-    Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google, customState: this.customState }).then(() => {
-    }).catch(e => {
-      console.log(e);
-    });
+    Auth.federatedSignIn({
+      provider: 'Google' as any,
+      customState: this.customState,
+    })
+      .then(() => {})
+      .catch((e: any) => {
+        console.log(e);
+      });
   }
 
   login(customeState: any = null) {

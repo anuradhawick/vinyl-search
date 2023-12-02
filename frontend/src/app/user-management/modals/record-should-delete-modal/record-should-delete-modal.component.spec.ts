@@ -8,9 +8,8 @@ describe('RecordShouldDeleteModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordShouldDeleteModalComponent ]
-    })
-    .compileComponents();
+      declarations: [RecordShouldDeleteModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

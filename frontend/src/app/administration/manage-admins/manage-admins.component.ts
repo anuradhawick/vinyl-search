@@ -8,24 +8,32 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-manage-admins',
   templateUrl: './manage-admins.component.html',
-  styleUrls: ['./manage-admins.component.css']
+  styleUrls: ['./manage-admins.component.css'],
 })
 export class ManageAdminsComponent implements OnInit {
   public admins: any = [];
   public loading = true;
   public form: FormGroup;
 
-  constructor(public auth: AuthService,
+  constructor(
+    public auth: AuthService,
     private adminService: AdminService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private dg: MatDialog,
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.email, Validators.required, Validators.pattern(/[.]+[a-zA-Z0-9]+$/)]]
+      email: [
+        '',
+        [
+          Validators.email,
+          Validators.required,
+          Validators.pattern(/[.]+[a-zA-Z0-9]+$/),
+        ],
+      ],
     });
   }
-  
+
   ngOnInit() {
     this.loadAdmins();
   }
@@ -40,8 +48,12 @@ export class ManageAdminsComponent implements OnInit {
   }
 
   async removeAdmin(uid: any, name: string, email: string) {
-    const { AdminActionConfirmModalComponent } = await import('../modals/admin-action-confirm-modal/admin-action-confirm-modal.component');
-    const dialogRef = this.dg.open(AdminActionConfirmModalComponent, { data: {message: `Removing ${name} (${email})`}});
+    const { AdminActionConfirmModalComponent } = await import(
+      '../modals/admin-action-confirm-modal/admin-action-confirm-modal.component'
+    );
+    const dialogRef = this.dg.open(AdminActionConfirmModalComponent, {
+      data: { message: `Removing ${name} (${email})` },
+    });
 
     dialogRef.afterClosed().subscribe((yes) => {
       if (yes) {
@@ -50,32 +62,43 @@ export class ManageAdminsComponent implements OnInit {
             this.toastr.success('Admin removed successfully', 'Success');
             this.loadAdmins();
           } else {
-            this.toastr.error('Unable to remove admin, check email and try again', 'Error');
+            this.toastr.error(
+              'Unable to remove admin, check email and try again',
+              'Error',
+            );
           }
         });
       }
-    })
+    });
   }
 
   createAdmin() {
     if (!this.form.invalid) {
       const email = this.form.get('email')!.value;
-      this.adminService.create_admin(email).then((res: any) => {
-        if (res.success) {
-          this.toastr.success('Admin created successfully', 'Success');
-          this.loadAdmins();
-          this.form.reset();
-        } else {
-          this.toastr.error('Unable to create admin, check email and try again', 'Error');
-        }
-      }).catch(() => {
-        this.toastr.error('Unable to create admin, check email and try again', 'Error');
-      });
+      this.adminService
+        .create_admin(email)
+        .then((res: any) => {
+          if (res.success) {
+            this.toastr.success('Admin created successfully', 'Success');
+            this.loadAdmins();
+            this.form.reset();
+          } else {
+            this.toastr.error(
+              'Unable to create admin, check email and try again',
+              'Error',
+            );
+          }
+        })
+        .catch(() => {
+          this.toastr.error(
+            'Unable to create admin, check email and try again',
+            'Error',
+          );
+        });
     }
   }
 
   cancel() {
     this.form.reset();
   }
-
 }

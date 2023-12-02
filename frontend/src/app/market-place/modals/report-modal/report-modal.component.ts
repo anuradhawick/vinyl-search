@@ -8,18 +8,17 @@ export interface DialogData {
 @Component({
   selector: 'app-report-modal',
   templateUrl: './report-modal.component.html',
-  styleUrls: ['./report-modal.component.css']
+  styleUrls: ['./report-modal.component.css'],
 })
 export class ReportModalComponent implements OnInit {
+  constructor(
+    public dialogRef: MatDialogRef<ReportModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  ) {}
 
-  constructor(public dialogRef: MatDialogRef<ReportModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   close(): void {
     this.dialogRef.close();
   }
-
 }

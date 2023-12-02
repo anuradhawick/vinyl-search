@@ -1,4 +1,13 @@
-import {Component, OnInit, Input, Optional, Inject, Output, EventEmitter, HostListener} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Optional,
+  Inject,
+  Output,
+  EventEmitter,
+  HostListener,
+} from '@angular/core';
 
 interface ImageViewerConfig {
   btnClass?: string;
@@ -28,12 +37,10 @@ interface ImageViewerConfig {
     fullscreenExit?: string;
   };
 
-  customBtns?: Array<
-    {
-      name: string;
-      icon: string;
-    }
-    >;
+  customBtns?: Array<{
+    name: string;
+    icon: string;
+  }>;
 }
 
 class CustomEvent {
@@ -45,7 +52,6 @@ class CustomEvent {
     this.imageIndex = imageIndex;
   }
 }
-
 
 const DEFAULT_CONFIG: ImageViewerConfig = {
   btnClass: 'default',
@@ -60,7 +66,7 @@ const DEFAULT_CONFIG: ImageViewerConfig = {
     rotateClockwise: true,
     rotateCounterClockwise: true,
     next: true,
-    prev: true
+    prev: true,
   },
   btnIcons: {
     zoomIn: 'zoom_in',
@@ -70,17 +76,16 @@ const DEFAULT_CONFIG: ImageViewerConfig = {
     next: 'navigate_next',
     prev: 'navigate_before',
     fullscreen: 'fullscreen',
-    fullscreenExit: 'fullscreen_exit'
-  }
+    fullscreenExit: 'fullscreen_exit',
+  },
 };
 
 @Component({
   selector: 'app-image-viewer',
   templateUrl: './image-viewer.component.html',
-  styleUrls: ['./image-viewer.component.css']
+  styleUrls: ['./image-viewer.component.css'],
 })
 export class ImageViewerComponent implements OnInit {
-
   @Input()
   src: string[] = [];
 
@@ -99,7 +104,12 @@ export class ImageViewerComponent implements OnInit {
   @Output()
   customEvent: EventEmitter<CustomEvent> = new EventEmitter();
 
-  public style = { transform: '', msTransform: '', oTransform: '', webkitTransform: '' };
+  public style = {
+    transform: '',
+    msTransform: '',
+    oTransform: '',
+    webkitTransform: '',
+  };
   public fullscreen = false;
   public loading = true;
   private scale = 1;
@@ -110,7 +120,9 @@ export class ImageViewerComponent implements OnInit {
   private prevY: number = 0;
   private hovered = false;
 
-  constructor( @Optional() @Inject('config') public moduleConfig: ImageViewerConfig) { }
+  constructor(
+    @Optional() @Inject('config') public moduleConfig: ImageViewerConfig,
+  ) {}
 
   ngOnInit() {
     const merged = this.mergeConfig(DEFAULT_CONFIG, this.moduleConfig);
@@ -118,7 +130,7 @@ export class ImageViewerComponent implements OnInit {
     this.triggerConfigBinding();
   }
 
-  @HostListener('window:keyup.ArrowRight',  ['$event'])
+  @HostListener('window:keyup.ArrowRight', ['$event'])
   nextImage(event: any) {
     if (this.canNavigate(event) && this.index < this.src.length - 1) {
       this.loading = true;
@@ -139,13 +151,13 @@ export class ImageViewerComponent implements OnInit {
   }
 
   zoomIn() {
-    this.scale *= (1 + this.config.zoomFactor!);
+    this.scale *= 1 + this.config.zoomFactor!;
     this.updateStyle();
   }
 
   zoomOut() {
     if (this.scale > this.config.zoomFactor!) {
-      this.scale /= (1 + this.config.zoomFactor!);
+      this.scale /= 1 + this.config.zoomFactor!;
     }
     this.updateStyle();
   }
@@ -177,8 +189,8 @@ export class ImageViewerComponent implements OnInit {
   }
 
   onDragOver(evt: any) {
-    this.translateX += (evt.clientX - this.prevX);
-    this.translateY += (evt.clientY - this.prevY);
+    this.translateX += evt.clientX - this.prevX;
+    this.translateY += evt.clientY - this.prevY;
     this.prevX = evt.clientX;
     this.prevY = evt.clientY;
     this.updateStyle();
@@ -230,7 +242,9 @@ export class ImageViewerComponent implements OnInit {
   }
 
   private canNavigate(event: any) {
-    return event == null ||  (this.config.allowKeyboardNavigation && this.hovered);
+    return (
+      event == null || (this.config.allowKeyboardNavigation && this.hovered)
+    );
   }
 
   private updateStyle() {
@@ -240,16 +254,21 @@ export class ImageViewerComponent implements OnInit {
     this.style.oTransform = this.style.transform;
   }
 
-  private mergeConfig(defaultValues: ImageViewerConfig, overrideValues: ImageViewerConfig): ImageViewerConfig {
+  private mergeConfig(
+    defaultValues: ImageViewerConfig,
+    overrideValues: ImageViewerConfig,
+  ): ImageViewerConfig {
     let result: ImageViewerConfig = { ...defaultValues };
     if (overrideValues) {
       result = { ...defaultValues, ...overrideValues };
 
       if (overrideValues.btnIcons) {
-        result.btnIcons = { ...defaultValues.btnIcons, ...overrideValues.btnIcons };
+        result.btnIcons = {
+          ...defaultValues.btnIcons,
+          ...overrideValues.btnIcons,
+        };
       }
     }
     return result;
   }
-
 }

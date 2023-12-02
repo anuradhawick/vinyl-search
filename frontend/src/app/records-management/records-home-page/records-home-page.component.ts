@@ -19,7 +19,7 @@ declare const $: any;
 @Component({
   selector: 'app-records-home-page',
   templateUrl: './records-home-page.component.html',
-  styleUrls: ['./records-home-page.component.css']
+  styleUrls: ['./records-home-page.component.css'],
 })
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
@@ -47,15 +47,15 @@ export class RecordsHomePageComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false })
   filtersPanel!: MatAccordion;
 
-  constructor(public route: ActivatedRoute,
+  constructor(
+    public route: ActivatedRoute,
     private router: Router,
     public auth: AuthService,
     private recordsService: RecordsService,
-    private filterDialog: MatDialog) {
-  }
+    private filterDialog: MatDialog,
+  ) {}
 
   ngOnInit() {
-
     this.route.queryParams.subscribe((p: any) => {
       this.records = null;
       const page = _.max([_.get(p, 'page', 1), 1]);
@@ -81,7 +81,8 @@ export class RecordsHomePageComponent implements OnInit {
         this.countryFilters = [this.countryFilters];
       }
 
-      if (_.isEmpty(_.trim(this.query)) &&
+      if (
+        _.isEmpty(_.trim(this.query)) &&
         _.isEmpty(this.genreFilters) &&
         _.isEmpty(this.styleFilters) &&
         _.isEmpty(this.countryFilters) &&
@@ -127,7 +128,11 @@ export class RecordsHomePageComponent implements OnInit {
       });
     }
 
-    this.autocomplete = this.recordsService.search_records({ limit: 5, skip: 0, query: _.trim(newquery) });
+    this.autocomplete = this.recordsService.search_records({
+      limit: 5,
+      skip: 0,
+      query: _.trim(newquery),
+    });
   }
 
   exitSearch() {
@@ -146,7 +151,7 @@ export class RecordsHomePageComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         query,
-        page: 1
+        page: 1,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -155,7 +160,7 @@ export class RecordsHomePageComponent implements OnInit {
   loadRecords() {
     const data = this.recordsService.fetch_records({
       skip: this.skip,
-      limit: this.limit
+      limit: this.limit,
     });
 
     this.records = data;
@@ -195,7 +200,7 @@ export class RecordsHomePageComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -225,8 +230,8 @@ export class RecordsHomePageComponent implements OnInit {
       data: {
         title: `Select the ${filterCriteria}`,
         all,
-        selected: active
-      }
+        selected: active,
+      },
     });
 
     dialogRef.afterClosed().subscribe(({ filters, selected }) => {
@@ -245,13 +250,13 @@ export class RecordsHomePageComponent implements OnInit {
       genres: _.isEmpty(this.genreFilters) ? null : this.genreFilters,
       styles: _.isEmpty(this.styleFilters) ? null : this.styleFilters,
       formats: _.isEmpty(this.formatFilters) ? null : this.formatFilters,
-      countries: _.isEmpty(this.countryFilters) ? null : this.countryFilters
+      countries: _.isEmpty(this.countryFilters) ? null : this.countryFilters,
     };
 
     this.router.navigateByUrl(this.router.url.split(/[?#]/)[0]).then(() => {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams
+        queryParams,
       });
     });
   }

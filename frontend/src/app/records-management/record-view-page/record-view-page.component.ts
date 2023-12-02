@@ -8,7 +8,7 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 @Component({
   selector: 'app-record-view-page',
   templateUrl: './record-view-page.component.html',
-  styleUrls: ['./record-view-page.component.css']
+  styleUrls: ['./record-view-page.component.css'],
 })
 export class RecordViewPageComponent implements OnInit {
   public _ = _;
@@ -24,19 +24,19 @@ export class RecordViewPageComponent implements OnInit {
       next: true,
       prev: true,
       zoomIn: true,
-      zoomOut: true
-    }
+      zoomOut: true,
+    },
   };
 
   // context control
   public histLoading = true;
   public recordLoading = true;
 
-  constructor(public route: ActivatedRoute,
-              private recordsService: RecordsService,
-              public auth: AuthService) {
-
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private recordsService: RecordsService,
+    public auth: AuthService,
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
@@ -51,5 +51,4 @@ export class RecordViewPageComponent implements OnInit {
       });
     });
   }
-
 }

@@ -1,74 +1,133 @@
-<div #navbar class="w-full fixed backdrop-blur-sm bg-slate-50 bg-opacity-70 p-4 mx-auto z-10 shadow-xl">
+<div
+  #navbar
+  class="w-full fixed backdrop-blur-sm bg-slate-50 bg-opacity-70 p-4 mx-auto z-10 shadow-xl"
+>
   <nav class="flex justify-between items-center">
-    <div><a class="text-2xl font-bold text-black hover:decoration-transparent" [routerLink]="'/'">VINYL.LK</a></div>
+    <div>
+      <a
+        class="text-2xl font-bold text-black hover:decoration-transparent"
+        [routerLink]="'/'"
+        >VINYL.LK</a
+      >
+    </div>
     <div class="hidden md:flex space-x-4 lg:space-x-10">
-      <a [routerLink]="[]" [matMenuTriggerFor]="menuMarket"
-        class="text-black font-semibold hover:decoration-transparent">
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuMarket"
+        class="text-black font-semibold hover:decoration-transparent"
+      >
         <mat-icon class="align-middle">shopping_cart</mat-icon>Marketplace
       </a>
       <mat-menu #menuMarket="matMenu">
-        <button mat-menu-item [routerLink]="['/market']" class="text-black font-semibold">
+        <button
+          mat-menu-item
+          [routerLink]="['/market']"
+          class="text-black font-semibold"
+        >
           <mat-icon>shop</mat-icon>For Sale
         </button>
-        <button *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" mat-menu-item
-          [routerLink]="['/market/new']" class="text-black font-semibold">
+        <button
+          *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')"
+          mat-menu-item
+          [routerLink]="['/market/new']"
+          class="text-black font-semibold"
+        >
           <mat-icon class="align-middle">content_paste</mat-icon>New Sale
         </button>
       </mat-menu>
 
-      <a [routerLink]="[]" [matMenuTriggerFor]="menuRecords"
-        class="text-black font-semibold hover:decoration-transparent">
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuRecords"
+        class="text-black font-semibold hover:decoration-transparent"
+      >
         <mat-icon class="align-middle">library_music</mat-icon>Records
       </a>
       <mat-menu #menuRecords="matMenu">
-        <button mat-menu-item [routerLink]="['/records']" class="text-black font-semibold">
+        <button
+          mat-menu-item
+          [routerLink]="['/records']"
+          class="text-black font-semibold"
+        >
           <mat-icon>library_music</mat-icon>Browse Records
         </button>
-        <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
+        <button
+          mat-menu-item
+          [routerLink]="['/records/new']"
+          class="text-black font-semibold"
+        >
           <mat-icon>content_paste</mat-icon>New Record
         </button>
       </mat-menu>
 
-      <a [routerLink]="[]" [matMenuTriggerFor]="menuForum"
-        class="text-black font-semibold hover:decoration-transparent">
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuForum"
+        class="text-black font-semibold hover:decoration-transparent"
+      >
         <mat-icon class="align-middle">forum</mat-icon>Forum
       </a>
       <mat-menu #menuForum="matMenu">
-        <button mat-menu-item [routerLink]="['/forum']" class="text-black font-semibold">
+        <button
+          mat-menu-item
+          [routerLink]="['/forum']"
+          class="text-black font-semibold"
+        >
           <mat-icon>forum</mat-icon>Browse Forum
         </button>
-        <button mat-menu-item [routerLink]="['/forum/editor']" class="text-black font-semibold">
+        <button
+          mat-menu-item
+          [routerLink]="['/forum/editor']"
+          class="text-black font-semibold"
+        >
           <mat-icon>content_paste</mat-icon>New Post
         </button>
       </mat-menu>
 
       <ng-container *ngIf="auth.isLoggedIn; else showLogin">
-        <a *ngIf="(user | async)?.roles.includes('Admin')" [routerLink]="['/admin']"
-          class="text-black font-semibold hover:decoration-transparent">
+        <a
+          *ngIf="(user | async)?.roles.includes('Admin')"
+          [routerLink]="['/admin']"
+          class="text-black font-semibold hover:decoration-transparent"
+        >
           <mat-icon class="align-middle">security</mat-icon>Admin
         </a>
 
-        <a [routerLink]="['/profile']" class="text-black font-semibold hover:decoration-transparent">
-          <img *ngIf="(user | async)?.picture; else placeholder"
-            class="w-[24px] h-[24px] inline border-black rounded-full border-2" [src]="(user | async)?.picture">
+        <a
+          [routerLink]="['/profile']"
+          class="text-black font-semibold hover:decoration-transparent"
+        >
+          <img
+            *ngIf="(user | async)?.picture; else placeholder"
+            class="w-[24px] h-[24px] inline border-black rounded-full border-2"
+            [src]="(user | async)?.picture"
+          />
           <ng-template #placeholder>
             <mat-icon class="align-middle">account_circle</mat-icon>
           </ng-template>
-          Hi {{(user | async)?.given_name}}
+          Hi {{ (user | async)?.given_name }}
         </a>
 
-        <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.logout()">
+        <a
+          [routerLink]="[]"
+          class="text-black font-semibold hover:decoration-transparent"
+          (click)="auth.logout()"
+        >
           <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
         </a>
       </ng-container>
       <ng-template #showLogin>
-        <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.login()">
+        <a
+          [routerLink]="[]"
+          class="text-black font-semibold hover:decoration-transparent"
+          (click)="auth.login()"
+        >
           <mat-icon class="align-middle">account_circle</mat-icon>Login
         </a>
       </ng-template>
     </div>
     <div class="md:hidden flex items-center">
-      <button (click)="menuOpen=!menuOpen">
+      <button (click)="menuOpen = !menuOpen">
         <mat-icon *ngIf="!menuOpen; else close">menu</mat-icon>
         <ng-template #close>
           <mat-icon>close</mat-icon>
@@ -77,78 +136,136 @@
     </div>
   </nav>
   <div class="md:hidden flex flex-col space-y-2" [class.hidden]="!menuOpen">
-    <hr>
-    <a [routerLink]="[]" [matMenuTriggerFor]="menuMarket" class="text-black font-semibold hover:decoration-transparent">
+    <hr />
+    <a
+      [routerLink]="[]"
+      [matMenuTriggerFor]="menuMarket"
+      class="text-black font-semibold hover:decoration-transparent"
+    >
       <mat-icon class="align-middle">shopping_cart</mat-icon>Marketplace
     </a>
     <mat-menu #menuMarket="matMenu">
-      <button mat-menu-item [routerLink]="['/market']" class="text-black font-semibold">
+      <button
+        mat-menu-item
+        [routerLink]="['/market']"
+        class="text-black font-semibold"
+      >
         <mat-icon>shop</mat-icon>For Sale
       </button>
-      <button *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')" mat-menu-item
-        [routerLink]="['/market/new']" class="text-black font-semibold">
+      <button
+        *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')"
+        mat-menu-item
+        [routerLink]="['/market/new']"
+        class="text-black font-semibold"
+      >
         <mat-icon class="align-middle">content_paste</mat-icon>New Sale
       </button>
     </mat-menu>
 
-    <a [routerLink]="[]" [matMenuTriggerFor]="menuRecords"
-      class="text-black font-semibold hover:decoration-transparent">
+    <a
+      [routerLink]="[]"
+      [matMenuTriggerFor]="menuRecords"
+      class="text-black font-semibold hover:decoration-transparent"
+    >
       <mat-icon class="align-middle">library_music</mat-icon>Records
     </a>
     <mat-menu #menuRecords="matMenu">
-      <button mat-menu-item [routerLink]="['/records']" class="text-black font-semibold">
+      <button
+        mat-menu-item
+        [routerLink]="['/records']"
+        class="text-black font-semibold"
+      >
         <mat-icon>library_music</mat-icon>Browse Records
       </button>
-      <button mat-menu-item [routerLink]="['/records/new']" class="text-black font-semibold">
+      <button
+        mat-menu-item
+        [routerLink]="['/records/new']"
+        class="text-black font-semibold"
+      >
         <mat-icon>content_paste</mat-icon>New Record
       </button>
     </mat-menu>
 
-    <a [routerLink]="[]" [matMenuTriggerFor]="menuForum" class="text-black font-semibold hover:decoration-transparent">
+    <a
+      [routerLink]="[]"
+      [matMenuTriggerFor]="menuForum"
+      class="text-black font-semibold hover:decoration-transparent"
+    >
       <mat-icon class="align-middle">forum</mat-icon>Forum
     </a>
     <mat-menu #menuForum="matMenu">
-      <button mat-menu-item [routerLink]="['/forum']" class="text-black font-semibold">
+      <button
+        mat-menu-item
+        [routerLink]="['/forum']"
+        class="text-black font-semibold"
+      >
         <mat-icon>forum</mat-icon>Browse Forum
       </button>
-      <button mat-menu-item [routerLink]="['/forum/editor']" class="text-black font-semibold">
+      <button
+        mat-menu-item
+        [routerLink]="['/forum/editor']"
+        class="text-black font-semibold"
+      >
         <mat-icon>content_paste</mat-icon>New Post
       </button>
     </mat-menu>
 
     <ng-container *ngIf="auth.isLoggedIn; else showLogin">
-      <a *ngIf="(user | async)?.roles.includes('Admin')" [routerLink]="['/admin']"
-        class="text-black font-semibold hover:decoration-transparent">
+      <a
+        *ngIf="(user | async)?.roles.includes('Admin')"
+        [routerLink]="['/admin']"
+        class="text-black font-semibold hover:decoration-transparent"
+      >
         <mat-icon class="align-middle">security</mat-icon>Admin
       </a>
 
-      <a [routerLink]="['/profile']" class="text-black font-semibold hover:decoration-transparent">
-        <img *ngIf="(user | async)?.picture; else placeholder"
-          class="w-[24px] h-[24px] inline border-black rounded-full border-2" [src]="(user | async)?.picture">
+      <a
+        [routerLink]="['/profile']"
+        class="text-black font-semibold hover:decoration-transparent"
+      >
+        <img
+          *ngIf="(user | async)?.picture; else placeholder"
+          class="w-[24px] h-[24px] inline border-black rounded-full border-2"
+          [src]="(user | async)?.picture"
+        />
         <ng-template #placeholder>
           <mat-icon class="align-middle">account_circle</mat-icon>
         </ng-template>
-        Hi {{(user | async)?.given_name}}
+        Hi {{ (user | async)?.given_name }}
       </a>
 
-      <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.logout()">
+      <a
+        [routerLink]="[]"
+        class="text-black font-semibold hover:decoration-transparent"
+        (click)="auth.logout()"
+      >
         <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
       </a>
     </ng-container>
     <ng-template #showLogin>
-      <a [routerLink]="[]" class="text-black font-semibold hover:decoration-transparent" (click)="auth.login()">
+      <a
+        [routerLink]="[]"
+        class="text-black font-semibold hover:decoration-transparent"
+        (click)="auth.login()"
+      >
         <mat-icon class="align-middle">account_circle</mat-icon>Login
       </a>
     </ng-template>
   </div>
 </div>
-<div class="bg-cover bg-center overflow-hidden h-[200px] sm:h-[400px]"
-  style="background-image: url('../assets/images/profile_city.jpg');">
+<div
+  class="bg-cover bg-center overflow-hidden h-[200px] sm:h-[400px]"
+  style="background-image: url(&quot;../assets/images/profile_city.jpg&quot;)"
+>
   <div class="ml-[50px] mt-[80px] sm:mt-[200px]">
-    <h1 class="text-white text-4xl sm:text-6xl font-extrabold font-serif">The Vinyl World</h1>
+    <h1 class="text-white text-4xl sm:text-6xl font-extrabold font-serif">
+      The Vinyl World
+    </h1>
   </div>
 </div>
-<div class="mt-[-60px] mx-0 sm:mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
+<div
+  class="mt-[-60px] mx-0 sm:mx-[30px] relative bg-slate-50 rounded-md shadow-xl"
+>
   <router-outlet></router-outlet>
 </div>
 <footer>

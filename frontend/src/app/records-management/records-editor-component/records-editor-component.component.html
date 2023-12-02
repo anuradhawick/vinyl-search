@@ -2,97 +2,178 @@
   <div class="col-12 col-lg-3">
     <div class="container-fluid">
       <div class="text-center">
-        <br>
+        <br />
         <div class="sq-container">
           <div class="sq-content">
             <div>
-              <app-image-viewer [config]="imgvconfig"
-                [src]="_.isEmpty(recordObject.images) && ['/assets/images/records-new-sample.svg'] || recordObject.images"
-                [(index)]="recordObject.chosenImage" (customEvent)="handleEvent($event)"></app-image-viewer>
+              <app-image-viewer
+                [config]="imgvconfig"
+                [src]="
+                  (_.isEmpty(recordObject.images) && [
+                    '/assets/images/records-new-sample.svg'
+                  ]) ||
+                  recordObject.images
+                "
+                [(index)]="recordObject.chosenImage"
+                (customEvent)="handleEvent($event)"
+              ></app-image-viewer>
             </div>
           </div>
         </div>
       </div>
 
       <div class="form-group m-0">
-        <button (click)="imageupload.click()" mat-raised-button color="primary" class="w-full mt-1">Upload</button>
-        <input #imageupload type="file" hidden (change)="addImage($event)" id="images" accept='image/*' multiple>
+        <button
+          (click)="imageupload.click()"
+          mat-raised-button
+          color="primary"
+          class="w-full mt-1"
+        >
+          Upload
+        </button>
+        <input
+          #imageupload
+          type="file"
+          hidden
+          (change)="addImage($event)"
+          id="images"
+          accept="image/*"
+          multiple
+        />
       </div>
-      <mat-progress-bar class="mb-1" *ngFor="let p of percentages" mode="determinate"
-        value="{{(p | async)}}"></mat-progress-bar>
+      <mat-progress-bar
+        class="mb-1"
+        *ngFor="let p of percentages"
+        mode="determinate"
+        value="{{ p | async }}"
+      ></mat-progress-bar>
 
-      <div *ngIf="recordObject.images.length>0" class="card col-12 m-0">
+      <div *ngIf="recordObject.images.length > 0" class="card col-12 m-0">
         <div class="row">
-          <div *ngFor="let image of recordObject.images; let i = index" class="col-sm-4 p-0">
+          <div
+            *ngFor="let image of recordObject.images; let i = index"
+            class="col-sm-4 p-0"
+          >
             <div class="m-1">
-              <a (click)="recordObject.chosenImage=i" class="thumbnail">
+              <a (click)="recordObject.chosenImage = i" class="thumbnail">
                 <div class="image" style="background-color: #d5d5d5">
-                  <img style="object-fit: cover" [src]="image" class="img img-responsive" />
+                  <img
+                    style="object-fit: cover"
+                    [src]="image"
+                    class="img img-responsive"
+                  />
                 </div>
               </a>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="col-12 col-lg-9">
     <div class="container-fluid">
-      <br>
-      <h1>{{editorTitle}}</h1>
-      <hr>
+      <br />
+      <h1>{{ editorTitle }}</h1>
+      <hr />
       <form [formGroup]="form" class="needs-validation" novalidate>
         <div class="form-group">
           <div class="row mb-1">
             <div class="col-4">
               <mat-form-field class="w-100">
-                <input matInput type="text" placeholder="Record Title" name="release-name" formControlName="name">
-                <mat-error *ngIf="form.controls.name.invalid">Record required</mat-error>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Record Title"
+                  name="release-name"
+                  formControlName="name"
+                />
+                <mat-error *ngIf="form.controls.name.invalid"
+                  >Record required</mat-error
+                >
               </mat-form-field>
             </div>
 
             <div class="col-4">
               <mat-form-field class="w-100">
-                <input matInput type="text" placeholder="Artist Name" name="main-artist-name"
-                  formControlName="mainArtist">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Artist Name"
+                  name="main-artist-name"
+                  formControlName="mainArtist"
+                />
               </mat-form-field>
             </div>
 
             <div class="col-4">
               <mat-form-field class="w-100">
-                <input matInput name="release-date" formControlName="date" type="text" placeholder="Date as YYYY-MM-DD">
-                <mat-error *ngIf="form.controls.date.invalid">Date invalid</mat-error>
+                <input
+                  matInput
+                  name="release-date"
+                  formControlName="date"
+                  type="text"
+                  placeholder="Date as YYYY-MM-DD"
+                />
+                <mat-error *ngIf="form.controls.date.invalid"
+                  >Date invalid</mat-error
+                >
               </mat-form-field>
             </div>
           </div>
-          <hr>
+          <hr />
           <div class="row mb-1">
             <div class="col-4">
               <mat-form-field class="w-100">
-                <input matInput type="text" placeholder="Label" name="release-label" formControlName="label" required>
-                <mat-error *ngIf="form.controls.label.invalid">Label required</mat-error>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Label"
+                  name="release-label"
+                  formControlName="label"
+                  required
+                />
+                <mat-error *ngIf="form.controls.label.invalid"
+                  >Label required</mat-error
+                >
               </mat-form-field>
             </div>
             <div class="col-4">
               <mat-form-field class="w-100">
-                <input matInput type="text" placeholder="Catalogue No." name="release-catalog"
-                  formControlName="catalogNo" required>
-                <mat-error *ngIf="form.controls.catalogNo.invalid">Catalogue No. required</mat-error>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Catalogue No."
+                  name="release-catalog"
+                  formControlName="catalogNo"
+                  required
+                />
+                <mat-error *ngIf="form.controls.catalogNo.invalid"
+                  >Catalogue No. required</mat-error
+                >
               </mat-form-field>
             </div>
             <div class="col-4">
               <mat-form-field class="w-100">
-                <mat-select formControlName="country" name="country" placeholder="Country of origin">
-                  <mat-option *ngFor="let c of countriesJSON" [value]="c.name">{{c.name}}</mat-option>
+                <mat-select
+                  formControlName="country"
+                  name="country"
+                  placeholder="Country of origin"
+                >
+                  <mat-option
+                    *ngFor="let c of countriesJSON"
+                    [value]="c.name"
+                    >{{ c.name }}</mat-option
+                  >
                 </mat-select>
-                <mat-error *ngIf="form.controls.country.invalid">Country required</mat-error>
+                <mat-error *ngIf="form.controls.country.invalid"
+                  >Country required</mat-error
+                >
               </mat-form-field>
             </div>
           </div>
         </div>
 
-        <hr>
+        <hr />
         <!-- <div class="form-group">
           <div class="row">
             <div class="col-3">
@@ -140,7 +221,7 @@
             </div>
           </div>
         </div> -->
-        <br>
+        <br />
         <!---->
         <div class="accordion">
           <div class="card">
@@ -150,62 +231,81 @@
 
             <div class="card-body">
               <mat-chip-listbox>
-                <mat-chip *ngFor="let g of genres" (click)="selectGenre(g.name)">{{g.name}}
+                <mat-chip *ngFor="let g of genres" (click)="selectGenre(g.name)"
+                  >{{ g.name }}
                 </mat-chip>
               </mat-chip-listbox>
-              <br>
+              <br />
               <mat-form-field class="w-100">
                 <mat-chip-grid #genreList aria-label="Custom genres">
-                  <mat-chip-row *ngFor="let g of recordObject.genres" (removed)="selectGenre(g, true)">
-                    {{g}}
+                  <mat-chip-row
+                    *ngFor="let g of recordObject.genres"
+                    (removed)="selectGenre(g, true)"
+                  >
+                    {{ g }}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
                     </button>
                   </mat-chip-row>
-                  <input placeholder="Add custom genres" [matChipInputFor]="genreList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addGenre($event)" />
+                  <input
+                    placeholder="Add custom genres"
+                    [matChipInputFor]="genreList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addGenre($event)"
+                  />
                 </mat-chip-grid>
               </mat-form-field>
-              <br>
+              <br />
               <label>Type and press Enter to add custom genres</label>
-              <br>
+              <br />
             </div>
           </div>
-          <br>
+          <br />
           <div class="card">
             <div class="card-header" id="headingTwo">
               <h4 class="card-title">Styles</h4>
             </div>
             <div class="card-body">
               <mat-chip-listbox>
-                <mat-chip *ngFor="let s of styles" (click)="selectStyle(s)">{{s}}
+                <mat-chip *ngFor="let s of styles" (click)="selectStyle(s)"
+                  >{{ s }}
                 </mat-chip>
               </mat-chip-listbox>
-              <br>
+              <br />
               <mat-form-field class="w-100">
                 <mat-chip-grid #styleList aria-label="Custom genres">
-                  <mat-chip-row *ngFor="let s of recordObject.styles" (removed)="selectStyle(s, true)">
-                    {{s}}
+                  <mat-chip-row
+                    *ngFor="let s of recordObject.styles"
+                    (removed)="selectStyle(s, true)"
+                  >
+                    {{ s }}
                     <button matChipRemove>
                       <mat-icon>cancel</mat-icon>
                     </button>
                   </mat-chip-row>
-                  <input placeholder="Add custom genres" [matChipInputFor]="styleList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addStyle($event)" />
+                  <input
+                    placeholder="Add custom genres"
+                    [matChipInputFor]="styleList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addStyle($event)"
+                  />
                 </mat-chip-grid>
               </mat-form-field>
-              <br>
+              <br />
               <label>Select genres and add sub styles or type to add</label>
-              <br>
+              <br />
             </div>
           </div>
         </div>
         <!---->
         <!--TRACKS START-->
         <h2>Track List</h2>
-        <table class="table table-responsive" style="background-color: whitesmoke">
+        <table
+          class="table table-responsive"
+          style="background-color: whitesmoke"
+        >
           <thead>
             <tr>
               <th scope="col">Position</th>
@@ -216,54 +316,138 @@
             </tr>
           </thead>
           <tbody #table id="bb" formArrayName="tracks">
-            <tr *ngFor="let track of form.get('tracks').controls; let ti = index" style="cursor: all-scroll"
-              id="track-row-{{ti}}" [formGroupName]="ti">
+            <tr
+              *ngFor="let track of form.get('tracks').controls; let ti = index"
+              style="cursor: all-scroll"
+              id="track-row-{{ ti }}"
+              [formGroupName]="ti"
+            >
               <td scope="row">
-                <mat-form-field style="width: 60px;">
-                  <input matInput type="text" placeholder="Index" name="track-{{ti}}-index" formControlName="index">
-                  <mat-error *ngIf="form.get('tracks').controls[ti].get('index').invalid">Required</mat-error>
+                <mat-form-field style="width: 60px">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Index"
+                    name="track-{{ ti }}-index"
+                    formControlName="index"
+                  />
+                  <mat-error
+                    *ngIf="form.get('tracks').controls[ti].get('index').invalid"
+                    >Required</mat-error
+                  >
                 </mat-form-field>
               </td>
               <td formArrayName="artists">
-                <div *ngFor="let artist of form.get('tracks').controls[ti].get('artists').controls; let i = index"
-                  [formGroupName]="i" class="input-group mb-1">
+                <div
+                  *ngFor="
+                    let artist of form.get('tracks').controls[ti].get('artists')
+                      .controls;
+                    let i = index
+                  "
+                  [formGroupName]="i"
+                  class="input-group mb-1"
+                >
                   <mat-form-field>
-                    <input matInput formControlName="name" type="text" placeholder="Artist"
-                      name="track-{{ti}}-artist-{{i}}">
-                    <button mat-button (click)="form.get('tracks').controls[ti].get('artists').removeAt(i)" matSuffix>
+                    <input
+                      matInput
+                      formControlName="name"
+                      type="text"
+                      placeholder="Artist"
+                      name="track-{{ ti }}-artist-{{ i }}"
+                    />
+                    <button
+                      mat-button
+                      (click)="
+                        form
+                          .get('tracks')
+                          .controls[ti].get('artists')
+                          .removeAt(i)
+                      "
+                      matSuffix
+                    >
                       <mat-icon>cancel</mat-icon>
                     </button>
-                    <mat-error *ngIf="form.get('tracks').controls[ti].get('artists').controls[i].invalid">Enter name
-                      or remove the field
+                    <mat-error
+                      *ngIf="
+                        form.get('tracks').controls[ti].get('artists').controls[
+                          i
+                        ].invalid
+                      "
+                      >Enter name or remove the field
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <button mat-button (click)="addArtist(form.get('tracks').controls[ti].get('artists'))" matSuffix>
+                <button
+                  mat-button
+                  (click)="
+                    addArtist(form.get('tracks').controls[ti].get('artists'))
+                  "
+                  matSuffix
+                >
                   Artist
                   <mat-icon>add_circle</mat-icon>
                 </button>
               </td>
               <td>
                 <mat-form-field>
-                  <input matInput type="text" placeholder="Title" name="track-{{ti}}-title" formControlName="title">
-                  <mat-error *ngIf="form.get('tracks').controls[ti].get('title').invalid">Enter the song title
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Title"
+                    name="track-{{ ti }}-title"
+                    formControlName="title"
+                  />
+                  <mat-error
+                    *ngIf="form.get('tracks').controls[ti].get('title').invalid"
+                    >Enter the song title
                   </mat-error>
                 </mat-form-field>
                 <div formArrayName="credits">
-                  <div *ngFor="let credit of form.get('tracks').controls[ti].get('credits').controls; let i = index"
-                    [formGroupName]="i">
+                  <div
+                    *ngFor="
+                      let credit of form
+                        .get('tracks')
+                        .controls[ti].get('credits').controls;
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
                     <mat-form-field>
-                      <input matInput type="text" placeholder="Credits" name="track-{{ti}}-creadits-{{i}}"
-                        formControlName="text">
-                      <button mat-button (click)="form.get('tracks').controls[ti].get('credits').removeAt(i)" matSuffix>
+                      <input
+                        matInput
+                        type="text"
+                        placeholder="Credits"
+                        name="track-{{ ti }}-creadits-{{ i }}"
+                        formControlName="text"
+                      />
+                      <button
+                        mat-button
+                        (click)="
+                          form
+                            .get('tracks')
+                            .controls[ti].get('credits')
+                            .removeAt(i)
+                        "
+                        matSuffix
+                      >
                         <mat-icon>cancel</mat-icon>
                       </button>
-                      <mat-error *ngIf="form.get('tracks').controls[ti].get('credits').controls[i].invalid">Enter name
-                        or remove the field
+                      <mat-error
+                        *ngIf="
+                          form.get('tracks').controls[ti].get('credits')
+                            .controls[i].invalid
+                        "
+                        >Enter name or remove the field
                       </mat-error>
                     </mat-form-field>
                   </div>
-                  <button mat-button (click)="addCredit(form.get('tracks').controls[ti].get('credits'))" matSuffix>
+                  <button
+                    mat-button
+                    (click)="
+                      addCredit(form.get('tracks').controls[ti].get('credits'))
+                    "
+                    matSuffix
+                  >
                     Credits
                     <mat-icon>add_circle</mat-icon>
                   </button>
@@ -271,9 +455,19 @@
               </td>
               <td>
                 <mat-form-field style="width: 100px">
-                  <input matInput type="text" placeholder="0:00" name="track-{{ti}}-duration"
-                    formControlName="duration">
-                  <mat-error *ngIf="form.get('tracks').controls[ti].get('duration').invalid">MM:SS</mat-error>
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="0:00"
+                    name="track-{{ ti }}-duration"
+                    formControlName="duration"
+                  />
+                  <mat-error
+                    *ngIf="
+                      form.get('tracks').controls[ti].get('duration').invalid
+                    "
+                    >MM:SS</mat-error
+                  >
                 </mat-form-field>
               </td>
               <td style="width: 100px">
@@ -281,13 +475,27 @@
                   <mat-icon>settings</mat-icon>
                 </button>
                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                  <button mat-menu-item (click)="form.get('tracks').removeAt(ti)">Remove</button>
-                  <button mat-menu-item (click)="insertTrackBefore(form.get('tracks'), ti)">Add track Above</button>
-                  <button mat-menu-item (click)="insertTrackAfter(form.get('tracks'), ti)">Add Track Below</button>
+                  <button
+                    mat-menu-item
+                    (click)="form.get('tracks').removeAt(ti)"
+                  >
+                    Remove
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="insertTrackBefore(form.get('tracks'), ti)"
+                  >
+                    Add track Above
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="insertTrackAfter(form.get('tracks'), ti)"
+                  >
+                    Add Track Below
+                  </button>
                 </mat-menu>
               </td>
             </tr>
-
           </tbody>
         </table>
 
@@ -296,39 +504,59 @@
             Track
             <mat-icon>add_circle</mat-icon>
           </button>
-          <button mat-button (click)="autoIndex()">
-            Auto Index
-          </button>
+          <button mat-button (click)="autoIndex()">Auto Index</button>
         </div>
 
         <!--TRACKS END-->
-        <br>
+        <br />
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">Descriptions</h4>
           </div>
           <div class="card-body">
             <mat-chip-listbox>
-              <mat-chip *ngFor="let d of descr" (click)="selectDescr(d)">{{d}}
+              <mat-chip *ngFor="let d of descr" (click)="selectDescr(d)"
+                >{{ d }}
               </mat-chip>
             </mat-chip-listbox>
-            <br>
+            <br />
             <mat-chip-listbox #descrList>
-              <mat-chip *ngFor="let s of recordObject.descriptions" [removable]="true">
-                {{s}}
-                <mat-icon matChipRemove (click)="selectDescr(s, true)">cancel</mat-icon>
+              <mat-chip
+                *ngFor="let s of recordObject.descriptions"
+                [removable]="true"
+              >
+                {{ s }}
+                <mat-icon matChipRemove (click)="selectDescr(s, true)"
+                  >cancel</mat-icon
+                >
               </mat-chip>
             </mat-chip-listbox>
-            <br>
+            <br />
           </div>
         </div>
         <!---->
-        <hr>
+        <hr />
         <div formArrayName="commonCredits">
-          <div *ngFor="let credit of form.get('commonCredits').controls; let i = index" [formGroupName]="i">
+          <div
+            *ngFor="
+              let credit of form.get('commonCredits').controls;
+              let i = index
+            "
+            [formGroupName]="i"
+          >
             <mat-form-field class="w-100">
-              <input matInput type="text" placeholder="Credits" name="common-credits-{{i}}" formControlName="text">
-              <button mat-button (click)="form.get('commonCredits').removeAt(i)" matSuffix>
+              <input
+                matInput
+                type="text"
+                placeholder="Credits"
+                name="common-credits-{{ i }}"
+                formControlName="text"
+              />
+              <button
+                mat-button
+                (click)="form.get('commonCredits').removeAt(i)"
+                matSuffix
+              >
                 <mat-icon>cancel</mat-icon>
               </button>
               <mat-error *ngIf="form.get('commonCredits').controls[i].invalid">
@@ -337,18 +565,34 @@
             </mat-form-field>
           </div>
           <div class="row container">
-            <button mat-button (click)="addCommonCredit(form.get('commonCredits'))">
+            <button
+              mat-button
+              (click)="addCommonCredit(form.get('commonCredits'))"
+            >
               Credit
               <mat-icon>add_circle</mat-icon>
             </button>
           </div>
         </div>
-        <hr>
+        <hr />
         <div formArrayName="songUrls">
-          <div *ngFor="let songUrl of form.get('songUrls').controls; let i = index" [formGroupName]="i">
+          <div
+            *ngFor="let songUrl of form.get('songUrls').controls; let i = index"
+            [formGroupName]="i"
+          >
             <mat-form-field class="w-100">
-              <input matInput type="text" placeholder="Song link" name="song-url-{{i}}" formControlName="text">
-              <button mat-button (click)="form.get('songUrls').removeAt(i)" matSuffix>
+              <input
+                matInput
+                type="text"
+                placeholder="Song link"
+                name="song-url-{{ i }}"
+                formControlName="text"
+              />
+              <button
+                mat-button
+                (click)="form.get('songUrls').removeAt(i)"
+                matSuffix
+              >
                 <mat-icon>cancel</mat-icon>
               </button>
               <mat-error *ngIf="form.get('songUrls').controls[i].invalid">
@@ -363,9 +607,13 @@
             </button>
           </div>
         </div>
-        <hr>
+        <hr />
         <mat-form-field class="w-100">
-          <textarea matInput placeholder="Notes" formControlName="notes"></textarea>
+          <textarea
+            matInput
+            placeholder="Notes"
+            formControlName="notes"
+          ></textarea>
         </mat-form-field>
       </form>
     </div>

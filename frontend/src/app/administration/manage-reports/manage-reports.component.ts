@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-manage-reports',
   templateUrl: './manage-reports.component.html',
-  styleUrls: ['./manage-reports.component.css']
+  styleUrls: ['./manage-reports.component.css'],
 })
 export class ManageReportsComponent implements OnInit {
   public loading = true;
@@ -19,12 +19,13 @@ export class ManageReportsComponent implements OnInit {
   public page = 1;
   public _ = _;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private adminService: AdminService,
     private router: Router,
     private toastr: ToastrService,
-    private dialog: MatDialog) {
-  }
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -40,22 +41,25 @@ export class ManageReportsComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminService.fetch_reports({ limit: this.limit, skip: this.skip }).then((records: any) => {
-      this.posts = records.reports;
-      this.posts = _.map(this.posts, (post: any) => {
-        if (post.type === 'report_selling_ad') {
-          _.assign(post, { link: '/market/' + post.targetId + '/view' });
-        }
+    this.adminService
+      .fetch_reports({ limit: this.limit, skip: this.skip })
+      .then((records: any) => {
+        this.posts = records.reports;
+        this.posts = _.map(this.posts, (post: any) => {
+          if (post.type === 'report_selling_ad') {
+            _.assign(post, { link: '/market/' + post.targetId + '/view' });
+          }
 
-        return post;
+          return post;
+        });
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
       });
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loading = false;
-    }).catch(() => {
-      this.loading = false;
-    });
   }
 
   changePage(event: any) {
@@ -63,7 +67,7 @@ export class ManageReportsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -75,5 +79,4 @@ export class ManageReportsComponent implements OnInit {
       this.loadPosts();
     });
   }
-
 }

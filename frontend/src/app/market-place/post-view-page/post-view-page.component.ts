@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-post-view-page',
   templateUrl: './post-view-page.component.html',
-  styleUrls: ['./post-view-page.component.css']
+  styleUrls: ['./post-view-page.component.css'],
 })
 export class PostViewPageComponent implements OnInit {
   public _ = _;
@@ -26,48 +26,48 @@ export class PostViewPageComponent implements OnInit {
       next: true,
       prev: true,
       zoomIn: true,
-      zoomOut: true
-    }
+      zoomOut: true,
+    },
   };
 
   public typeMap: any = {
-    'material': 'A/V Material',
-    'gear': 'A/V Gear'
+    material: 'A/V Material',
+    gear: 'A/V Gear',
   };
 
   public subTypeMap: any = {
-    'material': {
-      'phonograph': 'Phonograph Records',
-      'magnetic': 'Magnetic Tapes',
-      'compact': 'Compact Discs',
-      'digital': 'Digital Material',
-      'other': 'Other'
+    material: {
+      phonograph: 'Phonograph Records',
+      magnetic: 'Magnetic Tapes',
+      compact: 'Compact Discs',
+      digital: 'Digital Material',
+      other: 'Other',
     },
-    'gear': {
-      'amplifiers': 'Amplifiers',
+    gear: {
+      amplifiers: 'Amplifiers',
       'pre-amplifiers': 'Pre Amplifiers',
-      'speakers': 'Speakers',
-      'equalizers': 'Equalizers',
-      'mixers': 'Mixers',
-      'tape': 'Tape Gear',
-      'vinyl': 'Vinyl Gear',
-      'audio': 'Audio Accessories',
-      'video': 'Video Gear',
-      'digital': 'Digital Gear',
-      'other': 'Other'
-    }
+      speakers: 'Speakers',
+      equalizers: 'Equalizers',
+      mixers: 'Mixers',
+      tape: 'Tape Gear',
+      vinyl: 'Vinyl Gear',
+      audio: 'Audio Accessories',
+      video: 'Video Gear',
+      digital: 'Digital Gear',
+      other: 'Other',
+    },
   };
 
   // context control
   public postLoading = true;
 
-  constructor(public route: ActivatedRoute,
-              private marketService: MarketService,
-              public auth: AuthService,
-              private toastr: ToastrService,
-              public dialog: MatDialog) {
-
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private marketService: MarketService,
+    public auth: AuthService,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
@@ -82,15 +82,16 @@ export class PostViewPageComponent implements OnInit {
   async report() {
     const dialogRef = this.dialog.open(ReportModalComponent, {
       width: '50%',
-      data: {reason: 'Item already sold'}
+      data: { reason: 'Item already sold' },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!_.isEmpty(result)) {
-        this.marketService.report_post(this.postObject.id, {description: result})
+        this.marketService.report_post(this.postObject.id, {
+          description: result,
+        });
         this.toastr.success(`Records saved successfully`, 'Success');
       }
     });
   }
-
 }

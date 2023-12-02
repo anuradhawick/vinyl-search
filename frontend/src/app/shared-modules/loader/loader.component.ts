@@ -4,7 +4,7 @@ import { isPlatformServer } from '@angular/common';
 @Component({
   selector: 'app-loader',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.scss']
+  styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent implements OnInit {
   @Input() public hidden;
@@ -13,8 +13,7 @@ export class LoaderComponent implements OnInit {
     this.hidden = true;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   show() {
     if (isPlatformServer(this.platformId)) {

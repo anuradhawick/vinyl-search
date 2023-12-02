@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-forum-view-page',
   templateUrl: './forum-view-page.component.html',
-  styleUrls: ['./forum-view-page.component.css']
+  styleUrls: ['./forum-view-page.component.css'],
 })
 export class ForumViewPageComponent implements OnInit {
   public post: any = null;
@@ -31,21 +31,22 @@ export class ForumViewPageComponent implements OnInit {
   public enableCommentSection = false;
   private postId: string = '';
 
-
-  constructor(public route: ActivatedRoute,
+  constructor(
+    public route: ActivatedRoute,
     public auth: AuthService,
     private forumService: ForumService,
     private router: Router,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private tagService: TitleTagService) {
+    private tagService: TitleTagService,
+  ) {
     this.user = auth.user.asObservable();
     this.tagService.setTitle('Vinyl.LK: The Forum');
     this.tagService.setSocialMediaTags(
       'http://www.vinyl.lk',
-      'Vinyl.LK: Sri Lanka\'s largest records database',
+      "Vinyl.LK: Sri Lanka's largest records database",
       'Vinyl forum to talk about music, gear and many more!',
-      'https://www.vinyl.lk/assets/images/social.jpeg'
+      'https://www.vinyl.lk/assets/images/social.jpeg',
     );
   }
 
@@ -78,8 +79,8 @@ export class ForumViewPageComponent implements OnInit {
     const modal = this.dialog.open(ActionConfirmModalComponent, {
       data: {
         message: `Are you sure you want to delete the forum post?`,
-        title: `Are you sure?`
-      }
+        title: `Are you sure?`,
+      },
     });
 
     modal.afterClosed().subscribe((ok) => {
@@ -107,16 +108,22 @@ export class ForumViewPageComponent implements OnInit {
     } else if (this.imageProgress > 0) {
       this.editorDisabled = false;
       this.enableCommentSection = true;
-      this.toastr.warning('Images are still uploading... Please wait', 'Warning');
+      this.toastr.warning(
+        'Images are still uploading... Please wait',
+        'Warning',
+      );
       return;
     }
     const object = {
       postHTML: this.comment_data,
-      comment: true
+      comment: true,
     };
 
     if (this.comment_data.length < 10) {
-      this.toastr.warning(`Your comment is either empty or too short for submission`, 'Error');
+      this.toastr.warning(
+        `Your comment is either empty or too short for submission`,
+        'Error',
+      );
       this.editorDisabled = false;
       this.enableCommentSection = true;
       return;
@@ -124,15 +131,18 @@ export class ForumViewPageComponent implements OnInit {
     this.comment_data = '';
 
     const data = this.forumService.comment_post(this.postId, object);
-    data.then(() => {
-      this.toastr.success(`Comment submitted successfully`, 'Success');
-      this.editorDisabled = false;
-      this.loadComments();
-    }, (err) => {
-      this.editorDisabled = false;
-      this.enableCommentSection = true;
-      this.toastr.error(`Saving failed! Please try again later`, 'Error');
-    });
+    data.then(
+      () => {
+        this.toastr.success(`Comment submitted successfully`, 'Success');
+        this.editorDisabled = false;
+        this.loadComments();
+      },
+      (err) => {
+        this.editorDisabled = false;
+        this.enableCommentSection = true;
+        this.toastr.error(`Saving failed! Please try again later`, 'Error');
+      },
+    );
   }
 
   discardComment() {
@@ -154,8 +164,8 @@ export class ForumViewPageComponent implements OnInit {
     const modal = this.dialog.open(ActionConfirmModalComponent, {
       data: {
         message: `Are you sure you want to delete your comment?`,
-        title: `Are you sure?`
-      }
+        title: `Are you sure?`,
+      },
     });
 
     modal.afterClosed().subscribe((ok) => {
@@ -166,15 +176,18 @@ export class ForumViewPageComponent implements OnInit {
 
         const data = this.forumService.comment_delete(this.postId, id);
 
-        data.then(() => {
-          this.loader.hide();
-          this.toastr.success(`Comment deleted successfully`, 'Success');
-          this.loadComments();
-        }, () => {
-          this.toastr.error(`Action failed! Please try again later`, 'Error');
-          this.loadComments();
-          this.enableCommentSection = true;
-        });
+        data.then(
+          () => {
+            this.loader.hide();
+            this.toastr.success(`Comment deleted successfully`, 'Success');
+            this.loadComments();
+          },
+          () => {
+            this.toastr.error(`Action failed! Please try again later`, 'Error');
+            this.loadComments();
+            this.enableCommentSection = true;
+          },
+        );
       }
     });
   }

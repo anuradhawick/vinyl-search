@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-user-home-page',
   templateUrl: './user-home-page.component.html',
-  styleUrls: ['./user-home-page.component.css']
+  styleUrls: ['./user-home-page.component.css'],
 })
 export class UserHomePageComponent implements OnInit {
   public user: Observable<any>;
@@ -16,21 +16,25 @@ export class UserHomePageComponent implements OnInit {
     this.user = auth.user.asObservable();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   scroll(dir: string) {
     switch (dir) {
       case 'left':
-        this.hscroll.nativeElement.scrollTo({ left: (this.hscroll.nativeElement.scrollLeft - 100), behavior: 'smooth' });
+        this.hscroll.nativeElement.scrollTo({
+          left: this.hscroll.nativeElement.scrollLeft - 100,
+          behavior: 'smooth',
+        });
         break;
       case 'right':
-        this.hscroll.nativeElement.scrollTo({ left: (this.hscroll.nativeElement.scrollLeft + 100), behavior: 'smooth' });
+        this.hscroll.nativeElement.scrollTo({
+          left: this.hscroll.nativeElement.scrollLeft + 100,
+          behavior: 'smooth',
+        });
         break;
 
       default:
         break;
     }
   }
-
 }

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { v4 as uuid } from 'uuid';
-import { Storage } from '@aws-amplify/storage';
+import { Storage } from 'aws-amplify';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-forum-editor-component',
   templateUrl: './forum-editor-component.component.html',
-  styleUrls: ['./forum-editor-component.component.css']
+  styleUrls: ['./forum-editor-component.component.css'],
 })
 export class ForumEditorComponentComponent implements OnInit {
   @Input() imageProgress = 0;
@@ -20,26 +20,24 @@ export class ForumEditorComponentComponent implements OnInit {
   @Input() editorDisabled!: any;
   @Input() is_reply = false;
 
-
-  constructor() {
-  }
+  constructor() {}
 
   onReady(Editor: any) {
-    Editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
+    Editor.plugins.get('FileRepository').createUploadAdapter = (
+      loader: any,
+    ) => {
       return new MyUploadAdapter(loader, this);
     };
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
 
-
 class MyUploadAdapter {
-
-  constructor(private loader: any,
-    private ref: ForumEditorComponentComponent) {
+  constructor(
+    private loader: any,
+    private ref: ForumEditorComponentComponent,
+  ) {
     this.loader = loader;
     this.ref = ref;
   }
@@ -55,23 +53,27 @@ class MyUploadAdapter {
 
         Storage.put(filename, file, {
           customPrefix: {
-            public: 'temp/'
+            public: 'temp/',
           },
-          progressCallback(progress) {
+          progressCallback(progress: any) {
             that.loader.uploadTotal = progress.total;
             that.loader.uploaded = progress.loaded;
           },
-        }).then(() => {
-          this.ref.imageProgress--;
-          this.ref.imageProgressChange.emit(this.ref.imageProgress);
+        })
+          .then(() => {
+            this.ref.imageProgress--;
+            this.ref.imageProgressChange.emit(this.ref.imageProgress);
 
-          resolve({ 'default': `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}` });
-        }).catch((e) => {
-          this.ref.imageProgress--;
-          this.ref.imageProgressChange.emit(this.ref.imageProgress);
+            resolve({
+              default: `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`,
+            });
+          })
+          .catch((e: any) => {
+            this.ref.imageProgress--;
+            this.ref.imageProgressChange.emit(this.ref.imageProgress);
 
-          reject(e);
-        });
+            reject(e);
+          });
       });
     });
   }

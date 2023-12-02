@@ -4,15 +4,8 @@ import { PostEditorComponent } from './post-editor.component';
 import { SharedModules } from '../../shared-modules/shared.module';
 
 @NgModule({
-  declarations: [
-    PostEditorComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModules
-  ],
-  exports: [
-    PostEditorComponent
-  ]
+  declarations: [PostEditorComponent],
+  imports: [CommonModule, SharedModules],
+  exports: [PostEditorComponent],
 })
-export class PostEditorModule { }
+export class PostEditorModule {}

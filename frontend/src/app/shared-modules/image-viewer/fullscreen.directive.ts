@@ -1,19 +1,25 @@
-import { Directive, OnChanges, Input, ElementRef, SimpleChange } from '@angular/core';
+import {
+  Directive,
+  OnChanges,
+  Input,
+  ElementRef,
+  SimpleChange,
+} from '@angular/core';
 import screenfull from 'screenfull';
 
-
 @Directive({
-  selector: '[appToggleFullscreen]'
+  selector: '[appToggleFullscreen]',
 })
 export class ToggleFullscreenDirective implements OnChanges {
-
   @Input('appToggleFullscreen')
   isFullscreen: boolean = false;
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef) {}
 
   ngOnChanges(change: any) {
-    if (!!change.isFullscreen.previousValue === change.isFullscreen.currentValue) {
+    if (
+      !!change.isFullscreen.previousValue === change.isFullscreen.currentValue
+    ) {
       return;
     } else if (this.isFullscreen && screenfull.isEnabled) {
       screenfull.request(this.el.nativeElement);
@@ -21,5 +27,4 @@ export class ToggleFullscreenDirective implements OnChanges {
       screenfull.exit();
     }
   }
-
 }

@@ -8,9 +8,8 @@ describe('RecordsUpdatePageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordsUpdatePageComponent ]
-    })
-    .compileComponents();
+      declarations: [RecordsUpdatePageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

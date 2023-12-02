@@ -8,9 +8,8 @@ describe('PendingAdsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PendingAdsComponent ]
-    })
-    .compileComponents();
+      declarations: [PendingAdsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

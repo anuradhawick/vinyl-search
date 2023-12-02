@@ -9,14 +9,14 @@ import { CatalogErrorModalComponent } from '../modals/catalog-error/catalog-erro
 
 declare const $: any;
 
-
 @Component({
   selector: 'app-records-edit-page',
   templateUrl: './records-edit-page.component.html',
   styleUrls: ['./records-edit-page.component.css'],
 })
 export class RecordsEditPageComponent implements OnInit {
-  @ViewChild('editor', { static: false }) editor!: RecordsEditorComponentComponent;
+  @ViewChild('editor', { static: false })
+  editor!: RecordsEditorComponentComponent;
   @ViewChild('loader', { static: false }) loader!: LoaderComponent;
 
   ready = true;
@@ -48,16 +48,14 @@ export class RecordsEditPageComponent implements OnInit {
   // };
   public record = null;
 
-  constructor(private recordsService: RecordsService,
+  constructor(
+    private recordsService: RecordsService,
     private router: Router,
     private toastr: ToastrService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+  ) {}
 
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   save() {
     const record = this.editor.getReleaseData();
@@ -69,20 +67,28 @@ export class RecordsEditPageComponent implements OnInit {
 
       const data = this.recordsService.save_record(record);
 
-      data.then((result: any) => {
-        if (result.recordId) {
-          this.toastr.success(`Records saved successfully`, 'Success');
-          this.router.navigate(['/records', result.recordId, 'view']);
-        } else {
+      data.then(
+        (result: any) => {
+          if (result.recordId) {
+            this.toastr.success(`Records saved successfully`, 'Success');
+            this.router.navigate(['/records', result.recordId, 'view']);
+          } else {
+            this.ready = true;
+            this.loader.hide();
+            this.dialog.open(CatalogErrorModalComponent, {
+              data: { id: result.originalId },
+            });
+          }
+        },
+        () => {
           this.ready = true;
           this.loader.hide();
-          this.dialog.open(CatalogErrorModalComponent, { data: { id: result.originalId } });
-        }
-      }, () => {
-        this.ready = true;
-        this.loader.hide();
-        this.toastr.error(`Unable to save the records. Try again later`, 'Error');
-      });
+          this.toastr.error(
+            `Unable to save the records. Try again later`,
+            'Error',
+          );
+        },
+      );
     }
   }
 

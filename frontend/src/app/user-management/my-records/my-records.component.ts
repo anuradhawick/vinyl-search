@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-my-records',
   templateUrl: './my-records.component.html',
-  styleUrls: ['./my-records.component.css']
+  styleUrls: ['./my-records.component.css'],
 })
 export class MyRecordsComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
@@ -25,9 +25,8 @@ export class MyRecordsComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,
-    @Inject(MatDialog) private dialog: MatDialog
-  ) {
-  }
+    @Inject(MatDialog) private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -43,15 +42,18 @@ export class MyRecordsComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService.get_records({ limit: this.limit, skip: this.skip }).then((records: any) => {
-      this.records = records.records;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loader.hide();
-    }).catch(() => {
-      this.loader.hide();
-    });
+    this.userService
+      .get_records({ limit: this.limit, skip: this.skip })
+      .then((records: any) => {
+        this.records = records.records;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loader.hide();
+      })
+      .catch(() => {
+        this.loader.hide();
+      });
   }
 
   changePage(event: any) {
@@ -59,7 +61,7 @@ export class MyRecordsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -70,12 +72,15 @@ export class MyRecordsComponent implements OnInit {
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
-        this.userService.delete_record(id).then(() => {
-          this.loadPosts();
-          this.toastr.success('Forum item deleted successfully', 'Success');
-        }).catch(() => {
-          this.toastr.error('Request failed. Try again later!', 'Error');
-        });
+        this.userService
+          .delete_record(id)
+          .then(() => {
+            this.loadPosts();
+            this.toastr.success('Forum item deleted successfully', 'Success');
+          })
+          .catch(() => {
+            this.toastr.error('Request failed. Try again later!', 'Error');
+          });
       }
     });
   }

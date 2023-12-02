@@ -4,7 +4,10 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
 import { MarketService } from '../services/market.service';
 import { Observable } from 'rxjs';
 
@@ -23,31 +26,112 @@ const TREE_DATA: TreeNode[] = [
     saleSubtype: '',
     selected: false,
     children: [
-      { name: 'Phonograph Records', selected: false, saleType: 'material', saleSubtype: 'phonograph' },
-      { name: 'Magnetic Records', selected: false, saleType: 'material', saleSubtype: 'magnetic' },
-      { name: 'Compact Discs', selected: false, saleType: 'material', saleSubtype: 'compact' },
-      { name: 'Digital Material', selected: false, saleType: 'material', saleSubtype: 'digital' },
-      { name: 'Other', selected: false, saleType: 'material', saleSubtype: 'other' }
-    ]
-  }, {
+      {
+        name: 'Phonograph Records',
+        selected: false,
+        saleType: 'material',
+        saleSubtype: 'phonograph',
+      },
+      {
+        name: 'Magnetic Records',
+        selected: false,
+        saleType: 'material',
+        saleSubtype: 'magnetic',
+      },
+      {
+        name: 'Compact Discs',
+        selected: false,
+        saleType: 'material',
+        saleSubtype: 'compact',
+      },
+      {
+        name: 'Digital Material',
+        selected: false,
+        saleType: 'material',
+        saleSubtype: 'digital',
+      },
+      {
+        name: 'Other',
+        selected: false,
+        saleType: 'material',
+        saleSubtype: 'other',
+      },
+    ],
+  },
+  {
     name: 'A/V Gear',
     saleType: '',
     saleSubtype: '',
     selected: false,
     children: [
-      { name: 'Amplifiers', selected: false, saleType: 'gear', saleSubtype: 'amplifiers' },
-      { name: 'Pre Amplifiers', selected: false, saleType: 'gear', saleSubtype: 'pre-amplifiers' },
-      { name: 'Speakers', selected: false, saleType: 'gear', saleSubtype: 'speakers' },
-      { name: 'Equalizers', selected: false, saleType: 'gear', saleSubtype: 'equalizers' },
-      { name: 'Mixers', selected: false, saleType: 'gear', saleSubtype: 'mixers' },
-      { name: 'Tape Gear', selected: false, saleType: 'gear', saleSubtype: 'tape' },
-      { name: 'Vinyl Gear', selected: false, saleType: 'gear', saleSubtype: 'vinyl' },
-      { name: 'Audio Accessories', selected: false, saleType: 'gear', saleSubtype: 'audio' },
-      { name: 'Video Gear', selected: false, saleType: 'gear', saleSubtype: 'video' },
-      { name: 'Digital Gear', selected: false, saleType: 'gear', saleSubtype: 'digital' },
-      { name: 'Other', selected: false, saleType: 'gear', saleSubtype: 'other' },
-    ]
-  }
+      {
+        name: 'Amplifiers',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'amplifiers',
+      },
+      {
+        name: 'Pre Amplifiers',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'pre-amplifiers',
+      },
+      {
+        name: 'Speakers',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'speakers',
+      },
+      {
+        name: 'Equalizers',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'equalizers',
+      },
+      {
+        name: 'Mixers',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'mixers',
+      },
+      {
+        name: 'Tape Gear',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'tape',
+      },
+      {
+        name: 'Vinyl Gear',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'vinyl',
+      },
+      {
+        name: 'Audio Accessories',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'audio',
+      },
+      {
+        name: 'Video Gear',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'video',
+      },
+      {
+        name: 'Digital Gear',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'digital',
+      },
+      {
+        name: 'Other',
+        selected: false,
+        saleType: 'gear',
+        saleSubtype: 'other',
+      },
+    ],
+  },
 ];
 
 /** Flat node with expandable and level information */
@@ -63,7 +147,7 @@ interface FlatNode {
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css']
+  styleUrls: ['./landing-page.component.css'],
 })
 export class LandingPageComponent implements OnInit {
   public records: Observable<any> = new Observable<any>();
@@ -85,7 +169,9 @@ export class LandingPageComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
 
   public treeControl = new FlatTreeControl<FlatNode>(
-    node => node.level, node => node.expandable);
+    (node) => node.level,
+    (node) => node.expandable,
+  );
 
   public treeFlattener = new MatTreeFlattener(
     (node: TreeNode, level: number) => {
@@ -98,17 +184,22 @@ export class LandingPageComponent implements OnInit {
         level: level,
       };
     },
-    node => node.level,
-    node => node.expandable,
-    node => node.children
+    (node) => node.level,
+    (node) => node.expandable,
+    (node) => node.children,
   );
 
-  public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  public dataSource = new MatTreeFlatDataSource(
+    this.treeControl,
+    this.treeFlattener,
+  );
 
-  constructor(private marketService: MarketService,
+  constructor(
+    private marketService: MarketService,
     public route: ActivatedRoute,
     private router: Router,
-    public auth: AuthService) {
+    public auth: AuthService,
+  ) {
     this.dataSource.data = TREE_DATA;
   }
 
@@ -138,9 +229,11 @@ export class LandingPageComponent implements OnInit {
         this.selectedFilters[`gear.${f}`] = true;
       });
 
-      if (_.isEmpty(_.trim(this.query)) &&
+      if (
+        _.isEmpty(_.trim(this.query)) &&
         _.isEmpty(this.materialFilters) &&
-        _.isEmpty(this.gearFilters)) {
+        _.isEmpty(this.gearFilters)
+      ) {
         this.loadRecords();
       } else {
         this.loadSearchPage();
@@ -168,7 +261,11 @@ export class LandingPageComponent implements OnInit {
       });
     }
 
-    this.autocomplete = this.marketService.search_posts({ limit: 5, skip: 0, query: _.trim(newquery) });
+    this.autocomplete = this.marketService.search_posts({
+      limit: 5,
+      skip: 0,
+      query: _.trim(newquery),
+    });
   }
 
   exitSearch() {
@@ -187,7 +284,7 @@ export class LandingPageComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         query,
-        page: 1
+        page: 1,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -196,7 +293,7 @@ export class LandingPageComponent implements OnInit {
   loadRecords() {
     const data = this.marketService.fetch_posts({
       skip: this.skip,
-      limit: this.limit
+      limit: this.limit,
     });
 
     this.records = data;
@@ -216,7 +313,7 @@ export class LandingPageComponent implements OnInit {
       skip: this.skip,
       query: this.query,
       gear: JSON.stringify(this.gearFilters),
-      material: JSON.stringify(this.materialFilters)
+      material: JSON.stringify(this.materialFilters),
     });
 
     this.records = data;
@@ -243,7 +340,8 @@ export class LandingPageComponent implements OnInit {
         this.gearFilters.push(subType);
       }
     }
-    this.selectedFilters[`${type}.${subType}`] = !this.selectedFilters[`${type}.${subType}`];
+    this.selectedFilters[`${type}.${subType}`] =
+      !this.selectedFilters[`${type}.${subType}`];
     this.activateFilters();
   }
 
@@ -251,13 +349,13 @@ export class LandingPageComponent implements OnInit {
     const queryParams = {
       query: _.isEmpty(this.query) ? null : this.query,
       material: _.isEmpty(this.materialFilters) ? null : this.materialFilters,
-      gear: _.isEmpty(this.gearFilters) ? null : this.gearFilters
+      gear: _.isEmpty(this.gearFilters) ? null : this.gearFilters,
     };
 
     this.router.navigateByUrl(this.router.url.split(/[?#]/)[0]).then(() => {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams
+        queryParams,
       });
     });
   }
@@ -267,12 +365,11 @@ export class LandingPageComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
   }
-
 
   hasChild = (_: number, node: FlatNode) => node.expandable;
 }

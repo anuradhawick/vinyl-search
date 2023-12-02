@@ -5,59 +5,68 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class MarketService {
-
-  constructor(private http: HttpClient, private auth: AuthService) {
-  }
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+  ) {}
 
   async save_post(post: any) {
     const token = await this.auth.getToken();
 
-    return await this.http.post(environment.api_gateway + 'market', post, {
-      headers: new HttpHeaders({
-        'Authorization': token
+    return await this.http
+      .post(environment.api_gateway + 'market', post, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
       })
-    }).toPromise();
+      .toPromise();
   }
 
   async update_post(post: any) {
     const token = await this.auth.getToken();
 
-    return await this.http.post(environment.api_gateway + 'market/' + post.id, post, {
-      headers: new HttpHeaders({
-        'Authorization': token
+    return await this.http
+      .post(environment.api_gateway + 'market/' + post.id, post, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
       })
-    }).toPromise();
+      .toPromise();
   }
 
   fetch_posts(params: any) {
     return this.http.get(environment.api_gateway + 'market', {
-      params
+      params,
     });
   }
 
   async fetch_post(postId: any) {
     const token = await this.auth.getToken();
 
-    return await this.http.get(environment.api_gateway + 'market/' + postId, {
-      headers: new HttpHeaders({
-        'Authorization': token
+    return await this.http
+      .get(environment.api_gateway + 'market/' + postId, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
       })
-    }).toPromise();
+      .toPromise();
   }
 
   search_posts(params: any) {
     return this.http.get(environment.api_gateway + 'market/search', {
-      params
+      params,
     });
   }
 
   async report_post(postId: any, report: any) {
     const token = await this.auth.getToken();
 
-    return await this.http.post(environment.api_gateway + 'market/' + postId + '/report', report, {
-      headers: new HttpHeaders({
-        'Authorization': token
+    return await this.http
+      .post(environment.api_gateway + 'market/' + postId + '/report', report, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
       })
-    }).toPromise();
+      .toPromise();
   }
 }

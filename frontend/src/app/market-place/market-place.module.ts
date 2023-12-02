@@ -18,18 +18,15 @@ import { MarketService } from './services/market.service';
     NewPostComponent,
     PostViewPageComponent,
     ReportModalComponent,
-    PostEditPageComponent
+    PostEditPageComponent,
   ],
   imports: [
     CommonModule,
     MarketPlaceRoutingModule,
     FormsModule,
     SharedModules,
-    PostEditorModule
+    PostEditorModule,
   ],
-  providers: [
-    MarketService
-  ]
+  providers: [MarketService],
 })
-export class MarketPlaceModule {
-}
+export class MarketPlaceModule {}

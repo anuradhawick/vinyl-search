@@ -8,9 +8,8 @@ describe('ForumShouldDeleteModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForumShouldDeleteModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ForumShouldDeleteModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

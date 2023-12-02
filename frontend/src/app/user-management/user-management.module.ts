@@ -19,13 +19,8 @@ import { MyMarketComponent } from './my-market/my-market.component';
     UpdateDetailsComponent,
     ForumShouldDeleteModalComponent,
     RecordShouldDeleteModalComponent,
-    MyMarketComponent
+    MyMarketComponent,
   ],
-  imports: [
-    CommonModule,
-    UserManagementRoutingModule,
-    SharedModules
-  ]
+  imports: [CommonModule, UserManagementRoutingModule, SharedModules],
 })
-export class UserManagementModule {
-}
+export class UserManagementModule {}

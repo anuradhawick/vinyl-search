@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-all-ads',
   templateUrl: './all-ads.component.html',
-  styleUrls: ['./all-ads.component.css']
+  styleUrls: ['./all-ads.component.css'],
 })
 export class AllAdsComponent implements OnInit {
   public loading = true;
@@ -18,12 +18,13 @@ export class AllAdsComponent implements OnInit {
   public count = 0;
   public page = 1;
 
-  constructor(private route: ActivatedRoute,
-              private adminMarketService: MarketService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private adminMarketService: MarketService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -39,15 +40,18 @@ export class AllAdsComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminMarketService.fetch_posts_by_type({limit: this.limit, skip: this.skip, type: 'all'}).then((records: any) => {
-      this.posts = records.posts;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loading = false;
-    }).catch(() => {
-      this.loading = false;
-    });
+    this.adminMarketService
+      .fetch_posts_by_type({ limit: this.limit, skip: this.skip, type: 'all' })
+      .then((records: any) => {
+        this.posts = records.posts;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   changePage(event: any) {
@@ -55,7 +59,7 @@ export class AllAdsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -75,5 +79,4 @@ export class AllAdsComponent implements OnInit {
     //   }
     // });
   }
-
 }

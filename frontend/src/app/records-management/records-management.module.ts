@@ -24,17 +24,14 @@ import { ChooseFilterComponent } from './modals/choose-filter/choose-filter.comp
     RecordsUpdatePageComponent,
     RecordsRevisionViewPageComponent,
     CatalogErrorModalComponent,
-    ChooseFilterComponent
+    ChooseFilterComponent,
   ],
   imports: [
     CommonModule,
     RecordsManagementRoutingModule,
     FormsModule,
-    SharedModules
+    SharedModules,
   ],
-  providers: [
-    RecordsService
-  ]
+  providers: [RecordsService],
 })
-export class RecordsManagementModule {
-}
+export class RecordsManagementModule {}

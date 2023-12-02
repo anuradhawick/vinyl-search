@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-manage-forum',
   templateUrl: './manage-forum.component.html',
-  styleUrls: ['./manage-forum.component.css']
+  styleUrls: ['./manage-forum.component.css'],
 })
 export class ManageForumComponent implements OnInit {
   public loading = true;
@@ -19,12 +19,13 @@ export class ManageForumComponent implements OnInit {
   public count = 0;
   public page = 1;
 
-  constructor(private route: ActivatedRoute,
-              private adminService: AdminService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private adminService: AdminService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -40,15 +41,18 @@ export class ManageForumComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminService.fetch_forum({limit: this.limit, skip: this.skip}).then((records: any) => {
-      this.posts = records.posts;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loading = false;
-    }).catch(() => {
-      this.loading = false;
-    });
+    this.adminService
+      .fetch_forum({ limit: this.limit, skip: this.skip })
+      .then((records: any) => {
+        this.posts = records.posts;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   changePage(event: any) {
@@ -56,25 +60,29 @@ export class ManageForumComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
   }
 
   delete(id: string) {
-    const modal = this.dialog.open(AdminActionConfirmModalComponent, {data: {message: `Are you sure you want to delete the forum post?.`}});
+    const modal = this.dialog.open(AdminActionConfirmModalComponent, {
+      data: { message: `Are you sure you want to delete the forum post?.` },
+    });
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
-        this.adminService.delete_forum(id).then(() => {
-          this.loadPosts();
-          this.toastr.success('Forum item deleted successfully', 'Success');
-        }).catch(() => {
-          this.toastr.error('Request failed. Try again later!', 'Error');
-        });
+        this.adminService
+          .delete_forum(id)
+          .then(() => {
+            this.loadPosts();
+            this.toastr.success('Forum item deleted successfully', 'Success');
+          })
+          .catch(() => {
+            this.toastr.error('Request failed. Try again later!', 'Error');
+          });
       }
     });
   }
-
 }

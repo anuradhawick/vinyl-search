@@ -11,11 +11,11 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-post-edit-page',
   templateUrl: './post-edit-page.component.html',
-  styleUrls: ['./post-edit-page.component.css']
+  styleUrls: ['./post-edit-page.component.css'],
 })
 export class PostEditPageComponent implements OnInit {
-  @ViewChild('editor', {static: false}) editor!: PostEditorComponent;
-  @ViewChild('loader', {static: false}) loader!: LoaderComponent;
+  @ViewChild('editor', { static: false }) editor!: PostEditorComponent;
+  @ViewChild('loader', { static: false }) loader!: LoaderComponent;
   public postObject: any = null;
   public _ = _;
 
@@ -23,13 +23,14 @@ export class PostEditPageComponent implements OnInit {
   public postLoading = true;
   ready = true;
 
-  constructor(public route: ActivatedRoute,
-              private marketService: MarketService,
-              public auth: AuthService,
-              private toastr: ToastrService,
-              private router: Router,
-              public dialog: MatDialog) {
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private marketService: MarketService,
+    public auth: AuthService,
+    private toastr: ToastrService,
+    private router: Router,
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
@@ -54,20 +55,25 @@ export class PostEditPageComponent implements OnInit {
 
       const data = this.marketService.update_post(post);
 
-      data.then((result: any) => {
-        if (result.id) {
-          this.toastr.success(`Records saved successfully`, 'Success');
-          this.router.navigate(['/market', result.id, 'view']);
-        } else {
+      data.then(
+        (result: any) => {
+          if (result.id) {
+            this.toastr.success(`Records saved successfully`, 'Success');
+            this.router.navigate(['/market', result.id, 'view']);
+          } else {
+            this.ready = true;
+            this.loader.hide();
+          }
+        },
+        () => {
           this.ready = true;
           this.loader.hide();
-        }
-      }, () => {
-        this.ready = true;
-        this.loader.hide();
-        this.toastr.error(`Unable to save the records. Try again later`, 'Error');
-      });
+          this.toastr.error(
+            `Unable to save the records. Try again later`,
+            'Error',
+          );
+        },
+      );
     }
   }
-
 }

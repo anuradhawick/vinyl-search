@@ -10,29 +10,32 @@ import { RecordsRevisionViewPageComponent } from './records-revision-view-page/r
 const routes: Routes = [
   {
     path: '',
-    component: RecordsHomePageComponent
+    component: RecordsHomePageComponent,
   },
   {
-    path: 'new', component: RecordsEditPageComponent,
-    canActivate: [authGuard]
+    path: 'new',
+    component: RecordsEditPageComponent,
+    canActivate: [authGuard],
   },
   {
-    path: ':recordId/view', component: RecordViewPageComponent,
-    canActivate: [authGuard]
+    path: ':recordId/view',
+    component: RecordViewPageComponent,
+    canActivate: [authGuard],
   },
   {
-    path: ':recordId/update', component: RecordsUpdatePageComponent,
-    canActivate: [authGuard]
+    path: ':recordId/update',
+    component: RecordsUpdatePageComponent,
+    canActivate: [authGuard],
   },
   {
-    path: ':recordId/revisions/:revisionId', component: RecordsRevisionViewPageComponent,
-    canActivate: [authGuard]
+    path: ':recordId/revisions/:revisionId',
+    component: RecordsRevisionViewPageComponent,
+    canActivate: [authGuard],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RecordsManagementRoutingModule {
-}
+export class RecordsManagementRoutingModule {}

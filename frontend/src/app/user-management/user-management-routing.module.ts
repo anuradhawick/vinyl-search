@@ -14,31 +14,30 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'update',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'records',
-        component: MyRecordsComponent
+        component: MyRecordsComponent,
       },
       {
         path: 'forum',
-        component: MyForumComponent
+        component: MyForumComponent,
       },
       {
         path: 'market',
-        component: MyMarketComponent
+        component: MyMarketComponent,
       },
       {
         path: 'update',
-        component: UpdateDetailsComponent
-      }
-    ]
-  }
+        component: UpdateDetailsComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserManagementRoutingModule {
-}
+export class UserManagementRoutingModule {}

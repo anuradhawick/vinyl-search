@@ -8,9 +8,8 @@ describe('RecordsEditPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordsEditPageComponent ]
-    })
-    .compileComponents();
+      declarations: [RecordsEditPageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

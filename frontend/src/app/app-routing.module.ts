@@ -7,39 +7,57 @@ import { adminGuard } from './shared-modules/auth/admin.guard';
 const routes: Routes = [
   {
     path: '',
-    component: HomePageComponent
+    component: HomePageComponent,
   },
   {
     path: 'forum',
-    loadChildren: () => import('./forum-management/forum-management.module').then(mod => mod.ForumManagementModule)
+    loadChildren: () =>
+      import('./forum-management/forum-management.module').then(
+        (mod) => mod.ForumManagementModule,
+      ),
   },
   {
     path: 'records',
-    loadChildren: () => import('./records-management/records-management.module').then(mod => mod.RecordsManagementModule)
+    loadChildren: () =>
+      import('./records-management/records-management.module').then(
+        (mod) => mod.RecordsManagementModule,
+      ),
   },
   {
     path: 'profile',
-    loadChildren: () => import('./user-management/user-management.module').then(mod => mod.UserManagementModule),
-    canActivate: [authGuard]
+    loadChildren: () =>
+      import('./user-management/user-management.module').then(
+        (mod) => mod.UserManagementModule,
+      ),
+    canActivate: [authGuard],
   },
   {
     path: 'market',
-    loadChildren: () => import('./market-place/market-place.module').then(mod => mod.MarketPlaceModule),
-    canActivate: []
+    loadChildren: () =>
+      import('./market-place/market-place.module').then(
+        (mod) => mod.MarketPlaceModule,
+      ),
+    canActivate: [],
   },
   {
     path: 'admin',
-    loadChildren: () => import('./administration/administration.module').then(mod => mod.AdministrationModule),
-    canActivate: [authGuard, adminGuard]
+    loadChildren: () =>
+      import('./administration/administration.module').then(
+        (mod) => mod.AdministrationModule,
+      ),
+    canActivate: [authGuard, adminGuard],
   },
   {
     path: 'privacy-policy',
-    loadChildren: () => import('./pages/privacy-policy-page/privacy-policy-page.module').then(mod => mod.PrivacyPolicyPageModule)
+    loadChildren: () =>
+      import('./pages/privacy-policy-page/privacy-policy-page.module').then(
+        (mod) => mod.PrivacyPolicyPageModule,
+      ),
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

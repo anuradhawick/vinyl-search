@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-forum-home-page',
   templateUrl: './forum-home-page.component.html',
-  styleUrls: ['./forum-home-page.component.css']
+  styleUrls: ['./forum-home-page.component.css'],
 })
 export class ForumHomePageComponent implements OnInit {
   public posts = null;
@@ -23,12 +23,12 @@ export class ForumHomePageComponent implements OnInit {
 
   @ViewChild('forumloader', { static: true }) loader!: LoaderComponent;
 
-  constructor(public forumService: ForumService,
+  constructor(
+    public forumService: ForumService,
     public route: ActivatedRoute,
     public router: Router,
-    public auth: AuthService) {
-
-  }
+    public auth: AuthService,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -44,13 +44,12 @@ export class ForumHomePageComponent implements OnInit {
         this.loadSearchPage();
       }
     });
-
   }
 
   loadPosts() {
     const data = this.forumService.fetch_posts({
       limit: this.limit,
-      skip: this.skip
+      skip: this.skip,
     });
 
     data.subscribe((postsList: any) => {
@@ -66,7 +65,7 @@ export class ForumHomePageComponent implements OnInit {
     const data = this.forumService.search_posts({
       limit: this.limit,
       skip: this.skip,
-      query: this.query
+      query: this.query,
     });
 
     data.subscribe((postsList: any) => {
@@ -89,7 +88,7 @@ export class ForumHomePageComponent implements OnInit {
     this.autocomplete = this.forumService.search_posts({
       limit: 5,
       skip: 0,
-      query
+      query,
     });
   }
 
@@ -104,7 +103,7 @@ export class ForumHomePageComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -120,7 +119,7 @@ export class ForumHomePageComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         query,
-        page: 1
+        page: 1,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });

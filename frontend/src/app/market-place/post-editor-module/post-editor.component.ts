@@ -1,17 +1,24 @@
-import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
-import { Storage } from '@aws-amplify/storage';
-import {v4 as uuid} from 'uuid';
+import { Storage } from 'aws-amplify';
+import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post-editor',
   templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.css']
+  styleUrls: ['./post-editor.component.css'],
 })
 export class PostEditorComponent implements OnInit {
   @Output() readyStateChange = new EventEmitter<boolean>();
@@ -29,7 +36,7 @@ export class PostEditorComponent implements OnInit {
     price: 0,
     saleType: null,
     saleSubtype: null,
-    isNegotiable: false
+    isNegotiable: false,
   };
 
   // passed as prop
@@ -50,32 +57,36 @@ export class PostEditorComponent implements OnInit {
     wheelZoom: false,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
-    customBtns: [{name: 'delete', icon: 'delete'}],
+    customBtns: [{ name: 'delete', icon: 'delete' }],
     btnShow: {
       next: true,
       prev: true,
       zoomIn: true,
-      zoomOut: true
-    }
+      zoomOut: true,
+    },
   };
 
   public form: any;
 
-  constructor(private auth: AuthService,
-              public ngZone: NgZone,
-              private toastr: ToastrService,
-              private fb: FormBuilder) {
-  }
+  constructor(
+    private auth: AuthService,
+    public ngZone: NgZone,
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
       name: [this.postObject.name, Validators.required],
       description: [this.postObject.description, Validators.required],
       currency: [this.postObject.currency, Validators.required],
-      price: [this.postObject.price, [Validators.required, Validators.pattern(/[0-9]+(\.[0-9]+)?/)]],
+      price: [
+        this.postObject.price,
+        [Validators.required, Validators.pattern(/[0-9]+(\.[0-9]+)?/)],
+      ],
       saleType: [this.postObject.saleType, Validators.required],
       saleSubtype: [this.postObject.saleSubtype, Validators.required],
-      isNegotiable: [this.postObject.isNegotiable]
+      isNegotiable: [this.postObject.isNegotiable],
     });
     this.form.valueChanges.subscribe((values: any) => {
       _.assign(this.postObject, values);
@@ -84,17 +95,23 @@ export class PostEditorComponent implements OnInit {
 
   getReleaseData() {
     if (this.form.invalid) {
-      Object.keys(this.form.controls).forEach(field => {
+      Object.keys(this.form.controls).forEach((field) => {
         const control = this.form.get(field);
-        control.markAsTouched({onlySelf: true});
+        control.markAsTouched({ onlySelf: true });
       });
       return false;
     } else if (this.uploadCount > 0) {
-      this.toastr.warning(`Images are still being uploaded. Please wait!`, 'Warning');
+      this.toastr.warning(
+        `Images are still being uploaded. Please wait!`,
+        'Warning',
+      );
       return false;
     }
     if (this.postObject.images.length < 2) {
-      this.toastr.warning(`An advertisement must carry at least 2 images of the item!`, 'Warning');
+      this.toastr.warning(
+        `An advertisement must carry at least 2 images of the item!`,
+        'Warning',
+      );
       return false;
     }
 
@@ -107,7 +124,10 @@ export class PostEditorComponent implements OnInit {
       return;
     }
     if (this.postObject.images.length >= 10) {
-      this.toastr.warning('Maximum number of images supported is 10', 'Warning');
+      this.toastr.warning(
+        'Maximum number of images supported is 10',
+        'Warning',
+      );
     }
     if (!_.isEmpty(event.target.files)) {
       _.each(event.target.files, (file) => {
@@ -119,30 +139,35 @@ export class PostEditorComponent implements OnInit {
         const progressObserver = new Observable<any>((observer) => {
           Storage.put(filename, file, {
             customPrefix: {
-              public: 'temp/'
+              public: 'temp/',
             },
-            progressCallback(progress) {
-              observer.next(progress.loaded * 100 / progress.total);
+            progressCallback(progress: any) {
+              observer.next((progress.loaded * 100) / progress.total);
             },
-          }).then(() => {
-            const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`;
+          })
+            .then(() => {
+              const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`;
 
-            this.postObject.images.push(url);
-            this.uploadCount--;
-            if (this.uploadCount === 0) {
-              this.readyStateChange.emit(true);
-            }
-            observer.complete();
-            _.remove(this.percentages, (p) => p === progressObserver);
-          }).catch((e) => {
-            this.toastr.error('Image upload failed! Are you online?', 'Error');
-            this.uploadCount--;
-            _.remove(this.percentages, (p) => p === progressObserver);
-            if (this.uploadCount === 0) {
-              this.readyStateChange.emit(true);
-            }
-            observer.complete();
-          });
+              this.postObject.images.push(url);
+              this.uploadCount--;
+              if (this.uploadCount === 0) {
+                this.readyStateChange.emit(true);
+              }
+              observer.complete();
+              _.remove(this.percentages, (p) => p === progressObserver);
+            })
+            .catch((e) => {
+              this.toastr.error(
+                'Image upload failed! Are you online?',
+                'Error',
+              );
+              this.uploadCount--;
+              _.remove(this.percentages, (p) => p === progressObserver);
+              if (this.uploadCount === 0) {
+                this.readyStateChange.emit(true);
+              }
+              observer.complete();
+            });
         });
         this.percentages.push(progressObserver);
       });
@@ -156,7 +181,6 @@ export class PostEditorComponent implements OnInit {
     _.remove(this.postObject.images, (item) => _.isEqual(item, removeItem));
   }
 
-
   handleEvent(event: any) {
     switch (event.name) {
       case 'delete':
@@ -164,5 +188,4 @@ export class PostEditorComponent implements OnInit {
         break;
     }
   }
-
 }

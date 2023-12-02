@@ -8,9 +8,8 @@ describe('PostViewPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PostViewPageComponent ]
-    })
-    .compileComponents();
+      declarations: [PostViewPageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

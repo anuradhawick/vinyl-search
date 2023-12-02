@@ -1,18 +1,29 @@
-<br>
+<br />
 <app-loader #postloader></app-loader>
 <div [hidden]="!loader.isHidden()">
   <div class="mt-3 col-lg-8 offset-lg-2 offset-0 col-12">
-    <h2 aria-label="With textarea">{{title}}</h2>
-    <hr>
-    <ckeditor [editor]="Editor" [(ngModel)]="data" [config]="{toolbar: []}" [disabled]="true"></ckeditor>
-    <hr>
+    <h2 aria-label="With textarea">{{ title }}</h2>
+    <hr />
+    <ckeditor
+      [editor]="Editor"
+      [(ngModel)]="data"
+      [config]="{ toolbar: [] }"
+      [disabled]="true"
+    ></ckeditor>
+    <hr />
   </div>
   <div class="mt-3 col-lg-8 offset-lg-2 offset-0 col-12">
-    <div *ngIf="(user | async) && post && (user | async).uid===post.ownerUid">
+    <div *ngIf="(user | async) && post && (user | async).uid === post.ownerUid">
       <button mat-raised-button type="button" (click)="deletePost()">
         Delete
       </button>
-      <button mat-raised-button color="primary" [routerLink]="['/forum',post.id,'edit']" class="ml-1" type="button">
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/forum', post.id, 'edit']"
+        class="ml-1"
+        type="button"
+      >
         Edit
       </button>
     </div>
@@ -20,36 +31,80 @@
   <div class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12">
     <app-loader #commentloader></app-loader>
   </div>
-  <div class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12" *ngIf="comments.length>0">
+  <div
+    class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12"
+    *ngIf="comments.length > 0"
+  >
     <div *ngFor="let comment of comments">
-      <ckeditor [editor]="Editor" [(ngModel)]="comment.postHTML" [config]="{toolbar: []}" [disabled]="true"></ckeditor>
-      <div *ngIf="(user | async) && post && (user | async).uid===comment.ownerUid">
-        <button class="mt-1" mat-raised-button type="button" data-toggle="modal" data-target="#deleteComment"
-          (click)="deleteComment(comment._id)">
+      <ckeditor
+        [editor]="Editor"
+        [(ngModel)]="comment.postHTML"
+        [config]="{ toolbar: [] }"
+        [disabled]="true"
+      ></ckeditor>
+      <div
+        *ngIf="
+          (user | async) && post && (user | async).uid === comment.ownerUid
+        "
+      >
+        <button
+          class="mt-1"
+          mat-raised-button
+          type="button"
+          data-toggle="modal"
+          data-target="#deleteComment"
+          (click)="deleteComment(comment._id)"
+        >
           Delete
         </button>
       </div>
-      <hr>
+      <hr />
     </div>
   </div>
 
   <div class="mt-3 col-sm-12 text-center" *ngIf="!((user | async) && post)">
     Please login to comment on this post!
   </div>
-  <div class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12" *ngIf="(user | async) && post && enableCommentSection">
-    <app-forum-editor-component [is_reply]="true" [(data)]="comment_data"></app-forum-editor-component>
+  <div
+    class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12"
+    *ngIf="(user | async) && post && enableCommentSection"
+  >
+    <app-forum-editor-component
+      [is_reply]="true"
+      [(data)]="comment_data"
+    ></app-forum-editor-component>
   </div>
-  <div class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12" *ngIf="(user | async) && post && enableCommentSection">
-    <button mat-raised-button [disabled]="imageProgress > 0 || editorDisabled" type="button" data-toggle="modal"
-      data-target="#exampleModal" (click)="discardComment()">
+  <div
+    class="mt-3 col-lg-7 offset-lg-3 offset-0 col-12"
+    *ngIf="(user | async) && post && enableCommentSection"
+  >
+    <button
+      mat-raised-button
+      [disabled]="imageProgress > 0 || editorDisabled"
+      type="button"
+      data-toggle="modal"
+      data-target="#exampleModal"
+      (click)="discardComment()"
+    >
       Discard
     </button>
-    <button mat-raised-button color="primary" class="ml-1" type="button"
-      [disabled]="imageProgress > 0 || editorDisabled" (click)="saveComment()">
-      <span id="saveLoader" [hidden]="!(imageProgress > 0 || editorDisabled)" class="spinner-grow spinner-grow-sm"
-        role="status" aria-hidden="true"></span>
+    <button
+      mat-raised-button
+      color="primary"
+      class="ml-1"
+      type="button"
+      [disabled]="imageProgress > 0 || editorDisabled"
+      (click)="saveComment()"
+    >
+      <span
+        id="saveLoader"
+        [hidden]="!(imageProgress > 0 || editorDisabled)"
+        class="spinner-grow spinner-grow-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
       Save Comment
     </button>
   </div>
 </div>
-<br>
+<br />

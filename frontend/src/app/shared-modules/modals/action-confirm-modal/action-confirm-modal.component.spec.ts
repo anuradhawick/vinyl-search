@@ -8,9 +8,8 @@ describe('AdminActionConfirmModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActionConfirmModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ActionConfirmModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,33 +1,66 @@
-
-<div *ngIf="(user | async)" class="w-full">
+<div *ngIf="user | async" class="w-full">
   <div class="w-full lg:h-[75px] pt-4 lg:pt-0">
-    <img *ngIf="(user | async)?.picture; else placeholder" [src]="(user | async)?.picture" alt="Profile picture"
-      class="h-[150px] w-[150x] aspect-square border-solid border-2 border-black rounded-full mx-auto lg:-translate-y-[75px]">
+    <img
+      *ngIf="(user | async)?.picture; else placeholder"
+      [src]="(user | async)?.picture"
+      alt="Profile picture"
+      class="h-[150px] w-[150x] aspect-square border-solid border-2 border-black rounded-full mx-auto lg:-translate-y-[75px]"
+    />
     <ng-template #placeholder>
-      <img src="../../../assets/images/profile.png" alt="Profile picture" class="img-raised rounded-circle img-fluid">
+      <img
+        src="../../../assets/images/profile.png"
+        alt="Profile picture"
+        class="img-raised rounded-circle img-fluid"
+      />
     </ng-template>
   </div>
   <div class="w-full text-center">
-    <h3 class="font-semibold">{{(user | async)?.name}}</h3>
-    <h6 class="font-medium">{{(user | async)?.email}}</h6>
+    <h3 class="font-semibold">{{ (user | async)?.name }}</h3>
+    <h6 class="font-medium">{{ (user | async)?.email }}</h6>
   </div>
 </div>
 <div class="flex space-x-5 justify-center">
   <div class="flex md:hidden">
-    <a mat-button class="flex md:hidden" (click)="scroll('left')"><mat-icon>chevron_left</mat-icon></a>
+    <a mat-button class="flex md:hidden" (click)="scroll('left')"
+      ><mat-icon>chevron_left</mat-icon></a
+    >
   </div>
-  <div #hscroll class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between">
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'records'">
-      Records</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'forum'">Forum
+  <div
+    #hscroll
+    class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between"
+  >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'records'"
+    >
+      Records</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'forum'"
+      >Forum
     </a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'market'">
-      Marketplace</a>
-    <a mat-button class="text-black hover:decoration-transparent font-semibold" [routerLink]="'./'">
-      Profile</a>
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'market'"
+    >
+      Marketplace</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'./'"
+    >
+      Profile</a
+    >
   </div>
   <div class="flex md:hidden">
-    <a mat-button (click)="scroll('right')"><mat-icon>chevron_right</mat-icon></a>
+    <a mat-button (click)="scroll('right')"
+      ><mat-icon>chevron_right</mat-icon></a
+    >
   </div>
 </div>
 <div class="m-3 overflow-y-auto">

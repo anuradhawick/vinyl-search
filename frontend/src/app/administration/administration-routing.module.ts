@@ -23,23 +23,23 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'home',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'home',
-        component: ManageAdminsComponent
+        component: ManageAdminsComponent,
       },
       {
         path: 'records',
-        component: ManageRecordsComponent
+        component: ManageRecordsComponent,
       },
       {
         path: 'forum',
-        component: ManageForumComponent
+        component: ManageForumComponent,
       },
       {
         path: 'reports',
-        component: ManageReportsComponent
+        component: ManageReportsComponent,
       },
       {
         path: 'market',
@@ -48,36 +48,36 @@ const routes: Routes = [
           {
             path: '',
             redirectTo: 'pending',
-            pathMatch: 'full'
+            pathMatch: 'full',
           },
           {
             path: 'pending',
-            component: PendingAdsComponent
+            component: PendingAdsComponent,
           },
           {
             path: 'all',
-            component: AllAdsComponent
+            component: AllAdsComponent,
           },
           {
             path: 'expired',
-            component: ExpiredAdsComponent
+            component: ExpiredAdsComponent,
           },
           {
             path: 'approved',
-            component: ApprovedAdsComponent
+            component: ApprovedAdsComponent,
           },
           {
             path: ':postId/edit',
-            component: EditAdComponent
-          }
-        ]
-      }
-    ]
+            component: EditAdComponent,
+          },
+        ],
+      },
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AdministrationRoutingModule { }
+export class AdministrationRoutingModule {}

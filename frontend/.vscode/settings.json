@@ -1,4 +1,5 @@
 {
     "editor.tabSize": 2,
-    "workbench.editor.tabSizing": "fixed"
+    "workbench.editor.tabSizing": "fixed",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
 }

@@ -1,12 +1,26 @@
-<hr>
+<hr />
 <app-loader #loader></app-loader>
 <mat-list role="list" class="mx-auto max-w-[800px]">
-  <mat-list-item *ngFor="let r of records" role="listitem" class="hover:bg-slate-100">
-    <img matListItemAvatar [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'" alt="...">
-    <h3 matListItemTitle>{{r.name}}</h3>
-    <p matListItemLine>{{r.label}} - {{r.catalogNo}}
+  <mat-list-item
+    *ngFor="let r of records"
+    role="listitem"
+    class="hover:bg-slate-100"
+  >
+    <img
+      matListItemAvatar
+      [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
+      alt="..."
+    />
+    <h3 matListItemTitle>{{ r.name }}</h3>
+    <p matListItemLine>
+      {{ r.label }} - {{ r.catalogNo }}
       <span class="absolute top-0 right-0 h-full pt-[12px]">
-        <a mat-icon-button target="_blank" color="primary" [routerLink]="['/records',r.id,'view']">
+        <a
+          mat-icon-button
+          target="_blank"
+          color="primary"
+          [routerLink]="['/records', r.id, 'view']"
+        >
           <mat-icon>open_in_new</mat-icon>
         </a>
         <button mat-icon-button color="primary" (click)="delete(r.id)">
@@ -17,6 +31,11 @@
   </mat-list-item>
 </mat-list>
 <nav *ngIf="count > limit && loader.isHidden()" aria-label="Page navigation">
-  <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
-    (page)="changePage($event)"></mat-paginator>
+  <mat-paginator
+    showFirstLastButtons
+    [length]="count"
+    [pageSize]="limit"
+    [pageIndex]="page - 1"
+    (page)="changePage($event)"
+  ></mat-paginator>
 </nav>

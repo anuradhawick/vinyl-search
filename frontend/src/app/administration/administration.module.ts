@@ -40,5 +40,4 @@ import { MarketService } from './services/market.service';
   ],
   providers: [AdminService, MarketService],
 })
-export class AdministrationModule {
-}
+export class AdministrationModule {}

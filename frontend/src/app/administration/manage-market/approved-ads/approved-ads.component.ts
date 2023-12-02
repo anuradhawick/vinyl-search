@@ -9,7 +9,7 @@ import { AdminActionConfirmModalComponent } from '../../modals/admin-action-conf
 @Component({
   selector: 'app-approved-ads',
   templateUrl: './approved-ads.component.html',
-  styleUrls: ['./approved-ads.component.css']
+  styleUrls: ['./approved-ads.component.css'],
 })
 export class ApprovedAdsComponent implements OnInit {
   public loading = true;
@@ -19,12 +19,13 @@ export class ApprovedAdsComponent implements OnInit {
   public count = 0;
   public page = 1;
 
-  constructor(private route: ActivatedRoute,
-              private adminMarketService: MarketService,
-              private router: Router,
-              private toastr: ToastrService,
-              private dialog: MatDialog) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private adminMarketService: MarketService,
+    private router: Router,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
@@ -40,19 +41,22 @@ export class ApprovedAdsComponent implements OnInit {
   loadPosts() {
     this.posts = null;
     this.loading = true;
-    this.adminMarketService.fetch_posts_by_type({
-      limit: this.limit,
-      skip: this.skip,
-      type: 'approved'
-    }).then((records: any) => {
-      this.posts = records.posts;
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = records.count;
-      this.loading = false;
-    }).catch(() => {
-      this.loading = false;
-    });
+    this.adminMarketService
+      .fetch_posts_by_type({
+        limit: this.limit,
+        skip: this.skip,
+        type: 'approved',
+      })
+      .then((records: any) => {
+        this.posts = records.posts;
+        this.skip = records.skip;
+        this.limit = records.limit;
+        this.count = records.count;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   changePage(event: any) {
@@ -60,7 +64,7 @@ export class ApprovedAdsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: 1 + event.pageIndex
+        page: 1 + event.pageIndex,
       },
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -99,5 +103,4 @@ export class ApprovedAdsComponent implements OnInit {
   //     }
   //   });
   // }
-
 }

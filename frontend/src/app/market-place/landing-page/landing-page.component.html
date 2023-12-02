@@ -1,23 +1,50 @@
-<br>
+<br />
 <div class="ml-5 mr-5 mt-3 mb-3">
   <div class="row">
     <div class="col-sm-6 col-9">
       <div class="input-group">
-        <input (focus)="loadAutoComplete($event)" (blur)="exitSearch()" (keyup)="loadAutoComplete($event)" type="text"
-          class="form-control" placeholder="Search marketplace..." name="search-query" [(ngModel)]="query">
-        <button mat-button class="btn btn-default" type="button" (click)="search()">Search</button>
-        <div *ngIf="(autocomplete | async)?.posts.length > 0" style="background-color: #fff; left: 0;">
+        <input
+          (focus)="loadAutoComplete($event)"
+          (blur)="exitSearch()"
+          (keyup)="loadAutoComplete($event)"
+          type="text"
+          class="form-control"
+          placeholder="Search marketplace..."
+          name="search-query"
+          [(ngModel)]="query"
+        />
+        <button
+          mat-button
+          class="btn btn-default"
+          type="button"
+          (click)="search()"
+        >
+          Search
+        </button>
+        <div
+          *ngIf="(autocomplete | async)?.posts.length > 0"
+          style="background-color: #fff; left: 0"
+        >
           <div
-            style="z-index: 99; position: absolute; top: 100%; left: 0; right: 0; background-color: #fff; overflow: hidden">
+            style="
+              z-index: 99;
+              position: absolute;
+              top: 100%;
+              left: 0;
+              right: 0;
+              background-color: #fff;
+              overflow: hidden;
+            "
+          >
             <table class="table table-hover table-bordered shadow">
               <tbody>
                 <tr *ngFor="let r of (autocomplete | async)?.posts">
                   <td>
                     <a [routerLink]="['/market', r.id, 'view']">
-                      <strong>{{_.truncate(r.name, {length: 60})}}</strong>
-                      <br>
+                      <strong>{{ _.truncate(r.name, { length: 60 }) }}</strong>
+                      <br />
                       <div class="blockquote-footer">
-                        {{_.truncate(r.label, {length: 60})}}
+                        {{ _.truncate(r.label, { length: 60 }) }}
                       </div>
                     </a>
                   </td>
@@ -30,19 +57,37 @@
     </div>
     <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
       <div class="float-right">
-        <button mat-button type="button" class="btn btn-default" routerLink="/market/new">
+        <button
+          mat-button
+          type="button"
+          class="btn btn-default"
+          routerLink="/market/new"
+        >
           Add
         </button>
       </div>
     </div>
-    <div *ngIf="loader.isHidden() && !_.isEmpty(_.trim(_.get((route.queryParams | async), 'query')))"
-      class="ml-3 mr-5 mt-2 text-dark">
-      Search results for - <em>{{_.truncate(query, {length: 100})}}</em> (<a [routerLink]="['/market']">cancel</a>)
+    <div
+      *ngIf="
+        loader.isHidden() &&
+        !_.isEmpty(_.trim(_.get(route.queryParams | async, 'query')))
+      "
+      class="ml-3 mr-5 mt-2 text-dark"
+    >
+      Search results for - <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
+        [routerLink]="['/market']"
+        >cancel</a
+      >)
     </div>
     <ng-template #showLogin>
       <div class="col-sm-6 col-3">
         <div class="float-right">
-          <button mat-button type="button" class="btn btn-success" (click)="auth.login()">
+          <button
+            mat-button
+            type="button"
+            class="btn btn-success"
+            (click)="auth.login()"
+          >
             Login!
           </button>
         </div>
@@ -50,25 +95,38 @@
     </ng-template>
   </div>
 </div>
-<hr>
+<hr />
 <div class="row container-fluid">
   <div class="col-12 col-lg-3">
     <div class="container-fluid">
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node">
-          <button mat-raised-button (click)="toggleFilter(node.saleType, node.saleSubtype)"
-            class="m-0 btn-block text-left">
-            <mat-icon *ngIf="!!selectedFilters[node.saleType + '.' +node.saleSubtype]">done</mat-icon>
-            {{node.name}}
+          <button
+            mat-raised-button
+            (click)="toggleFilter(node.saleType, node.saleSubtype)"
+            class="m-0 btn-block text-left"
+          >
+            <mat-icon
+              *ngIf="!!selectedFilters[node.saleType + '.' + node.saleSubtype]"
+              >done</mat-icon
+            >
+            {{ node.name }}
           </button>
         </mat-tree-node>
-        <mat-tree-node *matTreeNodeDef="let node;when: hasChild">
-          <button mat-raised-button color="primary" class="m-0 btn-block text-left" matTreeNodeToggle>
+        <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+          <button
+            mat-raised-button
+            color="primary"
+            class="m-0 btn-block text-left"
+            matTreeNodeToggle
+          >
             <mat-icon class="mat-icon-rtl-mirror">
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
             </mat-icon>
-            {{node.name}}
+            {{ node.name }}
           </button>
         </mat-tree-node>
       </mat-tree>
@@ -79,28 +137,43 @@
       <app-loader #loader></app-loader>
       <div class="container">
         <div *ngIf="records | async as posts" class="row">
-
-          <div *ngFor="let r of posts.posts" class="col-lg-2 col-sm-4 col-6 p-2">
+          <div
+            *ngFor="let r of posts.posts"
+            class="col-lg-2 col-sm-4 col-6 p-2"
+          >
             <div class="card m-0 w-100">
               <div class="">
                 <a [routerLink]="['/market', r.id, 'view']" class="thumbnail">
                   <div class="image" style="background-color: #d5d5d5">
-                    <img style="object-fit: cover"
-                      [src]="r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'"
-                      class="img img-responsive" />
+                    <img
+                      style="object-fit: cover"
+                      [src]="
+                        r.images[r.chosenImage] ||
+                        '/assets/images/records-new-sample.svg'
+                      "
+                      class="img img-responsive"
+                    />
                   </div>
-                  <h6 class="m-1 text-truncate">{{r.name}}</h6>
-                  <p class="m-1 text-truncate">{{r.label}}</p>
+                  <h6 class="m-1 text-truncate">{{ r.name }}</h6>
+                  <p class="m-1 text-truncate">{{ r.label }}</p>
                 </a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <br>
-      <nav *ngIf="(records | async) && count > limit" aria-label="Page navigation">
-        <mat-paginator showFirstLastButtons [length]="count" [pageSize]="limit" [pageIndex]="page-1"
-          (page)="changePage($event)"></mat-paginator>
+      <br />
+      <nav
+        *ngIf="(records | async) && count > limit"
+        aria-label="Page navigation"
+      >
+        <mat-paginator
+          showFirstLastButtons
+          [length]="count"
+          [pageSize]="limit"
+          [pageIndex]="page - 1"
+          (page)="changePage($event)"
+        ></mat-paginator>
       </nav>
     </div>
   </div>

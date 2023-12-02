@@ -8,9 +8,8 @@ describe('ForumViewPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForumViewPageComponent ]
-    })
-    .compileComponents();
+      declarations: [ForumViewPageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

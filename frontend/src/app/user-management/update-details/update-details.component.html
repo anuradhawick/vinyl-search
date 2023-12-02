@@ -1,36 +1,89 @@
-<hr>
+<hr />
 <div class="mx-auto max-w-[800px]">
   <h3>Personal Information</h3>
   <div [formGroup]="form">
-    <hr>
+    <hr />
     <mat-form-field class="w-full">
-      <input matInput placeholder="Enter your first name" formControlName="firstName" required>
-      <mat-error *ngIf="form.controls['firstName'].invalid">Please enter a valid first name</mat-error>
+      <input
+        matInput
+        placeholder="Enter your first name"
+        formControlName="firstName"
+        required
+      />
+      <mat-error *ngIf="form.controls['firstName'].invalid"
+        >Please enter a valid first name</mat-error
+      >
     </mat-form-field>
-    <br>
+    <br />
     <mat-form-field class="w-full">
-      <input matInput placeholder="Enter your last name" formControlName="lastName" required>
-      <mat-error *ngIf="form.controls['lastName'].invalid">Please enter a valid last name</mat-error>
+      <input
+        matInput
+        placeholder="Enter your last name"
+        formControlName="lastName"
+        required
+      />
+      <mat-error *ngIf="form.controls['lastName'].invalid"
+        >Please enter a valid last name</mat-error
+      >
     </mat-form-field>
-    <button *ngIf="form.dirty" mat-raised-button (click)="discardDetails()">Cancel</button>
-    <button *ngIf="form.dirty" mat-raised-button color="primary" class="ml-1" (click)="updateDetails()">Update</button>
-    <br>
+    <button *ngIf="form.dirty" mat-raised-button (click)="discardDetails()">
+      Cancel
+    </button>
+    <button
+      *ngIf="form.dirty"
+      mat-raised-button
+      color="primary"
+      class="ml-1"
+      (click)="updateDetails()"
+    >
+      Update
+    </button>
+    <br />
   </div>
-  <hr>
+  <hr />
   <h3>Update Profile Picture</h3>
   <div class="w-full">
-    <img ngClass="max-h-[300px] aspect-square mx-auto rounded-full border-black border-2" *ngIf="uploadImageUrl"
-      [src]="uploadImageUrl">
+    <img
+      ngClass="max-h-[300px] aspect-square mx-auto rounded-full border-black border-2"
+      *ngIf="uploadImageUrl"
+      [src]="uploadImageUrl"
+    />
   </div>
-  <div *ngIf="uploadImageUrl===null && !uploading" class="form-group">
-    <button (click)="profilePicture.click()" mat-raised-button color="primary">Upload</button>
-    <input #profilePicture id="profilePicture" type="file" hidden (change)="addImage($event)" accept='image/*'>
+  <div *ngIf="uploadImageUrl === null && !uploading" class="form-group">
+    <button (click)="profilePicture.click()" mat-raised-button color="primary">
+      Upload
+    </button>
+    <input
+      #profilePicture
+      id="profilePicture"
+      type="file"
+      hidden
+      (change)="addImage($event)"
+      accept="image/*"
+    />
   </div>
-  <br>
-  <mat-progress-bar *ngIf="uploading" mode="determinate" value="{{uploadingProgress}}"></mat-progress-bar>
+  <br />
+  <mat-progress-bar
+    *ngIf="uploading"
+    mode="determinate"
+    value="{{ uploadingProgress }}"
+  ></mat-progress-bar>
   <div class="mb-3">
-    <button *ngIf="uploadImageUrl" mat-raised-button (click)="uploadImageUrl=null; uploadableFile=null;">Cancel</button>
-    <button *ngIf="uploadImageUrl" mat-raised-button color="primary" class="ml-1" (click)="upload()">Upload</button>
+    <button
+      *ngIf="uploadImageUrl"
+      mat-raised-button
+      (click)="uploadImageUrl = null; uploadableFile = null"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="uploadImageUrl"
+      mat-raised-button
+      color="primary"
+      class="ml-1"
+      (click)="upload()"
+    >
+      Upload
+    </button>
   </div>
-  
 </div>

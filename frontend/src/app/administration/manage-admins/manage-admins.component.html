@@ -1,39 +1,72 @@
-<hr>
+<hr />
 <div class="container">
   <h3>Administrators</h3>
-  <hr>
+  <hr />
   <div>
     <mat-list>
       @for (admin of admins; track $index) {
-      <mat-list-item class="hover:bg-slate-100">
-        <img *ngIf="admin.picture; else placeholder" matListItemAvatar [src]="admin.picture" alt="Admin avatar">
-        <ng-template #placeholder>
-          <img matListItemAvatar src="../../../assets/images/profile.png" alt="Profile picture">
-        </ng-template>
-        <h3 matListItemTitle>{{admin.name}}</h3>
-        <p matListItemLine>{{admin.email}}
-          <span class="absolute top-0 right-0 h-full pt-[12px]">
-            <button mat-icon-button color="primary"
-              (click)="removeAdmin(admin._id, admin.name, admin.email)"><mat-icon>delete</mat-icon></button>
-          </span>
-        </p>
-      </mat-list-item>
+        <mat-list-item class="hover:bg-slate-100">
+          <img
+            *ngIf="admin.picture; else placeholder"
+            matListItemAvatar
+            [src]="admin.picture"
+            alt="Admin avatar"
+          />
+          <ng-template #placeholder>
+            <img
+              matListItemAvatar
+              src="../../../assets/images/profile.png"
+              alt="Profile picture"
+            />
+          </ng-template>
+          <h3 matListItemTitle>{{ admin.name }}</h3>
+          <p matListItemLine>
+            {{ admin.email }}
+            <span class="absolute top-0 right-0 h-full pt-[12px]">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="removeAdmin(admin._id, admin.name, admin.email)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </span>
+          </p>
+        </mat-list-item>
       }
     </mat-list>
     <app-loader [hidden]="!loading"></app-loader>
-
   </div>
-  <hr>
+  <hr />
   <h3>Manage Admins</h3>
-  <hr>
+  <hr />
   <div [formGroup]="form">
     <mat-form-field class="w-100">
-      <input matInput placeholder="Enter email address to add admin" formControlName="email">
-      <mat-error *ngIf="form.controls['email'].invalid">Please enter a valid email</mat-error>
+      <input
+        matInput
+        placeholder="Enter email address to add admin"
+        formControlName="email"
+      />
+      <mat-error *ngIf="form.controls['email'].invalid"
+        >Please enter a valid email</mat-error
+      >
     </mat-form-field>
   </div>
-  <button *ngIf="!form.controls['email'].invalid || form.dirty" mat-raised-button (click)="cancel()">Clear</button>
-  <button *ngIf="!form.controls['email'].invalid" mat-raised-button color="primary" class="ml-1"
-    (click)="createAdmin()">Make Admin</button>
+  <button
+    *ngIf="!form.controls['email'].invalid || form.dirty"
+    mat-raised-button
+    (click)="cancel()"
+  >
+    Clear
+  </button>
+  <button
+    *ngIf="!form.controls['email'].invalid"
+    mat-raised-button
+    color="primary"
+    class="ml-1"
+    (click)="createAdmin()"
+  >
+    Make Admin
+  </button>
 </div>
-<br>
+<br />
