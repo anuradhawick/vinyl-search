@@ -17,6 +17,8 @@ import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
 import { PostEditorModule } from '../market-place/post-editor-module/post-editor-module.module';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
 import { MarketService } from './services/market.service';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { UsersService } from './services/users.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { MarketService } from './services/market.service';
     ApprovedAdsComponent,
     EditAdComponent,
     ManageReportsComponent,
+    ManageUsersComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +41,6 @@ import { MarketService } from './services/market.service';
     SharedModules,
     PostEditorModule,
   ],
-  providers: [AdminService, MarketService],
+  providers: [AdminService, MarketService, UsersService],
 })
 export class AdministrationModule {}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import { Storage } from 'aws-amplify';
+import { uploadData } from 'aws-amplify/storage';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../shared-modules/services/user.service';
@@ -105,15 +105,17 @@ export class UpdateDetailsComponent implements OnInit {
     this.uploading = true;
     this.uploadingProgress = 0;
 
-    Storage.put(filename, file, {
-      customPrefix: {
-        public: 'profile-pictures/',
-      },
-      progressCallback: (progress: any) => {
-        this.uploadingProgress = (progress.loaded * 100) / progress.total;
+    uploadData({
+      key: `profile-pictures/${filename}`,
+      data: file,
+      options: {
+        accessLevel: 'guest',
+        onProgress: (progress: any) => {
+          this.uploadingProgress = (progress.transferredBytes * 100) / progress.totalBytes;
+        },
       },
     })
-      .then(() => {
+      .result.then(() => {
         const url = `${environment.cdn_url}profile-pictures/${filename}`;
 
         this.uploading = false;
@@ -127,7 +129,7 @@ export class UpdateDetailsComponent implements OnInit {
             });
           });
       })
-      .catch((e) => {
+      .catch((e: any) => {
         this.uploading = false;
         this.toastr.error('Upload failed, Try again later!', 'Error');
         console.error(e);

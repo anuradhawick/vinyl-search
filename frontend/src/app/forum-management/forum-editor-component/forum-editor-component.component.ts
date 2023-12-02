@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { v4 as uuid } from 'uuid';
-import { Storage } from 'aws-amplify';
+import { uploadData } from 'aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -51,21 +51,22 @@ class MyUploadAdapter {
         const filename = `${uuid()}.${file.name.split('.').pop() || ''}`;
         const that = this;
 
-        Storage.put(filename, file, {
-          customPrefix: {
-            public: 'temp/',
-          },
-          progressCallback(progress: any) {
-            that.loader.uploadTotal = progress.total;
-            that.loader.uploaded = progress.loaded;
+        uploadData({
+          key: `temp/${filename}`,
+          data: file,
+          options: {
+            onProgress: (progress: any) => {
+              that.loader.uploadTotal = progress.totalBytes;
+              that.loader.uploaded = progress.transferredBytes;
+            },
           },
         })
-          .then(() => {
+          .result.then(() => {
             this.ref.imageProgress--;
             this.ref.imageProgressChange.emit(this.ref.imageProgress);
 
             resolve({
-              default: `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`,
+              default: `https://${environment.aws_config.Storage.S3.bucket}.s3-${environment.aws_config.Storage.S3.region}.amazonaws.com/temp/${filename}`,
             });
           })
           .catch((e: any) => {

@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../shared-modules/services/auth.service';
-import { Storage } from 'aws-amplify';
+import { uploadData } from 'aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import {
@@ -455,15 +455,18 @@ export class RecordsEditorComponentComponent implements OnInit {
         this.readyStateChange.emit(false);
 
         const progressObserver = new Observable((observer) => {
-          Storage.put(filename, file, {
-            customPrefix: {
-              public: 'temp/',
-            },
-            progressCallback(progress: any) {
-              observer.next((progress.loaded * 100) / progress.total);
+          uploadData({
+            key: `temp/${filename}`,
+            data: file,
+            options: {
+              onProgress: (progress: any) => {
+                observer.next(
+                  (progress.transferredBytes * 100) / progress.totalBytes,
+                );
+              },
             },
           })
-            .then(() => {
+            .result.then(() => {
               const url = `${environment.cdn_url}temp/${filename}`;
 
               this.recordObject.images.push(url);

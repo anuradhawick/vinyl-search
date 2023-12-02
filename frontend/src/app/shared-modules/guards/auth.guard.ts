@@ -1,13 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
-import { Auth } from 'aws-amplify';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = async (route, state) => {
   const auth: AuthService = inject(AuthService);
 
   try {
-    await Auth.currentAuthenticatedUser();
+    await getCurrentUser();
     return true;
   } catch (error) {
     // console.log(auth);

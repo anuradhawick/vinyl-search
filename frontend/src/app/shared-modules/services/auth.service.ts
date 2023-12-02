@@ -1,7 +1,11 @@
 import { Inject, Injectable, NgZone, afterNextRender } from '@angular/core';
-import { Auth } from 'aws-amplify';
-// import { CognitoHostedUIIdentityProvider } from '@aws-amplify/ui-angular'
-import { Hub } from 'aws-amplify';
+import {
+  fetchAuthSession,
+  getCurrentUser,
+  signInWithRedirect,
+  signOut,
+} from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -28,69 +32,64 @@ export class AuthService {
     private router: Router,
     @Inject(MatDialog) private dialog: MatDialog,
   ) {
-    afterNextRender(() => {
-      route.queryParams.subscribe((params: any) => {
-        if (params.error === 'invalid_request' && params.error_description) {
-          console.log('INVALID REQUEST', params.error_description);
-          if (
-            params.error_description === 'PreSignUp failed with error Google. '
-          ) {
-            this.loginFacebook();
-          } else if (
-            params.error_description ===
-            'PreSignUp failed with error Facebook. '
-          ) {
-            this.loginGoogle();
-          }
+    route.queryParams.subscribe((params: any) => {
+      if (params.error === 'invalid_request' && params.error_description) {
+        console.log('INVALID REQUEST', params.error_description);
+        if (
+          params.error_description === 'PreSignUp failed with error Google. '
+        ) {
+          this.loginFacebook();
+        } else if (
+          params.error_description === 'PreSignUp failed with error Facebook. '
+        ) {
+          this.loginGoogle();
         }
-      });
+      }
+    });
 
-      Hub.listen('auth', ({ payload: { event, data } }: any) => {
-        console.log(event, data);
-        (async () => {
-          console.log((await Auth.currentSession()).getIdToken().getJwtToken());
-        })();
-        switch (event) {
-          case 'signIn':
-            console.log('Login success');
-            Auth.currentAuthenticatedUser().then((u) => {
-              this.processUser(u);
-            });
-            break;
-          case 'signOut':
-            console.log('Logout success');
-            this.isLoggedIn = false;
-            this.user = null;
-            this.autoLogin = false;
-            this.profileLoaded = false;
-
-            break;
-          case 'customOAuthState':
-            this.customState = JSON.parse(decodeURIComponent(data));
-            this.zone.run(() => this.router.navigate(this.customState));
-            Auth.currentAuthenticatedUser().then((u) => {
-              this.processUser(u);
-            });
-            break;
-          case 'signIn_failure':
-            break;
-          case 'cognitoHostedUI_failure':
-            break;
-          case 'customState_failure':
-            break;
-        }
-      });
-
-      this.autoLogin = new Promise((resolve, reject) => {
-        Auth.currentAuthenticatedUser()
-          .then((u: any) => {
+    Hub.listen('auth', ({ payload }) => {
+      console.log(payload.event, payload);
+      (async () => {
+        console.log((await fetchAuthSession()).tokens?.idToken?.toString());
+      })();
+      switch (payload.event) {
+        case 'signedIn':
+        case 'signInWithRedirect':
+          console.log('Login success');
+          getCurrentUser().then((u) => {
             this.processUser(u);
-            resolve(true);
-          })
-          .catch(() => {
-            resolve(false);
           });
-      });
+          break;
+        case 'signedOut':
+          console.log('Logout success');
+          this.isLoggedIn = false;
+          this.user = null;
+          this.autoLogin = false;
+          this.profileLoaded = false;
+
+          break;
+        case 'customOAuthState':
+          this.customState = JSON.parse(decodeURIComponent(payload.data));
+          this.zone.run(() => this.router.navigate(this.customState));
+          getCurrentUser().then((u) => {
+            this.processUser(u);
+          });
+          break;
+        default:
+          console.log('Unrecornised');
+          break;
+      }
+    });
+
+    this.autoLogin = new Promise((resolve, reject) => {
+      getCurrentUser()
+        .then((u) => {
+          this.processUser(u);
+          resolve(true);
+        })
+        .catch(() => {
+          resolve(false);
+        });
     });
   }
 
@@ -117,10 +116,10 @@ export class AuthService {
 
   async getToken() {
     try {
-      const session: any = await Auth.currentSession();
-      return session.idToken.jwtToken;
+      const session  = await fetchAuthSession();
+      return session.tokens!.idToken!.toString();
     } catch (e) {
-      return null;
+      return 'null';
     }
   }
 
@@ -129,8 +128,8 @@ export class AuthService {
   }
 
   loginFacebook() {
-    Auth.federatedSignIn({
-      provider: 'Facebook' as any,
+    signInWithRedirect({
+      provider: 'Facebook',
       customState: this.customState,
     })
       .then(() => {})
@@ -140,8 +139,8 @@ export class AuthService {
   }
 
   loginGoogle() {
-    Auth.federatedSignIn({
-      provider: 'Google' as any,
+    signInWithRedirect({
+      provider: 'Google',
       customState: this.customState,
     })
       .then(() => {})
@@ -178,7 +177,7 @@ export class AuthService {
     this.user = null;
     this.isLoggedIn = false;
     this.autoLogin = null;
-    Auth.signOut();
+    signOut();
   }
 
   loginAuto() {

@@ -1,18 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth } from 'aws-amplify';
+import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
 import * as _ from 'lodash';
 
 export const adminGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
 
   try {
-    const user = await Auth.currentAuthenticatedUser();
+    const session = await fetchAuthSession();
     const groups: string[] = _.get(
-      user,
-      'signInUserSession.accessToken.payload.cognito:groups',
+      session.tokens?.idToken?.payload,
+      'cognito:groups',
       [],
-    );
+    ) as [];
     return groups.includes('Admin');
   } catch (error) {
     return router.parseUrl('/');

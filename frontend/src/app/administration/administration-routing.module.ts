@@ -12,6 +12,7 @@ import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
 import { authGuard } from '../shared-modules/guards/auth.guard';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'home',
         component: ManageAdminsComponent,
+      },
+      {
+        path: 'users',
+        component: ManageUsersComponent,
       },
       {
         path: 'records',

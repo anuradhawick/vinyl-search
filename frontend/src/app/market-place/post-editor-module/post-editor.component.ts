@@ -11,7 +11,7 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
-import { Storage } from 'aws-amplify';
+import { uploadData } from 'aws-amplify/storage';
 import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
 
@@ -137,16 +137,19 @@ export class PostEditorComponent implements OnInit {
         this.readyStateChange.emit(false);
 
         const progressObserver = new Observable<any>((observer) => {
-          Storage.put(filename, file, {
-            customPrefix: {
-              public: 'temp/',
-            },
-            progressCallback(progress: any) {
-              observer.next((progress.loaded * 100) / progress.total);
+          uploadData({
+            key: `temp/${filename}`,
+            data: file,
+            options: {
+              onProgress: (progress: any) => {
+                observer.next(
+                  (progress.transferredBytes * 100) / progress.totalBytes,
+                );
+              },
             },
           })
-            .then(() => {
-              const url = `https://${environment.aws_config.Storage.AWSS3.bucket}.s3-${environment.aws_config.Storage.AWSS3.region}.amazonaws.com/temp/${filename}`;
+            .result.then(() => {
+              const url = `https://${environment.aws_config.Storage.S3.bucket}.s3-${environment.aws_config.Storage.S3.region}.amazonaws.com/temp/${filename}`;
 
               this.postObject.images.push(url);
               this.uploadCount--;
@@ -156,7 +159,7 @@ export class PostEditorComponent implements OnInit {
               observer.complete();
               _.remove(this.percentages, (p) => p === progressObserver);
             })
-            .catch((e) => {
+            .catch(() => {
               this.toastr.error(
                 'Image upload failed! Are you online?',
                 'Error',
