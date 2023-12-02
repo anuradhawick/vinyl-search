@@ -1,4 +1,4 @@
-import { Router, builResponse } from './utils/lambda-router.js';
+import { Router, build_response } from './utils/lambda-router.js';
 import * as record_functions from './records-functions.js';
 
 
@@ -15,13 +15,13 @@ export const main = (event, context, callback) => {
     '/records/search',
     (event, context, callback) => {
       record_functions.search_records(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -38,13 +38,13 @@ export const main = (event, context, callback) => {
     '/records',
     (event, context, callback) => {
       record_functions.fetch_records(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -61,13 +61,13 @@ export const main = (event, context, callback) => {
     '/records/{recordId}',
     (event, context, callback) => {
       record_functions.fetch_record(event.pathParameters.recordId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -87,13 +87,13 @@ export const main = (event, context, callback) => {
         event.requestContext.authorizer.claims['custom:uid'],
         event.body
       ).then((recordId) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...recordId,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -113,13 +113,13 @@ export const main = (event, context, callback) => {
         event.pathParameters.recordId,
         event.body
       ).then((recordId) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           recordId,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -137,13 +137,13 @@ export const main = (event, context, callback) => {
       record_functions.fetch_history(
         event.pathParameters.recordId
       ).then((history) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           history,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -161,13 +161,13 @@ export const main = (event, context, callback) => {
       record_functions.fetch_revision(
         event.pathParameters.revisionId
       ).then((record) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...record,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))

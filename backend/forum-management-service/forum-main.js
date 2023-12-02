@@ -1,4 +1,4 @@
-import { Router, builResponse } from './utils/lambda-router.js';
+import { Router, build_response } from './utils/lambda-router.js';
 import * as forum_functions from './forum-functions.js';
 
 
@@ -15,13 +15,13 @@ export const main = (event, context, callback) => {
     '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.retrieve_post(event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           post: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -37,13 +37,13 @@ export const main = (event, context, callback) => {
     '/forum/{postId}/comments',
     (event, context, callback) => {
       forum_functions.retrieve_post_comments(event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           comments: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -59,13 +59,13 @@ export const main = (event, context, callback) => {
     '/forum',
     (event, context, callback) => {
       forum_functions.retrieve_posts(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -81,13 +81,13 @@ export const main = (event, context, callback) => {
     '/forum/search',
     (event, context, callback) => {
       forum_functions.search_posts(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }))
       });
@@ -102,13 +102,13 @@ export const main = (event, context, callback) => {
     '/forum',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, null).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           postId: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }))
       });
@@ -123,13 +123,13 @@ export const main = (event, context, callback) => {
     '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           postId: data,
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
@@ -144,13 +144,13 @@ export const main = (event, context, callback) => {
     '/forum/{postId}/comments',
     (event, context, callback) => {
       forum_functions.save_post(event.requestContext.authorizer.claims['custom:uid'], event.body, event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           postId: data,
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
@@ -165,12 +165,12 @@ export const main = (event, context, callback) => {
     '/forum/{postId}',
     (event, context, callback) => {
       forum_functions.delete_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
@@ -185,12 +185,12 @@ export const main = (event, context, callback) => {
     '/forum/{postId}/comments/{commentId}',
     (event, context, callback) => {
       forum_functions.delete_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.commentId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });

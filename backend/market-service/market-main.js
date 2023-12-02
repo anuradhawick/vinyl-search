@@ -1,4 +1,4 @@
-import { Router, builResponse } from './utils/lambda-router.js';
+import { Router, build_response } from './utils/lambda-router.js';
 import * as selling_functions from './selling-functions.js';
 
 
@@ -15,13 +15,13 @@ export const main = (event, context, callback) => {
     '/market/search',
     (event, context, callback) => {
       selling_functions.search_posts(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -38,13 +38,13 @@ export const main = (event, context, callback) => {
     '/market',
     (event, context, callback) => {
       selling_functions.fetch_posts(event.queryStringParameters).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -61,13 +61,13 @@ export const main = (event, context, callback) => {
     '/market/{postId}',
     (event, context, callback) => {
       selling_functions.fetch_post(event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -86,13 +86,13 @@ export const main = (event, context, callback) => {
         event.requestContext.authorizer.claims['custom:uid'],
         event.pathParameters.postId,
         event.body).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -111,13 +111,13 @@ export const main = (event, context, callback) => {
         event.requestContext.authorizer.claims['custom:uid'],
         event.body
       ).then((id) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...id,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -137,13 +137,13 @@ export const main = (event, context, callback) => {
         event.pathParameters.postId,
         event.body
       ).then((id) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           ...id,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           records: "ERROR",
           success: false
         }))
@@ -163,13 +163,13 @@ export const main = (event, context, callback) => {
   //       event.pathParameters.recordId,
   //       event.body
   //     ).then((recordId) => {
-  //       callback(null, builResponse(200, {
+  //       callback(null, build_response(200, {
   //         recordId,
   //         success: true
   //       }))
   //     }).catch((e) => {
   //       console.error(e)
-  //       callback(null, builResponse(500, {
+  //       callback(null, build_response(500, {
   //         records: "ERROR",
   //         success: false
   //       }))
@@ -187,13 +187,13 @@ export const main = (event, context, callback) => {
   //     record_functions.fetch_history(
   //       event.pathParameters.recordId
   //     ).then((history) => {
-  //       callback(null, builResponse(200, {
+  //       callback(null, build_response(200, {
   //         history,
   //         success: true
   //       }))
   //     }).catch((e) => {
   //       console.error(e);
-  //       callback(null, builResponse(500, {
+  //       callback(null, build_response(500, {
   //         records: "ERROR",
   //         success: false
   //       }))
@@ -211,13 +211,13 @@ export const main = (event, context, callback) => {
   //     record_functions.fetch_revision(
   //       event.pathParameters.revisionId
   //     ).then((record) => {
-  //       callback(null, builResponse(200, {
+  //       callback(null, build_response(200, {
   //         ...record,
   //         success: true
   //       }))
   //     }).catch((e) => {
   //       console.error(e);
-  //       callback(null, builResponse(500, {
+  //       callback(null, build_response(500, {
   //         records: "ERROR",
   //         success: false
   //       }))

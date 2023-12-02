@@ -48,7 +48,7 @@ export function ProxyRouter(event, context, callback) {
         handler(event, context, callback);
       } catch (e) {
         console.log(e);
-        this.callback(null, builResponse(500, "Data Error"));
+        this.callback(null, build_response(500, "Data Error"));
       }
     }
   }

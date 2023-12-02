@@ -25,7 +25,8 @@ resource "aws_api_gateway_deployment" "vinyl-lk" {
       aws_api_gateway_resource.admin_proxy,
       aws_api_gateway_method.any_admin_proxy,
       aws_api_gateway_method_response.any_admin_proxy,
-      module.lambda-admin-service,
+      aws_api_gateway_integration.any_admin_proxy,
+      aws_api_gateway_integration_response.any_admin_proxy,
       # forum
       aws_api_gateway_resource.forum,
       aws_api_gateway_method.get_forum,

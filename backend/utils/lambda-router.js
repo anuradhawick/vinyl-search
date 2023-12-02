@@ -13,13 +13,13 @@ export function Router(event, context, callback) {
         handler(event, context, callback);
       } catch (e) {
         console.log(e);
-        this.callback(null, builResponse(500, "Data Error"));
+        this.callback(null, build_response(500, "Data Error"));
       }
     }
   }
 }
 
-export function builResponse(statusCode, body) {
+export function build_response(statusCode, body) {
   return {
     statusCode,
     body: JSON.stringify(body),

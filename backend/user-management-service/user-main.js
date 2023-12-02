@@ -1,4 +1,4 @@
-import { Router, builResponse } from './utils/lambda-router.js';
+import { Router, build_response } from './utils/lambda-router.js';
 import * as user_functions from './user-functions.js';
 
 export const main = (event, context, callback) => {
@@ -15,13 +15,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.get_user(event.requestContext.authorizer.claims['custom:uid'])
         .then((user) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...user,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -38,13 +38,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.update_user(event.requestContext.authorizer.claims['custom:uid'], event.body)
         .then((user) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...user,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -61,13 +61,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.get_user_records(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((records) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...records,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -84,13 +84,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.get_user_forum_posts(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((user) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...user,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -107,12 +107,12 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
 
       user_functions.delete_forum_post(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
@@ -128,13 +128,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.get_user_market_posts(event.requestContext.authorizer.claims['custom:uid'], event.queryStringParameters)
         .then((user) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...user,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -152,13 +152,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       user_functions.mark_selling_item_as_sold(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postId)
         .then((user) => {
-          callback(null, builResponse(200, {
+          callback(null, build_response(200, {
             ...user,
             success: true
           }))
         }).catch((e) => {
           console.error(e);
-          callback(null, builResponse(500, {
+          callback(null, build_response(500, {
             records: "ERROR",
             success: false
           }))
@@ -175,12 +175,12 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
 
       user_functions.delete_record(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.recordId).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
@@ -196,12 +196,12 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
 
       user_functions.delete_marketplace_ad(event.requestContext.authorizer.claims['custom:uid'], event.pathParameters.postID).then((data) => {
-        callback(null, builResponse(200, {
+        callback(null, build_response(200, {
           success: true
         }));
       }).catch((e) => {
         console.error(e);
-        callback(null, builResponse(500, {
+        callback(null, build_response(500, {
           success: false
         }));
       });
