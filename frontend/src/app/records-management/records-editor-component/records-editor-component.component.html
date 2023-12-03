@@ -75,152 +75,142 @@
       <br />
       <h1>{{ editorTitle }}</h1>
       <hr />
-      <form [formGroup]="form" class="needs-validation" novalidate>
-        <div class="form-group">
-          <div class="row mb-1">
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Record Title"
-                  name="release-name"
-                  formControlName="name"
-                />
-                <mat-error *ngIf="form.controls.name.invalid"
-                  >Record required</mat-error
-                >
-              </mat-form-field>
-            </div>
-
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Artist Name"
-                  name="main-artist-name"
-                  formControlName="mainArtist"
-                />
-              </mat-form-field>
-            </div>
-
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <input
-                  matInput
-                  name="release-date"
-                  formControlName="date"
-                  type="text"
-                  placeholder="Date as YYYY-MM-DD"
-                />
-                <mat-error *ngIf="form.controls.date.invalid"
-                  >Date invalid</mat-error
-                >
-              </mat-form-field>
-            </div>
-          </div>
-          <hr />
-          <div class="row mb-1">
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Label"
-                  name="release-label"
-                  formControlName="label"
-                  required
-                />
-                <mat-error *ngIf="form.controls.label.invalid"
-                  >Label required</mat-error
-                >
-              </mat-form-field>
-            </div>
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Catalogue No."
-                  name="release-catalog"
-                  formControlName="catalogNo"
-                  required
-                />
-                <mat-error *ngIf="form.controls.catalogNo.invalid"
-                  >Catalogue No. required</mat-error
-                >
-              </mat-form-field>
-            </div>
-            <div class="col-4">
-              <mat-form-field class="w-100">
-                <mat-select
-                  formControlName="country"
-                  name="country"
-                  placeholder="Country of origin"
-                >
-                  <mat-option
-                    *ngFor="let c of countriesJSON"
-                    [value]="c.name"
-                    >{{ c.name }}</mat-option
-                  >
-                </mat-select>
-                <mat-error *ngIf="form.controls.country.invalid"
-                  >Country required</mat-error
-                >
-              </mat-form-field>
-            </div>
-          </div>
+      <form [formGroup]="form">
+        <div class="grid grid-cols-3 space-x-4">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              placeholder="Record Title"
+              name="release-name"
+              formControlName="name"
+            />
+            <mat-error *ngIf="form.controls.name.invalid"
+              >Record required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              placeholder="Artist Name"
+              name="main-artist-name"
+              formControlName="mainArtist"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              name="release-date"
+              formControlName="date"
+              type="text"
+              placeholder="Date as YYYY-MM-DD"
+            />
+            <mat-error *ngIf="form.controls.date.invalid"
+              >Date invalid</mat-error
+            >
+          </mat-form-field>
         </div>
-
         <hr />
-        <!-- <div class="form-group">
-          <div class="row">
-            <div class="col-3">
-              <mat-form-field class="w-100">
-                <mat-select placeholder="Channels" name="channel" formControlName="channelCoding">
-                  <mat-option value="Stereo">Stereo</mat-option>
-                  <mat-option value="Mono">Mono</mat-option>
-                  <mat-option value="Pseudo Stereo">Pseudo Stereo</mat-option>
-                  <mat-option value="Other/Unknown">Other/Unknown</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-            </div>
-            <div class="col-3">
-              <mat-form-field class="w-100">
-                <mat-select name="format" placeholder="Format" formControlName="format">
-                  <mat-option value="Vinyl">Vinyl</mat-option>
-                  <mat-option value="Acetate">Acetate</mat-option>
-                  <mat-option value="Flexi-Disc">Flexi-Disc</mat-option>
-                  <mat-option value="Lathe Cut">Lathe Cut</mat-option>
-                  <mat-option value="Shellac">Shellac</mat-option>
-                  <mat-option value="CD">CD</mat-option>
-                  <mat-option value="DVD">DVD</mat-option>
-                  <mat-option value="Mini Disc">Mini Disc</mat-option>
-                  <mat-option value="Cassette Tape">Cassette Tape</mat-option>
-                  <mat-option value="4-Track Cartridge">4-Track Cartridge</mat-option>
-                  <mat-option value="8-Track Cartridge">8-Track Cartridge</mat-option>
-                  <mat-option value="Other/Unknown">Other/Unknown</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-3">
-              <mat-form-field class="w-100">
-                <mat-select name="size" placeholder="Size" formControlName="size">
-                  <mat-option *ngFor="let c of sizesJSON" [value]="c">{{c}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-3">
-              <mat-form-field class="w-100">
-                <mat-select name="speed" placeholder="Speed" formControlName="speed">
-                  <mat-option *ngFor="let c of speedsJSON" [value]="c">{{c}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-        </div> -->
+        <div class="grid grid-cols-3 space-x-4">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              placeholder="Label"
+              name="release-label"
+              formControlName="label"
+              required
+            />
+            <mat-error *ngIf="form.controls.label.invalid"
+              >Label required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              placeholder="Catalogue No."
+              name="release-catalog"
+              formControlName="catalogNo"
+              required
+            />
+            <mat-error *ngIf="form.controls.catalogNo.invalid"
+              >Catalogue No. required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select
+              formControlName="country"
+              name="country"
+              placeholder="Country of origin"
+            >
+              <mat-option *ngFor="let c of countriesJSON" [value]="c.name">{{
+                c.name
+              }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls.country.invalid"
+              >Country required</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <hr />
+        <div class="grid grid-cols-4 space-x-4">
+          <mat-form-field>
+            <mat-select
+              placeholder="Channels"
+              name="channel"
+              formControlName="channelCoding"
+            >
+              <mat-option value="Stereo">Stereo</mat-option>
+              <mat-option value="Mono">Mono</mat-option>
+              <mat-option value="Pseudo Stereo">Pseudo Stereo</mat-option>
+              <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select
+              name="format"
+              placeholder="Format"
+              formControlName="format"
+            >
+              <mat-option value="Vinyl">Vinyl</mat-option>
+              <mat-option value="Acetate">Acetate</mat-option>
+              <mat-option value="Flexi-Disc">Flexi-Disc</mat-option>
+              <mat-option value="Lathe Cut">Lathe Cut</mat-option>
+              <mat-option value="Shellac">Shellac</mat-option>
+              <mat-option value="CD">CD</mat-option>
+              <mat-option value="DVD">DVD</mat-option>
+              <mat-option value="Mini Disc">Mini Disc</mat-option>
+              <mat-option value="Cassette Tape">Cassette Tape</mat-option>
+              <mat-option value="4-Track Cartridge"
+                >4-Track Cartridge</mat-option
+              >
+              <mat-option value="8-Track Cartridge"
+                >8-Track Cartridge</mat-option
+              >
+              <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select name="size" placeholder="Size" formControlName="size">
+              <mat-option *ngFor="let c of sizesJSON" [value]="c">{{
+                c
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select
+              name="speed"
+              placeholder="Speed"
+              formControlName="speed"
+            >
+              <mat-option *ngFor="let c of speedsJSON" [value]="c">{{
+                c
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
         <br />
         <!---->
         <div class="accordion">
@@ -236,7 +226,7 @@
                 </mat-chip>
               </mat-chip-listbox>
               <br />
-              <mat-form-field class="w-100">
+              <mat-form-field class="w-full">
                 <mat-chip-grid #genreList aria-label="Custom genres">
                   <mat-chip-row
                     *ngFor="let g of recordObject.genres"
@@ -273,7 +263,7 @@
                 </mat-chip>
               </mat-chip-listbox>
               <br />
-              <mat-form-field class="w-100">
+              <mat-form-field class="w-full">
                 <mat-chip-grid #styleList aria-label="Custom genres">
                   <mat-chip-row
                     *ngFor="let s of recordObject.styles"
@@ -544,7 +534,7 @@
             "
             [formGroupName]="i"
           >
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-full">
               <input
                 matInput
                 type="text"
@@ -580,7 +570,7 @@
             *ngFor="let songUrl of form.get('songUrls').controls; let i = index"
             [formGroupName]="i"
           >
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-full">
               <input
                 matInput
                 type="text"
@@ -608,7 +598,7 @@
           </div>
         </div>
         <hr />
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-full">
           <textarea
             matInput
             placeholder="Notes"

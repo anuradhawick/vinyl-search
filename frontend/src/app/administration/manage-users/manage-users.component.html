@@ -1,5 +1,39 @@
 <hr />
 <div class="container">
   <h3>Users</h3>
-  <hr>
+  <hr />
+  <mat-list>
+    @for (user of users; track $index) {
+      <mat-list-item class="hover:bg-slate-100">
+        <img
+          *ngIf="user.picture; else placeholder"
+          matListItemAvatar
+          [src]="user.picture"
+          alt="user avatar"
+        />
+        <ng-template #placeholder>
+          <img
+            matListItemAvatar
+            src="../../../assets/images/profile.png"
+            alt="Profile picture"
+          />
+        </ng-template>
+        <h3 matListItemTitle>{{ user.name }}</h3>
+        <p matListItemLine>
+          {{ user.email }}
+        </p>
+      </mat-list-item>
+    }
+  </mat-list>
+  <app-loader [hidden]="!loading"></app-loader>
+  <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
+    <mat-paginator
+      class="bg-slate-50"
+      showFirstLastButtons
+      [length]="count"
+      [pageSize]="limit"
+      [pageIndex]="page - 1"
+      (page)="changePage($event)"
+    ></mat-paginator>
+  </nav>
 </div>

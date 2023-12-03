@@ -2,6 +2,7 @@ import { build_response } from "./utils/lambda-router.js";
 import { ProxyRouter } from "./utils/lambda-proxy-router.js";
 import * as admin_functions from "./admin-functions";
 import * as admin_market_functions from "./admin-market-functions";
+import * as user_functions from "./user-functions";
 import _ from "lodash";
 
 const is_admin = (claims) => {
@@ -29,18 +30,19 @@ export const main = (event, context, callback) => {
     return callback(null, build_response(403, "Not an Admin"));
   }
 
+  // Users related
+
   /**
-   * get all admins
+   * get users
    */
-  router.route("GET", "admin-users", (event, context, callback) => {
-    admin_functions
-      .get_admin_users()
+  router.route("GET", "users", (event, context, callback) => {
+    user_functions
+      .get_users(event.queryStringParameters)
       .then((data) => {
         callback(
           null,
           build_response(200, {
-            users: data,
-            success: true,
+            ...data,
           })
         );
       })
@@ -59,13 +61,41 @@ export const main = (event, context, callback) => {
    * get user
    */
   router.route("GET", "users/{userUid}", (event, context, callback) => {
-    admin_functions
+    user_functions
       .get_user_by_uid(event.pathParameters.userUid)
       .then((data) => {
         callback(
           null,
           build_response(200, {
             ...data,
+          })
+        );
+      })
+      .catch((e) => {
+        console.error(e);
+        callback(
+          null,
+          build_response(500, {
+            success: false,
+          })
+        );
+      });
+  });
+
+  // Admins related
+
+  /**
+   * get all admins
+   */
+  router.route("GET", "admin-users", (event, context, callback) => {
+    admin_functions
+      .get_admin_users()
+      .then((data) => {
+        callback(
+          null,
+          build_response(200, {
+            users: data,
+            success: true,
           })
         );
       })
@@ -134,6 +164,8 @@ export const main = (event, context, callback) => {
       });
   });
 
+  // Records related
+
   /**
    * get all records
    */
@@ -184,6 +216,8 @@ export const main = (event, context, callback) => {
         );
       });
   });
+
+  // Forum related
 
   /**
    * get all forum posts
@@ -236,6 +270,8 @@ export const main = (event, context, callback) => {
       });
   });
 
+  // Reports related
+
   /**
    * get unresolved reports
    */
@@ -287,6 +323,8 @@ export const main = (event, context, callback) => {
         );
       });
   });
+
+  // Market related
 
   /**
    * get market posts

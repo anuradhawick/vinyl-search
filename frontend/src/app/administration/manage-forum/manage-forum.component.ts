@@ -12,12 +12,12 @@ import * as _ from 'lodash';
   styleUrls: ['./manage-forum.component.css'],
 })
 export class ManageForumComponent implements OnInit {
-  public loading = true;
-  public posts = null;
-  public skip = 0;
-  public limit = 10;
-  public count = 0;
-  public page = 1;
+  protected loading = true;
+  protected posts = null;
+  protected skip = 0;
+  protected limit = 10;
+  protected count = 0;
+  protected page = 1;
 
   constructor(
     private route: ActivatedRoute,
