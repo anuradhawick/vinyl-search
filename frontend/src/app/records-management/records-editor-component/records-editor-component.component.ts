@@ -19,10 +19,22 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
+  FormGroup,
   Validators,
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER } from '@angular/cdk/keycodes';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+// @ts-ignore
+import moment from 'moment';
 // @ts-ignore
 import genresJSON from '../../shared-modules/data/genres.json';
 // @ts-ignore
@@ -36,10 +48,30 @@ import descrJSON from '../../shared-modules/data/description.json';
 
 declare const $: any;
 
+export const DATE_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY MMM',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY MMMM',
+  },
+};
+
 @Component({
   selector: 'app-records-editor-component',
   templateUrl: './records-editor-component.component.html',
   styleUrls: ['./records-editor-component.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+  ],
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;
@@ -58,26 +90,16 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   public recordId: string = '';
 
-  // passed as prop
-  @Input()
-  set record(record: any) {
-    if (!_.isEmpty(record)) {
-      _.assign(this.recordObject, record);
-    }
-  }
-
+  @Input() record: any = null;
   @Input() public editorTitle = 'New Release Details';
-
   @Output() recordChange = new EventEmitter();
-
-  @Output()
-  readyStateChange = new EventEmitter<boolean>();
+  @Output() readyStateChange = new EventEmitter<boolean>();
 
   // current entry
   public recordObject: any = {
     chosenImage: 0,
     images: [],
-    date: null,
+    date: moment().format('YYYY-MM-DD'),
     genres: [],
     styles: [],
     descriptions: [],
@@ -128,7 +150,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     },
   };
 
-  public form: any;
+  public form!: FormGroup;
 
   constructor(
     private auth: AuthService,
@@ -138,15 +160,15 @@ export class RecordsEditorComponentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // patche the record from input to component
+    if (this.record) {
+      this.recordObject = _.cloneDeep(this.record);
+    }
+    // init the form
     this.form = this.fb.group({
       name: [this.recordObject.name, Validators.required],
-      mainArtist: [this.recordObject.mainArtist],
-      date: [
-        this.recordObject.date,
-        Validators.pattern(
-          /([1-2]{1}[0-9]{3}){1}(-((0)?[1-9]|1[0-2])(-[0-9]{1,2})?)?/,
-        ),
-      ],
+      mainArtist: [this.recordObject.mainArtist, Validators.required],
+      date: [this.recordObject.date, Validators.required],
       label: [this.recordObject.label, Validators.required],
       catalogNo: [this.recordObject.catalogNo, Validators.required],
       country: [this.recordObject.country, Validators.required],
@@ -208,8 +230,12 @@ export class RecordsEditorComponentComponent implements OnInit {
       ),
       notes: [this.recordObject.notes],
     });
+
+    // update record object to keep UI up to date
     this.form.valueChanges.subscribe((values: any) => {
       _.assign(this.recordObject, values);
+      // reformat date as string
+      this.recordObject.date = moment(values.date).format('DD-MM-YYYY');
     });
 
     const genres: any = [];
@@ -235,13 +261,14 @@ export class RecordsEditorComponentComponent implements OnInit {
       },
     });
 
-    this.imageDeleteButton();
     this.loadStyles();
   }
 
   resort(arr: any) {
     const new_index = _.map(arr, (item) => Number(_.split(item, '-').pop()));
-    const oldTracks = _.cloneDeep(this.form.get('tracks').controls);
+    const oldTracks = _.cloneDeep(
+      (this.form.get('tracks') as FormArray).controls,
+    );
     const updatedTracks: any = [];
 
     _.each(new_index, (i) => {
@@ -250,18 +277,21 @@ export class RecordsEditorComponentComponent implements OnInit {
 
     this.ngZone.run(() => {
       _.each(new_index, (i) => {
-        this.form.get('tracks').setControl(i, updatedTracks[i]);
+        (this.form.get('tracks') as FormArray).setControl(i, updatedTracks[i]);
       });
     });
   }
 
   autoIndex() {
-    _.each(this.form.get('tracks').controls, (control: FormControl, index) => {
-      const value = control.value;
+    _.each(
+      (this.form.get('tracks') as FormArray<FormGroup>).controls,
+      (control: FormGroup, index: number) => {
+        const value = control.value;
 
-      _.assign(value, { index: index + 1 });
-      control.setValue(value);
-    });
+        _.assign(value, { index: index + 1 });
+        control.setValue(value);
+      },
+    );
   }
 
   appendTrack(tracks: FormArray) {
@@ -426,10 +456,7 @@ export class RecordsEditorComponentComponent implements OnInit {
 
   getReleaseData() {
     if (this.form.invalid) {
-      Object.keys(this.form.controls).forEach((field) => {
-        const control = this.form.get(field);
-        control.markAsTouched({ onlySelf: true });
-      });
+      this.form.markAllAsTouched();
       return false;
     } else if (this.uploadCount > 0) {
       this.toastr.warning(
@@ -476,7 +503,6 @@ export class RecordsEditorComponentComponent implements OnInit {
               }
               observer.complete();
               _.remove(this.percentages, (p) => p === progressObserver);
-              this.imageDeleteButton();
             })
             .catch(() => {
               this.toastr.error(
@@ -495,23 +521,6 @@ export class RecordsEditorComponentComponent implements OnInit {
       });
       event.target.value = '';
     }
-  }
-
-  imageDeleteButton() {
-    // console.log(this.recordObject.images)
-    // _.assign(this.imgvconfig, {customBtns});
-    // this.ngZone.run(() => {
-    //   let customBtns = [{name: 'delete', icon: 'delete'}];
-    //
-    //   if (_.isEmpty(this.recordObject.images)) {
-    //     customBtns = [];
-    //     this.imgvconfig.customBtns.pop()
-    //   }
-    //   this.imgvconfig.customBtns = customBtns;
-    // });
-    // if (_.isEmpty(this.recordObject.images)) {
-    //   this.toastr.warning('No more images to remove', 'Ops!');
-    // }
   }
 
   handleEvent(event: any) {
@@ -590,6 +599,5 @@ export class RecordsEditorComponentComponent implements OnInit {
     const removeItem = this.recordObject.images[index];
     this.recordObject.chosenImage = 0;
     _.remove(this.recordObject.images, (item) => _.isEqual(item, removeItem));
-    this.imageDeleteButton();
   }
 }

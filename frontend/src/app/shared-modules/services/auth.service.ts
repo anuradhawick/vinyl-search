@@ -116,7 +116,7 @@ export class AuthService {
 
   async getToken() {
     try {
-      const session  = await fetchAuthSession();
+      const session = await fetchAuthSession();
       return session.tokens!.idToken!.toString();
     } catch (e) {
       return 'null';

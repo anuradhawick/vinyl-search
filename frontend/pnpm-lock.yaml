@@ -26,6 +26,9 @@ dependencies:
   '@angular/material':
     specifier: ^17.0.2
     version: 17.0.2(@angular/animations@17.0.5)(@angular/cdk@17.0.2)(@angular/common@17.0.5)(@angular/core@17.0.5)(@angular/forms@17.0.5)(@angular/platform-browser@17.0.5)(rxjs@7.8.1)
+  '@angular/material-moment-adapter':
+    specifier: ^17.0.2
+    version: 17.0.2(@angular/core@17.0.5)(@angular/material@17.0.2)(moment@2.29.4)
   '@angular/platform-browser':
     specifier: ^17.0.5
     version: 17.0.5(@angular/animations@17.0.5)(@angular/common@17.0.5)(@angular/core@17.0.5)
@@ -65,6 +68,9 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  moment:
+    specifier: ^2.29.4
+    version: 2.29.4
   ngx-toastr:
     specifier: ^18.0.0
     version: 18.0.0(@angular/common@17.0.5)(@angular/core@17.0.5)(@angular/platform-browser@17.0.5)
@@ -459,6 +465,19 @@ packages:
       '@angular/core': 17.0.5(rxjs@7.8.1)(zone.js@0.14.2)
       '@angular/platform-browser': 17.0.5(@angular/animations@17.0.5)(@angular/common@17.0.5)(@angular/core@17.0.5)
       rxjs: 7.8.1
+      tslib: 2.6.2
+    dev: false
+
+  /@angular/material-moment-adapter@17.0.2(@angular/core@17.0.5)(@angular/material@17.0.2)(moment@2.29.4):
+    resolution: {integrity: sha512-oVaGuFzlVd6qaAYN4MY79QUOtqEia+NqNjJq408rDuxrz67P9aiV0TFcy9J++KueEHQhzh1U92GfjrqG6R3jyQ==}
+    peerDependencies:
+      '@angular/core': ^17.0.0 || ^18.0.0
+      '@angular/material': 17.0.2
+      moment: ^2.18.1
+    dependencies:
+      '@angular/core': 17.0.5(rxjs@7.8.1)(zone.js@0.14.2)
+      '@angular/material': 17.0.2(@angular/animations@17.0.5)(@angular/cdk@17.0.2)(@angular/common@17.0.5)(@angular/core@17.0.5)(@angular/forms@17.0.5)(@angular/platform-browser@17.0.5)(rxjs@7.8.1)
+      moment: 2.29.4
       tslib: 2.6.2
     dev: false
 
@@ -7668,6 +7687,10 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
+
+  /moment@2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
 
   /mrmime@1.0.1:
     resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}

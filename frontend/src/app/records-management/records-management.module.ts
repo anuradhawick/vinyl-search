@@ -13,6 +13,8 @@ import { SharedModules } from '../shared-modules/shared.module';
 import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
 import { RecordsService } from './services/records.service';
 import { ChooseFilterComponent } from './modals/choose-filter/choose-filter.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ChooseFilterComponent } from './modals/choose-filter/choose-filter.comp
     RecordsManagementRoutingModule,
     FormsModule,
     SharedModules,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [RecordsService],
 })

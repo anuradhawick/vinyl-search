@@ -111,7 +111,8 @@ export class UpdateDetailsComponent implements OnInit {
       options: {
         accessLevel: 'guest',
         onProgress: (progress: any) => {
-          this.uploadingProgress = (progress.transferredBytes * 100) / progress.totalBytes;
+          this.uploadingProgress =
+            (progress.transferredBytes * 100) / progress.totalBytes;
         },
       },
     })

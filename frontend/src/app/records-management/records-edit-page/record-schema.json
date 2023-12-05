@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "chosenImage": { "type": "integer" },
+    "images": { "type": "array", "items": { "type": "string" } },
+    "date": { "type": "string", "format": "date" },
+    "genres": { "type": "array", "items": { "type": "string" } },
+    "styles": { "type": "array", "items": { "type": "string" } },
+    "descriptions": { "type": "array", "items": { "type": "string" } },
+    "speed": { "type": "string" },
+    "size": { "type": "string" },
+    "country": { "type": "string" },
+    "tracks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": { "type": "string" },
+          "artists": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": { "type": "integer" },
+                "name": { "type": "string" }
+              },
+              "required": ["index", "name"]
+            }
+          },
+          "title": { "type": "string" },
+          "credits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": { "type": "integer" },
+                "text": { "type": "string" }
+              },
+              "required": ["index", "text"]
+            }
+          },
+          "duration": { "type": "string" }
+        },
+        "required": ["index", "artists", "title", "credits", "duration"]
+      }
+    },
+    "notes": { "type": "string" },
+    "commonCredits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": { "type": "integer" },
+          "text": { "type": "string" }
+        },
+        "required": ["index", "text"]
+      }
+    },
+    "songUrls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": { "type": "integer" },
+          "text": { "type": "string", "format": "uri" }
+        },
+        "required": ["index", "text"]
+      }
+    },
+    "name": { "type": "string" },
+    "label": { "type": "string" },
+    "mainArtist": { "type": "string" },
+    "catalogNo": { "type": "string" },
+    "format": { "type": "string" },
+    "channelCoding": { "type": "string" }
+  },
+  "required": [
+    "chosenImage",
+    "images",
+    "date",
+    "genres",
+    "styles",
+    "descriptions",
+    "speed",
+    "size",
+    "country",
+    "tracks",
+    "notes",
+    "commonCredits",
+    "songUrls",
+    "name",
+    "label",
+    "mainArtist",
+    "catalogNo",
+    "format",
+    "channelCoding"
+  ]
+}
