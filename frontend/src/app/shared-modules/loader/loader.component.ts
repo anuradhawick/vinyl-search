@@ -8,9 +8,11 @@ import { isPlatformServer } from '@angular/common';
 })
 export class LoaderComponent implements OnInit {
   @Input() public hidden;
+  @Input() public loading;
 
   constructor(@Inject(PLATFORM_ID) private platformId: any) {
     this.hidden = true;
+    this.loading = !this.hidden;
   }
 
   ngOnInit() {}
@@ -20,6 +22,7 @@ export class LoaderComponent implements OnInit {
       return;
     }
     this.hidden = false;
+    this.loading = !this.hidden;
   }
 
   hide() {
@@ -27,6 +30,7 @@ export class LoaderComponent implements OnInit {
       return;
     }
     this.hidden = true;
+    this.loading = !this.hidden;
   }
 
   isHidden() {

@@ -3,6 +3,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { v4 as uuid } from 'uuid';
 import { uploadData } from 'aws-amplify/storage';
 import { environment } from '../../../environments/environment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-forum-editor-component',
@@ -11,16 +12,14 @@ import { environment } from '../../../environments/environment';
 })
 export class ForumEditorComponentComponent implements OnInit {
   @Input() imageProgress = 0;
-  @Output() imageProgressChange = new EventEmitter();
-  public Editor = ClassicEditor;
   @Input() title!: any;
-  @Output() titleChange = new EventEmitter();
   @Input() data!: any;
-  @Output() dataChange = new EventEmitter();
   @Input() editorDisabled!: any;
   @Input() is_reply = false;
-
-  constructor() {}
+  @Output() imageProgressChange = new EventEmitter();
+  @Output() dataChange = new EventEmitter();
+  @Output() titleChange = new EventEmitter();
+  protected Editor = ClassicEditor;
 
   onReady(Editor: any) {
     Editor.plugins.get('FileRepository').createUploadAdapter = (
@@ -66,7 +65,7 @@ class MyUploadAdapter {
             this.ref.imageProgressChange.emit(this.ref.imageProgress);
 
             resolve({
-              default: `https://${environment.aws_config.Storage.S3.bucket}.s3-${environment.aws_config.Storage.S3.region}.amazonaws.com/temp/${filename}`,
+              default: `${environment.cdn_url}temp/${filename}`,
             });
           })
           .catch((e: any) => {

@@ -11,6 +11,7 @@ import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-
 import { TitleTagService } from '../../shared-modules/services/title-tag.service';
 import { Observable } from 'rxjs';
 
+// TODO Edit/Delete not visible
 @Component({
   selector: 'app-forum-view-page',
   templateUrl: './forum-view-page.component.html',
@@ -40,7 +41,7 @@ export class ForumViewPageComponent implements OnInit {
     private dialog: MatDialog,
     private tagService: TitleTagService,
   ) {
-    this.user = auth.user.asObservable();
+    this.user = auth.user;
     this.tagService.setTitle('Vinyl.LK: The Forum');
     this.tagService.setSocialMediaTags(
       'http://www.vinyl.lk',

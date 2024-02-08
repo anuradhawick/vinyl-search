@@ -63,7 +63,7 @@
 <!--End Search-->
 <div
   *ngIf="
-    loader.isHidden() &&
+    !loading &&
     !_.isEmpty(_.trim(_.get(route.queryParams | async, 'query')))
   "
   class="ml-5 mr-5 mt-1 mb-2 text-dark"
@@ -89,34 +89,37 @@
     </mat-card>
   </div>
   <div class="w-full md:w-3/4 p-2">
-    <app-loader #forumloader></app-loader>
-    <mat-card>
-      <mat-card-content>
-        <mat-list class="p-0">
-          @for (post of $any(posts); track $index) {
-            <mat-list-item
-              role="listitem"
-              [routerLink]="[post.id, 'view']"
-              class="hover:bg-slate-100"
-              style="cursor: pointer !important"
-            >
-              <img
-                matListItemAvatar
-                src="/assets/images/records-new-sample.svg"
-              />
-              <h3 matListItemTitle>{{ post.postTitle }}</h3>
-              <p matListItemLine>
-                posted on: {{ post.createdAt | date: "medium" }}
-              </p>
-            </mat-list-item>
-          }
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
+    @if (loading) {
+      <app-loader [loading]="true"></app-loader>
+    } @else {
+      <mat-card>
+        <mat-card-content>
+          <mat-list class="p-0">
+            @for (post of $any(posts); track $index) {
+              <mat-list-item
+                role="listitem"
+                [routerLink]="[post.id, 'view']"
+                class="hover:bg-slate-100"
+                style="cursor: pointer !important"
+              >
+                <img
+                  matListItemAvatar
+                  src="/assets/images/records-new-sample.svg"
+                />
+                <h3 matListItemTitle>{{ post.postTitle }}</h3>
+                <p matListItemLine>
+                  posted on: {{ post.createdAt | date: "medium" }}
+                </p>
+              </mat-list-item>
+            }
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    }
   </div>
 </div>
 
-<nav *ngIf="count > limit && loader.isHidden()">
+<nav *ngIf="count > limit && !loading">
   <mat-paginator
     class="bg-slate-50"
     showFirstLastButtons

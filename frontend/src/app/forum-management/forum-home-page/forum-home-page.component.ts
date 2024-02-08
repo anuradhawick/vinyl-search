@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ForumService } from '../services/forum.service';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-forum-home-page',
@@ -12,22 +12,21 @@ import { Observable } from 'rxjs';
   styleUrls: ['./forum-home-page.component.css'],
 })
 export class ForumHomePageComponent implements OnInit {
-  public posts = null;
-  public skip = 0;
-  public limit = 10;
-  public count = 0;
-  public page = 1;
-  public autocomplete: Observable<any> = new Observable();
-  public _ = _;
-  public query: string = '';
-
-  @ViewChild('forumloader', { static: true }) loader!: LoaderComponent;
+  protected posts = null;
+  protected skip = 0;
+  protected limit = 10;
+  protected count = 0;
+  protected page = 1;
+  protected autocomplete: Observable<any> = new Observable();
+  protected _ = _;
+  protected query: string = '';
+  protected loading: boolean = false;
 
   constructor(
-    public forumService: ForumService,
-    public route: ActivatedRoute,
-    public router: Router,
-    public auth: AuthService,
+    protected forumService: ForumService,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected auth: AuthService,
   ) {}
 
   ngOnInit() {
@@ -36,7 +35,6 @@ export class ForumHomePageComponent implements OnInit {
       const page = _.max([_.get(p, 'page', 1), 1]);
       this.skip = (page - 1) * this.limit;
       this.page = page;
-      this.loader.show();
       this.query = _.get(p, 'query', '');
       if (_.isEmpty(_.trim(this.query))) {
         this.loadPosts();
@@ -47,34 +45,41 @@ export class ForumHomePageComponent implements OnInit {
   }
 
   loadPosts() {
-    const data = this.forumService.fetch_posts({
-      limit: this.limit,
-      skip: this.skip,
-    });
-
-    data.subscribe((postsList: any) => {
-      this.posts = postsList.posts;
-      this.skip = postsList.skip;
-      this.limit = postsList.limit;
-      this.count = _.get(postsList, 'count', 0);
-      this.loader.hide();
-    });
+    this.loading = true;
+    this.forumService
+      .fetch_posts({
+        limit: this.limit,
+        skip: this.skip,
+      })
+      .pipe(catchError(() => of(null)))
+      .subscribe((postsList: any) => {
+        if (postsList) {
+          this.posts = postsList.posts;
+          this.skip = postsList.skip;
+          this.limit = postsList.limit;
+          this.count = _.get(postsList, 'count', 0);
+        } else {
+          alert('Unable to load');
+        }
+        this.loading = false;
+      });
   }
 
   loadSearchPage() {
-    const data = this.forumService.search_posts({
-      limit: this.limit,
-      skip: this.skip,
-      query: this.query,
-    });
-
-    data.subscribe((postsList: any) => {
-      this.posts = postsList.posts;
-      this.skip = postsList.skip;
-      this.limit = postsList.limit;
-      this.count = postsList.count;
-      this.loader.hide();
-    });
+    this.loading = true;
+    this.forumService
+      .search_posts({
+        limit: this.limit,
+        skip: this.skip,
+        query: this.query,
+      })
+      .subscribe((postsList: any) => {
+        this.posts = postsList.posts;
+        this.skip = postsList.skip;
+        this.limit = postsList.limit;
+        this.count = postsList.count;
+        this.loading = false;
+      });
   }
 
   loadAutoComplete(event: any) {

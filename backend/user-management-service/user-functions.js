@@ -48,12 +48,25 @@ export async function update_user(uid_str, userdata) {
   return newUserData;
 };
 
-
 export async function get_user(uid_str) {
   const db = await connect_db();
   const uid = new ObjectId(uid_str);
-
-  return await db.collection('users').findOne({ _id: uid });
+  const data = await db.collection('users').aggregate([
+    {
+      $match:
+        {
+          _id: uid,
+        },
+    },
+    {
+      $addFields:
+        {
+          uid: "$_id",
+        },
+    },
+  ]).toArray()
+  
+  return data[0]
 };
 
 export async function get_user_records(uid_str, query_params) {
