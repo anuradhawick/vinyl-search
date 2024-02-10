@@ -12,8 +12,8 @@ import { AdminActionConfirmModalComponent } from '../../modals/admin-action-conf
   styleUrls: ['./pending-ads.component.css'],
 })
 export class PendingAdsComponent implements OnInit {
+  public posts: any = null;
   public loading = true;
-  public posts = null;
   public skip = 0;
   public limit = 10;
   public count = 0;

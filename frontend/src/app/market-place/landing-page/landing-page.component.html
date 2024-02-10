@@ -12,21 +12,21 @@
           placeholder="Search marketplace..."
           name="search-query"
           [(ngModel)]="query"
-        />
+          />
         <button
           mat-button
           class="btn btn-default"
           type="button"
           (click)="search()"
-        >
+          >
           Search
         </button>
-        <div
-          *ngIf="(autocomplete | async)?.posts.length > 0"
-          style="background-color: #fff; left: 0"
-        >
+        @if ((autocomplete | async)?.posts.length > 0) {
           <div
-            style="
+            style="background-color: #fff; left: 0"
+            >
+            <div
+              style="
               z-index: 99;
               position: absolute;
               top: 100%;
@@ -34,52 +34,44 @@
               right: 0;
               background-color: #fff;
               overflow: hidden;
-            "
-          >
-            <table class="table table-hover table-bordered shadow">
-              <tbody>
-                <tr *ngFor="let r of (autocomplete | async)?.posts">
-                  <td>
-                    <a [routerLink]="['/market', r.id, 'view']">
-                      <strong>{{ _.truncate(r.name, { length: 60 }) }}</strong>
-                      <br />
-                      <div class="blockquote-footer">
-                        {{ _.truncate(r.label, { length: 60 }) }}
-                      </div>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              "
+              >
+              <table class="table table-hover table-bordered shadow">
+                <tbody>
+                  @for (r of (autocomplete | async)?.posts; track r) {
+                    <tr>
+                      <td>
+                        <a [routerLink]="['/market', r.id, 'view']">
+                          <strong>{{ _.truncate(r.name, { length: 60 }) }}</strong>
+                          <br />
+                          <div class="blockquote-footer">
+                            {{ _.truncate(r.label, { length: 60 }) }}
+                          </div>
+                        </a>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
+        }
+      </div>
+    </div>
+    @if (auth.isLoggedIn) {
+      <div class="col-sm-6 col-3">
+        <div class="float-right">
+          <button
+            mat-button
+            type="button"
+            class="btn btn-default"
+            routerLink="/market/new"
+            >
+            Add
+          </button>
         </div>
       </div>
-    </div>
-    <div *ngIf="auth.isLoggedIn; else showLogin" class="col-sm-6 col-3">
-      <div class="float-right">
-        <button
-          mat-button
-          type="button"
-          class="btn btn-default"
-          routerLink="/market/new"
-        >
-          Add
-        </button>
-      </div>
-    </div>
-    <div
-      *ngIf="
-        loader.isHidden() &&
-        !_.isEmpty(_.trim(_.get(route.queryParams | async, 'query')))
-      "
-      class="ml-3 mr-5 mt-2 text-dark"
-    >
-      Search results for - <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
-        [routerLink]="['/market']"
-        >cancel</a
-      >)
-    </div>
-    <ng-template #showLogin>
+    } @else {
       <div class="col-sm-6 col-3">
         <div class="float-right">
           <button
@@ -87,12 +79,25 @@
             type="button"
             class="btn btn-success"
             (click)="auth.login()"
-          >
+            >
             Login!
           </button>
         </div>
       </div>
-    </ng-template>
+    }
+    @if (
+      loader.isHidden() &&
+      !_.isEmpty(_.trim(_.get(route.queryParams | async, 'query')))
+      ) {
+      <div
+        class="ml-3 mr-5 mt-2 text-dark"
+        >
+        Search results for - <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
+        [routerLink]="['/market']"
+        >cancel</a
+        >)
+      </div>
+    }
   </div>
 </div>
 <hr />
@@ -106,75 +111,81 @@
             mat-raised-button
             (click)="toggleFilter(node.saleType, node.saleSubtype)"
             class="m-0 btn-block text-left"
-          >
-            <mat-icon
-              *ngIf="!!selectedFilters[node.saleType + '.' + node.saleSubtype]"
-              >done</mat-icon
             >
-            {{ node.name }}
-          </button>
-        </mat-tree-node>
-        <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
-          <button
-            mat-raised-button
-            color="primary"
-            class="m-0 btn-block text-left"
-            matTreeNodeToggle
-          >
-            <mat-icon class="mat-icon-rtl-mirror">
-              {{
+            @if (!!selectedFilters[node.saleType + '.' + node.saleSubtype]) {
+              <mat-icon
+                >done</mat-icon
+                >
+              }
+              {{ node.name }}
+            </button>
+          </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild">
+            <button
+              mat-raised-button
+              color="primary"
+              class="m-0 btn-block text-left"
+              matTreeNodeToggle
+              >
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{
                 treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
-              }}
-            </mat-icon>
-            {{ node.name }}
-          </button>
-        </mat-tree-node>
-      </mat-tree>
-    </div>
-  </div>
-  <div class="col-12 col-lg-9">
-    <div class="container">
-      <app-loader #loader></app-loader>
-      <div class="container">
-        <div *ngIf="records | async as posts" class="row">
-          <div
-            *ngFor="let r of posts.posts"
-            class="col-lg-2 col-sm-4 col-6 p-2"
-          >
-            <div class="card m-0 w-100">
-              <div class="">
-                <a [routerLink]="['/market', r.id, 'view']" class="thumbnail">
-                  <div class="image" style="background-color: #d5d5d5">
-                    <img
-                      style="object-fit: cover"
-                      [src]="
-                        r.images[r.chosenImage] ||
-                        '/assets/images/records-new-sample.svg'
-                      "
-                      class="img img-responsive"
-                    />
-                  </div>
-                  <h6 class="m-1 text-truncate">{{ r.name }}</h6>
-                  <p class="m-1 text-truncate">{{ r.label }}</p>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+                }}
+              </mat-icon>
+              {{ node.name }}
+            </button>
+          </mat-tree-node>
+        </mat-tree>
       </div>
-      <br />
-      <nav
-        *ngIf="(records | async) && count > limit"
-        aria-label="Page navigation"
-      >
-        <mat-paginator
-          showFirstLastButtons
-          [length]="count"
-          [pageSize]="limit"
-          [pageIndex]="page - 1"
-          (page)="changePage($event)"
-        ></mat-paginator>
-      </nav>
+    </div>
+    <div class="col-12 col-lg-9">
+      <div class="container">
+        <app-loader #loader></app-loader>
+        <div class="container">
+          @if (records | async; as posts) {
+            <div class="row">
+              @for (r of posts.posts; track r) {
+                <div
+                  class="col-lg-2 col-sm-4 col-6 p-2"
+                  >
+                  <div class="card m-0 w-100">
+                    <div class="">
+                      <a [routerLink]="['/market', r.id, 'view']" class="thumbnail">
+                        <div class="image" style="background-color: #d5d5d5">
+                          <img
+                            style="object-fit: cover"
+                            [src]="
+                            r.images[r.chosenImage] ||
+                            '/assets/images/records-new-sample.svg'
+                            "
+                            class="img img-responsive"
+                            />
+                        </div>
+                        <h6 class="m-1 text-truncate">{{ r.name }}</h6>
+                        <p class="m-1 text-truncate">{{ r.label }}</p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <br />
+        @if ((records | async) && count > limit) {
+          <nav
+            aria-label="Page navigation"
+            >
+            <mat-paginator
+              showFirstLastButtons
+              [length]="count"
+              [pageSize]="limit"
+              [pageIndex]="page - 1"
+              (page)="changePage($event)"
+            ></mat-paginator>
+          </nav>
+        }
+      </div>
     </div>
   </div>
-</div>
+  

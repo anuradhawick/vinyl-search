@@ -12,8 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./manage-records.component.css'],
 })
 export class ManageRecordsComponent implements OnInit {
-  public loading = true;
-  public records = null;
+  public loading: boolean = true;
+  public records: any = null;
   public skip = 0;
   public limit = 10;
   public count = 0;

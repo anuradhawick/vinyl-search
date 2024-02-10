@@ -1,12 +1,13 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
   <mat-chip-listbox multiple>
-    <mat-chip-option
-      [selected]="isSelected(c)"
-      *ngFor="let c of data.all; let i = index"
-      (click)="toggleFilter(c)"
-      >{{ c }}
-    </mat-chip-option>
+    @for (c of data.all; track c; let i = $index) {
+      <mat-chip-option
+        [selected]="isSelected(c)"
+        (click)="toggleFilter(c)"
+        >{{ c }}
+      </mat-chip-option>
+    }
   </mat-chip-listbox>
 </div>
 <br />
@@ -19,7 +20,7 @@
     type="button"
     color="primary"
     (click)="done(selected, true)"
-  >
+    >
     Done
   </button>
 </div>

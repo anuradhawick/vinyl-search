@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 })
 export class MyMarketComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
-  public posts = null;
+  public posts: any = null;
   public skip = 0;
   public limit = 10;
   public count = 0;

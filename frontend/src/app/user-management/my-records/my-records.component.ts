@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MyRecordsComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
-  public records = null;
+  public records: any = null;
   public skip = 0;
   public limit = 10;
   public count = 0;

@@ -36,6 +36,7 @@ export async function get_admin_users() {
       name: 1,
       email: 1,
       picture: 1,
+      uid: "$_id",
     })
     .toArray();
 }

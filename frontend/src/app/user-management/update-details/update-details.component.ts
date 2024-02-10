@@ -98,7 +98,7 @@ export class UpdateDetailsComponent implements OnInit {
     }
 
     const file: File = this.uploadableFile;
-    const filename = `${this.user._id}.${file.name.split('.').pop() || ''}`;
+    const filename = `${this.user.uid}.${file.name.split('.').pop() || ''}`;
 
     this.uploadableFile = null;
     this.uploadImageUrl = null;

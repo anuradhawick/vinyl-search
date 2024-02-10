@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 })
 export class AllAdsComponent implements OnInit {
   public loading = true;
-  public posts = null;
+  public posts: any = null;
   public skip = 0;
   public limit = 10;
   public count = 0;

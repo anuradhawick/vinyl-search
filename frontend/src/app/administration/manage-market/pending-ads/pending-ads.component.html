@@ -4,65 +4,68 @@
   <hr />
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
-    <mat-list-item
-      *ngFor="let p of posts"
-      role="listitem"
-      class="hover:bg-slate-100"
-    >
-      <img
-        matListItemAvatar
-        [src]="
+    @for (p of posts; track p) {
+      <mat-list-item
+        role="listitem"
+        class="hover:bg-slate-100"
+        >
+        <img
+          matListItemAvatar
+          [src]="
           p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
-        "
-        alt="..."
-      />
-      <h3 matListItemTitle>{{ p.name }}</h3>
-      <p matListItemLine>
-        posted on: {{ p.createdAt | date: "medium" }}
-        <span class="absolute top-0 right-0 h-full pt-[12px]">
-          <a
-            mat-icon-button
-            color="primary"
-            [routerLink]="['/admin/market', p.id, 'edit']"
-          >
-            <mat-icon>edit</mat-icon>
-          </a>
-          <a
-            mat-icon-button
-            color="primary"
-            [routerLink]="[]"
-            (click)="approve(p.id)"
-          >
-            <mat-icon>check_circle</mat-icon>
-          </a>
-          <a
-            mat-icon-button
-            color="primary"
-            [routerLink]="[]"
-            (click)="reject(p.id)"
-          >
-            <mat-icon>cancel</mat-icon>
-          </a>
-          <a
-            mat-icon-button
-            color="primary"
-            target="_blank"
-            [routerLink]="['/market', p.id, 'view']"
-          >
-            <mat-icon>open_in_new</mat-icon>
-          </a>
-        </span>
-      </p>
-    </mat-list-item>
+          "
+          alt="..."
+          />
+        <h3 matListItemTitle>{{ p.name }}</h3>
+        <p matListItemLine>
+          posted on: {{ p.createdAt | date: "medium" }}
+          <span class="absolute top-0 right-0 h-full pt-[12px]">
+            <a
+              mat-icon-button
+              color="primary"
+              [routerLink]="['/admin/market', p.id, 'edit']"
+              >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a
+              mat-icon-button
+              color="primary"
+              [routerLink]="[]"
+              (click)="approve(p.id)"
+              >
+              <mat-icon>check_circle</mat-icon>
+            </a>
+            <a
+              mat-icon-button
+              color="primary"
+              [routerLink]="[]"
+              (click)="reject(p.id)"
+              >
+              <mat-icon>cancel</mat-icon>
+            </a>
+            <a
+              mat-icon-button
+              color="primary"
+              target="_blank"
+              [routerLink]="['/market', p.id, 'view']"
+              >
+              <mat-icon>open_in_new</mat-icon>
+            </a>
+          </span>
+        </p>
+      </mat-list-item>
+    }
   </mat-list>
-  <nav *ngIf="count > limit && !loading" aria-label="Page navigation">
-    <mat-paginator
-      class="bg-slate-50"
-      showFirstLastButtons
-      [length]="count"
-      [pageSize]="limit"
-      [pageIndex]="page - 1"
-      (page)="changePage($event)"
-    ></mat-paginator>
-  </nav>
+  @if (count > limit && !loading) {
+    <nav aria-label="Page navigation">
+      <mat-paginator
+        class="bg-slate-50"
+        showFirstLastButtons
+        [length]="count"
+        [pageSize]="limit"
+        [pageIndex]="page - 1"
+        (page)="changePage($event)"
+      ></mat-paginator>
+    </nav>
+  }
 </div>

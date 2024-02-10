@@ -1,37 +1,38 @@
 <div class="mt-[-60px] mx-[30px] relative bg-slate-50 rounded-md shadow-xl">
   <br />
   <app-loader #loader [hidden]="!!postObject"></app-loader>
-  <div *ngIf="postObject">
-    <app-post-editor
-      #editor
-      [(post)]="postObject"
-      (readyStateChange)="readyChange($event)"
-    ></app-post-editor>
-
-    <div class="row col-12">
-      <div class="col-12 col-sm-9 offset-3">
-        <div class="container-fluid">
-          <button
-            mat-raised-button
-            type="button"
-            [routerLink]="['/profile/market']"
-            [disabled]="!ready"
-          >
-            Discard
-          </button>
-          <button
-            mat-raised-button
-            type="button"
-            class="ml-1"
-            color="primary"
-            (click)="save()"
-            [disabled]="!ready"
-          >
-            Update
-          </button>
+  @if (postObject) {
+    <div>
+      <app-post-editor
+        #editor
+        [(post)]="postObject"
+        (readyStateChange)="readyChange($event)"
+      ></app-post-editor>
+      <div class="row col-12">
+        <div class="col-12 col-sm-9 offset-3">
+          <div class="container-fluid">
+            <button
+              mat-raised-button
+              type="button"
+              [routerLink]="['/profile/market']"
+              [disabled]="!ready"
+              >
+              Discard
+            </button>
+            <button
+              mat-raised-button
+              type="button"
+              class="ml-1"
+              color="primary"
+              (click)="save()"
+              [disabled]="!ready"
+              >
+              Update
+            </button>
+          </div>
+          <br />
         </div>
-        <br />
       </div>
     </div>
-  </div>
+  }
 </div>

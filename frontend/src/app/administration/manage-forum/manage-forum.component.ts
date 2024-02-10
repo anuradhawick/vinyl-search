@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 })
 export class ManageForumComponent implements OnInit {
   protected loading = true;
-  protected posts = null;
+  protected posts: any = null;
   protected skip = 0;
   protected limit = 10;
   protected count = 0;

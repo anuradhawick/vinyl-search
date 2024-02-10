@@ -9,10 +9,10 @@
               <app-image-viewer
                 [config]="imgvconfig"
                 [src]="
-                  (_.isEmpty(recordObject.images) && [
-                    '/assets/images/records-new-sample.svg'
-                  ]) ||
-                  recordObject.images
+                (_.isEmpty(recordObject.images) && [
+                '/assets/images/records-new-sample.svg'
+                ]) ||
+                recordObject.images
                 "
                 [(index)]="recordObject.chosenImage"
                 (customEvent)="handleEvent($event)"
@@ -21,14 +21,13 @@
           </div>
         </div>
       </div>
-
       <div class="form-group m-0">
         <button
           (click)="imageupload.click()"
           mat-raised-button
           color="primary"
           class="w-full mt-1"
-        >
+          >
           Upload
         </button>
         <input
@@ -39,35 +38,38 @@
           id="images"
           accept="image/*"
           multiple
-        />
+          />
       </div>
-      <mat-progress-bar
-        class="mb-1"
-        *ngFor="let p of percentages"
-        mode="determinate"
-        value="{{ p | async }}"
-      ></mat-progress-bar>
-
-      <div *ngIf="recordObject.images.length > 0" class="card col-12 m-0">
-        <div class="row">
-          <div
-            *ngFor="let image of recordObject.images; let i = index"
-            class="col-sm-4 p-0"
-          >
-            <div class="m-1">
-              <a (click)="recordObject.chosenImage = i" class="thumbnail">
-                <div class="image" style="background-color: #d5d5d5">
-                  <img
-                    style="object-fit: cover"
-                    [src]="image"
-                    class="img img-responsive"
-                  />
+      @for (p of percentages; track p) {
+        <mat-progress-bar
+          class="mb-1"
+          mode="determinate"
+          value="{{ p | async }}"
+        ></mat-progress-bar>
+      }
+      @if (recordObject.images.length > 0) {
+        <div class="card col-12 m-0">
+          <div class="row">
+            @for (image of recordObject.images; track image; let i = $index) {
+              <div
+                class="col-sm-4 p-0"
+                >
+                <div class="m-1">
+                  <a (click)="recordObject.chosenImage = i" class="thumbnail">
+                    <div class="image" style="background-color: #d5d5d5">
+                      <img
+                        style="object-fit: cover"
+                        [src]="image"
+                        class="img img-responsive"
+                        />
+                    </div>
+                  </a>
                 </div>
-              </a>
-            </div>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
   <div class="col-12 col-lg-9">
@@ -84,549 +86,590 @@
               placeholder="Record Title"
               name="release-name"
               formControlName="name"
-            />
-            <mat-error *ngIf="form.controls['name'].invalid"
-              >Record required</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              type="text"
-              placeholder="Artist Name"
-              name="main-artist-name"
-              formControlName="mainArtist"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Release date</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              name="release-date"
-              formControlName="date"
-              placeholder="YYYY-MM-DD"
-            />
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="form.controls['date'].invalid"
-              >Date invalid</mat-error
-            >
-          </mat-form-field>
-        </div>
-        <hr />
-        <div class="grid grid-cols-3 space-x-4">
-          <mat-form-field>
-            <input
-              matInput
-              type="text"
-              placeholder="Label"
-              name="release-label"
-              formControlName="label"
-              required
-            />
-            <mat-error *ngIf="form.controls['label'].invalid"
-              >Label required</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              type="text"
-              placeholder="Catalogue No."
-              name="release-catalog"
-              formControlName="catalogNo"
-              required
-            />
-            <mat-error *ngIf="form.controls['catalogNo'].invalid"
-              >Catalogue No. required</mat-error
-            >
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select
-              formControlName="country"
-              name="country"
-              placeholder="Country of origin"
-            >
-              <mat-option *ngFor="let c of countriesJSON" [value]="c.name">{{
-                c.name
-              }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.controls['country'].invalid"
-              >Country required</mat-error
-            >
-          </mat-form-field>
-        </div>
-        <hr />
-        <div class="grid grid-cols-4 space-x-4">
-          <mat-form-field>
-            <mat-select
-              placeholder="Channels"
-              name="channel"
-              formControlName="channelCoding"
-            >
-              <mat-option value="Stereo">Stereo</mat-option>
-              <mat-option value="Mono">Mono</mat-option>
-              <mat-option value="Pseudo Stereo">Pseudo Stereo</mat-option>
-              <mat-option value="Other/Unknown">Other/Unknown</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select
-              name="format"
-              placeholder="Format"
-              formControlName="format"
-            >
-              <mat-option value="Vinyl">Vinyl</mat-option>
-              <mat-option value="Acetate">Acetate</mat-option>
-              <mat-option value="Flexi-Disc">Flexi-Disc</mat-option>
-              <mat-option value="Lathe Cut">Lathe Cut</mat-option>
-              <mat-option value="Shellac">Shellac</mat-option>
-              <mat-option value="CD">CD</mat-option>
-              <mat-option value="DVD">DVD</mat-option>
-              <mat-option value="Mini Disc">Mini Disc</mat-option>
-              <mat-option value="Cassette Tape">Cassette Tape</mat-option>
-              <mat-option value="4-Track Cartridge"
-                >4-Track Cartridge</mat-option
-              >
-              <mat-option value="8-Track Cartridge"
-                >8-Track Cartridge</mat-option
-              >
-              <mat-option value="Other/Unknown">Other/Unknown</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select name="size" placeholder="Size" formControlName="size">
-              <mat-option *ngFor="let c of sizesJSON" [value]="c">{{
-                c
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select
-              name="speed"
-              placeholder="Speed"
-              formControlName="speed"
-            >
-              <mat-option *ngFor="let c of speedsJSON" [value]="c">{{
-                c
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <br />
-        <!---->
-        <div class="accordion">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <h4 class="card-title">Select Genres</h4>
-            </div>
-
-            <div class="card-body">
-              <mat-chip-listbox>
-                <mat-chip *ngFor="let g of genres" (click)="selectGenre(g.name)"
-                  >{{ g.name }}
-                </mat-chip>
-              </mat-chip-listbox>
-              <br />
-              <mat-form-field class="w-full">
-                <mat-chip-grid #genreList aria-label="Custom genres">
-                  <mat-chip-row
-                    *ngFor="let g of recordObject.genres"
-                    (removed)="selectGenre(g, true)"
+              />
+            @if (form.controls['name'].invalid) {
+              <mat-error
+                >Record required</mat-error
+                >
+              }
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                placeholder="Artist Name"
+                name="main-artist-name"
+                formControlName="mainArtist"
+                />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Release date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                name="release-date"
+                formControlName="date"
+                placeholder="YYYY-MM-DD"
+                />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (form.controls['date'].invalid) {
+                <mat-error
+                  >Date invalid</mat-error
                   >
-                    {{ g }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                  <input
-                    placeholder="Add custom genres"
-                    [matChipInputFor]="genreList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addGenre($event)"
-                  />
-                </mat-chip-grid>
+                }
               </mat-form-field>
-              <br />
-              <label>Type and press Enter to add custom genres</label>
-              <br />
             </div>
-          </div>
-          <br />
-          <div class="card">
-            <div class="card-header" id="headingTwo">
-              <h4 class="card-title">Styles</h4>
-            </div>
-            <div class="card-body">
-              <mat-chip-listbox>
-                <mat-chip *ngFor="let s of styles" (click)="selectStyle(s)"
-                  >{{ s }}
-                </mat-chip>
-              </mat-chip-listbox>
-              <br />
-              <mat-form-field class="w-full">
-                <mat-chip-grid #styleList aria-label="Custom genres">
-                  <mat-chip-row
-                    *ngFor="let s of recordObject.styles"
-                    (removed)="selectStyle(s, true)"
-                  >
-                    {{ s }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                  <input
-                    placeholder="Add custom genres"
-                    [matChipInputFor]="styleList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addStyle($event)"
+            <hr />
+            <div class="grid grid-cols-3 space-x-4">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Label"
+                  name="release-label"
+                  formControlName="label"
+                  required
                   />
-                </mat-chip-grid>
-              </mat-form-field>
-              <br />
-              <label>Select genres and add sub styles or type to add</label>
-              <br />
-            </div>
-          </div>
-        </div>
-        <!---->
-        <!--TRACKS START-->
-        <h2>Track List</h2>
-        <table
-          class="table table-responsive"
-          style="background-color: whitesmoke"
-        >
-          <thead>
-            <tr>
-              <th scope="col">Position</th>
-              <th scope="col" class="w-50">Artists</th>
-              <th scope="col" class="w-50">Title/Credits</th>
-              <th scope="col">Duration</th>
-              <th scope="col" class="w-25">Options</th>
-            </tr>
-          </thead>
-          <tbody #table id="bb" formArrayName="tracks">
-            <tr
-              *ngFor="
-                let track of $any(form.get('tracks')).controls;
-                let ti = index
-              "
-              style="cursor: all-scroll"
-              id="track-row-{{ ti }}"
-              [formGroupName]="ti"
-            >
-              <td scope="row">
-                <mat-form-field style="width: 60px">
-                  <input
-                    matInput
-                    type="text"
-                    placeholder="Index"
-                    name="track-{{ ti }}-index"
-                    formControlName="index"
-                  />
+                @if (form.controls['label'].invalid) {
                   <mat-error
-                    *ngIf="
-                      $any(form.get('tracks')).controls[ti].get('index').invalid
-                    "
-                    >Required</mat-error
-                  >
-                </mat-form-field>
-              </td>
-              <td formArrayName="artists">
-                <div
-                  *ngFor="
-                    let artist of $any(form.get('tracks')).controls[ti].get(
-                      'artists'
-                    ).controls;
-                    let i = index
-                  "
-                  [formGroupName]="i"
-                  class="input-group mb-1"
-                >
-                  <mat-form-field>
-                    <input
-                      matInput
-                      formControlName="name"
-                      type="text"
-                      placeholder="Artist"
-                      name="track-{{ ti }}-artist-{{ i }}"
-                    />
-                    <button
-                      mat-button
-                      (click)="
-                        $any(form.get('tracks'))
-                          .controls[ti].get('artists')
-                          .removeAt(i)
-                      "
-                      matSuffix
+                    >Label required</mat-error
                     >
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                    <mat-error
-                      *ngIf="
-                        $any(form.get('tracks')).controls[ti].get('artists')
-                          .controls[i].invalid
-                      "
-                      >Enter name or remove the field
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <button
-                  mat-button
-                  (click)="
-                    addArtist(
-                      $any(form.get('tracks')).controls[ti].get('artists')
-                    )
-                  "
-                  matSuffix
-                >
-                  Artist
-                  <mat-icon>add_circle</mat-icon>
-                </button>
-              </td>
-              <td>
+                  }
+                </mat-form-field>
                 <mat-form-field>
                   <input
                     matInput
                     type="text"
-                    placeholder="Title"
-                    name="track-{{ ti }}-title"
-                    formControlName="title"
-                  />
-                  <mat-error
-                    *ngIf="
-                      $any(form.get('tracks')).controls[ti].get('title').invalid
-                    "
-                    >Enter the song title
-                  </mat-error>
-                </mat-form-field>
-                <div formArrayName="credits">
-                  <div
-                    *ngFor="
-                      let credit of $any(form.get('tracks')).controls[ti].get(
-                        'credits'
-                      ).controls;
-                      let i = index
-                    "
-                    [formGroupName]="i"
-                  >
-                    <mat-form-field>
-                      <input
-                        matInput
-                        type="text"
-                        placeholder="Credits"
-                        name="track-{{ ti }}-creadits-{{ i }}"
-                        formControlName="text"
-                      />
-                      <button
-                        mat-button
-                        (click)="
-                          $any(form.get('tracks'))
-                            .controls[ti].get('credits')
-                            .removeAt(i)
-                        "
-                        matSuffix
+                    placeholder="Catalogue No."
+                    name="release-catalog"
+                    formControlName="catalogNo"
+                    required
+                    />
+                  @if (form.controls['catalogNo'].invalid) {
+                    <mat-error
+                      >Catalogue No. required</mat-error
                       >
-                        <mat-icon>cancel</mat-icon>
-                      </button>
+                    }
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-select
+                      formControlName="country"
+                      name="country"
+                      placeholder="Country of origin"
+                      >
+                      @for (c of countriesJSON; track c) {
+                        <mat-option [value]="c.name">{{
+                          c.name
+                        }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (form.controls['country'].invalid) {
                       <mat-error
-                        *ngIf="
-                          $any(form.get('tracks')).controls[ti].get('credits')
-                            .controls[i].invalid
-                        "
-                        >Enter name or remove the field
-                      </mat-error>
+                        >Country required</mat-error
+                        >
+                      }
                     </mat-form-field>
                   </div>
-                  <button
-                    mat-button
-                    (click)="
-                      addCredit(
-                        $any(form.get('tracks')).controls[ti].get('credits')
-                      )
-                    "
-                    matSuffix
-                  >
-                    Credits
-                    <mat-icon>add_circle</mat-icon>
-                  </button>
-                </div>
-              </td>
-              <td>
-                <mat-form-field style="width: 100px">
-                  <input
-                    matInput
-                    type="text"
-                    placeholder="0:00"
-                    name="track-{{ ti }}-duration"
-                    formControlName="duration"
-                  />
-                  <mat-error
-                    *ngIf="
-                      $any(form.get('tracks')).controls[ti].get('duration')
-                        .invalid
-                    "
-                    >MM:SS</mat-error
-                  >
-                </mat-form-field>
-              </td>
-              <td style="width: 100px">
-                <button mat-button [matMenuTriggerFor]="beforeMenu">
-                  <mat-icon>settings</mat-icon>
-                </button>
-                <mat-menu #beforeMenu="matMenu" xPosition="before">
-                  <button
-                    mat-menu-item
-                    (click)="$any(form.get('tracks')).removeAt(ti)"
-                  >
-                    Remove
-                  </button>
-                  <button
-                    mat-menu-item
-                    (click)="insertTrackBefore($any(form.get('tracks')), ti)"
-                  >
-                    Add track Above
-                  </button>
-                  <button
-                    mat-menu-item
-                    (click)="insertTrackAfter($any(form.get('tracks')), ti)"
-                  >
-                    Add Track Below
-                  </button>
-                </mat-menu>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="row container">
-          <button mat-button (click)="appendTrack($any(form.get('tracks')))">
-            Track
-            <mat-icon>add_circle</mat-icon>
-          </button>
-          <button mat-button (click)="autoIndex()">Auto Index</button>
-        </div>
-
-        <!--TRACKS END-->
-        <br />
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Descriptions</h4>
-          </div>
-          <div class="card-body">
-            <mat-chip-listbox>
-              <mat-chip *ngFor="let d of descr" (click)="selectDescr(d)"
-                >{{ d }}
-              </mat-chip>
-            </mat-chip-listbox>
-            <br />
-            <mat-chip-listbox #descrList>
-              <mat-chip
-                *ngFor="let s of recordObject.descriptions"
-                [removable]="true"
-              >
-                {{ s }}
-                <mat-icon matChipRemove (click)="selectDescr(s, true)"
-                  >cancel</mat-icon
-                >
-              </mat-chip>
-            </mat-chip-listbox>
-            <br />
-          </div>
-        </div>
-        <!---->
-        <hr />
-        <div formArrayName="commonCredits">
-          <div
-            *ngFor="
-              let credit of $any(form.get('commonCredits')).controls;
-              let i = index
-            "
-            [formGroupName]="i"
-          >
-            <mat-form-field class="w-full">
-              <input
-                matInput
-                type="text"
-                placeholder="Credits"
-                name="common-credits-{{ i }}"
-                formControlName="text"
-              />
-              <button
-                mat-button
-                (click)="$any(form.get('commonCredits')).removeAt(i)"
-                matSuffix
-              >
-                <mat-icon>cancel</mat-icon>
-              </button>
-              <mat-error
-                *ngIf="$any(form.get('commonCredits')).controls[i].invalid"
-              >
-                Enter credits or remove the field
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="row container">
-            <button
-              mat-button
-              (click)="addCommonCredit($any(form.get('commonCredits')))"
-            >
-              Credit
-              <mat-icon>add_circle</mat-icon>
-            </button>
-          </div>
-        </div>
-        <hr />
-        <div formArrayName="songUrls">
-          <div
-            *ngFor="
-              let songUrl of $any(form.get('songUrls')).controls;
-              let i = index
-            "
-            [formGroupName]="i"
-          >
-            <mat-form-field class="w-full">
-              <input
-                matInput
-                type="text"
-                placeholder="Song link"
-                name="song-url-{{ i }}"
-                formControlName="text"
-              />
-              <button
-                mat-button
-                (click)="$any(form.get('songUrls')).removeAt(i)"
-                matSuffix
-              >
-                <mat-icon>cancel</mat-icon>
-              </button>
-              <mat-error *ngIf="$any(form.get('songUrls')).controls[i].invalid">
-                Enter a valid web link or remove the field
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="row container">
-            <button mat-button (click)="addSongUrl($any(form.get('songUrls')))">
-              Song Link
-              <mat-icon>add_circle</mat-icon>
-            </button>
-          </div>
-        </div>
-        <hr />
-        <mat-form-field class="w-full">
-          <textarea
-            matInput
-            placeholder="Notes"
-            formControlName="notes"
-          ></textarea>
-        </mat-form-field>
-      </form>
-    </div>
-  </div>
-</div>
+                  <hr />
+                  <div class="grid grid-cols-4 space-x-4">
+                    <mat-form-field>
+                      <mat-select
+                        placeholder="Channels"
+                        name="channel"
+                        formControlName="channelCoding"
+                        >
+                        <mat-option value="Stereo">Stereo</mat-option>
+                        <mat-option value="Mono">Mono</mat-option>
+                        <mat-option value="Pseudo Stereo">Pseudo Stereo</mat-option>
+                        <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-select
+                        name="format"
+                        placeholder="Format"
+                        formControlName="format"
+                        >
+                        <mat-option value="Vinyl">Vinyl</mat-option>
+                        <mat-option value="Acetate">Acetate</mat-option>
+                        <mat-option value="Flexi-Disc">Flexi-Disc</mat-option>
+                        <mat-option value="Lathe Cut">Lathe Cut</mat-option>
+                        <mat-option value="Shellac">Shellac</mat-option>
+                        <mat-option value="CD">CD</mat-option>
+                        <mat-option value="DVD">DVD</mat-option>
+                        <mat-option value="Mini Disc">Mini Disc</mat-option>
+                        <mat-option value="Cassette Tape">Cassette Tape</mat-option>
+                        <mat-option value="4-Track Cartridge"
+                          >4-Track Cartridge</mat-option
+                          >
+                          <mat-option value="8-Track Cartridge"
+                            >8-Track Cartridge</mat-option
+                            >
+                            <mat-option value="Other/Unknown">Other/Unknown</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-select name="size" placeholder="Size" formControlName="size">
+                            @for (c of sizesJSON; track c) {
+                              <mat-option [value]="c">{{
+                                c
+                              }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-select
+                            name="speed"
+                            placeholder="Speed"
+                            formControlName="speed"
+                            >
+                            @for (c of speedsJSON; track c) {
+                              <mat-option [value]="c">{{
+                                c
+                              }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <br />
+                      <!---->
+                      <div class="accordion">
+                        <div class="card">
+                          <div class="card-header" id="headingOne">
+                            <h4 class="card-title">Select Genres</h4>
+                          </div>
+                          <div class="card-body">
+                            <mat-chip-listbox>
+                              @for (g of genres; track g) {
+                                <mat-chip (click)="selectGenre(g.name)"
+                                  >{{ g.name }}
+                                </mat-chip>
+                              }
+                            </mat-chip-listbox>
+                            <br />
+                            <mat-form-field class="w-full">
+                              <mat-chip-grid #genreList aria-label="Custom genres">
+                                @for (g of recordObject.genres; track g) {
+                                  <mat-chip-row
+                                    (removed)="selectGenre(g, true)"
+                                    >
+                                    {{ g }}
+                                    <button matChipRemove>
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </mat-chip-row>
+                                }
+                                <input
+                                  placeholder="Add custom genres"
+                                  [matChipInputFor]="genreList"
+                                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                  [matChipInputAddOnBlur]="true"
+                                  (matChipInputTokenEnd)="addGenre($event)"
+                                  />
+                              </mat-chip-grid>
+                            </mat-form-field>
+                            <br />
+                            <label>Type and press Enter to add custom genres</label>
+                            <br />
+                          </div>
+                        </div>
+                        <br />
+                        <div class="card">
+                          <div class="card-header" id="headingTwo">
+                            <h4 class="card-title">Styles</h4>
+                          </div>
+                          <div class="card-body">
+                            <mat-chip-listbox>
+                              @for (s of styles; track s) {
+                                <mat-chip (click)="selectStyle(s)"
+                                  >{{ s }}
+                                </mat-chip>
+                              }
+                            </mat-chip-listbox>
+                            <br />
+                            <mat-form-field class="w-full">
+                              <mat-chip-grid #styleList aria-label="Custom genres">
+                                @for (s of recordObject.styles; track s) {
+                                  <mat-chip-row
+                                    (removed)="selectStyle(s, true)"
+                                    >
+                                    {{ s }}
+                                    <button matChipRemove>
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </mat-chip-row>
+                                }
+                                <input
+                                  placeholder="Add custom genres"
+                                  [matChipInputFor]="styleList"
+                                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                  [matChipInputAddOnBlur]="true"
+                                  (matChipInputTokenEnd)="addStyle($event)"
+                                  />
+                              </mat-chip-grid>
+                            </mat-form-field>
+                            <br />
+                            <label>Select genres and add sub styles or type to add</label>
+                            <br />
+                          </div>
+                        </div>
+                      </div>
+                      <!---->
+                      <!--TRACKS START-->
+                      <h2>Track List</h2>
+                      <table
+                        class="table table-responsive"
+                        style="background-color: whitesmoke"
+                        >
+                        <thead>
+                          <tr>
+                            <th scope="col">Position</th>
+                            <th scope="col" class="w-50">Artists</th>
+                            <th scope="col" class="w-50">Title/Credits</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col" class="w-25">Options</th>
+                          </tr>
+                        </thead>
+                        <tbody #table id="bb" formArrayName="tracks">
+                          @for (
+                            track of $any(form.get('tracks')).controls;
+                            let ti = $index
+                            ; track
+                            track) {
+                            <tr
+                              style="cursor: all-scroll"
+                              id="track-row-{{ ti }}"
+                              [formGroupName]="ti"
+                              >
+                              <td scope="row">
+                                <mat-form-field style="width: 60px">
+                                  <input
+                                    matInput
+                                    type="text"
+                                    placeholder="Index"
+                                    name="track-{{ ti }}-index"
+                                    formControlName="index"
+                                    />
+                                  @if (
+                                    $any(form.get('tracks')).controls[ti].get('index').invalid
+                                    ) {
+                                    <mat-error
+                                      >Required</mat-error
+                                      >
+                                    }
+                                  </mat-form-field>
+                                </td>
+                                <td formArrayName="artists">
+                                  @for (
+                                    artist of $any(form.get('tracks')).controls[ti].get(
+                                    'artists'
+                                    ).controls;
+                                    let i = $index
+                                    ; track
+                                    artist) {
+                                    <div
+                                      [formGroupName]="i"
+                                      class="input-group mb-1"
+                                      >
+                                      <mat-form-field>
+                                        <input
+                                          matInput
+                                          formControlName="name"
+                                          type="text"
+                                          placeholder="Artist"
+                                          name="track-{{ ti }}-artist-{{ i }}"
+                                          />
+                                        <button
+                                          mat-button
+                                          (click)="
+                                          $any(form.get('tracks'))
+                                          .controls[ti].get('artists')
+                                          .removeAt(i)
+                                          "
+                                          matSuffix
+                                          >
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                        @if (
+                                          $any(form.get('tracks')).controls[ti].get('artists')
+                                          .controls[i].invalid
+                                          ) {
+                                          <mat-error
+                                            >Enter name or remove the field
+                                          </mat-error>
+                                        }
+                                      </mat-form-field>
+                                    </div>
+                                  }
+                                  <button
+                                    mat-button
+                                    (click)="
+                                    addArtist(
+                                    $any(form.get('tracks')).controls[ti].get('artists')
+                                    )
+                                    "
+                                    matSuffix
+                                    >
+                                    Artist
+                                    <mat-icon>add_circle</mat-icon>
+                                  </button>
+                                </td>
+                                <td>
+                                  <mat-form-field>
+                                    <input
+                                      matInput
+                                      type="text"
+                                      placeholder="Title"
+                                      name="track-{{ ti }}-title"
+                                      formControlName="title"
+                                      />
+                                    @if (
+                                      $any(form.get('tracks')).controls[ti].get('title').invalid
+                                      ) {
+                                      <mat-error
+                                        >Enter the song title
+                                      </mat-error>
+                                    }
+                                  </mat-form-field>
+                                  <div formArrayName="credits">
+                                    @for (
+                                      credit of $any(form.get('tracks')).controls[ti].get(
+                                      'credits'
+                                      ).controls;
+                                      let i = $index
+                                      ; track
+                                      credit) {
+                                      <div
+                                        [formGroupName]="i"
+                                        >
+                                        <mat-form-field>
+                                          <input
+                                            matInput
+                                            type="text"
+                                            placeholder="Credits"
+                                            name="track-{{ ti }}-creadits-{{ i }}"
+                                            formControlName="text"
+                                            />
+                                          <button
+                                            mat-button
+                                            (click)="
+                                            $any(form.get('tracks'))
+                                            .controls[ti].get('credits')
+                                            .removeAt(i)
+                                            "
+                                            matSuffix
+                                            >
+                                            <mat-icon>cancel</mat-icon>
+                                          </button>
+                                          @if (
+                                            $any(form.get('tracks')).controls[ti].get('credits')
+                                            .controls[i].invalid
+                                            ) {
+                                            <mat-error
+                                              >Enter name or remove the field
+                                            </mat-error>
+                                          }
+                                        </mat-form-field>
+                                      </div>
+                                    }
+                                    <button
+                                      mat-button
+                                      (click)="
+                                      addCredit(
+                                      $any(form.get('tracks')).controls[ti].get('credits')
+                                      )
+                                      "
+                                      matSuffix
+                                      >
+                                      Credits
+                                      <mat-icon>add_circle</mat-icon>
+                                    </button>
+                                  </div>
+                                </td>
+                                <td>
+                                  <mat-form-field style="width: 100px">
+                                    <input
+                                      matInput
+                                      type="text"
+                                      placeholder="0:00"
+                                      name="track-{{ ti }}-duration"
+                                      formControlName="duration"
+                                      />
+                                    @if (
+                                      $any(form.get('tracks')).controls[ti].get('duration')
+                                      .invalid
+                                      ) {
+                                      <mat-error
+                                        >MM:SS</mat-error
+                                        >
+                                      }
+                                    </mat-form-field>
+                                  </td>
+                                  <td style="width: 100px">
+                                    <button mat-button [matMenuTriggerFor]="beforeMenu">
+                                      <mat-icon>settings</mat-icon>
+                                    </button>
+                                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                      <button
+                                        mat-menu-item
+                                        (click)="$any(form.get('tracks')).removeAt(ti)"
+                                        >
+                                        Remove
+                                      </button>
+                                      <button
+                                        mat-menu-item
+                                        (click)="insertTrackBefore($any(form.get('tracks')), ti)"
+                                        >
+                                        Add track Above
+                                      </button>
+                                      <button
+                                        mat-menu-item
+                                        (click)="insertTrackAfter($any(form.get('tracks')), ti)"
+                                        >
+                                        Add Track Below
+                                      </button>
+                                    </mat-menu>
+                                  </td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                          <div class="row container">
+                            <button mat-button (click)="appendTrack($any(form.get('tracks')))">
+                              Track
+                              <mat-icon>add_circle</mat-icon>
+                            </button>
+                            <button mat-button (click)="autoIndex()">Auto Index</button>
+                          </div>
+                          <!--TRACKS END-->
+                          <br />
+                          <div class="card">
+                            <div class="card-header">
+                              <h4 class="card-title">Descriptions</h4>
+                            </div>
+                            <div class="card-body">
+                              <mat-chip-listbox>
+                                @for (d of descr; track d) {
+                                  <mat-chip (click)="selectDescr(d)"
+                                    >{{ d }}
+                                  </mat-chip>
+                                }
+                              </mat-chip-listbox>
+                              <br />
+                              <mat-chip-listbox #descrList>
+                                @for (s of recordObject.descriptions; track s) {
+                                  <mat-chip
+                                    [removable]="true"
+                                    >
+                                    {{ s }}
+                                    <mat-icon matChipRemove (click)="selectDescr(s, true)"
+                                      >cancel</mat-icon
+                                      >
+                                    </mat-chip>
+                                  }
+                                </mat-chip-listbox>
+                                <br />
+                              </div>
+                            </div>
+                            <!---->
+                            <hr />
+                            <div formArrayName="commonCredits">
+                              @for (
+                                credit of $any(form.get('commonCredits')).controls;
+                                let i = $index
+                                ; track
+                                credit) {
+                                <div
+                                  [formGroupName]="i"
+                                  >
+                                  <mat-form-field class="w-full">
+                                    <input
+                                      matInput
+                                      type="text"
+                                      placeholder="Credits"
+                                      name="common-credits-{{ i }}"
+                                      formControlName="text"
+                                      />
+                                    <button
+                                      mat-button
+                                      (click)="$any(form.get('commonCredits')).removeAt(i)"
+                                      matSuffix
+                                      >
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                    @if ($any(form.get('commonCredits')).controls[i].invalid) {
+                                      <mat-error
+                                        >
+                                        Enter credits or remove the field
+                                      </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                              }
+                              <div class="row container">
+                                <button
+                                  mat-button
+                                  (click)="addCommonCredit($any(form.get('commonCredits')))"
+                                  >
+                                  Credit
+                                  <mat-icon>add_circle</mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                            <hr />
+                            <div formArrayName="songUrls">
+                              @for (
+                                songUrl of $any(form.get('songUrls')).controls;
+                                let i = $index
+                                ; track
+                                songUrl) {
+                                <div
+                                  [formGroupName]="i"
+                                  >
+                                  <mat-form-field class="w-full">
+                                    <input
+                                      matInput
+                                      type="text"
+                                      placeholder="Song link"
+                                      name="song-url-{{ i }}"
+                                      formControlName="text"
+                                      />
+                                    <button
+                                      mat-button
+                                      (click)="$any(form.get('songUrls')).removeAt(i)"
+                                      matSuffix
+                                      >
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                    @if ($any(form.get('songUrls')).controls[i].invalid) {
+                                      <mat-error>
+                                        Enter a valid web link or remove the field
+                                      </mat-error>
+                                    }
+                                  </mat-form-field>
+                                </div>
+                              }
+                              <div class="row container">
+                                <button mat-button (click)="addSongUrl($any(form.get('songUrls')))">
+                                  Song Link
+                                  <mat-icon>add_circle</mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                            <hr />
+                            <mat-form-field class="w-full">
+                              <textarea
+                                matInput
+                                placeholder="Notes"
+                                formControlName="notes"
+                              ></textarea>
+                            </mat-form-field>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    
