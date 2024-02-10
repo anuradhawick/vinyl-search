@@ -251,7 +251,7 @@ export async function save_post(uid_str, post, postId) {
     const data = await db.collection('forum_posts').findOneAndUpdate(
       {
         _id: new ObjectId(postId),
-        ownerUid: uid
+        ownerUid: ownerUid
       },
       {
         $set: {
@@ -311,7 +311,7 @@ export async function save_post(uid_str, post, postId) {
 };
 
 export async function delete_post(uid_str, postId) {
-  const uid = new ObjectId(uid_str);
+  const ownerUid = new ObjectId(uid_str);
   const db = await connect_db();
   const post = await db.collection('forum_posts').findOne({ _id: new ObjectId(postId) });
   const $ = cheerio.load(post.postHTML);
@@ -333,7 +333,7 @@ export async function delete_post(uid_str, postId) {
 
   const removePost = db.collection('forum_posts').findOneAndDelete({
     _id: new ObjectId(postId),
-    ownerUid: uid
+    ownerUid: ownerUid
   });
 
   await Promise.all([removeImages, removePost]);

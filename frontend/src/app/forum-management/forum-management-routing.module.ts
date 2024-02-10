@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', component: ForumHomePageComponent },
   { path: ':postId/view', component: ForumViewPageComponent },
   {
-    path: 'editor',
+    path: 'new',
     component: ForumEditPageComponent,
     canActivate: [authGuard],
   },

@@ -27,7 +27,9 @@ class CustomReuseStrategy implements RouteReuseStrategy {
   private handlers: { [key: string]: DetachedRouteHandle } = {};
 
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
-    return true;
+    return (
+      route.url.at(-1)?.path !== 'edit' && route.url.at(-1)?.path !== 'new'
+    );
   }
 
   store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle): void {
@@ -35,7 +37,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
   }
 
   shouldAttach(route: ActivatedRouteSnapshot): boolean {
-    return !!this.handlers[this.getPath(route)];
+    return !!this.handlers[this.getPath(route)] && !route.params['reload'];
   }
 
   retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {

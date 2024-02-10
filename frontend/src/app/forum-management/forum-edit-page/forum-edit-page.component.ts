@@ -74,7 +74,6 @@ export class ForumEditPageComponent implements OnInit {
     const object = {
       postTitle: this.title,
       postHTML: this.data,
-      id: null,
     };
 
     if (this.newMode) {
@@ -96,7 +95,12 @@ export class ForumEditPageComponent implements OnInit {
       const data = this.forumService.update_post(this.postId, object);
       data.then(
         () => {
-          this.router.navigate(['/forum', this.postId, 'view']);
+          this.router.navigate([
+            '/forum',
+            this.postId,
+            'view',
+            { reload: true },
+          ]);
           this.editorDisabled = true;
         },
         (err) => {

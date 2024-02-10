@@ -61,9 +61,7 @@ export class ForumViewPageComponent implements OnInit {
         return;
       }
 
-      const data = this.forumService.fetch_post(postId);
-
-      data.subscribe((res: any) => {
+      this.forumService.fetch_post(postId).subscribe((res: any) => {
         const post = res.post;
         this.post = post;
         this.postId = postId;
