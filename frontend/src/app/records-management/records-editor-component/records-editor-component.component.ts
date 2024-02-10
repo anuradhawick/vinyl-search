@@ -162,6 +162,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   ngOnInit() {
     // patche the record from input to component
     if (this.record) {
+      console.log(this.record);
       this.recordObject = _.cloneDeep(this.record);
     }
     // init the form
@@ -235,7 +236,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     this.form.valueChanges.subscribe((values: any) => {
       _.assign(this.recordObject, values);
       // reformat date as string
-      this.recordObject.date = moment(values.date).format('DD-MM-YYYY');
+      this.recordObject.date = moment(values.date).format('YYYY-MM-DD');
     });
 
     const genres: any = [];
@@ -262,6 +263,7 @@ export class RecordsEditorComponentComponent implements OnInit {
     });
 
     this.loadStyles();
+    console.log('inited');
   }
 
   resort(arr: any) {

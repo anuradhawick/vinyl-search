@@ -23,7 +23,7 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: ':recordId/update',
+    path: ':recordId/edit',
     component: RecordsUpdatePageComponent,
     canActivate: [authGuard],
   },

@@ -44,7 +44,12 @@ export class RecordsEditPageComponent {
       (result: any) => {
         if (result.recordId) {
           this.toastr.success(`Records saved successfully`, 'Success');
-          this.router.navigate(['/records', result.recordId, 'view']);
+          this.router.navigate([
+            '/records',
+            result.recordId,
+            'view',
+            { reload: true },
+          ]);
         } else {
           this.ready = true;
           this.loader.hide();

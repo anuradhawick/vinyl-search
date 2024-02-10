@@ -5,17 +5,12 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-records-update-page',
   templateUrl: './records-update-page.component.html',
-  styleUrls: ['./records-update-page.component.css'],
+  styleUrls: ['./records-update-page.component.scss'],
 })
 export class RecordsUpdatePageComponent implements OnInit {
   @ViewChild(RecordsEditorComponentComponent)
@@ -71,7 +66,12 @@ export class RecordsUpdatePageComponent implements OnInit {
 
       data.then(
         (result: any) => {
-          this.router.navigate(['/records', result.recordId, 'view']);
+          this.router.navigate([
+            '/records',
+            result.recordId,
+            'view',
+            { reload: true },
+          ]);
         },
         () => {
           this.ready = true;
