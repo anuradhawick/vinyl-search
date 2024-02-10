@@ -8,18 +8,22 @@ import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
-import { Observable } from 'rxjs';
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  of,
+  switchMap,
+} from 'rxjs';
 // @ts-ignore
 import genresJSON from '../../shared-modules/data/genres.json';
 // @ts-ignore
 import countriesJSON from '../../shared-modules/data/countries.json';
 
-declare const $: any;
-
 @Component({
   selector: 'app-records-home-page',
   templateUrl: './records-home-page.component.html',
-  styleUrls: ['./records-home-page.component.css'],
+  styleUrls: ['./records-home-page.component.scss'],
 })
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
@@ -32,7 +36,9 @@ export class RecordsHomePageComponent implements OnInit {
   public limit = 30;
   public count = 0;
   public page = 1;
-  public autocomplete: Observable<any> = new Observable();
+  protected autocompleteShow = false;
+  protected autocompleteResult: any = null;
+  protected autocompleteEvent: Subject<string> = new Subject();
   public _ = _;
   public query: any = null;
   public component: any = this;
@@ -88,11 +94,42 @@ export class RecordsHomePageComponent implements OnInit {
         _.isEmpty(this.countryFilters) &&
         _.isEmpty(this.formatFilters)
       ) {
+        this.autocompleteResult = null;
         this.loadRecords();
       } else {
         this.loadSearchPage();
       }
     });
+
+    this.autocompleteEvent
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((query: string) => {
+          return !!query
+            ? this.recordsService.search_records({
+                limit: 5,
+                skip: 0,
+                query,
+              })
+            : of(null);
+        }),
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.autocompleteShow = true;
+          this.autocompleteResult = result;
+        } else {
+          this.autocompleteShow = false;
+          this.autocompleteResult = null;
+        }
+      });
+  }
+
+  exitSearch() {
+    setTimeout(() => {
+      this.autocompleteShow = false;
+    }, 300);
   }
 
   getStyles() {
@@ -108,43 +145,9 @@ export class RecordsHomePageComponent implements OnInit {
     return _.map(countriesJSON, (c) => c.name);
   }
 
-  loadAutoComplete(event: any) {
-    const query: string = _.trim(event.target.value);
-    let newquery = '';
-
-    if (_.isEmpty(query) || query.length < 3) {
-      this.autocomplete = new Observable();
-      return;
-    } else {
-      const qarray = _.split(query, ' ');
-
-      _.each(qarray, (item) => {
-        const tmp: string = _.trim(item);
-
-        if (tmp.length >= 3) {
-          newquery += tmp;
-          newquery += ' ';
-        }
-      });
-    }
-
-    this.autocomplete = this.recordsService.search_records({
-      limit: 5,
-      skip: 0,
-      query: _.trim(newquery),
-    });
-  }
-
-  exitSearch() {
-    setTimeout(() => {
-      this.autocomplete = new Observable();
-    }, 500);
-  }
-
   search() {
     const query = _.trim(this.query);
     if (_.isEmpty(query)) {
-      this.autocomplete = new Observable();
       return;
     }
     this.router.navigate([], {

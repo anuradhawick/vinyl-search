@@ -6723,7 +6723,7 @@ button.bg-dark:focus {
   padding-top: 100%;
 }
 
-.flex-row {
+/* .flex-row {
   flex-direction: row !important;
 }
 
@@ -6837,8 +6837,8 @@ button.bg-dark:focus {
 
 .align-self-stretch {
   align-self: stretch !important;
-}
-
+} */
+/* 
 @media (min-width: 576px) {
   .flex-sm-row {
     flex-direction: row !important;
@@ -7197,8 +7197,8 @@ button.bg-dark:focus {
   .align-self-xl-stretch {
     align-self: stretch !important;
   }
-}
-
+} */
+/* 
 .float-left {
   float: left !important;
 }
@@ -7257,7 +7257,7 @@ button.bg-dark:focus {
   .float-xl-none {
     float: none !important;
   }
-}
+} */
 
 .position-static {
   position: static !important;

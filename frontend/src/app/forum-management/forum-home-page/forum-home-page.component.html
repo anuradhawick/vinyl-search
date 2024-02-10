@@ -1,64 +1,57 @@
 <br />
 <!--Search-->
-<div class="mx-4 flex justify-between flex-wrap">
+<div class="p-2 flex justify-between flex-wrap">
   <div class="flex flex-wrap w-full">
-    <mat-form-field
-      class="grow max-w-[500px]"
-      style="height: 60px; margin-right: 10px"
-    >
+    <mat-form-field class="grow max-w-md" style="height: 60px">
       <input
         matInput
         class="-translate-y-[10px]"
-        (focus)="loadAutoComplete($event)"
+        (focus)="autocompleteShow = true"
         (blur)="exitSearch()"
-        (keyup)="loadAutoComplete($event)"
+        (keyup)="autocompleteEvent.next($any($event).target.value)"
         type="text"
         placeholder="Search forum..."
         name="search-query"
         [(ngModel)]="query"
       />
     </mat-form-field>
-    <div class="flex justify-between grow">
-      <button mat-raised-button color="primary" (click)="search()">
+    <div class="flex justify-start gap-1 md:justify-between grow">
+      <button
+        class="md:ml-2"
+        mat-raised-button
+        color="primary"
+        (click)="search()"
+      >
         Search
       </button>
       <button mat-raised-button color="primary" routerLink="/forum/editor">
         New
       </button>
     </div>
-    @if ((autocomplete | async)?.posts.length > 0) {
-      <div style="background-color: #fff; left: 0">
-        <div
-          style="
-            z-index: 99;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: #fff;
-            overflow: hidden;
-          "
-        >
-          <table class="table table-hover table-bordered shadow">
-            <tbody>
-              @for (p of (autocomplete | async)?.posts; track p) {
-                <tr>
-                  <td>
-                    <a [routerLink]="['/forum', p.id, 'view']">
-                      <strong>{{
-                        _.truncate(p.postTitle, { length: 60 })
-                      }}</strong>
-                      <br />
-                      <em>
-                        Posted by {{ _.truncate(p.ownerName, { length: 60 }) }}
-                      </em>
-                    </a>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+    @if (autocompleteShow && autocompleteResult?.posts?.length > 0) {
+      <div
+        class="z-10 p-2 max-w-md absolute top-[76px] left-2 right-2 bg-white border-solid border-slate-400 border-2 rounded-md overflow-hidden"
+      >
+        <table class="w-full">
+          <tbody>
+            @for (post of autocompleteResult?.posts; track post) {
+              <tr>
+                <td>
+                  <a [routerLink]="['/forum', post.id, 'view']">
+                    <strong>{{
+                      _.truncate(post.postTitle, { length: 60 })
+                    }}</strong>
+                    <br />
+                    <em> posted on: {{ post.createdAt | date: "medium" }} </em>
+                  </a>
+                  @if (!$last) {
+                    <hr />
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
     }
   </div>
@@ -96,7 +89,7 @@
       <mat-card>
         <mat-card-content>
           <mat-list class="p-0">
-            @for (post of $any(posts); track $index) {
+            @for (post of posts; track post) {
               <mat-list-item
                 role="listitem"
                 [routerLink]="[post.id, 'view']"
@@ -116,18 +109,16 @@
           </mat-list>
         </mat-card-content>
       </mat-card>
+      <nav>
+        <mat-paginator
+          class="bg-slate-50"
+          showFirstLastButtons
+          [length]="count"
+          [pageSize]="limit"
+          [pageIndex]="page - 1"
+          (page)="changePage($event)"
+        ></mat-paginator>
+      </nav>
     }
   </div>
 </div>
-@if (!loading) {
-  <nav>
-    <mat-paginator
-      class="bg-slate-50"
-      showFirstLastButtons
-      [length]="count"
-      [pageSize]="limit"
-      [pageIndex]="page - 1"
-      (page)="changePage($event)"
-    ></mat-paginator>
-  </nav>
-}

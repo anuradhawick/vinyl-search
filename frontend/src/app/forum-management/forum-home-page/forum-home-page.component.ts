@@ -1,26 +1,34 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ForumService } from '../services/forum.service';
-import { Observable, catchError, of } from 'rxjs';
+import {
+  Subject,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  of,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-forum-home-page',
   templateUrl: './forum-home-page.component.html',
-  styleUrls: ['./forum-home-page.component.css'],
+  styleUrls: ['./forum-home-page.component.scss'],
 })
 export class ForumHomePageComponent implements OnInit {
-  protected posts = null;
+  protected posts: any = null;
   protected skip = 0;
   protected limit = 10;
   protected count = 0;
   protected page = 1;
-  protected autocomplete: Observable<any> = new Observable();
-  protected _ = _;
+  protected autocompleteShow = false;
+  protected autocompleteResult: any = null;
+  protected autocompleteEvent: Subject<string> = new Subject();
   protected query: string = '';
   protected loading: boolean = false;
+  protected _ = _;
 
   constructor(
     protected forumService: ForumService,
@@ -37,11 +45,42 @@ export class ForumHomePageComponent implements OnInit {
       this.page = page;
       this.query = _.get(p, 'query', '');
       if (_.isEmpty(_.trim(this.query))) {
+        this.autocompleteResult = null;
         this.loadPosts();
       } else {
         this.loadSearchPage();
       }
     });
+
+    this.autocompleteEvent
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((query: string) => {
+          return !!query
+            ? this.forumService.search_posts({
+                limit: 5,
+                skip: 0,
+                query,
+              })
+            : of(null);
+        }),
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.autocompleteShow = true;
+          this.autocompleteResult = result;
+        } else {
+          this.autocompleteShow = false;
+          this.autocompleteResult = null;
+        }
+      });
+  }
+
+  exitSearch() {
+    setTimeout(() => {
+      this.autocompleteShow = false;
+    }, 300);
   }
 
   loadPosts() {
@@ -82,27 +121,6 @@ export class ForumHomePageComponent implements OnInit {
       });
   }
 
-  loadAutoComplete(event: any) {
-    const query = _.trim(event.target.value);
-
-    if (_.isEmpty(query)) {
-      this.autocomplete = new Observable();
-      return;
-    }
-
-    this.autocomplete = this.forumService.search_posts({
-      limit: 5,
-      skip: 0,
-      query,
-    });
-  }
-
-  exitSearch() {
-    setTimeout(() => {
-      this.autocomplete = new Observable();
-    }, 500);
-  }
-
   changePage(event: any) {
     this.posts = null;
     this.router.navigate([], {
@@ -117,7 +135,6 @@ export class ForumHomePageComponent implements OnInit {
   search() {
     const query = _.trim(this.query);
     if (_.isEmpty(query)) {
-      this.autocomplete = new Observable();
       return;
     }
     this.router.navigate([], {
