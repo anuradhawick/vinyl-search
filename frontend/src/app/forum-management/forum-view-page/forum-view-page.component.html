@@ -70,6 +70,8 @@
       <app-forum-editor-component
         [is_reply]="true"
         [(data)]="comment_data"
+        [(imageProgress)]="imageProgress"
+        [editorDisabled]="editorDisabled"
       ></app-forum-editor-component>
       <br />
       @if ((user | async) && post && enableCommentSection) {
@@ -91,15 +93,11 @@
             [disabled]="imageProgress > 0 || editorDisabled"
             (click)="saveComment()"
           >
-            <span
-              id="saveLoader"
-              [hidden]="!(imageProgress > 0 || editorDisabled)"
-              class="spinner-grow spinner-grow-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
             Save Comment
           </button>
+          @if (imageProgress > 0 || editorDisabled) {
+            <mat-spinner class="!h-9 !w-10"></mat-spinner>
+          }
         </div>
       }
     </div>

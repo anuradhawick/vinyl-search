@@ -62,8 +62,9 @@ resource "aws_s3_bucket_cors_configuration" "vinyl-lk-bucket" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["PUT", "POST"]
-    expose_headers  = ["ETag"]
+    allowed_methods = ["PUT", "HEAD", "POST", "GET", "DELETE"]
+    expose_headers  = ["ETag", "x-amz-multipart-parts-count", "x-amz-abort-date"]
     allowed_origins = ["*"]
+    max_age_seconds = 3000
   }
 }

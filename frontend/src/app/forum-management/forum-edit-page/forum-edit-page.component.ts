@@ -12,7 +12,7 @@ import { catchError, of } from 'rxjs';
 @Component({
   selector: 'app-forum-edit-page',
   templateUrl: './forum-edit-page.component.html',
-  styleUrls: ['./forum-edit-page.component.css'],
+  styleUrls: ['./forum-edit-page.component.scss'],
 })
 export class ForumEditPageComponent implements OnInit {
   protected title = '';

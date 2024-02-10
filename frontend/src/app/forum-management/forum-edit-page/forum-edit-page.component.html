@@ -27,15 +27,11 @@
           [disabled]="imageProgress > 0 || editorDisabled"
           (click)="savePost()"
         >
-          <span
-            id="saveLoader"
-            [hidden]="!(imageProgress > 0 || editorDisabled)"
-            class="spinner-grow spinner-grow-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
           {{ newMode ? "Save" : "Update" }}
         </button>
+        @if (imageProgress > 0 || editorDisabled) {
+          <mat-spinner class="!h-9 !w-10"></mat-spinner>
+        }
       </div>
     </div>
   </div>

@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-forum-view-page',
   templateUrl: './forum-view-page.component.html',
-  styleUrls: ['./forum-view-page.component.css'],
+  styleUrls: ['./forum-view-page.component.scss'],
 })
 export class ForumViewPageComponent implements OnInit {
   public post: any = null;
