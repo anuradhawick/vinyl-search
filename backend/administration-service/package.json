@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.511.0",
+    "@aws-sdk/client-s3": "^3.511.0",
     "cheerio": "^1.0.0-rc.12",
     "esbuild": "0.17.19",
     "jimp": "^0.22.8",

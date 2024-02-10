@@ -1,4 +1,4 @@
-# VinylLk
+# Vinyl Lk Frontend
 
 ## Environment
 

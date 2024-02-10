@@ -3,5 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "init": "npm clean-install"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "mongodb": "5.5"
+  }
 }

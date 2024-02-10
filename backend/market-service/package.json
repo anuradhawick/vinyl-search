@@ -10,6 +10,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
     "esbuild": "0.17.19",
     "jimp": "^0.22.8",
     "lodash": "^4.17.21",

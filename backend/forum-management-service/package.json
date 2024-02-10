@@ -10,8 +10,9 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "esbuild": "0.17.19",
+    "@aws-sdk/client-s3": "^3.511.0",
     "cheerio": "^1.0.0-rc.12",
+    "esbuild": "0.17.19",
     "html-to-text": "^9.0.5",
     "lodash": "^4.17.21",
     "mongodb": "5.5"

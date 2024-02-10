@@ -1,5 +1,5 @@
 export function Router(event, context, callback) {
-  console.log('EVENT RECEIVED', event)
+  console.log("EVENT RECEIVED", event);
   this.path = event.resource;
   this.method = event.httpMethod;
   this.callback = callback;
@@ -7,7 +7,7 @@ export function Router(event, context, callback) {
   this.route = function (method, path, handler) {
     if (this.method === method && this.path === path) {
       try {
-        if (method !== 'GET') {
+        if (method !== "GET") {
           event.body = JSON.parse(event.body);
         }
         handler(event, context, callback);
@@ -16,7 +16,7 @@ export function Router(event, context, callback) {
         this.callback(null, build_response(500, "Data Error"));
       }
     }
-  }
+  };
 }
 
 export function build_response(statusCode, body) {
@@ -24,8 +24,8 @@ export function build_response(statusCode, body) {
     statusCode,
     body: JSON.stringify(body),
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
     },
   };
 }

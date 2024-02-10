@@ -30,7 +30,7 @@ module "lambda-admin-service" {
     {
       path = "${path.module}/../backend/administration-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle admin-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
         "cd dist",
         ":zip"
@@ -69,7 +69,7 @@ module "lambda-forum-service" {
     {
       path = "${path.module}/../backend/forum-management-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle forum-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
         "cd dist",
         ":zip"
@@ -108,7 +108,7 @@ module "lambda-market-service" {
     {
       path = "${path.module}/../backend/market-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle market-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
         "cd dist",
         ":zip"
@@ -148,7 +148,7 @@ module "lambda-records-service" {
     {
       path = "${path.module}/../backend/records-management-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle records-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
         "cp wm.png dist",
         "cd dist",
@@ -187,7 +187,7 @@ module "lambda-user-service" {
     {
       path = "${path.module}/../backend/user-management-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle user-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
         "cd dist",
         ":zip"
@@ -195,7 +195,6 @@ module "lambda-user-service" {
     }
   ]
 }
-
 
 #
 # user-pool-triggers lambda Function
@@ -224,7 +223,7 @@ module "lambda-user-pool-triggers" {
     {
       path = "${path.module}/../backend/userpool-trigger-service",
       commands = [
-        "npm install",
+        "npm clean-install",
         "./node_modules/.bin/esbuild --sourcemap --bundle user-pool-triggers.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
         "cd dist",
         ":zip"
@@ -252,7 +251,7 @@ module "lambda-user-pool-triggers" {
 #     {
 #       path = "${path.module}/../frontend/",
 #       commands = [
-#         "npm install",
+#         "npm clean-install",
 #         ":zip"
 #       ]
 #     }

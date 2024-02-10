@@ -1,11 +1,10 @@
-import _ from 'lodash';
-
+import _ from "lodash";
 
 function match_regex_path(template_path, proxy_path) {
   // function created with the help of AI
   // Convert the template_path into a regex pattern
   // Replace {variable} with a regex group that matches anything except for '/'
-  const pattern = template_path.replace(/{\w+}/g, '([^\/]+)');
+  const pattern = template_path.replace(/{\w+}/g, "([^/]+)");
 
   // Create a new RegExp object with the pattern
   const regex = new RegExp(`^${pattern}$`);
@@ -15,7 +14,9 @@ function match_regex_path(template_path, proxy_path) {
 
   if (match) {
     // Extract the variable names from the template
-    const path_param_variables = (template_path.match(/{\w+}/g) || []).map(v => v.slice(1, -1));
+    const path_param_variables = (template_path.match(/{\w+}/g) || []).map(
+      (v) => v.slice(1, -1)
+    );
 
     // Create the params object
     let params = {};
@@ -32,17 +33,17 @@ function match_regex_path(template_path, proxy_path) {
 }
 
 export function ProxyRouter(event, context, callback) {
-  console.log('EVENT RECEIVED', event)
-  this.path = _.trim(_.get(event, 'pathParameters.proxy', ''), '/');
+  console.log("EVENT RECEIVED", event);
+  this.path = _.trim(_.get(event, "pathParameters.proxy", ""), "/");
   this.method = event.httpMethod;
   this.callback = callback;
 
   this.route = function (method, path, handler) {
-    const matched_params = match_regex_path(_.trim(path, '/'), this.path);
+    const matched_params = match_regex_path(_.trim(path, "/"), this.path);
     if (this.method === method && matched_params) {
       try {
-        if (method !== 'GET') {
-          _.assign(event, { 'pathParameters': matched_params })
+        if (method !== "GET") {
+          _.assign(event, { pathParameters: matched_params });
           event.body = JSON.parse(event.body);
         }
         handler(event, context, callback);
@@ -51,6 +52,5 @@ export function ProxyRouter(event, context, callback) {
         this.callback(null, build_response(500, "Data Error"));
       }
     }
-  }
+  };
 }
-
