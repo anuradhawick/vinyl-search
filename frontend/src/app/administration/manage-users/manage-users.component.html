@@ -6,17 +6,13 @@
     @for (user of users; track $index) {
       <mat-list-item class="hover:bg-slate-100">
         @if (user.picture) {
-          <img
-            matListItemAvatar
-            [src]="user.picture"
-            alt="user avatar"
-            />
+          <img matListItemAvatar [src]="user.picture" alt="user avatar" />
         } @else {
           <img
             matListItemAvatar
             src="../../../assets/images/profile.png"
             alt="Profile picture"
-            />
+          />
         }
         <h3 matListItemTitle>{{ user.name }}</h3>
         <p matListItemLine>

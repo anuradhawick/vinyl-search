@@ -6,13 +6,13 @@
           [src]="(user | async)?.picture"
           alt="Profile picture"
           class="h-[150px] w-[150x] aspect-square border-solid border-2 border-black rounded-full mx-auto lg:-translate-y-[75px]"
-          />
+        />
       } @else {
         <img
           src="../../../assets/images/profile.png"
           alt="Profile picture"
           class="img-raised rounded-circle img-fluid"
-          />
+        />
       }
     </div>
     <div class="w-full text-center">
@@ -25,47 +25,46 @@
   <div class="flex md:hidden">
     <a mat-button class="flex md:hidden" (click)="scroll('left')"
       ><mat-icon>chevron_left</mat-icon></a
-      >
-    </div>
-    <div
-      #hscroll
-      class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between"
-      >
-      <a
-        mat-button
-        class="text-black hover:decoration-transparent font-semibold"
-        [routerLink]="'records'"
-        >
-        Records</a
-        >
-        <a
-          mat-button
-          class="text-black hover:decoration-transparent font-semibold"
-          [routerLink]="'forum'"
-          >Forum
-        </a>
-        <a
-          mat-button
-          class="text-black hover:decoration-transparent font-semibold"
-          [routerLink]="'market'"
-          >
-          Marketplace</a
-          >
-          <a
-            mat-button
-            class="text-black hover:decoration-transparent font-semibold"
-            [routerLink]="'./'"
-            >
-            Profile</a
-            >
-          </div>
-          <div class="flex md:hidden">
-            <a mat-button (click)="scroll('right')"
-              ><mat-icon>chevron_right</mat-icon></a
-              >
-            </div>
-          </div>
-          <div class="m-3 overflow-y-auto">
-            <router-outlet></router-outlet>
-          </div>
-          
+    >
+  </div>
+  <div
+    #hscroll
+    class="flex space-x-5 overflow-x-auto overflow-y-hidden justify-between"
+  >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'records'"
+    >
+      Records</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'forum'"
+      >Forum
+    </a>
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'market'"
+    >
+      Marketplace</a
+    >
+    <a
+      mat-button
+      class="text-black hover:decoration-transparent font-semibold"
+      [routerLink]="'./'"
+    >
+      Profile</a
+    >
+  </div>
+  <div class="flex md:hidden">
+    <a mat-button (click)="scroll('right')"
+      ><mat-icon>chevron_right</mat-icon></a
+    >
+  </div>
+</div>
+<div class="m-3 overflow-y-auto">
+  <router-outlet></router-outlet>
+</div>

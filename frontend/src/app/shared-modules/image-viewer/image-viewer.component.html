@@ -4,7 +4,7 @@
   [style.backgroundColor]="config.containerBackgroundColor"
   (wheel)="scrollZoom($event)"
   (dragover)="onDragOver($event)"
-  >
+>
   <img
     [src]="src[index]"
     [ngStyle]="style"
@@ -12,7 +12,7 @@
     (dragstart)="onDragStart($event)"
     (load)="onLoad()"
     (loadstart)="onLoadStart()"
-    />
+  />
   <!-- Div below will be used to hide the 'ghost' image when dragging -->
   <div></div>
   @if (loading) {
@@ -29,7 +29,7 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="rotateCounterClockwise()"
-      >
+    >
       <mat-icon>{{ config.btnIcons!.rotateCounterClockwise }}</mat-icon>
     </button>
   }
@@ -40,7 +40,7 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="rotateClockwise()"
-      >
+    >
       <mat-icon>{{ config.btnIcons!.rotateClockwise }}</mat-icon>
     </button>
   }
@@ -51,7 +51,7 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="zoomOut()"
-      >
+    >
       <mat-icon>{{ config.btnIcons!.zoomOut }}</mat-icon>
     </button>
   }
@@ -62,7 +62,7 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="zoomIn()"
-      >
+    >
       <mat-icon>{{ config.btnIcons!.zoomIn }}</mat-icon>
     </button>
   }
@@ -73,7 +73,7 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="fireCustomEvent(cBtn.name, index)"
-      >
+    >
       <mat-icon>{{ cBtn.icon }}</mat-icon>
     </button>
   }
@@ -85,11 +85,9 @@
       [ngClass]="config.btnClass"
       color="primary"
       (click)="toggleFullscreen()"
-      >
+    >
       @if (fullscreen) {
-        <mat-icon>{{
-          config.btnIcons!.fullscreenExit
-        }}</mat-icon>
+        <mat-icon>{{ config.btnIcons!.fullscreenExit }}</mat-icon>
       }
       @if (!fullscreen) {
         <mat-icon>{{ config.btnIcons!.fullscreen }}</mat-icon>
@@ -105,7 +103,7 @@
         type="button"
         (click)="prevImage($event)"
         [disabled]="index === 0"
-        >
+      >
         <mat-icon>{{ config.btnIcons!.prev }}</mat-icon>
       </button>
       <button
@@ -115,7 +113,7 @@
         type="button"
         (click)="nextImage($event)"
         [disabled]="index === src.length - 1"
-        >
+      >
         <mat-icon>{{ config.btnIcons!.next }}</mat-icon>
       </button>
     </div>

@@ -7,24 +7,20 @@
       @for (admin of admins; track $index) {
         <mat-list-item class="hover:bg-slate-100">
           @if (admin.picture) {
-            <img
-              matListItemAvatar
-              [src]="admin.picture"
-              alt="Admin avatar"
-              />
+            <img matListItemAvatar [src]="admin.picture" alt="Admin avatar" />
           } @else {
             <img
               matListItemAvatar
               src="../../../assets/images/profile.png"
               alt="Profile picture"
-              />
+            />
           }
           <ng-template #placeholder>
             <img
               matListItemAvatar
               src="../../../assets/images/profile.png"
               alt="Profile picture"
-              />
+            />
           </ng-template>
           <h3 matListItemTitle>{{ admin.name }}</h3>
           <p matListItemLine>
@@ -34,7 +30,7 @@
                 mat-icon-button
                 color="primary"
                 (click)="removeAdmin(admin.uid, admin.name, admin.email)"
-                >
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </span>
@@ -53,32 +49,24 @@
         matInput
         placeholder="Enter email address to add admin"
         formControlName="email"
-        />
-      @if (form.controls['email'].invalid) {
-        <mat-error
-          >Please enter a valid email</mat-error
-          >
-        }
-      </mat-form-field>
-    </div>
-    @if (!form.controls['email'].invalid || form.dirty) {
-      <button
-        mat-raised-button
-        (click)="cancel()"
-        >
-        Clear
-      </button>
-    }
-    @if (!form.controls['email'].invalid) {
-      <button
-        mat-raised-button
-        color="primary"
-        class="ml-1"
-        (click)="createAdmin()"
-        >
-        Make Admin
-      </button>
-    }
+      />
+      @if (form.controls["email"].invalid) {
+        <mat-error>Please enter a valid email</mat-error>
+      }
+    </mat-form-field>
   </div>
-  <br />
-  
+  @if (!form.controls["email"].invalid || form.dirty) {
+    <button mat-raised-button (click)="cancel()">Clear</button>
+  }
+  @if (!form.controls["email"].invalid) {
+    <button
+      mat-raised-button
+      color="primary"
+      class="ml-1"
+      (click)="createAdmin()"
+    >
+      Make Admin
+    </button>
+  }
+</div>
+<br />

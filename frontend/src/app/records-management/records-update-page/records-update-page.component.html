@@ -18,7 +18,7 @@
                 placeholder="Revision comments"
                 [formControl]="revisionComments"
                 required
-                >
+              >
               </textarea>
               <mat-error>
                 Please enter a comment describing your revision
@@ -38,7 +38,7 @@
                 type="button"
                 [routerLink]="['/records', recordObject.id, 'view']"
                 [disabled]="!ready"
-                >
+              >
                 Discard
               </button>
               <button
@@ -48,7 +48,7 @@
                 class="ml-1"
                 (click)="save()"
                 [disabled]="!ready"
-                >
+              >
                 Save
               </button>
             </div>

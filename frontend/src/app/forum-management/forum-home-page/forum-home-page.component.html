@@ -5,7 +5,7 @@
     <mat-form-field
       class="grow max-w-[500px]"
       style="height: 60px; margin-right: 10px"
-      >
+    >
       <input
         matInput
         class="-translate-y-[10px]"
@@ -16,7 +16,7 @@
         placeholder="Search forum..."
         name="search-query"
         [(ngModel)]="query"
-        />
+      />
     </mat-form-field>
     <div class="flex justify-between grow">
       <button mat-raised-button color="primary" (click)="search()">
@@ -27,27 +27,27 @@
       </button>
     </div>
     @if ((autocomplete | async)?.posts.length > 0) {
-      <div
-        style="background-color: #fff; left: 0"
-        >
+      <div style="background-color: #fff; left: 0">
         <div
           style="
-          z-index: 99;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background-color: #fff;
-          overflow: hidden;
+            z-index: 99;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            overflow: hidden;
           "
-          >
+        >
           <table class="table table-hover table-bordered shadow">
             <tbody>
               @for (p of (autocomplete | async)?.posts; track p) {
                 <tr>
                   <td>
                     <a [routerLink]="['/forum', p.id, 'view']">
-                      <strong>{{ _.truncate(p.postTitle, { length: 60 }) }}</strong>
+                      <strong>{{
+                        _.truncate(p.postTitle, { length: 60 })
+                      }}</strong>
                       <br />
                       <em>
                         Posted by {{ _.truncate(p.ownerName, { length: 60 }) }}
@@ -65,14 +65,12 @@
 </div>
 <!--End Search-->
 @if (
-  !loading && !_.isEmpty(_.trim(_.get(route.queryParams | async, 'query')))
-  ) {
-  <div
-    class="ml-5 mr-5 mt-1 mb-2 text-dark"
-    >
+  !loading && !_.isEmpty(_.trim(_.get(route.queryParams | async, "query")))
+) {
+  <div class="ml-5 mr-5 mt-1 mb-2 text-dark">
     Search results for - <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
-    [routerLink]="['/forum']"
-    >cancel</a
+      [routerLink]="['/forum']"
+      >cancel</a
     >)
   </div>
 }
@@ -104,11 +102,11 @@
                 [routerLink]="[post.id, 'view']"
                 class="hover:bg-slate-100"
                 style="cursor: pointer !important"
-                >
+              >
                 <img
                   matListItemAvatar
                   src="/assets/images/records-new-sample.svg"
-                  />
+                />
                 <h3 matListItemTitle>{{ post.postTitle }}</h3>
                 <p matListItemLine>
                   posted on: {{ post.createdAt | date: "medium" }}

@@ -12,9 +12,7 @@
     ></ckeditor>
     <hr />
     @if ((user | async) && post && (user | async).uid === post.ownerUid) {
-      <div
-        class="flex gap-1"
-        >
+      <div class="flex gap-1">
         <button mat-raised-button type="button" (click)="deletePost()">
           Delete
         </button>
@@ -23,7 +21,7 @@
           color="primary"
           [routerLink]="['/forum', post.id, 'edit']"
           type="button"
-          >
+        >
           Edit
         </button>
       </div>
@@ -44,16 +42,15 @@
           ></ckeditor>
           @if (
             (user | async) && post && (user | async).uid === comment.ownerUid
-            ) {
-            <div
-              >
+          ) {
+            <div>
               <button
                 mat-raised-button
                 type="button"
                 data-toggle="modal"
                 data-target="#deleteComment"
                 (click)="deleteComment(comment._id)"
-                >
+              >
                 Delete
               </button>
             </div>
@@ -69,18 +66,14 @@
     </div>
   }
   @if ((user | async) && post && enableCommentSection) {
-    <div
-      class="mx-4 md:ml-[20%] md:w-[80%]"
-      >
+    <div class="mx-4 md:ml-[20%] md:w-[80%]">
       <app-forum-editor-component
         [is_reply]="true"
         [(data)]="comment_data"
       ></app-forum-editor-component>
       <br />
       @if ((user | async) && post && enableCommentSection) {
-        <div
-          class="flex gap-1"
-          >
+        <div class="flex gap-1">
           <button
             mat-raised-button
             [disabled]="imageProgress > 0 || editorDisabled"
@@ -88,7 +81,7 @@
             data-toggle="modal"
             data-target="#exampleModal"
             (click)="discardComment()"
-            >
+          >
             Discard
           </button>
           <button
@@ -97,7 +90,7 @@
             type="button"
             [disabled]="imageProgress > 0 || editorDisabled"
             (click)="saveComment()"
-            >
+          >
             <span
               id="saveLoader"
               [hidden]="!(imageProgress > 0 || editorDisabled)"

@@ -5,15 +5,12 @@
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     @for (p of posts; track p) {
-      <mat-list-item
-        role="listitem"
-        class="hover:bg-slate-100"
-        >
+      <mat-list-item role="listitem" class="hover:bg-slate-100">
         <img
           matListItemAvatar
           [src]="'/assets/images/records-new-sample.svg'"
           alt="..."
-          />
+        />
         <h3 class="pr-[96px]" matListItemTitle>{{ p.postTitle }}</h3>
         <p matListItemLine>
           posted on: {{ p.createdAt | date: "medium" }}
@@ -23,7 +20,7 @@
               target="_blank"
               color="primary"
               [routerLink]="['/forum', p.id, 'view']"
-              >
+            >
               <mat-icon>open_in_new</mat-icon>
             </a>
             <button mat-icon-button color="primary" (click)="delete(p.id)">

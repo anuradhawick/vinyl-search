@@ -2,15 +2,12 @@
 <app-loader #loader></app-loader>
 <mat-list role="list" class="mx-auto max-w-[800px]">
   @for (p of posts; track p) {
-    <mat-list-item
-      role="listitem"
-      class="hover:bg-slate-100"
-      >
+    <mat-list-item role="listitem" class="hover:bg-slate-100">
       <img
         matListItemAvatar
         [src]="'/assets/images/records-new-sample.svg'"
         alt="..."
-        />
+      />
       <h3 matListItemTitle>{{ p.postTitle }}</h3>
       <p matListItemLine>
         posted on: {{ p.createdAt | date: "medium" }}
@@ -20,7 +17,7 @@
             target="_blank"
             color="primary"
             [routerLink]="['/forum', p.id, 'view']"
-            >
+          >
             <mat-icon>open_in_new</mat-icon>
           </button>
           <button mat-icon-button color="primary" (click)="delete(p.id)">

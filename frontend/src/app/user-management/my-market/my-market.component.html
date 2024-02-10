@@ -2,15 +2,14 @@
 <app-loader #loader></app-loader>
 <mat-list role="list" class="mx-auto max-w-[800px]">
   @for (p of posts; track p) {
-    <mat-list-item
-      role="listitem"
-      class="hover:bg-slate-100"
-      >
+    <mat-list-item role="listitem" class="hover:bg-slate-100">
       <img
         matListItemAvatar
-        [src]="p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'"
+        [src]="
+          p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
+        "
         alt="..."
-        />
+      />
       <h3 matListItemTitle>{{ p.name }}</h3>
       <p matListItemLine>
         posted on: {{ p.createdAt | date: "medium" }}
@@ -21,7 +20,7 @@
               target="_blank"
               color="primary"
               [routerLink]="['/market', p.id, 'edit']"
-              >
+            >
               <mat-icon>edit</mat-icon>
             </a>
           }
@@ -30,15 +29,11 @@
             target="_blank"
             color="primary"
             [routerLink]="['/market', p.id, 'view']"
-            >
+          >
             <mat-icon>open_in_new</mat-icon>
           </a>
           @if (!p.sold) {
-            <button
-              mat-icon-button
-              color="primary"
-              (click)="markAsSold(p._id)"
-              >
+            <button mat-icon-button color="primary" (click)="markAsSold(p._id)">
               <mat-icon>done</mat-icon>
             </button>
           }

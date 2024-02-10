@@ -5,17 +5,14 @@
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     @for (r of records; track r) {
-      <mat-list-item
-        role="listitem"
-        class="hover:bg-slate-100"
-        >
+      <mat-list-item role="listitem" class="hover:bg-slate-100">
         <img
           matListItemAvatar
           [src]="
-          r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'
+            r.images[r.chosenImage] || '/assets/images/records-new-sample.svg'
           "
           alt="..."
-          />
+        />
         <h3 matListItemTitle>{{ r.name }}</h3>
         <p matListItemLine>
           {{ r.label }} - {{ r.catalogNo }}
@@ -25,7 +22,7 @@
               target="_blank"
               color="primary"
               [routerLink]="['/records', r.id, 'view']"
-              >
+            >
               <mat-icon>open_in_new</mat-icon>
             </a>
             <button mat-icon-button color="primary" (click)="delete(r.id)">

@@ -5,17 +5,14 @@
   <app-loader [hidden]="!loading"></app-loader>
   <mat-list role="list">
     @for (p of posts; track p) {
-      <mat-list-item
-        role="listitem"
-        class="hover:bg-slate-100"
-        >
+      <mat-list-item role="listitem" class="hover:bg-slate-100">
         <img
           matListItemAvatar
           [src]="
-          p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
+            p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
           "
           alt="..."
-          />
+        />
         <h3 matListItemTitle>{{ p.name }}</h3>
         <p matListItemLine>
           posted on: {{ p.createdAt | date: "medium" }}
@@ -24,7 +21,7 @@
               mat-icon-button
               color="primary"
               [routerLink]="['/admin/market', p.id, 'edit']"
-              >
+            >
               <mat-icon>edit</mat-icon>
             </a>
             <a
@@ -32,7 +29,7 @@
               color="primary"
               [routerLink]="[]"
               (click)="approve(p.id)"
-              >
+            >
               <mat-icon>check_circle</mat-icon>
             </a>
             <a
@@ -40,7 +37,7 @@
               color="primary"
               [routerLink]="[]"
               (click)="reject(p.id)"
-              >
+            >
               <mat-icon>cancel</mat-icon>
             </a>
             <a
@@ -48,7 +45,7 @@
               color="primary"
               target="_blank"
               [routerLink]="['/market', p.id, 'view']"
-              >
+            >
               <mat-icon>open_in_new</mat-icon>
             </a>
           </span>
