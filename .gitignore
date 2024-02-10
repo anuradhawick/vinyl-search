@@ -23,6 +23,7 @@ speed-measure-plugin.json
 
 # IDE - VSCode
 .vscode
+.vscode/*
 
 # misc
 /.sass-cache

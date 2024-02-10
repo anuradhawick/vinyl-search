@@ -1,6 +1,0 @@
-{
-    "editor.tabSize": 2,
-    "workbench.editor.tabSizing": "fixed",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "CodeGPT.apiKey": "CodeGPT Plus Beta",
-}
