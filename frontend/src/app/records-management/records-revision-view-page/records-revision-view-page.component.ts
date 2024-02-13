@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-records-revision-view-page',
   templateUrl: './records-revision-view-page.component.html',
-  styleUrls: ['./records-revision-view-page.component.css'],
+  styleUrls: ['./records-revision-view-page.component.scss'],
 })
 export class RecordsRevisionViewPageComponent implements OnInit {
   public _ = _;
@@ -32,7 +32,7 @@ export class RecordsRevisionViewPageComponent implements OnInit {
     private route: ActivatedRoute,
     private recordsService: RecordsService,
   ) {}
-
+  // TODO this is a redundant component
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);

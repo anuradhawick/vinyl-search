@@ -6,19 +6,20 @@ import { RecordsService } from '../services/records.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CatalogErrorModalComponent } from '../modals/catalog-error/catalog-error.component';
+import { catchError, of } from 'rxjs';
 // import { record } from './test-record';
 
 @Component({
   selector: 'app-records-edit-page',
   templateUrl: './records-edit-page.component.html',
-  styleUrls: ['./records-edit-page.component.css'],
+  styleUrls: ['./records-edit-page.component.scss'],
 })
 export class RecordsEditPageComponent {
   @ViewChild('editor') editor!: RecordsEditorComponentComponent;
-  @ViewChild('loader') loader!: LoaderComponent;
 
   protected ready = true;
   protected record = null;
+  protected loading = false;
   // For testing
   // protected record = record;
 
@@ -34,14 +35,24 @@ export class RecordsEditPageComponent {
 
     if (!record) return;
 
-    this.loader.show();
+    this.loading = true;
     this.ready = false;
     this.record = record;
 
-    const data = this.recordsService.save_record(record);
-
-    data.then(
-      (result: any) => {
+    this.recordsService
+      .save_record(record)
+      .pipe(
+        catchError((error) => {
+          console.log(error);
+          this.ready = true;
+          this.toastr.error(
+            `Unable to save the records. Try again later`,
+            'Error',
+          );
+          return of(null);
+        }),
+      )
+      .subscribe((result: any) => {
         if (result.recordId) {
           this.toastr.success(`Records saved successfully`, 'Success');
           this.router.navigate([
@@ -52,21 +63,12 @@ export class RecordsEditPageComponent {
           ]);
         } else {
           this.ready = true;
-          this.loader.hide();
           this.dialog.open(CatalogErrorModalComponent, {
             data: { id: result.originalId },
           });
         }
-      },
-      () => {
-        this.ready = true;
-        this.loader.hide();
-        this.toastr.error(
-          `Unable to save the records. Try again later`,
-          'Error',
-        );
-      },
-    );
+        this.loading = false;
+      });
   }
 
   readyChange(event: any) {

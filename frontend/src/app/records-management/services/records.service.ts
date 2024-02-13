@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { environment } from '../../../environments/environment';
-import { shareReplay } from 'rxjs';
+import { from, shareReplay } from 'rxjs';
+import { post } from 'aws-amplify/api';
 
 @Injectable()
 export class RecordsService {
@@ -11,16 +12,14 @@ export class RecordsService {
     private auth: AuthService,
   ) {}
 
-  async save_record(record: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(environment.api_gateway + 'records', record, {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .toPromise();
+  save_record(record: any) {
+    return from(
+      post({
+        apiName: '[vinyl.lk]',
+        path: 'records/',
+        options: { body: record },
+      }).response,
+    );
   }
 
   async update_record(record: any) {

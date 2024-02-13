@@ -1,44 +1,31 @@
-<br />
-<app-loader #loader></app-loader>
-@if (loader.isHidden()) {
-  <div>
-    @if (record) {
-      <app-records-editor-component
-        [record]="record"
-        #editor
-        (readyStateChange)="readyChange($event)"
-      ></app-records-editor-component>
-    }
-    @if (!record) {
-      <app-records-editor-component
-        #editor
-        (readyStateChange)="readyChange($event)"
-      ></app-records-editor-component>
-    }
-    <div class="row col-12">
-      <div class="col-12 col-sm-9 offset-3">
-        <div class="container-fluid">
-          <button
-            mat-raised-button
-            type="button"
-            [routerLink]="['/records']"
-            [disabled]="!ready"
-          >
-            Discard
-          </button>
-          <button
-            mat-raised-button
-            type="button"
-            class="ml-1"
-            color="primary"
-            (click)="save()"
-            [disabled]="!ready"
-          >
-            Save
-          </button>
-        </div>
-        <br />
-      </div>
+<app-loader [loading]="loading"></app-loader>
+@if (!loading) {
+  @if (record) {
+    <app-records-editor-component
+      [record]="record"
+      #editor
+      (readyStateChange)="readyChange($event)"
+    ></app-records-editor-component>
+  } @else {
+    <app-records-editor-component
+      #editor
+      (readyStateChange)="readyChange($event)"
+    ></app-records-editor-component>
+  }
+  <div class="w-full">
+    <div class="relative md:left-1/3 flex flex-row gap-1 p-2">
+      <button mat-raised-button [routerLink]="['/records']" [disabled]="!ready">
+        Discard
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="save()"
+        [disabled]="!ready"
+      >
+        Save
+      </button>
     </div>
   </div>
+  <br />
 }

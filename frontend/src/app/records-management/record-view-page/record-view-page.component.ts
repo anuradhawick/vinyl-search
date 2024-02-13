@@ -8,7 +8,7 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 @Component({
   selector: 'app-record-view-page',
   templateUrl: './record-view-page.component.html',
-  styleUrls: ['./record-view-page.component.css'],
+  styleUrls: ['./record-view-page.component.scss'],
 })
 export class RecordViewPageComponent implements OnInit {
   public _ = _;

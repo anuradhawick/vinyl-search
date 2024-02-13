@@ -63,7 +63,7 @@ export const DATE_FORMATS = {
 @Component({
   selector: 'app-records-editor-component',
   templateUrl: './records-editor-component.component.html',
-  styleUrls: ['./records-editor-component.component.css'],
+  styleUrls: ['./records-editor-component.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -160,9 +160,8 @@ export class RecordsEditorComponentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // patche the record from input to component
+    // patch the record from input to component
     if (this.record) {
-      console.log(this.record);
       this.recordObject = _.cloneDeep(this.record);
     }
     // init the form
