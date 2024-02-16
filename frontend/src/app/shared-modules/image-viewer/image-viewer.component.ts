@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 
 interface ImageViewerConfig {
-  btnClass?: string;
   zoomFactor?: number;
   containerBackgroundColor?: string;
   wheelZoom?: boolean;
@@ -54,10 +53,9 @@ class CustomEvent {
 }
 
 const DEFAULT_CONFIG: ImageViewerConfig = {
-  btnClass: 'default',
   zoomFactor: 0.1,
   containerBackgroundColor: '#000',
-  wheelZoom: false,
+  wheelZoom: true,
   allowFullscreen: true,
   allowKeyboardNavigation: true,
   btnShow: {
@@ -83,7 +81,7 @@ const DEFAULT_CONFIG: ImageViewerConfig = {
 @Component({
   selector: 'app-image-viewer',
   templateUrl: './image-viewer.component.html',
-  styleUrls: ['./image-viewer.component.css'],
+  styleUrls: ['./image-viewer.component.scss'],
 })
 export class ImageViewerComponent implements OnInit {
   @Input()
@@ -150,6 +148,26 @@ export class ImageViewerComponent implements OnInit {
     }
   }
 
+  @HostListener('document:fullscreenchange')
+  @HostListener('document:webkitfullscreenchange')
+  @HostListener('document:mozfullscreenchange')
+  @HostListener('document:MSFullscreenChange')
+  onEscPress() {
+    if (!document.fullscreenElement) {
+      this.fullscreen = false;
+    }
+  }
+
+  @HostListener('mouseover')
+  onMouseOver() {
+    this.hovered = true;
+  }
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    this.hovered = false;
+  }
+
   zoomIn() {
     this.scale *= 1 + this.config.zoomFactor!;
     this.updateStyle();
@@ -162,9 +180,9 @@ export class ImageViewerComponent implements OnInit {
     this.updateStyle();
   }
 
-  scrollZoom(evt: any) {
+  scrollZoom(event: WheelEvent) {
     if (this.config.wheelZoom) {
-      evt.deltaY > 0 ? this.zoomOut() : this.zoomIn();
+      event.deltaY > 0 ? this.zoomOut() : this.zoomIn();
       return false;
     }
     return;
@@ -229,16 +247,6 @@ export class ImageViewerComponent implements OnInit {
     this.translateX = 0;
     this.translateY = 0;
     this.updateStyle();
-  }
-
-  @HostListener('mouseover')
-  onMouseOver() {
-    this.hovered = true;
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave() {
-    this.hovered = false;
   }
 
   private canNavigate(event: any) {

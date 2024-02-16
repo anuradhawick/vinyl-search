@@ -1,6 +1,6 @@
 <div
   [appToggleFullscreen]="fullscreen"
-  class="img-container"
+  class="flex min-w-[350px] w-full aspect-square relative overflow-hidden items-center align-middle"
   [style.backgroundColor]="config.containerBackgroundColor"
   (wheel)="scrollZoom($event)"
   (dragover)="onDragOver($event)"
@@ -8,109 +8,104 @@
   <img
     [src]="src[index]"
     [ngStyle]="style"
+    class="block m-auto max-h-full max-w-full"
     alt="Image not found..."
     (dragstart)="onDragStart($event)"
     (load)="onLoad()"
     (loadstart)="onLoadStart()"
+    (click)="reset()"
   />
   <!-- Div below will be used to hide the 'ghost' image when dragging -->
   <div></div>
   @if (loading) {
-    <div class="spinner-overlay">
-      <div class="spinner-container">
+    <div
+      class="absolute top-0 left-0 right-0 bottom-0 h-full w-full bg-black bg-opacity-5"
+    >
+      <div
+        class="absolute top-0 left-0 right-0 bottom-0 h-[100px] w-[100px] m-auto"
+      >
         <mat-spinner></mat-spinner>
       </div>
     </div>
   }
-  @if (config.btnShow.rotateCounterClockwise) {
-    <button
-      mat-mini-fab
-      type="button"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="rotateCounterClockwise()"
-    >
-      <mat-icon>{{ config.btnIcons!.rotateCounterClockwise }}</mat-icon>
-    </button>
-  }
-  @if (config.btnShow.rotateClockwise) {
-    <button
-      mat-mini-fab
-      type="button"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="rotateClockwise()"
-    >
-      <mat-icon>{{ config.btnIcons!.rotateClockwise }}</mat-icon>
-    </button>
-  }
-  @if (config.btnShow.zoomOut) {
-    <button
-      mat-mini-fab
-      type="button"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="zoomOut()"
-    >
-      <mat-icon>{{ config.btnIcons!.zoomOut }}</mat-icon>
-    </button>
-  }
-  @if (config.btnShow.zoomIn) {
-    <button
-      mat-mini-fab
-      type="button"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="zoomIn()"
-    >
-      <mat-icon>{{ config.btnIcons!.zoomIn }}</mat-icon>
-    </button>
-  }
-  @for (cBtn of config.customBtns; track cBtn) {
-    <button
-      mat-mini-fab
-      type="button"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="fireCustomEvent(cBtn.name, index)"
-    >
-      <mat-icon>{{ cBtn.icon }}</mat-icon>
-    </button>
-  }
-  @if (config.allowFullscreen) {
-    <button
-      mat-mini-fab
-      type="button"
-      id="ngx-fs-btn"
-      [ngClass]="config.btnClass"
-      color="primary"
-      (click)="toggleFullscreen()"
-    >
-      @if (fullscreen) {
-        <mat-icon>{{ config.btnIcons!.fullscreenExit }}</mat-icon>
-      }
-      @if (!fullscreen) {
-        <mat-icon>{{ config.btnIcons!.fullscreen }}</mat-icon>
-      }
-    </button>
-  }
-  @if (src.length > 1) {
-    <div class="nav-button-container">
+  <div class="absolute z-10 flex flex-col top-2 right-2">
+    @if (config.allowFullscreen) {
       <button
         mat-mini-fab
-        [ngClass]="config.btnClass"
-        color="primary"
         type="button"
+        color="primary"
+        (click)="toggleFullscreen()"
+      >
+        @if (fullscreen) {
+          <mat-icon>{{ config.btnIcons!.fullscreenExit }}</mat-icon>
+        }
+        @if (!fullscreen) {
+          <mat-icon>{{ config.btnIcons!.fullscreen }}</mat-icon>
+        }
+      </button>
+    }
+  </div>
+  <div
+    class="absolute h-auto z-10 flex flex-col top-20 bottom-20 right-2 justify-end space-y-10"
+  >
+    @if (config.btnShow.rotateCounterClockwise) {
+      <button
+        mat-mini-fab
+        type="button"
+        color="primary"
+        (click)="rotateCounterClockwise()"
+      >
+        <mat-icon>{{ config.btnIcons!.rotateCounterClockwise }}</mat-icon>
+      </button>
+    }
+    @if (config.btnShow.rotateClockwise) {
+      <button
+        mat-mini-fab
+        type="button"
+        color="primary"
+        (click)="rotateClockwise()"
+      >
+        <mat-icon>{{ config.btnIcons!.rotateClockwise }}</mat-icon>
+      </button>
+    }
+    @if (config.btnShow.zoomIn) {
+      <button mat-mini-fab type="button" color="primary" (click)="zoomIn()">
+        <mat-icon>{{ config.btnIcons!.zoomIn }}</mat-icon>
+      </button>
+    }
+    @if (config.btnShow.zoomOut) {
+      <button mat-mini-fab type="button" color="primary" (click)="zoomOut()">
+        <mat-icon>{{ config.btnIcons!.zoomOut }}</mat-icon>
+      </button>
+    }
+    @for (cBtn of config.customBtns; track cBtn) {
+      <button
+        mat-mini-fab
+        type="button"
+        color="primary"
+        (click)="fireCustomEvent(cBtn.name, index)"
+      >
+        <mat-icon>{{ cBtn.icon }}</mat-icon>
+      </button>
+    }
+  </div>
+  @if (src.length > 1) {
+    <div
+      class="absolute bottom-10 z-10 flex flex-row text-center w-full justify-center items-center"
+    >
+      <button
+        class="mx-2"
+        mat-mini-fab
+        color="primary"
         (click)="prevImage($event)"
         [disabled]="index === 0"
       >
         <mat-icon>{{ config.btnIcons!.prev }}</mat-icon>
       </button>
       <button
+        class="mx-2"
         mat-mini-fab
-        [ngClass]="config.btnClass"
         color="primary"
-        type="button"
         (click)="nextImage($event)"
         [disabled]="index === src.length - 1"
       >

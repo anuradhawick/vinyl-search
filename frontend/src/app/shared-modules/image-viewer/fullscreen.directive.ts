@@ -1,10 +1,4 @@
-import {
-  Directive,
-  OnChanges,
-  Input,
-  ElementRef,
-  SimpleChange,
-} from '@angular/core';
+import { Directive, OnChanges, Input, ElementRef } from '@angular/core';
 import screenfull from 'screenfull';
 
 @Directive({
