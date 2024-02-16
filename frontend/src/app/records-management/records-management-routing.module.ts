@@ -4,7 +4,6 @@ import { RecordsHomePageComponent } from './records-home-page/records-home-page.
 import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.component';
 import { authGuard } from '../shared-modules/guards/auth.guard';
 import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
-import { RecordsUpdatePageComponent } from './records-update-page/records-update-page.component';
 
 const routes: Routes = [
   {
@@ -17,13 +16,13 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: ':recordId/view',
-    component: RecordViewPageComponent,
+    path: ':recordId/edit',
+    component: RecordsEditPageComponent,
     canActivate: [authGuard],
   },
   {
-    path: ':recordId/edit',
-    component: RecordsUpdatePageComponent,
+    path: ':recordId/view',
+    component: RecordViewPageComponent,
     canActivate: [authGuard],
   },
   {

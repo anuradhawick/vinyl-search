@@ -91,7 +91,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   public recordId: string = '';
 
   @Input() record: any = null;
-  @Input() public editorTitle = 'New Release Details';
+  @Input() editorTitle = '';
   @Output() recordChange = new EventEmitter();
   @Output() readyStateChange = new EventEmitter<boolean>();
 

@@ -25,16 +25,17 @@ export class RecordsService {
     );
   }
 
-  async update_record(record: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(environment.api_gateway + 'records/' + record.id, record, {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .toPromise();
+  update_record(record: any) {
+    return from(
+      post({
+        apiName: '[vinyl.lk]',
+        path: `records/${record.id}`,
+        options: { body: record },
+      }).response,
+    ).pipe(
+      map((res) => res.body),
+      switchMap((body) => from(body.json())),
+    );
   }
 
   fetch_records(params: any) {
