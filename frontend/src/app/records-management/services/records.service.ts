@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { environment } from '../../../environments/environment';
-import { from, shareReplay } from 'rxjs';
-import { post } from 'aws-amplify/api';
+import { from, shareReplay, map, switchMap } from 'rxjs';
+import { post, get } from 'aws-amplify/api';
 
 @Injectable()
 export class RecordsService {
@@ -19,6 +19,9 @@ export class RecordsService {
         path: 'records/',
         options: { body: record },
       }).response,
+    ).pipe(
+      map((res) => res.body),
+      switchMap((body) => from(body.json())),
     );
   }
 
@@ -42,17 +45,16 @@ export class RecordsService {
       .pipe(shareReplay(1));
   }
 
-  async fetch_record_history(recordId: string) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .get(environment.api_gateway + 'records/' + recordId + '/revisions', {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .pipe(shareReplay(1))
-      .toPromise();
+  fetch_record_history(recordId: string) {
+    return from(
+      get({
+        apiName: '[vinyl.lk]',
+        path: `records/${recordId}/revisions`,
+      }).response,
+    ).pipe(
+      map((res) => res.body),
+      switchMap((body) => from(body.json())),
+    );
   }
 
   search_records(params: any) {
@@ -63,32 +65,27 @@ export class RecordsService {
       .pipe(shareReplay(1));
   }
 
-  async fetch_record(recordId: string) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .get(environment.api_gateway + 'records/' + recordId, {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .pipe(shareReplay(1))
-      .toPromise();
+  fetch_record(recordId: string) {
+    return from(
+      get({
+        apiName: '[vinyl.lk]',
+        path: `records/${recordId}`,
+      }).response,
+    ).pipe(
+      map((res) => res.body),
+      switchMap((body) => from(body.json())),
+    );
   }
 
-  async fetch_record_revision(recordId: string, revisionId: string) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .get(
-        `${environment.api_gateway}records/${recordId}/revisions/${revisionId}`,
-        {
-          headers: new HttpHeaders({
-            Authorization: token,
-          }),
-        },
-      )
-      .pipe(shareReplay(1))
-      .toPromise();
+  fetch_record_revision(recordId: string, revisionId: string) {
+    return from(
+      get({
+        apiName: '[vinyl.lk]',
+        path: `records/${recordId}/revisions/${revisionId}`,
+      }).response,
+    ).pipe(
+      map((res) => res.body),
+      switchMap((body) => from(body.json())),
+    );
   }
 }

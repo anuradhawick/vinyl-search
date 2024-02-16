@@ -44,22 +44,24 @@
               </mat-chip-listbox>
             </div>
             <hr />
-            <h6>Revision history</h6>
-            <div>
-              <app-loader [hidden]="!histLoading"></app-loader>
-              @for (h of recordHistory?.history; track $index) {
-                <a
-                  mat-button
-                  [routerLink]="[
-                    '/records',
-                    recordObject.id,
-                    'revisions',
-                    h._id
-                  ]"
-                  >Revision - {{ h.createdAt | date: "medium" }}</a
-                >
-              }
-            </div>
+            @if (!isRevisionView) {
+              <h6>Revision history</h6>
+              <div>
+                <app-loader [hidden]="!histLoading"></app-loader>
+                @for (h of recordHistory?.history; track $index) {
+                  <a
+                    mat-button
+                    [routerLink]="[
+                      '/records',
+                      recordObject.id,
+                      'revisions',
+                      h._id
+                    ]"
+                    >Revision - {{ h.createdAt | date: "medium" }}</a
+                  >
+                }
+              </div>
+            }
           </mat-card-content>
         </mat-card>
       </div>
@@ -214,8 +216,8 @@
                     </tr>
                   }
                   <tr>
-                    <td class="w-1/4">Notes</td>
-                    <td class="w-3/4">
+                    <td class="min-w-[100px] w-1/3">Notes</td>
+                    <td class="min-w-[200px] w-2/3">
                       <strong>
                         <div style="white-space: pre-wrap">
                           {{ recordObject.notes }}
@@ -242,18 +244,48 @@
                 }
               </div>
             }
+            @if (isRevisionView) {
+              <hr />
+              <table class="w-full border-separate border-spacing-y-3">
+                <tbody>
+                  @if (recordObject.reviser) {
+                    <tr>
+                      <td class="min-w-[100px] w-1/3">Revised by</td>
+                      <td class="min-w-[200px] w-2/3">
+                        <strong>
+                          <div style="white-space: pre-wrap">
+                            {{ recordObject.reviser.name || "Not available" }}
+                          </div>
+                        </strong>
+                      </td>
+                    </tr>
+                  }
+                  @if (recordObject.revisionComments) {
+                    <tr>
+                      <td class="min-w-[100px] w-1/3">Revision comments</td>
+                      <td class="min-w-[200px] w-2/3">
+                        <strong>
+                          <div style="white-space: pre-wrap">
+                            {{
+                              recordObject.revisionComments || "Not available"
+                            }}
+                          </div>
+                        </strong>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
           </mat-card-content>
         </mat-card>
+        @if (auth.isLoggedIn && !isRevisionView) {
+          <hr />
+          <a mat-button [routerLink]="['/records', recordObject.id, 'edit']"
+            >Submit a revision</a
+          >
+        }
       </div>
-      @if (auth.isLoggedIn) {
-        <hr />
-        <a
-          mat-button
-          class="m-2"
-          [routerLink]="['/records', recordObject.id, 'edit']"
-          >Submit a revision</a
-        >
-      }
     </div>
     <!--END RIGHT COL-->
   </div>

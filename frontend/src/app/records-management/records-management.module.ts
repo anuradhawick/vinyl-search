@@ -7,7 +7,6 @@ import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.
 import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
 import { RecordsEditorComponentComponent } from './records-editor-component/records-editor-component.component';
 import { RecordsUpdatePageComponent } from './records-update-page/records-update-page.component';
-import { RecordsRevisionViewPageComponent } from './records-revision-view-page/records-revision-view-page.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModules } from '../shared-modules/shared.module';
 import { CatalogErrorModalComponent } from './modals/catalog-error/catalog-error.component';
@@ -24,7 +23,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     RecordViewPageComponent,
     RecordsEditorComponentComponent,
     RecordsUpdatePageComponent,
-    RecordsRevisionViewPageComponent,
     CatalogErrorModalComponent,
     ChooseFilterComponent,
   ],

@@ -5,7 +5,6 @@ import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.
 import { authGuard } from '../shared-modules/guards/auth.guard';
 import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
 import { RecordsUpdatePageComponent } from './records-update-page/records-update-page.component';
-import { RecordsRevisionViewPageComponent } from './records-revision-view-page/records-revision-view-page.component';
 
 const routes: Routes = [
   {
@@ -29,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: ':recordId/revisions/:revisionId',
-    component: RecordsRevisionViewPageComponent,
+    component: RecordViewPageComponent,
     canActivate: [authGuard],
   },
 ];

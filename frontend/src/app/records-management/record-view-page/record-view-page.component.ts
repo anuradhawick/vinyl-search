@@ -11,10 +11,10 @@ import { AuthService } from '../../shared-modules/services/auth.service';
   styleUrls: ['./record-view-page.component.scss'],
 })
 export class RecordViewPageComponent implements OnInit {
-  public _ = _;
-  public recordObject: any = null;
-  public recordHistory: any = null;
-  public imgvconfig: any = {
+  protected _ = _;
+  protected recordObject: any = null;
+  protected recordHistory: any = null;
+  protected imgvconfig: any = {
     zoomFactor: 0.1,
     wheelZoom: true,
     allowFullscreen: true,
@@ -29,26 +29,38 @@ export class RecordViewPageComponent implements OnInit {
   };
 
   // context control
-  public histLoading = true;
-  public recordLoading = true;
+  protected histLoading = true;
+  protected recordLoading = true;
+  protected isRevisionView = false;
 
   constructor(
-    public route: ActivatedRoute,
+    protected auth: AuthService,
+    private route: ActivatedRoute,
     private recordsService: RecordsService,
-    public auth: AuthService,
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
-      this.recordsService.fetch_record(recordId).then((data) => {
+      const revisionId = _.get(map, 'params.revisionId', null);
+      this.isRevisionView = !!revisionId;
+      // fetch records
+      (this.isRevisionView
+        ? this.recordsService.fetch_record_revision(recordId, revisionId)
+        : this.recordsService.fetch_record(recordId)
+      ).subscribe((data: any) => {
+        console.log(data);
         this.recordObject = data;
         this.recordLoading = false;
-        this.recordsService.fetch_record_history(recordId).then((data1) => {
-          this.recordHistory = data1;
-          this.histLoading = false;
-        });
       });
+      // fetch revisions
+      !this.isRevisionView &&
+        this.recordsService
+          .fetch_record_history(recordId)
+          .subscribe((data: any) => {
+            this.recordHistory = data;
+            this.histLoading = false;
+          });
     });
   }
 }

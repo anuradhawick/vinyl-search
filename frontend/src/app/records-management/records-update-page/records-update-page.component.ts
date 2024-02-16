@@ -34,16 +34,9 @@ export class RecordsUpdatePageComponent implements OnInit {
     this.revisionComments = this.fb.control('', Validators.required);
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
-      const data = this.recordsService.fetch_record(recordId);
-
-      data.then(
-        (record) => {
-          this.recordObject = record;
-        },
-        () => {
-          console.log('error');
-        },
-      );
+      this.recordsService.fetch_record(recordId).subscribe((record) => {
+        this.recordObject = record;
+      });
     });
   }
 
