@@ -13,7 +13,7 @@ export class RecordsRevisionViewPageComponent implements OnInit {
   public recordObject: any = null;
   public imgvconfig: any = {
     zoomFactor: 0.1,
-    wheelZoom: false,
+    wheelZoom: true,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
     customBtns: [],

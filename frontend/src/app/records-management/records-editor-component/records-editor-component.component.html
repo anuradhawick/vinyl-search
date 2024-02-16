@@ -1,31 +1,23 @@
 <div class="flex flex-col md:flex-row">
   <div class="w-full md:w-1/3">
     <div class="m-2">
-      <div class="text-center">
-        <div class="sq-container">
-          <div class="sq-content">
-            <div>
-              <app-image-viewer
-                [config]="imgvconfig"
-                [src]="
-                  (_.isEmpty(recordObject.images) && [
-                    '/assets/images/records-new-sample.svg'
-                  ]) ||
-                  recordObject.images
-                "
-                [(index)]="recordObject.chosenImage"
-                (customEvent)="handleEvent($event)"
-              ></app-image-viewer>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group m-0">
+      <app-image-viewer
+        [config]="imgvconfig"
+        [src]="
+          (_.isEmpty(recordObject.images) && [
+            '/assets/images/records-new-sample.svg'
+          ]) ||
+          recordObject.images
+        "
+        [(index)]="recordObject.chosenImage"
+        (customEvent)="handleEvent($event)"
+      ></app-image-viewer>
+      <div class="flex flex-col">
         <button
           (click)="imageupload.click()"
           mat-raised-button
           color="primary"
-          class="w-full mt-1"
+          class="w-full my-1"
         >
           Upload
         </button>
@@ -41,37 +33,34 @@
       </div>
       @for (p of percentages; track p) {
         <mat-progress-bar
-          class="mb-1"
+          class="my-1"
           mode="determinate"
           value="{{ p | async }}"
         ></mat-progress-bar>
       }
       @if (recordObject.images.length > 0) {
-        <div class="card col-12 m-0">
-          <div class="row">
+        <mat-card>
+          <mat-card-content class="flex flex-row flex-wrap gap-1">
             @for (image of recordObject.images; track image; let i = $index) {
-              <div class="col-sm-4 p-0">
-                <div class="m-1">
-                  <a (click)="recordObject.chosenImage = i" class="thumbnail">
-                    <div class="image" style="background-color: #d5d5d5">
-                      <img
-                        style="object-fit: cover"
-                        [src]="image"
-                        class="img img-responsive"
-                      />
-                    </div>
-                  </a>
-                </div>
+              <div class="w-1/4 inline-block">
+                <a (click)="recordObject.chosenImage = i">
+                  <div class="aspect-square bg-white m-1">
+                    <img
+                      class="object-cover"
+                      [src]="image"
+                    />
+                  </div>
+                </a>
               </div>
             }
-          </div>
-        </div>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   </div>
   <div class="w-full md:w-2/3">
     <div class="m-2">
-      <h1>{{ editorTitle }}</h1>
+      <h2>{{ editorTitle }}</h2>
       <hr />
       <form [formGroup]="form">
         <mat-card>
@@ -118,7 +107,7 @@
               </mat-form-field>
             </div>
             <hr />
-            <div class="grid grid-cols-1  md:grid-cols-3 md:space-x-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 md:space-x-4">
               <mat-form-field>
                 <input
                   matInput
@@ -161,7 +150,7 @@
               </mat-form-field>
             </div>
             <hr />
-            <div class="grid grid-cols-1  md:grid-cols-3 md:space-x-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 md:space-x-4">
               <mat-form-field>
                 <mat-select
                   placeholder="Channels"

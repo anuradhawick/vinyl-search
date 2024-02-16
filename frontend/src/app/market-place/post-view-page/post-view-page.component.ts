@@ -18,7 +18,7 @@ export class PostViewPageComponent implements OnInit {
   public recordHistory: any = null;
   public imgvconfig = {
     zoomFactor: 0.1,
-    wheelZoom: false,
+    wheelZoom: true,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
     customBtns: [],

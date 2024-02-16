@@ -54,7 +54,7 @@ export class PostEditorComponent implements OnInit {
   // image viewer config
   public imgvconfig = {
     zoomFactor: 0.1,
-    wheelZoom: false,
+    wheelZoom: true,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
     customBtns: [{ name: 'delete', icon: 'delete' }],

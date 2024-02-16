@@ -138,7 +138,7 @@ export class RecordsEditorComponentComponent implements OnInit {
   // image viewer config
   public imgvconfig = {
     zoomFactor: 0.1,
-    wheelZoom: false,
+    wheelZoom: true,
     allowFullscreen: true,
     allowKeyboardNavigation: true,
     customBtns: [{ name: 'delete', icon: 'delete' }],
@@ -262,7 +262,6 @@ export class RecordsEditorComponentComponent implements OnInit {
     });
 
     this.loadStyles();
-    console.log('inited');
   }
 
   resort(arr: any) {
