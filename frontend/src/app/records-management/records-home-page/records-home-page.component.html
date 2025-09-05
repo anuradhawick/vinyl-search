@@ -28,13 +28,13 @@
         Add
       </button>
     </div>
-    @if (autocompleteShow && autocompleteResult?.records?.length > 0) {
+    @if (autocompleteShow && autocompleteResult?.length > 0) {
       <div
         class="z-10 p-2 max-w-md absolute top-[76px] left-2 right-2 bg-white border-solid border-slate-400 border-2 rounded-md overflow-hidden"
       >
         <table class="w-full">
           <tbody>
-            @for (record of autocompleteResult?.records; track record) {
+            @for (record of autocompleteResult; track record) {
               <tr>
                 <td>
                   <a [routerLink]="['/records', record.id, 'view']">
@@ -62,10 +62,11 @@
     !_.isEmpty(_.trim(_.get(route.queryParams | async, "query")))
   ) {
     <div class="ml-3 mr-5 mt-2 text-dark">
-      Search results for - <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
-        [routerLink]="['/records']"
-        >cancel</a
-      >)
+      Search results for -
+      <span class="font-semibold">{{
+        _.truncate(query, { length: 100 })
+      }}</span>
+      (<a mat-button (click)="exitSearchRoute()">cancel</a>)
     </div>
   }
 </div>
@@ -222,41 +223,32 @@
   <div class="w-full md:w-9/12 p-2">
     <app-loader #recordsloader></app-loader>
     <div class="grid md:grid-cols-6 md:gap-4 grid-cols-3 gap-2">
-      @for (r of $any(_.get(records | async, "records")); track r) {
-        <div>
-          <div class="bg-white rounded-md shadow-xl h-full">
-            <div>
-              <a
-                [routerLink]="['/records', r.id, 'view']"
-                class="h-full w-full"
-              >
-                <div class="w-full h-full">
-                  <img
-                    [src]="
-                      r.images[r.chosenImage] ||
-                      '/assets/images/records-new-sample.svg'
-                    "
-                    class="min-w-full object-cover object-center aspect-square rounded-t-lg"
-                  />
-                </div>
-                <p
-                  class="m-0 mx-1 mt-1 font-medium text-black text-sm truncate"
-                >
-                  {{ r.name }}
-                </p>
-                <p
-                  class="m-0 mx-1 mb-1 font-medium text-gray-700 text-xs truncate"
-                >
-                  {{ r.label }}
-                </p>
-              </a>
-            </div>
+      @for (r of records; track r) {
+        <div class="bg-white rounded-md shadow-xl h-full">
+          <div>
+            <a [routerLink]="['/records', r.id, 'view']" class="h-full w-full">
+              <div class="w-full h-full">
+                <img
+                [src]="
+                  r.images[r.chosenImage] ||
+                  '/assets/images/records-new-sample.svg'
+                  "
+                class="min-w-full object-cover object-center aspect-square rounded-t-md"
+                />
+              </div>
+              <p class="m-0 mx-1 mt-1 font-medium text-black text-sm truncate">
+                {{ r.name }}
+              </p>
+              <p class="m-0 mx-1 mb-1 font-medium text-gray-700 text-xs truncate">
+                {{ r.label }}
+              </p>
+            </a>
           </div>
         </div>
       }
     </div>
     <br />
-    @if ((records | async) && count > limit) {
+    @if (records && count > limit) {
       <nav>
         <mat-paginator
           class="bg-slate-50"

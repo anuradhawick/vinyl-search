@@ -128,8 +128,8 @@ module "lambda-records-service" {
   handler       = "records-main.main"
   runtime       = "nodejs18.x"
   architectures = ["x86_64"]
-  memory_size   = 512
-  timeout       = 10
+  memory_size   = 1024
+  timeout       = 29
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI

@@ -5,7 +5,7 @@ import Jimp from 'jimp';
 import _ from 'lodash';
 import { connect_db } from './utils/db-util.js';
 
-
+const __dirname = path.resolve(path.dirname(''))
 const s3 = new S3Client();
 const BUCKET_NAME = process.env.BUCKET_NAME
 const CDN_DOMAIN = process.env.CDN_DOMAIN
@@ -424,4 +424,3 @@ export async function update_record(reviser_uid_str, recordId, record) {
 
   return record.id;
 };
-

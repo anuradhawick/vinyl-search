@@ -35,3 +35,8 @@ output "s3_bucket_name" {
   value       = aws_s3_bucket.vinyl-lk-bucket.id
   description = "S3 bucket name for Amplify"
 }
+
+output "cdn_domain" {
+  value       = aws_route53_record.vinyl-lk-cdn.name
+  description = "CDN fomain for S3 objects."
+}

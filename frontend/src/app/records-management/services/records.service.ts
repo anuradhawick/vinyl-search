@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { from, shareReplay, map, switchMap } from 'rxjs';
 import { post, get } from 'aws-amplify/api';
@@ -9,7 +8,6 @@ import { post, get } from 'aws-amplify/api';
 export class RecordsService {
   constructor(
     private http: HttpClient,
-    private auth: AuthService,
   ) {}
 
   save_record(record: any) {

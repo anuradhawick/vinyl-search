@@ -49,8 +49,7 @@ export class RecordViewPageComponent implements OnInit {
         ? this.recordsService.fetch_record_revision(recordId, revisionId)
         : this.recordsService.fetch_record(recordId)
       ).subscribe((data: any) => {
-        console.log(data);
-        this.recordObject = data;
+        this.recordObject = data.record;
         this.recordLoading = false;
       });
       // fetch revisions
@@ -58,7 +57,7 @@ export class RecordViewPageComponent implements OnInit {
         this.recordsService
           .fetch_record_history(recordId)
           .subscribe((data: any) => {
-            this.recordHistory = data;
+            this.recordHistory = data.history;
             this.histLoading = false;
           });
     });

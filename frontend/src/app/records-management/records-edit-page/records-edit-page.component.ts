@@ -44,8 +44,8 @@ export class RecordsEditPageComponent implements OnInit {
       this.isRevisionSubmission = !!recordId;
 
       if (this.isRevisionSubmission) {
-        this.recordsService.fetch_record(recordId).subscribe((record) => {
-          this.record = record;
+        this.recordsService.fetch_record(recordId).subscribe((res: any) => {
+          this.record = res.record;
           this.loading = false;
         });
       } else {

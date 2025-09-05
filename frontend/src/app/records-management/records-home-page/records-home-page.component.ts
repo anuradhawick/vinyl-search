@@ -54,9 +54,9 @@ export class RecordsHomePageComponent implements OnInit {
   filtersPanel!: MatAccordion;
 
   constructor(
-    public route: ActivatedRoute,
+    protected route: ActivatedRoute,
+    protected auth: AuthService,
     private router: Router,
-    public auth: AuthService,
     private recordsService: RecordsService,
     private filterDialog: MatDialog,
   ) {}
@@ -115,10 +115,10 @@ export class RecordsHomePageComponent implements OnInit {
             : of(null);
         }),
       )
-      .subscribe((result) => {
+      .subscribe((result: any) => {
         if (result) {
           this.autocompleteShow = true;
-          this.autocompleteResult = result;
+          this.autocompleteResult = result.records;
         } else {
           this.autocompleteShow = false;
           this.autocompleteResult = null;
@@ -130,6 +130,11 @@ export class RecordsHomePageComponent implements OnInit {
     setTimeout(() => {
       this.autocompleteShow = false;
     }, 300);
+  }
+
+  exitSearchRoute() {
+    this.autocompleteEvent.next('');
+    this.router.navigate(['/records']);
   }
 
   getStyles() {
@@ -161,18 +166,15 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   loadRecords() {
-    const data = this.recordsService.fetch_records({
+    this.recordsService.fetch_records({
       skip: this.skip,
       limit: this.limit,
-    });
-
-    this.records = data;
-
-    data.subscribe((records: any) => {
-      this.skip = records.skip;
-      this.limit = records.limit;
-      this.count = _.get(records, 'count', 0);
+    }).subscribe((res: any) => {
       this.loader.hide();
+      this.records = res.records;
+      this.skip = res.skip;
+      this.limit = res.limit;
+      this.count = _.get(res, 'count', 0);
     });
   }
 
@@ -186,14 +188,11 @@ export class RecordsHomePageComponent implements OnInit {
       styles: JSON.stringify(this.styleFilters),
       formats: JSON.stringify(this.formatFilters),
       countries: JSON.stringify(this.countryFilters),
-    });
-
-    this.records = data;
-
-    data.subscribe((postsList: any) => {
-      this.skip = postsList.skip;
-      this.limit = postsList.limit;
-      this.count = postsList.count;
+    }).subscribe((res: any) => {
+      this.records = res.records;
+      this.skip = res.skip;
+      this.limit = res.limit;
+      this.count = res.count;
       this.loader.hide();
     });
   }

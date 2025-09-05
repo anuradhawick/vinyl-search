@@ -48,7 +48,7 @@
               <h6>Revision history</h6>
               <div>
                 <app-loader [hidden]="!histLoading"></app-loader>
-                @for (h of recordHistory?.history; track $index) {
+                @for (h of recordHistory; track $index) {
                   <a
                     mat-button
                     [routerLink]="[

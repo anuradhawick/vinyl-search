@@ -12,8 +12,8 @@ export async function connect_db() {
       return cachedDb
     }
     else {
-      client = await MongoClient.connect(atlas_connection_uri, { useNewUrlParser: true });
-      cachedDb = await client.db('vinyl');
+      client = new MongoClient(atlas_connection_uri);
+      cachedDb = client.db('vinyl');
       return cachedDb;
     }
   } catch (err) {

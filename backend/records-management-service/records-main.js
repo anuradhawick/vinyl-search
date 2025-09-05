@@ -62,13 +62,13 @@ export const main = (event, context, callback) => {
     (event, context, callback) => {
       record_functions.fetch_record(event.pathParameters.recordId).then((data) => {
         callback(null, build_response(200, {
-          ...data,
+          record: data,
           success: true
         }))
       }).catch((e) => {
         console.error(e)
         callback(null, build_response(500, {
-          records: "ERROR",
+          record: null,
           success: false
         }))
       });
@@ -88,13 +88,13 @@ export const main = (event, context, callback) => {
         event.body
       ).then((recordId) => {
         callback(null, build_response(200, {
-          ...recordId,
+          recordId,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
         callback(null, build_response(500, {
-          records: "ERROR",
+          recordId: null,
           success: false
         }))
       });
@@ -120,7 +120,7 @@ export const main = (event, context, callback) => {
       }).catch((e) => {
         console.error(e)
         callback(null, build_response(500, {
-          records: "ERROR",
+          recordId: null,
           success: false
         }))
       });
@@ -144,7 +144,7 @@ export const main = (event, context, callback) => {
       }).catch((e) => {
         console.error(e);
         callback(null, build_response(500, {
-          records: "ERROR",
+          history: null,
           success: false
         }))
       });
@@ -162,13 +162,13 @@ export const main = (event, context, callback) => {
         event.pathParameters.revisionId
       ).then((record) => {
         callback(null, build_response(200, {
-          ...record,
+          record: record,
           success: true
         }))
       }).catch((e) => {
         console.error(e);
         callback(null, build_response(500, {
-          records: "ERROR",
+          record: null,
           success: false
         }))
       });
