@@ -6,7 +6,7 @@ describe('MarketService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MarketService = TestBed.get(MarketService);
+    const service: MarketService = TestBed.inject(MarketService);
     expect(service).toBeTruthy();
   });
 });

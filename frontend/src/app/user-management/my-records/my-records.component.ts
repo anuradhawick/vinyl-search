@@ -8,9 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-my-records',
-  templateUrl: './my-records.component.html',
-  styleUrls: ['./my-records.component.css'],
+    selector: 'app-my-records',
+    templateUrl: './my-records.component.html',
+    styleUrls: ['./my-records.component.css'],
+    standalone: false
 })
 export class MyRecordsComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;

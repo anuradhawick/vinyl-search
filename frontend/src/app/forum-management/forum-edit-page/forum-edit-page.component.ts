@@ -10,9 +10,10 @@ import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-
 import { catchError, of } from 'rxjs';
 
 @Component({
-  selector: 'app-forum-edit-page',
-  templateUrl: './forum-edit-page.component.html',
-  styleUrls: ['./forum-edit-page.component.scss'],
+    selector: 'app-forum-edit-page',
+    templateUrl: './forum-edit-page.component.html',
+    styleUrls: ['./forum-edit-page.component.scss'],
+    standalone: false
 })
 export class ForumEditPageComponent implements OnInit {
   protected title = '';

@@ -6,9 +6,10 @@ import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-all-ads',
-  templateUrl: './all-ads.component.html',
-  styleUrls: ['./all-ads.component.css'],
+    selector: 'app-all-ads',
+    templateUrl: './all-ads.component.html',
+    styleUrls: ['./all-ads.component.css'],
+    standalone: false
 })
 export class AllAdsComponent implements OnInit {
   public loading = true;

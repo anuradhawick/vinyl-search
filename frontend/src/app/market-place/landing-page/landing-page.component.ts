@@ -145,9 +145,10 @@ interface FlatNode {
 }
 
 @Component({
-  selector: 'app-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css'],
+    selector: 'app-landing-page',
+    templateUrl: './landing-page.component.html',
+    styleUrls: ['./landing-page.component.css'],
+    standalone: false
 })
 export class LandingPageComponent implements OnInit {
   public records: Observable<any> = new Observable<any>();

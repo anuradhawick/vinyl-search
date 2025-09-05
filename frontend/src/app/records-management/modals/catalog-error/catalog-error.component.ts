@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-catalog-error',
-  templateUrl: './catalog-error.component.html',
-  styleUrls: ['./catalog-error.component.css'],
+    selector: 'app-catalog-error',
+    templateUrl: './catalog-error.component.html',
+    styleUrls: ['./catalog-error.component.css'],
+    standalone: false
 })
 export class CatalogErrorModalComponent implements OnInit {
   constructor(

@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-manage-market',
-  templateUrl: './manage-market.component.html',
-  styleUrls: ['./manage-market.component.css'],
+    selector: 'app-manage-market',
+    templateUrl: './manage-market.component.html',
+    styleUrls: ['./manage-market.component.css'],
+    standalone: false
 })
 export class ManageMarketComponent implements OnInit {
   @ViewChild('hscroll')

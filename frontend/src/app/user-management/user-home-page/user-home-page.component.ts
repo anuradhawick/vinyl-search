@@ -3,9 +3,10 @@ import { AuthService } from '../../shared-modules/services/auth.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-user-home-page',
-  templateUrl: './user-home-page.component.html',
-  styleUrls: ['./user-home-page.component.css'],
+    selector: 'app-user-home-page',
+    templateUrl: './user-home-page.component.html',
+    styleUrls: ['./user-home-page.component.css'],
+    standalone: false
 })
 export class UserHomePageComponent implements OnInit {
   public user: Observable<any>;

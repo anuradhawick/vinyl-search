@@ -6,9 +6,10 @@ import { RecordsService } from '../services/records.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
 
 @Component({
-  selector: 'app-record-view-page',
-  templateUrl: './record-view-page.component.html',
-  styleUrls: ['./record-view-page.component.scss'],
+    selector: 'app-record-view-page',
+    templateUrl: './record-view-page.component.html',
+    styleUrls: ['./record-view-page.component.scss'],
+    standalone: false
 })
 export class RecordViewPageComponent implements OnInit {
   protected _ = _;

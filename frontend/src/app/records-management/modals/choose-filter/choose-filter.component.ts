@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-choose-filter',
-  templateUrl: './choose-filter.component.html',
-  styleUrls: ['./choose-filter.component.css'],
+    selector: 'app-choose-filter',
+    templateUrl: './choose-filter.component.html',
+    styleUrls: ['./choose-filter.component.css'],
+    standalone: false
 })
 export class ChooseFilterComponent implements OnInit {
   public selected: Array<string> = [];

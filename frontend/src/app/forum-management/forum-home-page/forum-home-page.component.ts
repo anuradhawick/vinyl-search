@@ -13,9 +13,10 @@ import {
 } from 'rxjs';
 
 @Component({
-  selector: 'app-forum-home-page',
-  templateUrl: './forum-home-page.component.html',
-  styleUrls: ['./forum-home-page.component.scss'],
+    selector: 'app-forum-home-page',
+    templateUrl: './forum-home-page.component.html',
+    styleUrls: ['./forum-home-page.component.scss'],
+    standalone: false
 })
 export class ForumHomePageComponent implements OnInit {
   protected posts: any = null;

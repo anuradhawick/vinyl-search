@@ -9,9 +9,9 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './home/home-page/home-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  HttpClientModule,
   provideHttpClient,
   withFetch,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { SharedModules } from './shared-modules/shared.module';
 import { ToastrModule } from 'ngx-toastr';
@@ -70,11 +70,11 @@ class CustomReuseStrategy implements RouteReuseStrategy {
 
 @NgModule({
   declarations: [AppComponent, HomePageComponent],
+  bootstrap: [AppComponent],
   imports: [
     SharedModules,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
     MatIconModule,
     MatMenuModule,
     BrowserAnimationsModule,
@@ -89,7 +89,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
     },
     provideClientHydration(),
     provideHttpClient(withFetch()),
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

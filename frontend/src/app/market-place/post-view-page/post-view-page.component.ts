@@ -8,9 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-post-view-page',
-  templateUrl: './post-view-page.component.html',
-  styleUrls: ['./post-view-page.component.css'],
+    selector: 'app-post-view-page',
+    templateUrl: './post-view-page.component.html',
+    styleUrls: ['./post-view-page.component.css'],
+    standalone: false
 })
 export class PostViewPageComponent implements OnInit {
   public _ = _;

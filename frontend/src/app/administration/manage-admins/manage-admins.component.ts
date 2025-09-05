@@ -6,9 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-manage-admins',
-  templateUrl: './manage-admins.component.html',
-  styleUrls: ['./manage-admins.component.css'],
+    selector: 'app-manage-admins',
+    templateUrl: './manage-admins.component.html',
+    styleUrls: ['./manage-admins.component.css'],
+    standalone: false
 })
 export class ManageAdminsComponent implements OnInit {
   public admins: any = [];

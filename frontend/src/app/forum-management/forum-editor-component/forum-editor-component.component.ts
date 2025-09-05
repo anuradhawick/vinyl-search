@@ -6,9 +6,10 @@ import { environment } from '../../../environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-forum-editor-component',
-  templateUrl: './forum-editor-component.component.html',
-  styleUrls: ['./forum-editor-component.component.css'],
+    selector: 'app-forum-editor-component',
+    templateUrl: './forum-editor-component.component.html',
+    styleUrls: ['./forum-editor-component.component.css'],
+    standalone: false
 })
 export class ForumEditorComponentComponent implements OnInit {
   @Input() imageProgress = 0;

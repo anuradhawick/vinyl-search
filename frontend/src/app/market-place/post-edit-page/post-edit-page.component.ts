@@ -9,9 +9,10 @@ import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-post-edit-page',
-  templateUrl: './post-edit-page.component.html',
-  styleUrls: ['./post-edit-page.component.css'],
+    selector: 'app-post-edit-page',
+    templateUrl: './post-edit-page.component.html',
+    styleUrls: ['./post-edit-page.component.css'],
+    standalone: false
 })
 export class PostEditPageComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;

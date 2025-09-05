@@ -7,9 +7,10 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { MarketService } from '../services/market.service';
 
 @Component({
-  selector: 'app-new-post',
-  templateUrl: './new-post.component.html',
-  styleUrls: ['./new-post.component.css'],
+    selector: 'app-new-post',
+    templateUrl: './new-post.component.html',
+    styleUrls: ['./new-post.component.css'],
+    standalone: false
 })
 export class NewPostComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;

@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-action-confirm-modal',
-  templateUrl: './action-confirm-modal.component.html',
-  styleUrls: ['./action-confirm-modal.component.css'],
+    selector: 'app-action-confirm-modal',
+    templateUrl: './action-confirm-modal.component.html',
+    styleUrls: ['./action-confirm-modal.component.css'],
+    standalone: false
 })
 export class ActionConfirmModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}

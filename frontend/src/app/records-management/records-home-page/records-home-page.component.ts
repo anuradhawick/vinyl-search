@@ -21,9 +21,10 @@ import genresJSON from '../../shared-modules/data/genres.json';
 import countriesJSON from '../../shared-modules/data/countries.json';
 
 @Component({
-  selector: 'app-records-home-page',
-  templateUrl: './records-home-page.component.html',
-  styleUrls: ['./records-home-page.component.scss'],
+    selector: 'app-records-home-page',
+    templateUrl: './records-home-page.component.html',
+    styleUrls: ['./records-home-page.component.scss'],
+    standalone: false
 })
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;
@@ -166,35 +167,39 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   loadRecords() {
-    this.recordsService.fetch_records({
-      skip: this.skip,
-      limit: this.limit,
-    }).subscribe((res: any) => {
-      this.loader.hide();
-      this.records = res.records;
-      this.skip = res.skip;
-      this.limit = res.limit;
-      this.count = _.get(res, 'count', 0);
-    });
+    this.recordsService
+      .fetch_records({
+        skip: this.skip,
+        limit: this.limit,
+      })
+      .subscribe((res: any) => {
+        this.loader.hide();
+        this.records = res.records;
+        this.skip = res.skip;
+        this.limit = res.limit;
+        this.count = _.get(res, 'count', 0);
+      });
   }
 
   loadSearchPage() {
     this.records = null;
-    const data = this.recordsService.search_records({
-      limit: this.limit,
-      skip: this.skip,
-      query: this.query,
-      genres: JSON.stringify(this.genreFilters),
-      styles: JSON.stringify(this.styleFilters),
-      formats: JSON.stringify(this.formatFilters),
-      countries: JSON.stringify(this.countryFilters),
-    }).subscribe((res: any) => {
-      this.records = res.records;
-      this.skip = res.skip;
-      this.limit = res.limit;
-      this.count = res.count;
-      this.loader.hide();
-    });
+    const data = this.recordsService
+      .search_records({
+        limit: this.limit,
+        skip: this.skip,
+        query: this.query,
+        genres: JSON.stringify(this.genreFilters),
+        styles: JSON.stringify(this.styleFilters),
+        formats: JSON.stringify(this.formatFilters),
+        countries: JSON.stringify(this.countryFilters),
+      })
+      .subscribe((res: any) => {
+        this.records = res.records;
+        this.skip = res.skip;
+        this.limit = res.limit;
+        this.count = res.count;
+        this.loader.hide();
+      });
   }
 
   changePage(event: any) {

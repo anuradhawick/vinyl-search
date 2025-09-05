@@ -13,9 +13,10 @@ import { Observable } from 'rxjs';
 
 // TODO Edit/Delete not visible
 @Component({
-  selector: 'app-forum-view-page',
-  templateUrl: './forum-view-page.component.html',
-  styleUrls: ['./forum-view-page.component.scss'],
+    selector: 'app-forum-view-page',
+    templateUrl: './forum-view-page.component.html',
+    styleUrls: ['./forum-view-page.component.scss'],
+    standalone: false
 })
 export class ForumViewPageComponent implements OnInit {
   public post: any = null;

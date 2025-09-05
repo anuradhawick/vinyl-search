@@ -61,17 +61,18 @@ export const DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-records-editor-component',
-  templateUrl: './records-editor-component.component.html',
-  styleUrls: ['./records-editor-component.component.scss'],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-  ],
+    selector: 'app-records-editor-component',
+    templateUrl: './records-editor-component.component.html',
+    styleUrls: ['./records-editor-component.component.scss'],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    ],
+    standalone: false
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;

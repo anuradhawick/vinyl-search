@@ -6,9 +6,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-report-modal',
-  templateUrl: './report-modal.component.html',
-  styleUrls: ['./report-modal.component.css'],
+    selector: 'app-report-modal',
+    templateUrl: './report-modal.component.html',
+    styleUrls: ['./report-modal.component.css'],
+    standalone: false
 })
 export class ReportModalComponent implements OnInit {
   constructor(

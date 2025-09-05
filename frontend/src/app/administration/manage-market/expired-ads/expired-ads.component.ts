@@ -6,9 +6,10 @@ import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-expired-ads',
-  templateUrl: './expired-ads.component.html',
-  styleUrls: ['./expired-ads.component.css'],
+    selector: 'app-expired-ads',
+    templateUrl: './expired-ads.component.html',
+    styleUrls: ['./expired-ads.component.css'],
+    standalone: false
 })
 export class ExpiredAdsComponent implements OnInit {
   public loading = true;

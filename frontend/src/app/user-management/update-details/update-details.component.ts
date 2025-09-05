@@ -8,9 +8,10 @@ import { UserService } from '../../shared-modules/services/user.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-update-details',
-  templateUrl: './update-details.component.html',
-  styleUrls: ['./update-details.component.css'],
+    selector: 'app-update-details',
+    templateUrl: './update-details.component.html',
+    styleUrls: ['./update-details.component.css'],
+    standalone: false
 })
 export class UpdateDetailsComponent implements OnInit {
   public uploadImageUrl = null;

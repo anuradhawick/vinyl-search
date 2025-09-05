@@ -6,9 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-manage-reports',
-  templateUrl: './manage-reports.component.html',
-  styleUrls: ['./manage-reports.component.css'],
+    selector: 'app-manage-reports',
+    templateUrl: './manage-reports.component.html',
+    styleUrls: ['./manage-reports.component.css'],
+    standalone: false
 })
 export class ManageReportsComponent implements OnInit {
   public loading = true;

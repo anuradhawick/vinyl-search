@@ -6,9 +6,10 @@ import * as _ from 'lodash';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-manage-users',
-  templateUrl: './manage-users.component.html',
-  styleUrl: './manage-users.component.scss',
+    selector: 'app-manage-users',
+    templateUrl: './manage-users.component.html',
+    styleUrl: './manage-users.component.scss',
+    standalone: false
 })
 export class ManageUsersComponent implements OnInit {
   protected users: any = [];

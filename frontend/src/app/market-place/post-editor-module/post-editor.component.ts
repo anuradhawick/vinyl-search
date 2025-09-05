@@ -16,9 +16,10 @@ import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-post-editor',
-  templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.css'],
+    selector: 'app-post-editor',
+    templateUrl: './post-editor.component.html',
+    styleUrls: ['./post-editor.component.css'],
+    standalone: false
 })
 export class PostEditorComponent implements OnInit {
   @Output() readyStateChange = new EventEmitter<boolean>();

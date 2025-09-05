@@ -8,9 +8,10 @@ import { ForumShouldDeleteModalComponent } from '../modals/forum-should-delete/f
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-my-forum',
-  templateUrl: './my-forum.component.html',
-  styleUrls: ['./my-forum.component.css'],
+    selector: 'app-my-forum',
+    templateUrl: './my-forum.component.html',
+    styleUrls: ['./my-forum.component.css'],
+    standalone: false
 })
 export class MyForumComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;

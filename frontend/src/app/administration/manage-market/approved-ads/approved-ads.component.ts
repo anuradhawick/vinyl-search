@@ -7,9 +7,10 @@ import * as _ from 'lodash';
 import { AdminActionConfirmModalComponent } from '../../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 
 @Component({
-  selector: 'app-approved-ads',
-  templateUrl: './approved-ads.component.html',
-  styleUrls: ['./approved-ads.component.css'],
+    selector: 'app-approved-ads',
+    templateUrl: './approved-ads.component.html',
+    styleUrls: ['./approved-ads.component.css'],
+    standalone: false
 })
 export class ApprovedAdsComponent implements OnInit {
   public loading = true;

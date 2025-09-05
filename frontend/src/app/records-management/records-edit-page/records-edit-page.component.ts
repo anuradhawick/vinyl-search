@@ -12,9 +12,10 @@ import * as _ from 'lodash';
 // import { record } from './test-record';
 
 @Component({
-  selector: 'app-records-edit-page',
-  templateUrl: './records-edit-page.component.html',
-  styleUrls: ['./records-edit-page.component.scss'],
+    selector: 'app-records-edit-page',
+    templateUrl: './records-edit-page.component.html',
+    styleUrls: ['./records-edit-page.component.scss'],
+    standalone: false
 })
 export class RecordsEditPageComponent implements OnInit {
   @ViewChild('editor') editor!: RecordsEditorComponentComponent;

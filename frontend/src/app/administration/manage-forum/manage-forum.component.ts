@@ -7,9 +7,10 @@ import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-manage-forum',
-  templateUrl: './manage-forum.component.html',
-  styleUrls: ['./manage-forum.component.css'],
+    selector: 'app-manage-forum',
+    templateUrl: './manage-forum.component.html',
+    styleUrls: ['./manage-forum.component.css'],
+    standalone: false
 })
 export class ManageForumComponent implements OnInit {
   protected loading = true;

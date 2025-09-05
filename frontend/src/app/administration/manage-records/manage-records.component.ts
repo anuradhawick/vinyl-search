@@ -7,9 +7,10 @@ import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-manage-records',
-  templateUrl: './manage-records.component.html',
-  styleUrls: ['./manage-records.component.css'],
+    selector: 'app-manage-records',
+    templateUrl: './manage-records.component.html',
+    styleUrls: ['./manage-records.component.css'],
+    standalone: false
 })
 export class ManageRecordsComponent implements OnInit {
   public loading: boolean = true;

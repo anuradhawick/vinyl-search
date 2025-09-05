@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-forum-should-delete',
-  templateUrl: './forum-should-delete.component.html',
-  styleUrls: ['./forum-should-delete.component.css'],
+    selector: 'app-forum-should-delete',
+    templateUrl: './forum-should-delete.component.html',
+    styleUrls: ['./forum-should-delete.component.css'],
+    standalone: false
 })
 export class ForumShouldDeleteModalComponent implements OnInit {
   constructor(

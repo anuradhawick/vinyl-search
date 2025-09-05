@@ -8,9 +8,10 @@ import * as _ from 'lodash';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-ad',
-  templateUrl: './edit-ad.component.html',
-  styleUrls: ['./edit-ad.component.css'],
+    selector: 'app-edit-ad',
+    templateUrl: './edit-ad.component.html',
+    styleUrls: ['./edit-ad.component.css'],
+    standalone: false
 })
 export class EditAdComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;
