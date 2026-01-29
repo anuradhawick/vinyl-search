@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.24",
-    "@angular/cli": "^8.3.23",
+    "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
     "@ckeditor/ckeditor5-alignment": "^11.2.0",
