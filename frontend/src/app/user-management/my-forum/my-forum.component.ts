@@ -1,17 +1,40 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../shared-modules/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ForumShouldDeleteModalComponent } from '../modals/forum-should-delete/forum-should-delete.component';
 import * as _ from 'lodash';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-my-forum',
-    templateUrl: './my-forum.component.html',
-    styleUrls: ['./my-forum.component.css'],
-    standalone: false
+  selector: 'app-my-forum',
+  templateUrl: './my-forum.component.html',
+  styleUrls: ['./my-forum.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class MyForumComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;

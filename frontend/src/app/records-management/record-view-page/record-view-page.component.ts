@@ -1,15 +1,33 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import * as _ from 'lodash';
 import { RecordsService } from '../services/records.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
+import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatChipListbox, MatChip } from '@angular/material/chips';
+import { MatButton, MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-record-view-page',
-    templateUrl: './record-view-page.component.html',
-    styleUrls: ['./record-view-page.component.scss'],
-    standalone: false
+  selector: 'app-record-view-page',
+  templateUrl: './record-view-page.component.html',
+  styleUrls: ['./record-view-page.component.scss'],
+  imports: [
+    LoaderComponent,
+    ImageViewerComponent,
+    MatCard,
+    MatCardContent,
+    MatChipListbox,
+    MatChip,
+    MatButton,
+    RouterLink,
+    MatFabButton,
+    MatIcon,
+    DatePipe,
+  ],
 })
 export class RecordViewPageComponent implements OnInit {
   protected _ = _;

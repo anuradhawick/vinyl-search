@@ -8,7 +8,7 @@ describe('AllAdsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AllAdsComponent],
+      imports: [AllAdsComponent],
     }).compileComponents();
   }));
 

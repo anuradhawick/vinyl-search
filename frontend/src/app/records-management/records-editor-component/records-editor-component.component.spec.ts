@@ -8,7 +8,7 @@ describe('RecordsEditorComponentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RecordsEditorComponentComponent],
+      imports: [RecordsEditorComponentComponent],
     }).compileComponents();
   }));
 

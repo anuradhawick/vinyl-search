@@ -1,16 +1,39 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-my-market',
-    templateUrl: './my-market.component.html',
-    styleUrls: ['./my-market.component.css'],
-    standalone: false
+  selector: 'app-my-market',
+  templateUrl: './my-market.component.html',
+  styleUrls: ['./my-market.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class MyMarketComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;

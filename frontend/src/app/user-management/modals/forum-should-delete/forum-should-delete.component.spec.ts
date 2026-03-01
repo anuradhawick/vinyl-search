@@ -8,7 +8,7 @@ describe('ForumShouldDeleteModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ForumShouldDeleteModalComponent],
+      imports: [ForumShouldDeleteModalComponent],
     }).compileComponents();
   }));
 

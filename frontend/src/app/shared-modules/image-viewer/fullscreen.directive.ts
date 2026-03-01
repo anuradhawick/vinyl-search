@@ -1,10 +1,7 @@
 import { Directive, OnChanges, Input, ElementRef } from '@angular/core';
 import screenfull from 'screenfull';
 
-@Directive({
-    selector: '[appToggleFullscreen]',
-    standalone: false
-})
+@Directive({ selector: '[appToggleFullscreen]' })
 export class ToggleFullscreenDirective implements OnChanges {
   @Input('appToggleFullscreen')
   isFullscreen: boolean = false;

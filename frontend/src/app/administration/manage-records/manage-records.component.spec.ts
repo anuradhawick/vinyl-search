@@ -8,7 +8,7 @@ describe('ManageRecordsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ManageRecordsComponent],
+      imports: [ManageRecordsComponent],
     }).compileComponents();
   }));
 

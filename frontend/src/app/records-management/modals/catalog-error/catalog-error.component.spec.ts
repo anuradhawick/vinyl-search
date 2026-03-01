@@ -8,7 +8,7 @@ describe('CatalogErrorModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CatalogErrorModalComponent],
+      imports: [CatalogErrorModalComponent],
     }).compileComponents();
   }));
 

@@ -1,15 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
+import { LoaderComponent } from '../../../shared-modules/loader/loader.component';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-all-ads',
-    templateUrl: './all-ads.component.html',
-    styleUrls: ['./all-ads.component.css'],
-    standalone: false
+  selector: 'app-all-ads',
+  templateUrl: './all-ads.component.html',
+  styleUrls: ['./all-ads.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class AllAdsComponent implements OnInit {
   public loading = true;

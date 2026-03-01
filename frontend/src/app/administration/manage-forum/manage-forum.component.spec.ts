@@ -8,7 +8,7 @@ describe('ManageForumComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ManageForumComponent],
+      imports: [ManageForumComponent],
     }).compileComponents();
   }));
 

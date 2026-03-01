@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ForumService } from '../services/forum.service';
@@ -11,12 +11,43 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import { MatFormField, MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatPaginator } from '@angular/material/paginator';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-forum-home-page',
-    templateUrl: './forum-home-page.component.html',
-    styleUrls: ['./forum-home-page.component.scss'],
-    standalone: false
+  selector: 'app-forum-home-page',
+  templateUrl: './forum-home-page.component.html',
+  styleUrls: ['./forum-home-page.component.scss'],
+  imports: [
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatButton,
+    RouterLink,
+    MatCard,
+    MatCardContent,
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatPaginator,
+    AsyncPipe,
+    DatePipe,
+  ],
 })
 export class ForumHomePageComponent implements OnInit {
   protected posts: any = null;

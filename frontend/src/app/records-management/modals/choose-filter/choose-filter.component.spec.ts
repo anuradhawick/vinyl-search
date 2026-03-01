@@ -8,7 +8,7 @@ describe('ChooseFilterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ChooseFilterComponent],
+      imports: [ChooseFilterComponent],
     }).compileComponents();
   }));
 

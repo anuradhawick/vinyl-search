@@ -8,7 +8,7 @@ describe('ExpiredAdsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ExpiredAdsComponent],
+      imports: [ExpiredAdsComponent],
     }).compileComponents();
   }));
 

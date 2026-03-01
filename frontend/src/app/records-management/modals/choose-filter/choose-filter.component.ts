@@ -1,12 +1,29 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import * as _ from 'lodash';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatChipListbox, MatChipOption } from '@angular/material/chips';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-choose-filter',
-    templateUrl: './choose-filter.component.html',
-    styleUrls: ['./choose-filter.component.css'],
-    standalone: false
+  selector: 'app-choose-filter',
+  templateUrl: './choose-filter.component.html',
+  styleUrls: ['./choose-filter.component.css'],
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatChipListbox,
+    MatChipOption,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class ChooseFilterComponent implements OnInit {
   public selected: Array<string> = [];

@@ -6,12 +6,15 @@ import * as _ from 'lodash';
 import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-    selector: 'app-post-view-page',
-    templateUrl: './post-view-page.component.html',
-    styleUrls: ['./post-view-page.component.css'],
-    standalone: false
+  selector: 'app-post-view-page',
+  templateUrl: './post-view-page.component.html',
+  styleUrls: ['./post-view-page.component.css'],
+  imports: [LoaderComponent, ImageViewerComponent, MatIcon],
 })
 export class PostViewPageComponent implements OnInit {
   public _ = _;

@@ -6,12 +6,14 @@ import { PostEditorComponent } from '../../../market-place/post-editor-module/po
 import { AdminService } from '../../services/admin.service';
 import * as _ from 'lodash';
 import { Location } from '@angular/common';
+import { LoaderComponent } from '../../../shared-modules/loader/loader.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-edit-ad',
-    templateUrl: './edit-ad.component.html',
-    styleUrls: ['./edit-ad.component.css'],
-    standalone: false
+  selector: 'app-edit-ad',
+  templateUrl: './edit-ad.component.html',
+  styleUrls: ['./edit-ad.component.css'],
+  imports: [LoaderComponent, PostEditorComponent, MatButton],
 })
 export class EditAdComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;

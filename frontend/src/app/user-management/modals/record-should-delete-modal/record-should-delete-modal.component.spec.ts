@@ -8,7 +8,7 @@ describe('RecordShouldDeleteModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RecordShouldDeleteModalComponent],
+      imports: [RecordShouldDeleteModalComponent],
     }).compileComponents();
   }));
 

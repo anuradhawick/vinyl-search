@@ -21,7 +21,11 @@ import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { UsersService } from './services/users.service';
 
 @NgModule({
-  declarations: [
+  imports: [
+    CommonModule,
+    AdministrationRoutingModule,
+    SharedModules,
+    PostEditorModule,
     HomePageComponent,
     ManageAdminsComponent,
     ManageRecordsComponent,
@@ -34,12 +38,6 @@ import { UsersService } from './services/users.service';
     EditAdComponent,
     ManageReportsComponent,
     ManageUsersComponent,
-  ],
-  imports: [
-    CommonModule,
-    AdministrationRoutingModule,
-    SharedModules,
-    PostEditorModule,
   ],
   providers: [AdminService, MarketService, UsersService],
 })

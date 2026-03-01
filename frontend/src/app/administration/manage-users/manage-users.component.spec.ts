@@ -8,7 +8,7 @@ describe('ManageUsersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ManageUsersComponent],
+      imports: [ManageUsersComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ManageUsersComponent);

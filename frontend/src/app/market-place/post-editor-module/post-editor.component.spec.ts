@@ -8,7 +8,7 @@ describe('PostEditorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PostEditorComponent],
+      imports: [PostEditorComponent],
     }).compileComponents();
   }));
 

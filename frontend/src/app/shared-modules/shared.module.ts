@@ -26,14 +26,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
-  declarations: [
-    LoaderComponent,
-    ImageViewerComponent,
-    ToggleFullscreenDirective,
-    ActionConfirmModalComponent,
-    LoginModalComponent,
-    LoginModalComponent,
-  ],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -58,6 +50,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatProgressSpinnerModule,
     MatCardModule,
     MatExpansionModule,
+    LoaderComponent,
+    ImageViewerComponent,
+    ToggleFullscreenDirective,
+    ActionConfirmModalComponent,
+    LoginModalComponent,
+    LoginModalComponent,
   ],
   exports: [
     CommonModule,

@@ -1,15 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { AdminService } from '../services/admin.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
 
 @Component({
-    selector: 'app-manage-admins',
-    templateUrl: './manage-admins.component.html',
-    styleUrls: ['./manage-admins.component.css'],
-    standalone: false
+  selector: 'app-manage-admins',
+  templateUrl: './manage-admins.component.html',
+  styleUrls: ['./manage-admins.component.css'],
+  imports: [
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    MatIcon,
+    LoaderComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatButton,
+  ],
 })
 export class ManageAdminsComponent implements OnInit {
   public admins: any = [];

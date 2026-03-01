@@ -8,7 +8,7 @@ describe('RecordViewPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RecordViewPageComponent],
+      imports: [RecordViewPageComponent],
     }).compileComponents();
   }));
 

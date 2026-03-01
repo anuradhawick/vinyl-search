@@ -8,7 +8,7 @@ describe('LoginModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginModalComponent],
+      imports: [LoginModalComponent],
     }).compileComponents();
   }));
 

@@ -1,17 +1,38 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { UserService } from '../../shared-modules/services/user.service';
 import * as _ from 'lodash';
 import { RecordShouldDeleteModalComponent } from '../modals/record-should-delete-modal/record-should-delete-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-my-records',
-    templateUrl: './my-records.component.html',
-    styleUrls: ['./my-records.component.css'],
-    standalone: false
+  selector: 'app-my-records',
+  templateUrl: './my-records.component.html',
+  styleUrls: ['./my-records.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+  ],
 })
 export class MyRecordsComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;

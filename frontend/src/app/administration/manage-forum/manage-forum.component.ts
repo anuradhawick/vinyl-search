@@ -1,16 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 import * as _ from 'lodash';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-manage-forum',
-    templateUrl: './manage-forum.component.html',
-    styleUrls: ['./manage-forum.component.css'],
-    standalone: false
+  selector: 'app-manage-forum',
+  templateUrl: './manage-forum.component.html',
+  styleUrls: ['./manage-forum.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class ManageForumComponent implements OnInit {
   protected loading = true;

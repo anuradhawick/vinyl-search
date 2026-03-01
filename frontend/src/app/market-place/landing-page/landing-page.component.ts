@@ -1,15 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   MatTreeFlatDataSource,
   MatTreeFlattener,
+  MatTree,
+  MatTreeNodeDef,
+  MatTreeNode,
+  MatTreeNodeToggle,
 } from '@angular/material/tree';
 import { MarketService } from '../services/market.service';
 import { Observable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { AsyncPipe } from '@angular/common';
 
 interface TreeNode {
   name: string;
@@ -145,10 +154,22 @@ interface FlatNode {
 }
 
 @Component({
-    selector: 'app-landing-page',
-    templateUrl: './landing-page.component.html',
-    styleUrls: ['./landing-page.component.css'],
-    standalone: false
+  selector: 'app-landing-page',
+  templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.css'],
+  imports: [
+    FormsModule,
+    MatButton,
+    RouterLink,
+    MatTree,
+    MatTreeNodeDef,
+    MatTreeNode,
+    MatIcon,
+    MatTreeNodeToggle,
+    LoaderComponent,
+    MatPaginator,
+    AsyncPipe,
+  ],
 })
 export class LandingPageComponent implements OnInit {
   public records: Observable<any> = new Observable<any>();

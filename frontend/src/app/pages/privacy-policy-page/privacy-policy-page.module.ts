@@ -5,8 +5,11 @@ import { PrivacyPolicyPageRoutingModule } from './privacy-policy-page-routing.mo
 import { PrivacyPolicyPageComponent } from './privacy-policy-page.component';
 
 @NgModule({
-  declarations: [PrivacyPolicyPageComponent],
-  imports: [CommonModule, PrivacyPolicyPageRoutingModule],
+  imports: [
+    CommonModule,
+    PrivacyPolicyPageRoutingModule,
+    PrivacyPolicyPageComponent,
+  ],
 })
 export class PrivacyPolicyPageModule {
   constructor() {

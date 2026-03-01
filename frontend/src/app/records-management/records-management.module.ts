@@ -15,15 +15,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [
-    RecordsHomePageComponent,
-    RecordsHomePageComponent,
-    RecordsEditPageComponent,
-    RecordViewPageComponent,
-    RecordsEditorComponentComponent,
-    CatalogErrorModalComponent,
-    ChooseFilterComponent,
-  ],
   imports: [
     CommonModule,
     RecordsManagementRoutingModule,
@@ -31,6 +22,13 @@ import { MatNativeDateModule } from '@angular/material/core';
     SharedModules,
     MatDatepickerModule,
     MatNativeDateModule,
+    RecordsHomePageComponent,
+    RecordsHomePageComponent,
+    RecordsEditPageComponent,
+    RecordViewPageComponent,
+    RecordsEditorComponentComponent,
+    CatalogErrorModalComponent,
+    ChooseFilterComponent,
   ],
   providers: [RecordsService],
 })

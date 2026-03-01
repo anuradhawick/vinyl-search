@@ -8,12 +8,20 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 import { catchError, of } from 'rxjs';
+import { ForumEditorComponentComponent } from '../forum-editor-component/forum-editor-component.component';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-    selector: 'app-forum-edit-page',
-    templateUrl: './forum-edit-page.component.html',
-    styleUrls: ['./forum-edit-page.component.scss'],
-    standalone: false
+  selector: 'app-forum-edit-page',
+  templateUrl: './forum-edit-page.component.html',
+  styleUrls: ['./forum-edit-page.component.scss'],
+  imports: [
+    LoaderComponent,
+    ForumEditorComponentComponent,
+    MatButton,
+    MatProgressSpinner,
+  ],
 })
 export class ForumEditPageComponent implements OnInit {
   protected title = '';

@@ -8,7 +8,7 @@ describe('ForumEditorComponentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ForumEditorComponentComponent],
+      imports: [ForumEditorComponentComponent],
     }).compileComponents();
   }));
 

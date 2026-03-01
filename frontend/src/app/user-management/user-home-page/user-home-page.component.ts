@@ -1,12 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { Observable } from 'rxjs';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-user-home-page',
-    templateUrl: './user-home-page.component.html',
-    styleUrls: ['./user-home-page.component.css'],
-    standalone: false
+  selector: 'app-user-home-page',
+  templateUrl: './user-home-page.component.html',
+  styleUrls: ['./user-home-page.component.css'],
+  imports: [MatButton, MatIcon, RouterLink, RouterOutlet, AsyncPipe],
 })
 export class UserHomePageComponent implements OnInit {
   public user: Observable<any>;

@@ -3,13 +3,19 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { v4 as uuid } from 'uuid';
 import { uploadData } from 'aws-amplify/storage';
 import { environment } from '../../../environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @Component({
-    selector: 'app-forum-editor-component',
-    templateUrl: './forum-editor-component.component.html',
-    styleUrls: ['./forum-editor-component.component.css'],
-    standalone: false
+  selector: 'app-forum-editor-component',
+  templateUrl: './forum-editor-component.component.html',
+  styleUrls: ['./forum-editor-component.component.css'],
+  imports: [FormsModule, CKEditorModule],
 })
 export class ForumEditorComponentComponent implements OnInit {
   @Input() imageProgress = 0;

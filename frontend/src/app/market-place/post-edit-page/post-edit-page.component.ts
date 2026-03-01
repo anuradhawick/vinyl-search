@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,12 +7,13 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-post-edit-page',
-    templateUrl: './post-edit-page.component.html',
-    styleUrls: ['./post-edit-page.component.css'],
-    standalone: false
+  selector: 'app-post-edit-page',
+  templateUrl: './post-edit-page.component.html',
+  styleUrls: ['./post-edit-page.component.css'],
+  imports: [LoaderComponent, PostEditorComponent, MatButton, RouterLink],
 })
 export class PostEditPageComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;

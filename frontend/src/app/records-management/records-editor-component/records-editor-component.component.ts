@@ -21,8 +21,18 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import {
+  MatChipInputEvent,
+  MatChipListbox,
+  MatChip,
+  MatChipGrid,
+  MatChipRow,
+  MatChipRemove,
+  MatChipInput,
+} from '@angular/material/chips';
 import { ENTER } from '@angular/cdk/keycodes';
 import {
   MomentDateAdapter,
@@ -45,6 +55,31 @@ import speedsJSON from '../../shared-modules/data/speed.json';
 import sizesJSON from '../../shared-modules/data/size.json';
 // @ts-ignore
 import descrJSON from '../../shared-modules/data/description.json';
+import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { MatButton } from '@angular/material/button';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {
+  MatFormField,
+  MatInput,
+  MatError,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { AsyncPipe } from '@angular/common';
 
 declare const $: any;
 
@@ -61,18 +96,49 @@ export const DATE_FORMATS = {
 };
 
 @Component({
-    selector: 'app-records-editor-component',
-    templateUrl: './records-editor-component.component.html',
-    styleUrls: ['./records-editor-component.component.scss'],
-    providers: [
-        {
-            provide: DateAdapter,
-            useClass: MomentDateAdapter,
-            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-        },
-        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-    ],
-    standalone: false
+  selector: 'app-records-editor-component',
+  templateUrl: './records-editor-component.component.html',
+  styleUrls: ['./records-editor-component.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+  ],
+  imports: [
+    ImageViewerComponent,
+    MatButton,
+    MatProgressBar,
+    MatCard,
+    MatCardContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatLabel,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatSelect,
+    MatOption,
+    MatCardHeader,
+    MatCardTitle,
+    MatChipListbox,
+    MatChip,
+    MatChipGrid,
+    MatChipRow,
+    MatChipRemove,
+    MatIcon,
+    MatChipInput,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    AsyncPipe,
+  ],
 })
 export class RecordsEditorComponentComponent implements OnInit {
   public genresJSON = genresJSON;

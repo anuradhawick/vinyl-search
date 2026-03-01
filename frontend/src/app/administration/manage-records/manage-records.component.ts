@@ -1,16 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../services/admin.service';
 import * as _ from 'lodash';
 import { AdminActionConfirmModalComponent } from '../modals/admin-action-confirm-modal/admin-action-confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-manage-records',
-    templateUrl: './manage-records.component.html',
-    styleUrls: ['./manage-records.component.css'],
-    standalone: false
+  selector: 'app-manage-records',
+  templateUrl: './manage-records.component.html',
+  styleUrls: ['./manage-records.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+  ],
 })
 export class ManageRecordsComponent implements OnInit {
   public loading: boolean = true;

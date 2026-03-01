@@ -8,7 +8,7 @@ describe('ForumViewPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ForumViewPageComponent],
+      imports: [ForumViewPageComponent],
     }).compileComponents();
   }));
 

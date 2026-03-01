@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { RecordsService } from '../services/records.service';
@@ -7,15 +7,33 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { CatalogErrorModalComponent } from '../modals/catalog-error/catalog-error.component';
 import { catchError, of } from 'rxjs';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import * as _ from 'lodash';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 // import { record } from './test-record';
 
 @Component({
-    selector: 'app-records-edit-page',
-    templateUrl: './records-edit-page.component.html',
-    styleUrls: ['./records-edit-page.component.scss'],
-    standalone: false
+  selector: 'app-records-edit-page',
+  templateUrl: './records-edit-page.component.html',
+  styleUrls: ['./records-edit-page.component.scss'],
+  imports: [
+    LoaderComponent,
+    RecordsEditorComponentComponent,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    ReactiveFormsModule,
+    MatError,
+    MatButton,
+    RouterLink,
+  ],
 })
 export class RecordsEditPageComponent implements OnInit {
   @ViewChild('editor') editor!: RecordsEditorComponentComponent;

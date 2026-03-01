@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
@@ -10,13 +10,28 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
 import { TitleTagService } from '../../shared-modules/services/title-tag.service';
 import { Observable } from 'rxjs';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { ForumEditorComponentComponent } from '../forum-editor-component/forum-editor-component.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AsyncPipe } from '@angular/common';
 
 // TODO Edit/Delete not visible
 @Component({
-    selector: 'app-forum-view-page',
-    templateUrl: './forum-view-page.component.html',
-    styleUrls: ['./forum-view-page.component.scss'],
-    standalone: false
+  selector: 'app-forum-view-page',
+  templateUrl: './forum-view-page.component.html',
+  styleUrls: ['./forum-view-page.component.scss'],
+  imports: [
+    LoaderComponent,
+    CKEditorModule,
+    FormsModule,
+    MatButton,
+    RouterLink,
+    ForumEditorComponentComponent,
+    MatProgressSpinner,
+    AsyncPipe,
+  ],
 })
 export class ForumViewPageComponent implements OnInit {
   public post: any = null;

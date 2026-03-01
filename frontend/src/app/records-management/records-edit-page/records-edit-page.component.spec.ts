@@ -8,7 +8,7 @@ describe('RecordsEditPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RecordsEditPageComponent],
+      imports: [RecordsEditPageComponent],
     }).compileComponents();
   }));
 

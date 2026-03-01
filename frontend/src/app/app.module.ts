@@ -69,7 +69,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
 }
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
     SharedModules,
@@ -81,6 +81,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
     ToastrModule.forRoot({
       preventDuplicates: true,
     }),
+    HomePageComponent,
   ],
   providers: [
     {

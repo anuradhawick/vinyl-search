@@ -1,10 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-home-page',
-    templateUrl: './home-page.component.html',
-    styleUrls: ['./home-page.component.css'],
-    standalone: false
+  selector: 'app-home-page',
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.css'],
+  imports: [MatButton, MatIcon, RouterLinkActive, RouterLink, RouterOutlet],
 })
 export class HomePageComponent implements OnInit {
   @ViewChild('hscroll')

@@ -8,6 +8,11 @@ import {
   EventEmitter,
   HostListener,
 } from '@angular/core';
+import { ToggleFullscreenDirective } from './fullscreen.directive';
+import { NgStyle } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 interface ImageViewerConfig {
   zoomFactor?: number;
@@ -79,10 +84,16 @@ const DEFAULT_CONFIG: ImageViewerConfig = {
 };
 
 @Component({
-    selector: 'app-image-viewer',
-    templateUrl: './image-viewer.component.html',
-    styleUrls: ['./image-viewer.component.scss'],
-    standalone: false
+  selector: 'app-image-viewer',
+  templateUrl: './image-viewer.component.html',
+  styleUrls: ['./image-viewer.component.scss'],
+  imports: [
+    ToggleFullscreenDirective,
+    NgStyle,
+    MatProgressSpinner,
+    MatMiniFabButton,
+    MatIcon,
+  ],
 })
 export class ImageViewerComponent implements OnInit {
   @Input()

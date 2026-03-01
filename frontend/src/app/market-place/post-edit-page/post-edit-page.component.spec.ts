@@ -8,7 +8,7 @@ describe('PostEditPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PostEditPageComponent],
+      imports: [PostEditPageComponent],
     }).compileComponents();
   }));
 

@@ -1,15 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AdminService } from '../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-manage-reports',
-    templateUrl: './manage-reports.component.html',
-    styleUrls: ['./manage-reports.component.css'],
-    standalone: false
+  selector: 'app-manage-reports',
+  templateUrl: './manage-reports.component.html',
+  styleUrls: ['./manage-reports.component.css'],
+  imports: [
+    LoaderComponent,
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    RouterLink,
+    MatIcon,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class ManageReportsComponent implements OnInit {
   public loading = true;

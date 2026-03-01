@@ -3,13 +3,29 @@ import { UsersService } from '../services/users.service';
 import { catchError, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import {
+  MatList,
+  MatListItem,
+  MatListItemAvatar,
+  MatListItemTitle,
+  MatListItemLine,
+} from '@angular/material/list';
+import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 
 @Component({
-    selector: 'app-manage-users',
-    templateUrl: './manage-users.component.html',
-    styleUrl: './manage-users.component.scss',
-    standalone: false
+  selector: 'app-manage-users',
+  templateUrl: './manage-users.component.html',
+  styleUrl: './manage-users.component.scss',
+  imports: [
+    MatList,
+    MatListItem,
+    MatListItemAvatar,
+    MatListItemTitle,
+    MatListItemLine,
+    LoaderComponent,
+    MatPaginator,
+  ],
 })
 export class ManageUsersComponent implements OnInit {
   protected users: any = [];

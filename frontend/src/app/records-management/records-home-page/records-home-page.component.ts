@@ -1,12 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { MatAccordion } from '@angular/material/expansion';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 import { ChooseFilterComponent } from '../modals/choose-filter/choose-filter.component';
 import {
   Subject,
@@ -19,12 +24,33 @@ import {
 import genresJSON from '../../shared-modules/data/genres.json';
 // @ts-ignore
 import countriesJSON from '../../shared-modules/data/countries.json';
+import { MatFormField, MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatPaginator } from '@angular/material/paginator';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-records-home-page',
-    templateUrl: './records-home-page.component.html',
-    styleUrls: ['./records-home-page.component.scss'],
-    standalone: false
+  selector: 'app-records-home-page',
+  templateUrl: './records-home-page.component.html',
+  styleUrls: ['./records-home-page.component.scss'],
+  imports: [
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatButton,
+    RouterLink,
+    MatCard,
+    MatCardContent,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    LoaderComponent,
+    MatPaginator,
+    AsyncPipe,
+  ],
 })
 export class RecordsHomePageComponent implements OnInit {
   public genresJSON = genresJSON;

@@ -12,18 +12,16 @@ import { SharedModules } from '../shared-modules/shared.module';
 import { ForumService } from './services/forum.service';
 
 @NgModule({
-  declarations: [
-    ForumHomePageComponent,
-    ForumViewPageComponent,
-    ForumEditPageComponent,
-    ForumEditorComponentComponent,
-  ],
   imports: [
     FormsModule,
     CommonModule,
     ForumManagementRoutingModule,
     CKEditorModule,
     SharedModules,
+    ForumHomePageComponent,
+    ForumViewPageComponent,
+    ForumEditPageComponent,
+    ForumEditorComponentComponent,
   ],
   providers: [ForumService],
 })

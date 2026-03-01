@@ -1,17 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import * as _ from 'lodash';
 import { uploadData } from 'aws-amplify/storage';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../shared-modules/services/user.service';
 import { environment } from '../../../environments/environment';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { NgClass } from '@angular/common';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
-    selector: 'app-update-details',
-    templateUrl: './update-details.component.html',
-    styleUrls: ['./update-details.component.css'],
-    standalone: false
+  selector: 'app-update-details',
+  templateUrl: './update-details.component.html',
+  styleUrls: ['./update-details.component.css'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatButton,
+    NgClass,
+    MatProgressBar,
+  ],
 })
 export class UpdateDetailsComponent implements OnInit {
   public uploadImageUrl = null;

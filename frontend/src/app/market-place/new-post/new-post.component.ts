@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { MarketService } from '../services/market.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-new-post',
-    templateUrl: './new-post.component.html',
-    styleUrls: ['./new-post.component.css'],
-    standalone: false
+  selector: 'app-new-post',
+  templateUrl: './new-post.component.html',
+  styleUrls: ['./new-post.component.css'],
+  imports: [LoaderComponent, PostEditorComponent, MatButton, RouterLink],
 })
 export class NewPostComponent implements OnInit {
   @ViewChild('editor', { static: false }) editor!: PostEditorComponent;

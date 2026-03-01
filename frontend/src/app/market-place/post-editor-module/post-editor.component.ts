@@ -9,17 +9,42 @@ import {
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { uploadData } from 'aws-amplify/storage';
 import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
+import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { MatButton } from '@angular/material/button';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-post-editor',
-    templateUrl: './post-editor.component.html',
-    styleUrls: ['./post-editor.component.css'],
-    standalone: false
+  selector: 'app-post-editor',
+  templateUrl: './post-editor.component.html',
+  styleUrls: ['./post-editor.component.css'],
+  imports: [
+    ImageViewerComponent,
+    MatButton,
+    MatProgressBar,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatCheckbox,
+    MatSelect,
+    MatOption,
+    AsyncPipe,
+  ],
 })
 export class PostEditorComponent implements OnInit {
   @Output() readyStateChange = new EventEmitter<boolean>();

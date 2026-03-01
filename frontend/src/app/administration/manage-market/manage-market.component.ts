@@ -1,10 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-manage-market',
-    templateUrl: './manage-market.component.html',
-    styleUrls: ['./manage-market.component.css'],
-    standalone: false
+  selector: 'app-manage-market',
+  templateUrl: './manage-market.component.html',
+  styleUrls: ['./manage-market.component.css'],
+  imports: [MatButton, MatIcon, RouterLink, RouterOutlet],
 })
 export class ManageMarketComponent implements OnInit {
   @ViewChild('hscroll')
