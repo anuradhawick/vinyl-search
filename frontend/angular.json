@@ -133,7 +133,13 @@
               "sourceMap": true,
               "namedChunks": true,
               "ssr": false,
-              "prerender": false
+              "prerender": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
