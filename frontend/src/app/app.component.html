@@ -26,14 +26,15 @@
         >
           <mat-icon>shop</mat-icon>For Sale
         </button>
-        <button
-          *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')"
-          mat-menu-item
-          [routerLink]="['/market/new']"
-          class="text-black font-semibold"
-        >
-          <mat-icon class="align-middle">content_paste</mat-icon>New Sale
-        </button>
+        @if (auth.isLoggedIn && (user | async)?.roles.includes("Admin")) {
+          <button
+            mat-menu-item
+            [routerLink]="['/market/new']"
+            class="text-black font-semibold"
+          >
+            <mat-icon class="align-middle">content_paste</mat-icon>New Sale
+          </button>
+        }
       </mat-menu>
 
       <a
@@ -84,30 +85,29 @@
         </button>
       </mat-menu>
 
-      <ng-container *ngIf="auth.isLoggedIn; else showLogin">
-        <a
-          *ngIf="(user | async)?.roles.includes('Admin')"
-          [routerLink]="['/admin']"
-          class="text-black font-semibold hover:decoration-transparent"
-        >
-          <mat-icon class="align-middle">security</mat-icon>Admin
-        </a>
-
+      @if (auth.isLoggedIn) {
+        @if ((user | async)?.roles.includes("Admin")) {
+          <a
+            [routerLink]="['/admin']"
+            class="text-black font-semibold hover:decoration-transparent"
+          >
+            <mat-icon class="align-middle">security</mat-icon>Admin
+          </a>
+        }
         <a
           [routerLink]="['/profile']"
           class="text-black font-semibold hover:decoration-transparent"
         >
-          <img
-            *ngIf="(user | async)?.picture; else placeholder"
-            class="w-[24px] h-[24px] inline border-black rounded-full border-2"
-            [src]="(user | async)?.picture"
-          />
-          <ng-template #placeholder>
+          @if ((user | async)?.picture) {
+            <img
+              class="w-[24px] h-[24px] inline border-black rounded-full border-2"
+              [src]="(user | async)?.picture"
+            />
+          } @else {
             <mat-icon class="align-middle">account_circle</mat-icon>
-          </ng-template>
+          }
           Hi {{ (user | async)?.given_name }}
         </a>
-
         <a
           [routerLink]="[]"
           class="text-black font-semibold hover:decoration-transparent"
@@ -115,8 +115,7 @@
         >
           <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
         </a>
-      </ng-container>
-      <ng-template #showLogin>
+      } @else {
         <a
           [routerLink]="[]"
           class="text-black font-semibold hover:decoration-transparent"
@@ -124,14 +123,15 @@
         >
           <mat-icon class="align-middle">account_circle</mat-icon>Login
         </a>
-      </ng-template>
+      }
     </div>
     <div class="md:hidden flex items-center">
       <button (click)="menuOpen = !menuOpen">
-        <mat-icon *ngIf="!menuOpen; else close">menu</mat-icon>
-        <ng-template #close>
+        @if (!menuOpen) {
+          <mat-icon>menu</mat-icon>
+        } @else {
           <mat-icon>close</mat-icon>
-        </ng-template>
+        }
       </button>
     </div>
   </nav>
@@ -152,14 +152,15 @@
       >
         <mat-icon>shop</mat-icon>For Sale
       </button>
-      <button
-        *ngIf="auth.isLoggedIn && (user | async)?.roles.includes('Admin')"
-        mat-menu-item
-        [routerLink]="['/market/new']"
-        class="text-black font-semibold"
-      >
-        <mat-icon class="align-middle">content_paste</mat-icon>New Sale
-      </button>
+      @if (auth.isLoggedIn && (user | async)?.roles.includes("Admin")) {
+        <button
+          mat-menu-item
+          [routerLink]="['/market/new']"
+          class="text-black font-semibold"
+        >
+          <mat-icon class="align-middle">content_paste</mat-icon>New Sale
+        </button>
+      }
     </mat-menu>
 
     <a
@@ -210,30 +211,29 @@
       </button>
     </mat-menu>
 
-    <ng-container *ngIf="auth.isLoggedIn; else showLogin">
-      <a
-        *ngIf="(user | async)?.roles.includes('Admin')"
-        [routerLink]="['/admin']"
-        class="text-black font-semibold hover:decoration-transparent"
-      >
-        <mat-icon class="align-middle">security</mat-icon>Admin
-      </a>
-
+    @if (auth.isLoggedIn) {
+      @if ((user | async)?.roles.includes("Admin")) {
+        <a
+          [routerLink]="['/admin']"
+          class="text-black font-semibold hover:decoration-transparent"
+        >
+          <mat-icon class="align-middle">security</mat-icon>Admin
+        </a>
+      }
       <a
         [routerLink]="['/profile']"
         class="text-black font-semibold hover:decoration-transparent"
       >
-        <img
-          *ngIf="(user | async)?.picture; else placeholder"
-          class="w-[24px] h-[24px] inline border-black rounded-full border-2"
-          [src]="(user | async)?.picture"
-        />
-        <ng-template #placeholder>
+        @if ((user | async)?.picture) {
+          <img
+            class="w-[24px] h-[24px] inline border-black rounded-full border-2"
+            [src]="(user | async)?.picture"
+          />
+        } @else {
           <mat-icon class="align-middle">account_circle</mat-icon>
-        </ng-template>
+        }
         Hi {{ (user | async)?.given_name }}
       </a>
-
       <a
         [routerLink]="[]"
         class="text-black font-semibold hover:decoration-transparent"
@@ -241,7 +241,15 @@
       >
         <mat-icon class="align-middle">exit_to_app</mat-icon>Logout
       </a>
-    </ng-container>
+    } @else {
+      <a
+        [routerLink]="[]"
+        class="text-black font-semibold hover:decoration-transparent"
+        (click)="auth.login()"
+      >
+        <mat-icon class="align-middle">account_circle</mat-icon>Login
+      </a>
+    }
     <ng-template #showLogin>
       <a
         [routerLink]="[]"
