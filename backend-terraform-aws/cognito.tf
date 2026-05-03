@@ -187,7 +187,10 @@ data "aws_iam_policy_document" "vinyl-lk-authenticated_role_policy" {
       "s3:*",
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_s3_bucket.vinyl-lk-bucket.arn,
+      "${aws_s3_bucket.vinyl-lk-bucket.arn}/*",
+    ]
   }
 }
 

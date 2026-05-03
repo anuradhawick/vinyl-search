@@ -1,7 +1,6 @@
 {
   "recommendations": [
-    "angular.ng-template",
-    "bradlc.vscode-tailwindcss",
+    "amazonwebservices.aws-toolkit-vscode",
     "esbenp.prettier-vscode"
   ]
 }

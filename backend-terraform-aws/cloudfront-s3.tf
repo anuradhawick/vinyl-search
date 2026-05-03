@@ -42,8 +42,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   tags = var.common-tags
 
   viewer_certificate {
-    acm_certificate_arn = var.ACM_CERT
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.ACM_CERT
+    minimum_protocol_version = "TLSv1.2_2025"
+    ssl_support_method       = "sni-only"
   }
 
   aliases = ["${terraform.workspace == "prod" ? "" : terraform.workspace}cdn.vinyl.lk"]

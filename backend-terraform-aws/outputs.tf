@@ -1,6 +1,6 @@
 # API
 output "api_gateway_url" {
-  value       = aws_api_gateway_deployment.vinyl-lk.invoke_url
+  value       = aws_api_gateway_stage.vinyl-lk.invoke_url
   description = "URL used to invoke the API."
 }
 
@@ -27,7 +27,7 @@ output "user_pool_client_id" {
 
 output "oauth_domain" {
   value       = aws_cognito_user_pool_domain.vinyl-lk-auth.domain
-  description = "OAuth fomain for Amplify."
+  description = "OAuth domain for Amplify."
 }
 
 # Storage
@@ -38,5 +38,5 @@ output "s3_bucket_name" {
 
 output "cdn_domain" {
   value       = aws_route53_record.vinyl-lk-cdn.name
-  description = "CDN fomain for S3 objects."
+  description = "CDN domain for S3 objects."
 }

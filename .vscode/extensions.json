@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "amazonwebservices.aws-toolkit-vscode",
+    "angular.ng-template",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "golang.go",
+    "hashicorp.terraform"
+  ]
+}

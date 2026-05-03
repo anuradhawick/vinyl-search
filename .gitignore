@@ -21,10 +21,6 @@ speed-measure-plugin.json
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode
-.vscode/*
-
 # misc
 /.sass-cache
 /connect.lock
@@ -54,7 +50,19 @@ awsconfiguration.json
 /.idea/
 
 # terraform
-.terraform*
+**/.terraform/*
+!.terraform.lock.hcl
+!**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
 builds*
 *.tfvars
 tests/*
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*

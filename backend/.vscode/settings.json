@@ -1,4 +1,5 @@
 {
+  "CodeGPT.apiKey": "Perplexity",
   "editor.tabSize": 2,
   "workbench.editor.tabSizing": "fixed",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -6,21 +7,7 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "extensions.ignoreRecommendations": false,
-  "js.tsdk": "node_modules/typescript/lib",
-  "tailwindCSS.includeLanguages": {
-    "html": "html",
-    "typescript": "javascript"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[css]": {
+  "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {

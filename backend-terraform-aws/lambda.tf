@@ -2,12 +2,13 @@
 # admin-service lambda Function
 #
 module "lambda-admin-service" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-admin-service-${terraform.workspace}"
   description   = "admin-service"
-  handler       = "admin-main.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 256
   timeout       = 6
@@ -28,10 +29,12 @@ module "lambda-admin-service" {
   number_of_policy_jsons = 2
   source_path = [
     {
-      path = "${path.module}/../backend/administration-service",
+      path = "${path.module}/../backend-go/admin",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle admin-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
+        "cp ../../backend/administration-service/wm.png dist/wm.png",
         "cd dist",
         ":zip"
       ]
@@ -43,12 +46,13 @@ module "lambda-admin-service" {
 # forum-service lambda Function
 #
 module "lambda-forum-service" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-forum-service-${terraform.workspace}"
   description   = "forum-service"
-  handler       = "forum-main.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 256
   timeout       = 6
@@ -67,10 +71,11 @@ module "lambda-forum-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend/forum-management-service",
+      path = "${path.module}/../backend-go/forum",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle forum-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
         "cd dist",
         ":zip"
       ]
@@ -82,12 +87,13 @@ module "lambda-forum-service" {
 # market-service lambda Function
 #
 module "lambda-market-service" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-market-service-${terraform.workspace}"
   description   = "market-service"
-  handler       = "market-main.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 256
   timeout       = 6
@@ -106,10 +112,12 @@ module "lambda-market-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend/market-service",
+      path = "${path.module}/../backend-go/market",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle market-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
+        "cp ../../backend/market-service/wm.png dist/wm.png",
         "cd dist",
         ":zip"
       ]
@@ -121,12 +129,13 @@ module "lambda-market-service" {
 # records-service lambda Function
 #
 module "lambda-records-service" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-records-service-${terraform.workspace}"
   description   = "records-service"
-  handler       = "records-main.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 1024
   timeout       = 29
@@ -146,11 +155,12 @@ module "lambda-records-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend/records-management-service",
+      path = "${path.module}/../backend-go/records",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle records-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
-        "cp wm.png dist",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
+        "cp ../../backend/records-management-service/wm.png dist/wm.png",
         "cd dist",
         ":zip"
       ]
@@ -162,12 +172,13 @@ module "lambda-records-service" {
 # user-service lambda Function
 #
 module "lambda-user-service" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-user-service-${terraform.workspace}"
   description   = "user-service"
-  handler       = "user-main.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 256
   timeout       = 6
@@ -175,6 +186,8 @@ module "lambda-user-service" {
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
+    BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
+    BUCKET_REGION             = var.region
     NODE_OPTIONS              = "--enable-source-maps"
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
   }
@@ -185,10 +198,11 @@ module "lambda-user-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend/user-management-service",
+      path = "${path.module}/../backend-go/users",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle user-main.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
         "cd dist",
         ":zip"
       ]
@@ -200,12 +214,13 @@ module "lambda-user-service" {
 # user-pool-triggers lambda Function
 #
 module "lambda-user-pool-triggers" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "8.8.0"
 
   function_name = "vinyl-lk-user-pool-triggers-${terraform.workspace}"
   description   = "user-pool-triggers"
-  handler       = "user-pool-triggers.main"
-  runtime       = "nodejs18.x"
+  handler       = "bootstrap"
+  runtime       = "provided.al2023"
   architectures = ["x86_64"]
   memory_size   = 128
   timeout       = 6
@@ -221,10 +236,11 @@ module "lambda-user-pool-triggers" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend/userpool-trigger-service",
+      path = "${path.module}/../backend-go/userpool-trigger",
       commands = [
-        "npm clean-install",
-        "./node_modules/.bin/esbuild --sourcemap --bundle user-pool-triggers.js --outdir=dist --platform=node --target=node18 --preserve-symlinks --external:@aws-sdk/client-s3 --external:@aws-sdk/client-cognito-identity-provider",
+        "rm -rf dist",
+        "mkdir -p dist",
+        "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
         "cd dist",
         ":zip"
       ]
