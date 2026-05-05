@@ -17,6 +17,7 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+// main registers record routes and starts the Lambda router.
 func main() {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/records/search", searchRecords)
@@ -33,6 +34,7 @@ func main() {
 	})
 }
 
+// searchRecords returns records matching text and facet query parameters.
 func searchRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := search(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -41,6 +43,7 @@ func searchRecords(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, withSuccess(data)), nil
 }
 
+// fetchRecords returns the newest latest-version records.
 func fetchRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := list(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -49,6 +52,7 @@ func fetchRecords(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, withSuccess(data)), nil
 }
 
+// fetchRecord returns one latest-version record by id.
 func fetchRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	record, err := getRecord(ctx, req.PathParameters["recordId"])
 	if err != nil {
@@ -57,6 +61,7 @@ func fetchRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events
 	return common.JSON(http.StatusOK, map[string]any{"record": record, "success": true}), nil
 }
 
+// newRecord creates a new catalog record for the authenticated user.
 func newRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -69,6 +74,7 @@ func newRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.A
 	return common.JSON(http.StatusOK, map[string]any{"recordId": result, "success": true}), nil
 }
 
+// updateRecord creates a new latest revision for an existing catalog record.
 func updateRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -81,6 +87,7 @@ func updateRecord(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"recordId": recordID, "success": true}), nil
 }
 
+// fetchHistory returns revision metadata for a record.
 func fetchHistory(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	history, err := history(ctx, req.PathParameters["recordId"])
 	if err != nil {
@@ -89,6 +96,7 @@ func fetchHistory(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"history": history, "success": true}), nil
 }
 
+// fetchRevision returns one historical record revision.
 func fetchRevision(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	record, err := revision(ctx, req.PathParameters["revisionId"])
 	if err != nil {
@@ -97,6 +105,7 @@ func fetchRevision(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, map[string]any{"record": record, "success": true}), nil
 }
 
+// search returns filtered latest-version records with pagination metadata.
 func search(ctx context.Context, params map[string]string) (bson.M, error) {
 	genres := common.StringArrayQuery(params, "genres")
 	styles := common.StringArrayQuery(params, "styles")
@@ -142,6 +151,7 @@ func search(ctx context.Context, params map[string]string) (bson.M, error) {
 	return result, nil
 }
 
+// list returns latest-version records sorted by newest first.
 func list(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 30)
 	skip := common.IntQuery(params, "skip", 0)
@@ -158,6 +168,7 @@ func list(ctx context.Context, params map[string]string) (bson.M, error) {
 	return result, nil
 }
 
+// recordsFacet builds the record pagination facet used by search and list.
 func recordsFacet(skip, limit int64) mongo.Pipeline {
 	return mongo.Pipeline{
 		{{Key: "$facet", Value: bson.M{
@@ -182,6 +193,7 @@ func recordsFacet(skip, limit int64) mongo.Pipeline {
 	}
 }
 
+// getRecord fetches one latest-version record and rewrites image URLs for display.
 func getRecord(ctx context.Context, recordID string) (bson.M, error) {
 	oid, err := common.ParseOID(recordID)
 	if err != nil {
@@ -199,6 +211,7 @@ func getRecord(ctx context.Context, recordID string) (bson.M, error) {
 	return data, nil
 }
 
+// revision fetches one record revision with limited reviser profile data.
 func revision(ctx context.Context, revisionID string) (bson.M, error) {
 	oid, err := common.ParseOID(revisionID)
 	if err != nil {
@@ -208,6 +221,7 @@ func revision(ctx context.Context, revisionID string) (bson.M, error) {
 		{{Key: "$match", Value: bson.M{"_id": oid}}},
 		{{Key: "$lookup", Value: bson.M{"from": "users", "localField": "reviserUid", "foreignField": "uid", "as": "reviser"}}},
 		{{Key: "$addFields", Value: bson.M{"reviser": bson.M{"$arrayElemAt": bson.A{"$reviser", 0}}}}},
+		// Remove private user fields before returning revision metadata to clients.
 		{{Key: "$project", Value: bson.M{"reviser._id": 0, "reviser.authProviders": 0, "reviser.email": 0, "reviser.updatedAt": 0}}},
 	}
 	data, err := aggregateOne(ctx, "records", pipeline)
@@ -218,6 +232,7 @@ func revision(ctx context.Context, revisionID string) (bson.M, error) {
 	return data, nil
 }
 
+// history returns lightweight revision entries for all versions of a record.
 func history(ctx context.Context, recordID string) ([]bson.M, error) {
 	oid, err := common.ParseOID(recordID)
 	if err != nil {
@@ -247,6 +262,7 @@ func history(ctx context.Context, recordID string) ([]bson.M, error) {
 	return data, nil
 }
 
+// create inserts a new latest-version catalog record after checking catalog number uniqueness.
 func create(ctx context.Context, uid string, record bson.M) (bson.M, error) {
 	ownerUID, err := common.ParseOID(uid)
 	if err != nil {
@@ -257,6 +273,7 @@ func create(ctx context.Context, uid string, record bson.M) (bson.M, error) {
 		return nil, err
 	}
 
+	// The original API reports duplicates by returning the existing logical record id.
 	catalogNo := strings.TrimSpace(stringValue(record["catalogNo"]))
 	var existing bson.M
 	err = db.Collection("records").FindOne(ctx, bson.M{"catalogNo": catalogNo}).Decode(&existing)
@@ -284,6 +301,7 @@ func create(ctx context.Context, uid string, record bson.M) (bson.M, error) {
 	return bson.M{"recordId": id}, nil
 }
 
+// update marks old record versions as stale and inserts the supplied record as the latest revision.
 func update(ctx context.Context, reviserUID, recordID string, record bson.M) (any, error) {
 	reviser, err := common.ParseOID(reviserUID)
 	if err != nil {
@@ -307,6 +325,7 @@ func update(ctx context.Context, reviserUID, recordID string, record bson.M) (an
 	if err != nil {
 		return nil, err
 	}
+	// Store revisions as append-only documents while preserving the logical record id.
 	if _, err := db.Collection("records").UpdateMany(ctx, bson.M{"id": oid}, bson.M{"$set": bson.M{"latest": false}}); err != nil {
 		return nil, err
 	}
@@ -321,11 +340,13 @@ func update(ctx context.Context, reviserUID, recordID string, record bson.M) (an
 	return id, nil
 }
 
+// processImages promotes record images from temp storage and creates derived variants.
 func processImages(ctx context.Context, raw any, keepExisting bool) (bson.A, error) {
 	images := common.StringSlice(raw)
 	out := make(bson.A, 0, len(images))
 	for _, image := range images {
 		if keepExisting && common.FirstPathSegment(image) == "records-images" {
+			// Existing permanent keys are kept during edits so they are not copied again.
 			out = append(out, image)
 			continue
 		}
@@ -341,6 +362,7 @@ func processImages(ctx context.Context, raw any, keepExisting bool) (bson.A, err
 	return out, nil
 }
 
+// aggregateOne returns the first document from a collection aggregation pipeline.
 func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipeline) (bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -360,11 +382,13 @@ func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipelin
 	return data[0], nil
 }
 
+// withSuccess annotates a response document with a success flag.
 func withSuccess(doc bson.M) bson.M {
 	doc["success"] = true
 	return doc
 }
 
+// stringValue safely converts string values from loosely typed request bodies.
 func stringValue(value any) string {
 	if value == nil {
 		return ""
@@ -375,6 +399,7 @@ func stringValue(value any) string {
 	return ""
 }
 
+// sortByCreatedDesc sorts decoded history documents by createdAt descending.
 func sortByCreatedDesc(data []bson.M) {
 	for i := 0; i < len(data); i++ {
 		for j := i + 1; j < len(data); j++ {
@@ -385,6 +410,7 @@ func sortByCreatedDesc(data []bson.M) {
 	}
 }
 
+// createdMillis converts supported createdAt values into milliseconds for sorting.
 func createdMillis(value any) int64 {
 	switch typed := value.(type) {
 	case bson.DateTime:

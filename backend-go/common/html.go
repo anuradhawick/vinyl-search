@@ -7,6 +7,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+// HTMLRewriteResult describes rewritten forum HTML and the image/text data found in it.
 type HTMLRewriteResult struct {
 	HTML      string
 	NewImages []string
@@ -14,6 +15,7 @@ type HTMLRewriteResult struct {
 	Text      string
 }
 
+// RewriteForumHTML rewrites temporary forum image URLs, collects image URLs, and extracts plain text.
 func RewriteForumHTML(input string) (HTMLRewriteResult, error) {
 	root, err := html.Parse(strings.NewReader(input))
 	if err != nil {
@@ -23,6 +25,7 @@ func RewriteForumHTML(input string) (HTMLRewriteResult, error) {
 	var result HTMLRewriteResult
 	var visit func(*html.Node)
 	visit = func(n *html.Node) {
+		// Walk the parsed tree once so image rewriting and text extraction stay in sync.
 		if n.Type == html.ElementNode && n.Data == "img" {
 			for i := range n.Attr {
 				if n.Attr[i].Key != "src" {
@@ -63,6 +66,7 @@ func RewriteForumHTML(input string) (HTMLRewriteResult, error) {
 	return result, nil
 }
 
+// ImageSources returns every src attribute from img tags in the supplied HTML.
 func ImageSources(input string) ([]string, error) {
 	root, err := html.Parse(strings.NewReader(input))
 	if err != nil {

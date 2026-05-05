@@ -16,10 +16,12 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+// main starts the Cognito user-pool trigger Lambda.
 func main() {
 	lambda.Start(handler)
 }
 
+// handler dispatches Cognito trigger events to the matching workflow.
 func handler(ctx context.Context, event map[string]any) (map[string]any, error) {
 	switch stringValue(event["triggerSource"]) {
 	case "PostConfirmation_ConfirmSignUp":
@@ -31,6 +33,7 @@ func handler(ctx context.Context, event map[string]any) (map[string]any, error) 
 	}
 }
 
+// postConfirmation upserts the Mongo user and writes its uid back to Cognito.
 func postConfirmation(ctx context.Context, event map[string]any) (map[string]any, error) {
 	userPoolID := stringValue(event["userPoolId"])
 	username := stringValue(event["userName"])
@@ -52,6 +55,7 @@ func postConfirmation(ctx context.Context, event map[string]any) (map[string]any
 		},
 	}
 
+	// The Mongo document is the source for the custom uid claim used by API handlers.
 	user, err := updateUser(ctx, email, update)
 	if err != nil {
 		return nil, err
@@ -78,6 +82,7 @@ func postConfirmation(ctx context.Context, event map[string]any) (map[string]any
 	return event, nil
 }
 
+// preSignUp links external identities and auto-confirms trusted provider signups.
 func preSignUp(ctx context.Context, event map[string]any) (map[string]any, error) {
 	if err := mergeUsers(ctx, stringValue(event["userPoolId"]), userAttributes(event), stringValue(event["userName"])); err != nil {
 		return nil, err
@@ -89,6 +94,7 @@ func preSignUp(ctx context.Context, event map[string]any) (map[string]any, error
 	return event, nil
 }
 
+// mergeUsers links a new external provider identity to the oldest Cognito user with the same email.
 func mergeUsers(ctx context.Context, userPoolID string, attrs map[string]string, username string) error {
 	provider, providerID := splitProvider(username)
 	if provider != "Google" && provider != "Facebook" {
@@ -105,6 +111,7 @@ func mergeUsers(ctx context.Context, userPoolID string, attrs map[string]string,
 	if err != nil || len(out.Users) == 0 {
 		return err
 	}
+	// Link into the oldest matching Cognito user so repeat signups converge on one account.
 	sort.Slice(out.Users, func(i, j int) bool {
 		if out.Users[i].UserCreateDate == nil {
 			return false
@@ -133,6 +140,7 @@ func mergeUsers(ctx context.Context, userPoolID string, attrs map[string]string,
 	return addAuthProvider(ctx, attrValue(out.Users[0].Attributes, "email"), provider)
 }
 
+// updateUser upserts a Mongo user document by email and returns the updated document.
 func updateUser(ctx context.Context, email string, update bson.M) (bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -148,11 +156,13 @@ func updateUser(ctx context.Context, email string, update bson.M) (bson.M, error
 	return user, err
 }
 
+// addAuthProvider records an auth provider on a Mongo user document.
 func addAuthProvider(ctx context.Context, email, provider string) error {
 	_, err := updateUser(ctx, email, bson.M{"$addToSet": bson.M{"authProviders": provider}})
 	return err
 }
 
+// userAttributes extracts Cognito user attributes from a trigger event.
 func userAttributes(event map[string]any) map[string]string {
 	request := childMap(event, "request")
 	raw := childMap(request, "userAttributes")
@@ -163,6 +173,7 @@ func userAttributes(event map[string]any) map[string]string {
 	return out
 }
 
+// childMap returns a nested event map, creating it when missing.
 func childMap(parent map[string]any, key string) map[string]any {
 	child, ok := parent[key].(map[string]any)
 	if !ok {
@@ -172,6 +183,7 @@ func childMap(parent map[string]any, key string) map[string]any {
 	return child
 }
 
+// splitProvider splits a Cognito provider username into provider and provider id.
 func splitProvider(username string) (string, string) {
 	parts := strings.SplitN(username, "_", 2)
 	if len(parts) == 1 {
@@ -180,6 +192,7 @@ func splitProvider(username string) (string, string) {
 	return parts[0], parts[1]
 }
 
+// attrValue returns the value of a named Cognito attribute.
 func attrValue(attrs []types.AttributeType, name string) string {
 	for _, attr := range attrs {
 		if aws.ToString(attr.Name) == name {
@@ -189,6 +202,7 @@ func attrValue(attrs []types.AttributeType, name string) string {
 	return ""
 }
 
+// stringValue safely converts event values into strings.
 func stringValue(value any) string {
 	if s, ok := value.(string); ok {
 		return s

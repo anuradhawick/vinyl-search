@@ -17,6 +17,7 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+// main registers admin routes and starts the Lambda router.
 func main() {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/admin/users", adminOnly(getUsers))
@@ -41,6 +42,7 @@ func main() {
 	})
 }
 
+// adminOnly wraps a handler with a Cognito Admin group authorization check.
 func adminOnly(next func(context.Context, events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)) func(context.Context, events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 		if !common.IsAdmin(req) {
@@ -50,6 +52,7 @@ func adminOnly(next func(context.Context, events.APIGatewayProxyRequest) (events
 	}
 }
 
+// getUsers returns a paginated list of users for the admin UI.
 func getUsers(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := users(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -58,6 +61,7 @@ func getUsers(ctx context.Context, req events.APIGatewayProxyRequest) (events.AP
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// getUserByUID returns one user document by uid.
 func getUserByUID(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := userByUID(ctx, req.PathParameters["userUid"])
 	if err != nil {
@@ -66,6 +70,7 @@ func getUserByUID(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// getAdminUsers returns users who currently have the Admin role.
 func getAdminUsers(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := adminUsers(ctx)
 	if err != nil {
@@ -74,6 +79,7 @@ func getAdminUsers(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, map[string]any{"users": data, "success": true}), nil
 }
 
+// removeAdmin removes the Admin role from a user in Cognito and Mongo.
 func removeAdmin(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ok, err := removeAdminUser(ctx, req.PathParameters["userUid"])
 	if err != nil {
@@ -82,6 +88,7 @@ func removeAdmin(ctx context.Context, req events.APIGatewayProxyRequest) (events
 	return common.JSON(http.StatusOK, map[string]any{"success": ok}), nil
 }
 
+// addAdmin grants the Admin role to a user in Cognito and Mongo.
 func addAdmin(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ok, err := addAdminUser(ctx, req.PathParameters["email"])
 	if err != nil {
@@ -90,6 +97,7 @@ func addAdmin(ctx context.Context, req events.APIGatewayProxyRequest) (events.AP
 	return common.JSON(http.StatusOK, map[string]any{"success": ok}), nil
 }
 
+// getRecords returns a paginated admin view of latest records.
 func getRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := allRecords(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -99,6 +107,7 @@ func getRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// removeRecord deletes all revisions of a record and its owned images.
 func removeRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := deleteRecord(ctx, req.PathParameters["recordId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -106,6 +115,7 @@ func removeRecord(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// getForumPosts returns a paginated admin view of forum posts.
 func getForumPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := allForumPosts(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -115,6 +125,7 @@ func getForumPosts(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// removeForumPost deletes a forum post and its embedded images.
 func removeForumPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := deleteForumPost(ctx, req.PathParameters["postId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -122,6 +133,7 @@ func removeForumPost(ctx context.Context, req events.APIGatewayProxyRequest) (ev
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// getReports returns unresolved reports for the admin moderation queue.
 func getReports(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := reports(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -131,6 +143,7 @@ func getReports(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// resolveReport marks a report as resolved.
 func resolveReport(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := resolveUserReport(ctx, req.PathParameters["reportId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -138,6 +151,7 @@ func resolveReport(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// getMarketPosts returns marketplace posts for the requested moderation bucket.
 func getMarketPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var (
 		data bson.M
@@ -162,6 +176,7 @@ func getMarketPosts(ctx context.Context, req events.APIGatewayProxyRequest) (eve
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// marketAction applies a moderation action to a marketplace post.
 func marketAction(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -174,6 +189,7 @@ func marketAction(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"success": ok}), nil
 }
 
+// getMarketPost returns one marketplace post for admin review.
 func getMarketPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := marketPost(ctx, req.PathParameters["postId"])
 	if err != nil {
@@ -183,6 +199,7 @@ func getMarketPost(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// updateMarketPost creates a new admin-edited marketplace revision.
 func updateMarketPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -195,6 +212,7 @@ func updateMarketPost(ctx context.Context, req events.APIGatewayProxyRequest) (e
 	return common.JSON(http.StatusOK, map[string]any{"postId": postID, "success": true}), nil
 }
 
+// users returns paginated user summaries for admin browsing.
 func users(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 5)
 	skip := common.IntQuery(params, "skip", 0)
@@ -214,6 +232,7 @@ func users(ctx context.Context, params map[string]string) (bson.M, error) {
 	return aggregateOne(ctx, "users", pipeline)
 }
 
+// userByUID fetches a user document by Mongo ObjectID string.
 func userByUID(ctx context.Context, uid string) (bson.M, error) {
 	oid, err := common.ParseOID(uid)
 	if err != nil {
@@ -228,6 +247,7 @@ func userByUID(ctx context.Context, uid string) (bson.M, error) {
 	return user, err
 }
 
+// adminUsers returns public profile fields for users with the Admin role.
 func adminUsers(ctx context.Context) ([]bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -242,6 +262,7 @@ func adminUsers(ctx context.Context) ([]bson.M, error) {
 		return nil, err
 	}
 	for _, user := range users {
+		// Trim each document in-place so private auth and audit fields are not returned.
 		user["uid"] = user["_id"]
 		for key := range user {
 			if key != "name" && key != "email" && key != "picture" && key != "uid" {
@@ -252,6 +273,7 @@ func adminUsers(ctx context.Context) ([]bson.M, error) {
 	return users, nil
 }
 
+// listUsersByEmail returns Cognito usernames that match an email address.
 func listUsersByEmail(ctx context.Context, email string) ([]cognitoTypesUser, error) {
 	client, err := common.Cognito(ctx)
 	if err != nil {
@@ -275,6 +297,7 @@ type cognitoTypesUser struct {
 	Username string
 }
 
+// removeAdminUser removes Admin access from Cognito and mirrors it to Mongo.
 func removeAdminUser(ctx context.Context, uid string) (bool, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -294,6 +317,7 @@ func removeAdminUser(ctx context.Context, uid string) (bool, error) {
 		return false, err
 	}
 	if len(cognitoUsers) == 0 || email == "anuradhawick@gmail.com" {
+		// Keep the bootstrap owner account from losing the final admin path.
 		return false, nil
 	}
 	client, err := common.Cognito(ctx)
@@ -312,6 +336,7 @@ func removeAdminUser(ctx context.Context, uid string) (bool, error) {
 	return err == nil, err
 }
 
+// addAdminUser grants Admin access in Cognito and mirrors it to Mongo.
 func addAdminUser(ctx context.Context, email string) (bool, error) {
 	cognitoUsers, err := listUsersByEmail(ctx, email)
 	if err != nil {
@@ -340,6 +365,7 @@ func addAdminUser(ctx context.Context, email string) (bool, error) {
 	return err == nil, err
 }
 
+// allRecords returns paginated latest-version records for admin browsing.
 func allRecords(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 30)
 	skip := common.IntQuery(params, "skip", 0)
@@ -366,6 +392,7 @@ func allRecords(ctx context.Context, params map[string]string) (bson.M, error) {
 	return data, nil
 }
 
+// deleteRecord deletes every revision of a record and its stored image objects.
 func deleteRecord(ctx context.Context, recordID string) error {
 	oid, err := common.ParseOID(recordID)
 	if err != nil {
@@ -385,6 +412,7 @@ func deleteRecord(ctx context.Context, recordID string) error {
 	}
 	var images []string
 	for _, record := range records {
+		// Gather images across all revisions before deleting the logical record.
 		images = append(images, common.StringSlice(record["images"])...)
 	}
 	for _, image := range common.UniqueStrings(images) {
@@ -396,12 +424,14 @@ func deleteRecord(ctx context.Context, recordID string) error {
 	return err
 }
 
+// allForumPosts returns paginated forum posts for admin browsing.
 func allForumPosts(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 5)
 	skip := common.IntQuery(params, "skip", 0)
 	return aggregateOne(ctx, "forum_posts", userPostsPipeline(bson.M{}, skip, limit, bson.M{"postTitle": 1, "createdAt": 1, "id": 1}))
 }
 
+// deleteForumPost deletes a forum post and removes images embedded in its HTML.
 func deleteForumPost(ctx context.Context, postID string) error {
 	oid, err := common.ParseOID(postID)
 	if err != nil {
@@ -422,6 +452,7 @@ func deleteForumPost(ctx context.Context, postID string) error {
 	return db.Collection("forum_posts").FindOneAndDelete(ctx, bson.M{"_id": oid}).Err()
 }
 
+// reports returns unresolved report summaries for moderation.
 func reports(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 5)
 	skip := common.IntQuery(params, "skip", 0)
@@ -444,6 +475,7 @@ func reports(ctx context.Context, params map[string]string) (bson.M, error) {
 	return aggregateOne(ctx, "reports", pipeline)
 }
 
+// resolveUserReport marks a user report as resolved.
 func resolveUserReport(ctx context.Context, reportID string) error {
 	oid, err := common.ParseOID(reportID)
 	if err != nil {
@@ -456,6 +488,7 @@ func resolveUserReport(ctx context.Context, reportID string) error {
 	return db.Collection("reports").FindOneAndUpdate(ctx, bson.M{"_id": oid}, bson.M{"$set": bson.M{"resolved": true}}).Err()
 }
 
+// marketPosts returns paginated marketplace posts matching an admin moderation filter.
 func marketPosts(ctx context.Context, params map[string]string, match bson.M) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 5)
 	skip := common.IntQuery(params, "skip", 0)
@@ -482,6 +515,7 @@ func marketPosts(ctx context.Context, params map[string]string, match bson.M) (b
 	return data, nil
 }
 
+// marketPostAction approves or rejects a marketplace post from an admin action payload.
 func marketPostAction(ctx context.Context, body bson.M) (bool, error) {
 	id, err := common.OIDFromAny(body["id"])
 	if err != nil {
@@ -504,6 +538,7 @@ func marketPostAction(ctx context.Context, body bson.M) (bool, error) {
 	return err == nil, err
 }
 
+// marketPost fetches one latest marketplace post and rewrites image URLs for display.
 func marketPost(ctx context.Context, postID string) (bson.M, error) {
 	oid, err := common.ParseOID(postID)
 	if err != nil {
@@ -521,6 +556,7 @@ func marketPost(ctx context.Context, postID string) (bson.M, error) {
 	return data, nil
 }
 
+// updateMarket marks old marketplace versions stale and inserts the admin-edited version.
 func updateMarket(ctx context.Context, reviserUID, postID string, post bson.M) (any, error) {
 	oid, err := common.ParseOID(postID)
 	if err != nil {
@@ -539,6 +575,7 @@ func updateMarket(ctx context.Context, reviserUID, postID string, post bson.M) (
 	if err != nil {
 		return nil, err
 	}
+	// Preserve marketplace history by inserting a new latest document instead of overwriting.
 	if _, err := db.Collection("selling_items").UpdateMany(ctx, bson.M{"id": oid}, bson.M{"$set": bson.M{"latest": false}}); err != nil {
 		return nil, err
 	}
@@ -554,11 +591,13 @@ func updateMarket(ctx context.Context, reviserUID, postID string, post bson.M) (
 	return id, nil
 }
 
+// processSellingImages promotes new selling images and creates derived variants.
 func processSellingImages(ctx context.Context, raw any) (bson.A, error) {
 	images := common.StringSlice(raw)
 	out := make(bson.A, 0, len(images))
 	for _, image := range images {
 		if common.FirstPathSegment(image) == "selling-images" {
+			// Existing permanent keys are kept during edits so they are not copied again.
 			out = append(out, image)
 			continue
 		}
@@ -574,6 +613,7 @@ func processSellingImages(ctx context.Context, raw any) (bson.A, error) {
 	return out, nil
 }
 
+// userPostsPipeline builds the shared admin pagination pipeline for user-owned content.
 func userPostsPipeline(match bson.M, skip, limit int64, project bson.M) mongo.Pipeline {
 	return mongo.Pipeline{
 		{{Key: "$match", Value: match}},
@@ -593,6 +633,7 @@ func userPostsPipeline(match bson.M, skip, limit int64, project bson.M) mongo.Pi
 	}
 }
 
+// aggregateOne returns the first document from a collection aggregation pipeline.
 func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipeline) (bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -612,6 +653,7 @@ func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipelin
 	return data[0], nil
 }
 
+// stringValue safely converts string values from loosely typed request bodies.
 func stringValue(value any) string {
 	if s, ok := value.(string); ok {
 		return s

@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+// TestQueryHelpers verifies query parsing helpers and their fallback behavior.
 func TestQueryHelpers(t *testing.T) {
 	params := map[string]string{"limit": "12", "bad": "nope", "genres": `["baila","pop"]`}
 	if got := IntQuery(params, "limit", 30); got != 12 {
@@ -23,6 +24,7 @@ func TestQueryHelpers(t *testing.T) {
 	}
 }
 
+// TestNormalizeMongoJSON verifies BSON values are serialized into JSON-friendly values.
 func TestNormalizeMongoJSON(t *testing.T) {
 	oid := bson.NewObjectID()
 	input := bson.M{
@@ -45,6 +47,7 @@ func TestNormalizeMongoJSON(t *testing.T) {
 	}
 }
 
+// TestCDNURL verifies CDN image variant URL generation.
 func TestCDNURL(t *testing.T) {
 	t.Setenv("CDN_DOMAIN", "cdn.example.test")
 	got := CDNURL("records-images", "thumbnails", "https://bucket/records-images/original.png")
@@ -54,6 +57,7 @@ func TestCDNURL(t *testing.T) {
 	}
 }
 
+// TestRewriteForumHTML verifies temp images are rewritten and forum text is extracted.
 func TestRewriteForumHTML(t *testing.T) {
 	t.Setenv("CDN_DOMAIN", "cdn.example.test")
 	result, err := RewriteForumHTML(`<html><body><p>Hello <b>world</b></p><img src="https://cdn.example.test/temp/a.png"></body></html>`)
@@ -71,6 +75,7 @@ func TestRewriteForumHTML(t *testing.T) {
 	}
 }
 
+// TestAuthHelpers verifies UID and admin claims are read from API Gateway authorizer data.
 func TestAuthHelpers(t *testing.T) {
 	req := events.APIGatewayProxyRequest{
 		RequestContext: events.APIGatewayProxyRequestContext{

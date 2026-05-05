@@ -16,6 +16,7 @@ var (
 	db       *mongo.Database
 )
 
+// DB returns the shared Mongo database connection for the Lambda process.
 func DB(ctx context.Context) (*mongo.Database, error) {
 	dbMu.Lock()
 	defer dbMu.Unlock()
@@ -34,6 +35,7 @@ func DB(ctx context.Context) (*mongo.Database, error) {
 		return nil, err
 	}
 
+	// Ping before caching the client so later handlers do not reuse a dead connection.
 	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	if err := client.Ping(pingCtx, nil); err != nil {

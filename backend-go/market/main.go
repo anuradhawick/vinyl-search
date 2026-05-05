@@ -15,6 +15,7 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+// main registers marketplace routes and starts the Lambda router.
 func main() {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/market/search", searchPosts)
@@ -32,10 +33,12 @@ func main() {
 	})
 }
 
+// unsupported returns a not found response for marketplace routes that are not implemented.
 func unsupported(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return common.NotFound(), nil
 }
 
+// searchPosts returns marketplace posts that match query and filter parameters.
 func searchPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := search(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -45,6 +48,7 @@ func searchPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// fetchPosts returns the active marketplace listing.
 func fetchPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := list(ctx, req.QueryStringParameters)
 	if err != nil {
@@ -54,6 +58,7 @@ func fetchPosts(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// fetchPost returns a single active marketplace post.
 func fetchPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	data, err := get(ctx, req.PathParameters["postId"])
 	if err != nil {
@@ -63,6 +68,7 @@ func fetchPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.A
 	return common.JSON(http.StatusOK, data), nil
 }
 
+// newPost creates a marketplace post for the authenticated user.
 func newPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -76,6 +82,7 @@ func newPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	return common.JSON(http.StatusOK, result), nil
 }
 
+// updatePost updates an unapproved marketplace post owned by the authenticated user.
 func updatePost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -89,6 +96,7 @@ func updatePost(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, result), nil
 }
 
+// reportPost records a user report for a marketplace post.
 func reportPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -102,6 +110,7 @@ func reportPost(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, result), nil
 }
 
+// search returns filtered active marketplace posts with pagination metadata.
 func search(ctx context.Context, params map[string]string) (bson.M, error) {
 	materials := common.StringArrayQuery(params, "material")
 	gears := common.StringArrayQuery(params, "gear")
@@ -114,6 +123,7 @@ func search(ctx context.Context, params map[string]string) (bson.M, error) {
 		match["$text"] = bson.M{"$search": query}
 	}
 	if len(gears) > 0 || len(materials) > 0 {
+		// Subtype filters are scoped by sale type so gear and material values do not overlap.
 		match["$or"] = bson.A{
 			bson.M{"$and": bson.A{bson.M{"saleType": bson.M{"$eq": "gear"}}, bson.M{"saleSubtype": bson.M{"$in": common.StringArray(gears)}}}},
 			bson.M{"$and": bson.A{bson.M{"saleType": bson.M{"$eq": "material"}}, bson.M{"saleSubtype": bson.M{"$in": common.StringArray(materials)}}}},
@@ -138,6 +148,7 @@ func search(ctx context.Context, params map[string]string) (bson.M, error) {
 	return result, nil
 }
 
+// list returns active marketplace posts sorted by newest first.
 func list(ctx context.Context, params map[string]string) (bson.M, error) {
 	limit := common.IntQuery(params, "limit", 30)
 	skip := common.IntQuery(params, "skip", 0)
@@ -154,6 +165,7 @@ func list(ctx context.Context, params map[string]string) (bson.M, error) {
 	return result, nil
 }
 
+// activeMarketplaceMatch builds the public visibility filter for marketplace posts.
 func activeMarketplaceMatch() bson.M {
 	return bson.M{
 		"approved": true,
@@ -166,6 +178,7 @@ func activeMarketplaceMatch() bson.M {
 	}
 }
 
+// postsFacet builds the marketplace pagination facet.
 func postsFacet(skip, limit int64) mongo.Pipeline {
 	return mongo.Pipeline{
 		{{Key: "$facet", Value: bson.M{
@@ -182,6 +195,7 @@ func postsFacet(skip, limit int64) mongo.Pipeline {
 	}
 }
 
+// get fetches one latest marketplace post and rewrites image URLs for display.
 func get(ctx context.Context, postID string) (bson.M, error) {
 	oid, err := common.ParseOID(postID)
 	if err != nil {
@@ -199,6 +213,7 @@ func get(ctx context.Context, postID string) (bson.M, error) {
 	return data, nil
 }
 
+// create inserts a new marketplace post in a pending moderation state.
 func create(ctx context.Context, uid string, post bson.M) (bson.M, error) {
 	images, err := processImages(ctx, post["images"], false)
 	if err != nil {
@@ -226,6 +241,7 @@ func create(ctx context.Context, uid string, post bson.M) (bson.M, error) {
 	return bson.M{"id": id}, nil
 }
 
+// update modifies an owner's latest unapproved marketplace post.
 func update(ctx context.Context, uid, postID string, body bson.M) (bson.M, error) {
 	oid, err := common.ParseOID(postID)
 	if err != nil {
@@ -259,11 +275,13 @@ func update(ctx context.Context, uid, postID string, body bson.M) (bson.M, error
 	return bson.M{"id": body["id"]}, nil
 }
 
+// processImages promotes marketplace images from temp storage and creates derived variants.
 func processImages(ctx context.Context, raw any, keepExisting bool) (bson.A, error) {
 	images := common.StringSlice(raw)
 	out := make(bson.A, 0, len(images))
 	for _, image := range images {
 		if keepExisting && common.FirstPathSegment(image) == "selling-images" {
+			// Existing permanent keys are kept during edits so they are not copied again.
 			out = append(out, image)
 			continue
 		}
@@ -279,6 +297,7 @@ func processImages(ctx context.Context, raw any, keepExisting bool) (bson.A, err
 	return out, nil
 }
 
+// report inserts a marketplace report document for moderation review.
 func report(ctx context.Context, reporterUID, postID string, report bson.M) (bson.M, error) {
 	report["reporterUid"] = reporterUID
 	report["createdAt"] = time.Now()
@@ -297,6 +316,7 @@ func report(ctx context.Context, reporterUID, postID string, report bson.M) (bso
 	return bson.M{"id": res.InsertedID}, nil
 }
 
+// aggregateOne returns the first document from a selling_items aggregation pipeline.
 func aggregateOne(ctx context.Context, pipeline mongo.Pipeline) (bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {

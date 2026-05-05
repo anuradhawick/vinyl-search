@@ -11,6 +11,7 @@ type Config struct {
 	CognitoUserPoolID string
 }
 
+// LoadConfig reads runtime configuration from Lambda environment variables.
 func LoadConfig() Config {
 	return Config{
 		MongoURI:          os.Getenv("MONGODB_ATLAS_CLUSTER_URI"),
@@ -21,6 +22,7 @@ func LoadConfig() Config {
 	}
 }
 
+// firstNonEmpty returns the first non-empty string from a list of candidates.
 func firstNonEmpty(values ...string) string {
 	for _, value := range values {
 		if value != "" {

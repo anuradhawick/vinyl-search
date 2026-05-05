@@ -15,6 +15,7 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+// main registers user account routes and starts the Lambda router.
 func main() {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/users", getProfile)
@@ -32,6 +33,7 @@ func main() {
 	})
 }
 
+// getProfile returns the authenticated user's profile.
 func getProfile(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	user, err := user(ctx, common.UID(req))
 	if err != nil {
@@ -41,6 +43,7 @@ func getProfile(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, user), nil
 }
 
+// updateProfile applies allowed profile changes for the authenticated user.
 func updateProfile(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	body, err := common.DecodeBody(req.Body)
 	if err != nil {
@@ -57,6 +60,7 @@ func updateProfile(ctx context.Context, req events.APIGatewayProxyRequest) (even
 	return common.JSON(http.StatusOK, user), nil
 }
 
+// getRecords returns records owned by the authenticated user.
 func getRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	records, err := userRecords(ctx, common.UID(req), req.QueryStringParameters)
 	if err != nil {
@@ -66,6 +70,7 @@ func getRecords(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	return common.JSON(http.StatusOK, records), nil
 }
 
+// getForum returns forum posts owned by the authenticated user.
 func getForum(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	posts, err := userForumPosts(ctx, common.UID(req), req.QueryStringParameters)
 	if err != nil {
@@ -75,6 +80,7 @@ func getForum(ctx context.Context, req events.APIGatewayProxyRequest) (events.AP
 	return common.JSON(http.StatusOK, posts), nil
 }
 
+// getMarket returns marketplace posts owned by the authenticated user.
 func getMarket(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	posts, err := userMarketPosts(ctx, common.UID(req), req.QueryStringParameters)
 	if err != nil {
@@ -84,6 +90,7 @@ func getMarket(ctx context.Context, req events.APIGatewayProxyRequest) (events.A
 	return common.JSON(http.StatusOK, posts), nil
 }
 
+// deleteForum deletes one forum post owned by the authenticated user.
 func deleteForum(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := deleteForumPost(ctx, common.UID(req), req.PathParameters["postId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -91,6 +98,7 @@ func deleteForum(ctx context.Context, req events.APIGatewayProxyRequest) (events
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// deleteRecord deletes one logical record owned by the authenticated user.
 func deleteRecord(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := deleteUserRecord(ctx, common.UID(req), req.PathParameters["recordId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -98,6 +106,7 @@ func deleteRecord(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// deleteMarket deletes one marketplace ad owned by the authenticated user.
 func deleteMarket(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if err := deleteMarketplaceAd(ctx, common.UID(req), req.PathParameters["postId"]); err != nil {
 		return common.Internal(map[string]any{"success": false}, err), nil
@@ -105,6 +114,7 @@ func deleteMarket(ctx context.Context, req events.APIGatewayProxyRequest) (event
 	return common.JSON(http.StatusOK, map[string]any{"success": true}), nil
 }
 
+// updateUser updates mutable profile fields and returns the updated user document.
 func updateUser(ctx context.Context, uid string, data bson.M) (bson.M, error) {
 	oid, err := common.ParseOID(uid)
 	if err != nil {
@@ -115,6 +125,7 @@ func updateUser(ctx context.Context, uid string, data bson.M) (bson.M, error) {
 		set["picture"] = data["picture"]
 	}
 	if stringValue(data["family_name"]) != "" && stringValue(data["given_name"]) != "" {
+		// Keep the display name derived from given and family names for compatibility.
 		set["family_name"] = data["family_name"]
 		set["given_name"] = data["given_name"]
 		set["name"] = stringValue(data["given_name"]) + " " + stringValue(data["family_name"])
@@ -136,6 +147,7 @@ func updateUser(ctx context.Context, uid string, data bson.M) (bson.M, error) {
 	return user, err
 }
 
+// user fetches the authenticated user's profile by uid.
 func user(ctx context.Context, uid string) (bson.M, error) {
 	oid, err := common.ParseOID(uid)
 	if err != nil {
@@ -153,6 +165,7 @@ func user(ctx context.Context, uid string) (bson.M, error) {
 	return user, nil
 }
 
+// userRecords returns paginated latest-version records owned by a user.
 func userRecords(ctx context.Context, uid string, params map[string]string) (bson.M, error) {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -183,6 +196,7 @@ func userRecords(ctx context.Context, uid string, params map[string]string) (bso
 	return data, nil
 }
 
+// userForumPosts returns paginated forum posts owned by a user.
 func userForumPosts(ctx context.Context, uid string, params map[string]string) (bson.M, error) {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -194,6 +208,7 @@ func userForumPosts(ctx context.Context, uid string, params map[string]string) (
 	return aggregateOne(ctx, "forum_posts", pipeline)
 }
 
+// userMarketPosts returns paginated marketplace posts owned by a user.
 func userMarketPosts(ctx context.Context, uid string, params map[string]string) (bson.M, error) {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -205,6 +220,7 @@ func userMarketPosts(ctx context.Context, uid string, params map[string]string) 
 	return aggregateOne(ctx, "selling_items", userPostsPipeline(bson.M{"ownerUid": owner}, skip, limit, project))
 }
 
+// userPostsPipeline builds the shared pagination pipeline for user-owned content.
 func userPostsPipeline(match bson.M, skip, limit int64, project bson.M) mongo.Pipeline {
 	return mongo.Pipeline{
 		{{Key: "$match", Value: match}},
@@ -224,6 +240,7 @@ func userPostsPipeline(match bson.M, skip, limit int64, project bson.M) mongo.Pi
 	}
 }
 
+// deleteForumPost deletes an owned forum post and removes its embedded images.
 func deleteForumPost(ctx context.Context, uid, postID string) error {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -248,6 +265,7 @@ func deleteForumPost(ctx context.Context, uid, postID string) error {
 	return db.Collection("forum_posts").FindOneAndDelete(ctx, bson.M{"_id": oid, "ownerUid": owner}).Err()
 }
 
+// deleteUserRecord deletes all owned revisions for a logical record and its images.
 func deleteUserRecord(ctx context.Context, uid, recordID string) error {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -271,6 +289,7 @@ func deleteUserRecord(ctx context.Context, uid, recordID string) error {
 	}
 	var images []string
 	for _, record := range records {
+		// Gather images across all revisions before deleting the logical record.
 		images = append(images, common.StringSlice(record["images"])...)
 	}
 	for _, image := range common.UniqueStrings(images) {
@@ -282,6 +301,7 @@ func deleteUserRecord(ctx context.Context, uid, recordID string) error {
 	return err
 }
 
+// deleteMarketplaceAd deletes all owned versions of a marketplace ad and its images.
 func deleteMarketplaceAd(ctx context.Context, uid, postID string) error {
 	owner, err := common.ParseOID(uid)
 	if err != nil {
@@ -305,6 +325,7 @@ func deleteMarketplaceAd(ctx context.Context, uid, postID string) error {
 	}
 	var images []string
 	for _, post := range posts {
+		// Gather images across all versions before deleting the logical ad.
 		images = append(images, common.StringSlice(post["images"])...)
 	}
 	for _, image := range common.UniqueStrings(images) {
@@ -317,6 +338,7 @@ func deleteMarketplaceAd(ctx context.Context, uid, postID string) error {
 	return err
 }
 
+// aggregateOne returns the first document from a collection aggregation pipeline.
 func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipeline) (bson.M, error) {
 	db, err := common.DB(ctx)
 	if err != nil {
@@ -336,6 +358,7 @@ func aggregateOne(ctx context.Context, collection string, pipeline mongo.Pipelin
 	return data[0], nil
 }
 
+// stringValue safely converts string values from loosely typed request bodies.
 func stringValue(value any) string {
 	if s, ok := value.(string); ok {
 		return s

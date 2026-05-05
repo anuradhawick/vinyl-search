@@ -30,6 +30,7 @@ var (
 	watermarkImg image.Image
 )
 
+// AWSConfig loads and caches the AWS SDK configuration for the Lambda process.
 func AWSConfig(ctx context.Context) (aws.Config, error) {
 	awsOnce.Do(func() {
 		cfg := LoadConfig()
@@ -46,6 +47,7 @@ func AWSConfig(ctx context.Context) (aws.Config, error) {
 	return awsCfg, awsErr
 }
 
+// S3 returns the shared S3 client initialized from the cached AWS config.
 func S3(ctx context.Context) (*s3.Client, error) {
 	if _, err := AWSConfig(ctx); err != nil {
 		return nil, err
@@ -53,6 +55,7 @@ func S3(ctx context.Context) (*s3.Client, error) {
 	return s3Client, nil
 }
 
+// Cognito returns the shared Cognito client initialized from the cached AWS config.
 func Cognito(ctx context.Context) (*cognitoidentityprovider.Client, error) {
 	if _, err := AWSConfig(ctx); err != nil {
 		return nil, err
@@ -60,6 +63,7 @@ func Cognito(ctx context.Context) (*cognitoidentityprovider.Client, error) {
 	return cognito, nil
 }
 
+// CopyFromTemp copies an uploaded temp object into its permanent S3 prefix.
 func CopyFromTemp(ctx context.Context, filename, targetPrefix string) error {
 	client, err := S3(ctx)
 	if err != nil {
@@ -75,6 +79,7 @@ func CopyFromTemp(ctx context.Context, filename, targetPrefix string) error {
 	return err
 }
 
+// DeleteObject removes an object from the configured S3 bucket.
 func DeleteObject(ctx context.Context, key string) error {
 	client, err := S3(ctx)
 	if err != nil {
@@ -88,6 +93,7 @@ func DeleteObject(ctx context.Context, key string) error {
 	return err
 }
 
+// CreateWatermarks creates watermarked and thumbnail JPEG variants for an S3 image.
 func CreateWatermarks(ctx context.Context, key string) error {
 	client, err := S3(ctx)
 	if err != nil {
@@ -116,6 +122,7 @@ func CreateWatermarks(ctx context.Context, key string) error {
 		return err
 	}
 
+	// Keep the original image dimensions for the watermark and use a compact fixed-width thumbnail.
 	scaled := imaging.Fit(watermark, source.Bounds().Dx(), source.Bounds().Dy(), imaging.Lanczos)
 	thumb := imaging.Resize(source, 100, 0, imaging.Lanczos)
 	watermarked := imaging.OverlayCenter(source, scaled, 0.22)
@@ -147,12 +154,14 @@ func CreateWatermarks(ctx context.Context, key string) error {
 	return err
 }
 
+// encodeJPEG encodes an image as a high-quality JPEG byte slice.
 func encodeJPEG(img image.Image) ([]byte, error) {
 	var buf bytes.Buffer
 	err := jpeg.Encode(&buf, img, &jpeg.Options{Quality: 90})
 	return buf.Bytes(), err
 }
 
+// watermarkImage loads and caches the PNG watermark image used for derived assets.
 func watermarkImage() (image.Image, error) {
 	watermarkMu.Lock()
 	defer watermarkMu.Unlock()
@@ -180,15 +189,18 @@ func watermarkImage() (image.Image, error) {
 	return nil, errors.New("wm.png not found")
 }
 
+// stringsTrimExt returns a filename with its final extension removed.
 func stringsTrimExt(name string) string {
 	return name[:len(name)-len(path.Ext(name))]
 }
 
+// ReadAllAndClose reads every byte from a closer and always closes it.
 func ReadAllAndClose(r io.ReadCloser) ([]byte, error) {
 	defer r.Close()
 	return io.ReadAll(r)
 }
 
+// init registers PNG decoding for watermark images.
 func init() {
 	image.RegisterFormat("png", "\x89PNG\r\n\x1a\n", png.Decode, png.DecodeConfig)
 }

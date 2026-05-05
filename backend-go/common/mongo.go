@@ -12,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+// ParseOID parses a non-empty hex string into a Mongo ObjectID.
 func ParseOID(value string) (bson.ObjectID, error) {
 	if value == "" {
 		return bson.NilObjectID, errors.New("empty object id")
@@ -19,6 +20,7 @@ func ParseOID(value string) (bson.ObjectID, error) {
 	return bson.ObjectIDFromHex(value)
 }
 
+// OIDFromAny converts a string or ObjectID value into a Mongo ObjectID.
 func OIDFromAny(value any) (bson.ObjectID, error) {
 	switch typed := value.(type) {
 	case bson.ObjectID:
@@ -30,6 +32,7 @@ func OIDFromAny(value any) (bson.ObjectID, error) {
 	}
 }
 
+// DecodeBody decodes an API Gateway JSON body into a BSON map.
 func DecodeBody(body string) (bson.M, error) {
 	if body == "" {
 		return bson.M{}, nil
@@ -39,10 +42,12 @@ func DecodeBody(body string) (bson.M, error) {
 	return doc, err
 }
 
+// NormalizeMongoJSON converts Mongo-specific values into JSON-friendly values.
 func NormalizeMongoJSON(value any) any {
 	return normalize(reflect.ValueOf(value))
 }
 
+// normalize recursively converts BSON, time, map, and slice values for JSON encoding.
 func normalize(v reflect.Value) any {
 	if !v.IsValid() {
 		return nil
@@ -84,6 +89,7 @@ func normalize(v reflect.Value) any {
 		return out
 	}
 
+	// Fall back to reflection so ordinary maps and slices from handlers normalize too.
 	switch v.Kind() {
 	case reflect.Map:
 		out := map[string]any{}
@@ -103,11 +109,13 @@ func normalize(v reflect.Value) any {
 	}
 }
 
+// CDNURL builds a CDN URL for an image variant from an original image path.
 func CDNURL(prefix, variant, image string) string {
 	name := strings.TrimSuffix(path.Base(imagePath(image)), path.Ext(imagePath(image)))
 	return "https://" + LoadConfig().CDNDomain + "/" + prefix + "/" + variant + "/" + name + ".jpeg"
 }
 
+// imagePath returns the path portion of a URL or the original image string.
 func imagePath(image string) string {
 	if parsed, err := url.Parse(image); err == nil && parsed.Path != "" {
 		return parsed.Path
@@ -115,10 +123,12 @@ func imagePath(image string) string {
 	return image
 }
 
+// Filename returns the final path segment from an image URL or key.
 func Filename(image string) string {
 	return path.Base(imagePath(image))
 }
 
+// FirstPathSegment returns the first path segment from an image URL or key.
 func FirstPathSegment(image string) string {
 	clean := strings.Trim(imagePath(image), "/")
 	if clean == "" {
@@ -127,6 +137,7 @@ func FirstPathSegment(image string) string {
 	return strings.Split(clean, "/")[0]
 }
 
+// PreviousPathSegment returns the path segment immediately before the filename.
 func PreviousPathSegment(image string) string {
 	clean := strings.Trim(imagePath(image), "/")
 	if clean == "" {
@@ -139,6 +150,7 @@ func PreviousPathSegment(image string) string {
 	return parts[len(parts)-2]
 }
 
+// RewriteImages rewrites a document's image list to CDN URLs for the requested variant.
 func RewriteImages(doc bson.M, prefix, variant string) {
 	raw, ok := doc["images"].(bson.A)
 	if !ok {
@@ -157,12 +169,14 @@ func RewriteImages(doc bson.M, prefix, variant string) {
 	doc["images"] = images
 }
 
+// RewriteImageList rewrites image lists on every child document in a container field.
 func RewriteImageList(container bson.M, key, prefix, variant string) {
 	for _, doc := range Docs(container[key]) {
 		RewriteImages(doc, prefix, variant)
 	}
 }
 
+// Docs converts supported BSON slice shapes into a slice of BSON maps.
 func Docs(value any) []bson.M {
 	switch typed := value.(type) {
 	case []bson.M:
@@ -188,6 +202,7 @@ func Docs(value any) []bson.M {
 	}
 }
 
+// StringSlice converts supported string slice shapes into a native string slice.
 func StringSlice(value any) []string {
 	switch typed := value.(type) {
 	case []string:
@@ -213,6 +228,7 @@ func StringSlice(value any) []string {
 	}
 }
 
+// UniqueStrings returns values in first-seen order with duplicates removed.
 func UniqueStrings(values []string) []string {
 	seen := map[string]bool{}
 	out := make([]string, 0, len(values))
@@ -226,6 +242,7 @@ func UniqueStrings(values []string) []string {
 	return out
 }
 
+// StringArray converts a native string slice into a BSON array.
 func StringArray(values []string) bson.A {
 	out := make(bson.A, len(values))
 	for i, value := range values {

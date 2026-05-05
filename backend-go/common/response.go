@@ -15,6 +15,7 @@ var corsHeaders = map[string]string{
 	"Content-Type":                     "application/json",
 }
 
+// NormalizePath removes trailing slashes so Lambda routes match consistently.
 func NormalizePath(req *events.APIGatewayProxyRequest) {
 	if req.Path != "/" {
 		req.Path = strings.TrimRight(req.Path, "/")
@@ -24,6 +25,7 @@ func NormalizePath(req *events.APIGatewayProxyRequest) {
 	}
 }
 
+// JSON serializes a response body as JSON with the service CORS headers.
 func JSON(status int, body any) events.APIGatewayProxyResponse {
 	data, err := json.Marshal(NormalizeMongoJSON(body))
 	if err != nil {
@@ -38,14 +40,17 @@ func JSON(status int, body any) events.APIGatewayProxyResponse {
 	}
 }
 
+// Error returns a JSON error response with the provided status and body.
 func Error(status int, body any) events.APIGatewayProxyResponse {
 	return JSON(status, body)
 }
 
+// NotFound returns the standard JSON 404 response used by unsupported routes.
 func NotFound() events.APIGatewayProxyResponse {
 	return JSON(http.StatusNotFound, map[string]any{"success": false, "error": "Not Found"})
 }
 
+// Internal logs an optional error and returns the standard JSON 500 response.
 func Internal(body any, err error) events.APIGatewayProxyResponse {
 	if err != nil {
 		log.Printf("handler error: %v", err)

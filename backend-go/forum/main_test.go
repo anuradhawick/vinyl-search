@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
+// TestUnsupportedCommentGet verifies unsupported forum routes return 404.
 func TestUnsupportedCommentGet(t *testing.T) {
 	resp, err := unsupported(context.Background(), events.APIGatewayProxyRequest{})
 	if err != nil {
