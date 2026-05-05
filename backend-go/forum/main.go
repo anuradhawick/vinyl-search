@@ -17,22 +17,30 @@ import (
 
 // main registers forum routes and starts the Lambda router.
 func main() {
+	lambda.Start(handler)
+}
+
+// handler normalizes API Gateway paths and dispatches requests through the forum router.
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	common.NormalizePath(&req)
+	return newRouter().Handle(ctx, req)
+}
+
+// newRouter registers forum routes.
+func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/forum/:postId", getPost)
-	router.GET("/forum/:postId/comments", getComments)
-	router.GET("/forum/:postId/comments/:commentId", unsupported)
 	router.GET("/forum", getPosts)
 	router.GET("/forum/search", searchPosts)
 	router.POST("/forum", saveNewPost)
-	router.POST("/forum/:postId", saveExistingPost)
+	router.GET("/forum/:postId/comments/:commentId", unsupported)
+	router.GET("/forum/:postId/comments", getComments)
+	router.GET("/forum/:postId", getPost)
 	router.POST("/forum/:postId/comments", saveComment)
-	router.DELETE("/forum/:postId", removePost)
+	router.POST("/forum/:postId", saveExistingPost)
 	router.DELETE("/forum/:postId/comments/:commentId", removeComment)
+	router.DELETE("/forum/:postId", removePost)
 
-	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		common.NormalizePath(&req)
-		return router.Handle(ctx, req)
-	})
+	return router
 }
 
 // unsupported returns a not found response for forum routes that are not implemented.

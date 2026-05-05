@@ -24,11 +24,28 @@ var (
 	awsOnce      sync.Once
 	awsCfg       aws.Config
 	awsErr       error
-	s3Client     *s3.Client
-	cognito      *cognitoidentityprovider.Client
+	s3Client     S3API
+	cognito      CognitoAPI
 	watermarkMu  sync.Mutex
 	watermarkImg image.Image
 )
+
+// S3API is the S3 subset used by the Lambda handlers.
+type S3API interface {
+	CopyObject(context.Context, *s3.CopyObjectInput, ...func(*s3.Options)) (*s3.CopyObjectOutput, error)
+	DeleteObject(context.Context, *s3.DeleteObjectInput, ...func(*s3.Options)) (*s3.DeleteObjectOutput, error)
+	GetObject(context.Context, *s3.GetObjectInput, ...func(*s3.Options)) (*s3.GetObjectOutput, error)
+	PutObject(context.Context, *s3.PutObjectInput, ...func(*s3.Options)) (*s3.PutObjectOutput, error)
+}
+
+// CognitoAPI is the Cognito subset used by the Lambda handlers.
+type CognitoAPI interface {
+	AdminAddUserToGroup(context.Context, *cognitoidentityprovider.AdminAddUserToGroupInput, ...func(*cognitoidentityprovider.Options)) (*cognitoidentityprovider.AdminAddUserToGroupOutput, error)
+	AdminLinkProviderForUser(context.Context, *cognitoidentityprovider.AdminLinkProviderForUserInput, ...func(*cognitoidentityprovider.Options)) (*cognitoidentityprovider.AdminLinkProviderForUserOutput, error)
+	AdminRemoveUserFromGroup(context.Context, *cognitoidentityprovider.AdminRemoveUserFromGroupInput, ...func(*cognitoidentityprovider.Options)) (*cognitoidentityprovider.AdminRemoveUserFromGroupOutput, error)
+	AdminUpdateUserAttributes(context.Context, *cognitoidentityprovider.AdminUpdateUserAttributesInput, ...func(*cognitoidentityprovider.Options)) (*cognitoidentityprovider.AdminUpdateUserAttributesOutput, error)
+	ListUsers(context.Context, *cognitoidentityprovider.ListUsersInput, ...func(*cognitoidentityprovider.Options)) (*cognitoidentityprovider.ListUsersOutput, error)
+}
 
 // AWSConfig loads and caches the AWS SDK configuration for the Lambda process.
 func AWSConfig(ctx context.Context) (aws.Config, error) {
@@ -48,7 +65,10 @@ func AWSConfig(ctx context.Context) (aws.Config, error) {
 }
 
 // S3 returns the shared S3 client initialized from the cached AWS config.
-func S3(ctx context.Context) (*s3.Client, error) {
+func S3(ctx context.Context) (S3API, error) {
+	if s3Client != nil {
+		return s3Client, nil
+	}
 	if _, err := AWSConfig(ctx); err != nil {
 		return nil, err
 	}
@@ -56,11 +76,36 @@ func S3(ctx context.Context) (*s3.Client, error) {
 }
 
 // Cognito returns the shared Cognito client initialized from the cached AWS config.
-func Cognito(ctx context.Context) (*cognitoidentityprovider.Client, error) {
+func Cognito(ctx context.Context) (CognitoAPI, error) {
+	if cognito != nil {
+		return cognito, nil
+	}
 	if _, err := AWSConfig(ctx); err != nil {
 		return nil, err
 	}
 	return cognito, nil
+}
+
+// MockS3 installs a test S3 implementation for handlers that use common S3 helpers.
+func MockS3(client S3API) {
+	s3Client = client
+}
+
+// MockCognito installs a test Cognito implementation for handlers that use common Cognito helpers.
+func MockCognito(client CognitoAPI) {
+	cognito = client
+}
+
+// ResetAWS clears cached AWS clients and config so tests can install fresh mocks.
+func ResetAWS() {
+	awsOnce = sync.Once{}
+	awsCfg = aws.Config{}
+	awsErr = nil
+	s3Client = nil
+	cognito = nil
+	watermarkMu.Lock()
+	watermarkImg = nil
+	watermarkMu.Unlock()
 }
 
 // CopyFromTemp copies an uploaded temp object into its permanent S3 prefix.

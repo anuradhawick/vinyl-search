@@ -19,6 +19,17 @@ import (
 
 // main registers admin routes and starts the Lambda router.
 func main() {
+	lambda.Start(handler)
+}
+
+// handler normalizes API Gateway paths and dispatches requests through the admin router.
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	common.NormalizePath(&req)
+	return newRouter().Handle(ctx, req)
+}
+
+// newRouter registers admin routes.
+func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/admin/users", adminOnly(getUsers))
 	router.GET("/admin/users/:userUid", adminOnly(getUserByUID))
@@ -36,10 +47,7 @@ func main() {
 	router.GET("/admin/market/:postId", adminOnly(getMarketPost))
 	router.POST("/admin/market/:postId", adminOnly(updateMarketPost))
 
-	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		common.NormalizePath(&req)
-		return router.Handle(ctx, req)
-	})
+	return router
 }
 
 // adminOnly wraps a handler with a Cognito Admin group authorization check.

@@ -17,6 +17,17 @@ import (
 
 // main registers user account routes and starts the Lambda router.
 func main() {
+	lambda.Start(handler)
+}
+
+// handler normalizes API Gateway paths and dispatches requests through the users router.
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	common.NormalizePath(&req)
+	return newRouter().Handle(ctx, req)
+}
+
+// newRouter registers user account routes.
+func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/users", getProfile)
 	router.POST("/users", updateProfile)
@@ -27,10 +38,7 @@ func main() {
 	router.GET("/users/market", getMarket)
 	router.DELETE("/users/market/:postId", deleteMarket)
 
-	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		common.NormalizePath(&req)
-		return router.Handle(ctx, req)
-	})
+	return router
 }
 
 // getProfile returns the authenticated user's profile.

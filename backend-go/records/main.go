@@ -19,6 +19,17 @@ import (
 
 // main registers record routes and starts the Lambda router.
 func main() {
+	lambda.Start(handler)
+}
+
+// handler normalizes API Gateway paths and dispatches requests through the records router.
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	common.NormalizePath(&req)
+	return newRouter().Handle(ctx, req)
+}
+
+// newRouter registers record routes.
+func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/records/search", searchRecords)
 	router.GET("/records", fetchRecords)
@@ -28,10 +39,7 @@ func main() {
 	router.GET("/records/:recordId/revisions", fetchHistory)
 	router.GET("/records/:recordId/revisions/:revisionId", fetchRevision)
 
-	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		common.NormalizePath(&req)
-		return router.Handle(ctx, req)
-	})
+	return router
 }
 
 // searchRecords returns records matching text and facet query parameters.

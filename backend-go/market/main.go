@@ -17,6 +17,17 @@ import (
 
 // main registers marketplace routes and starts the Lambda router.
 func main() {
+	lambda.Start(handler)
+}
+
+// handler normalizes API Gateway paths and dispatches requests through the market router.
+func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	common.NormalizePath(&req)
+	return newRouter().Handle(ctx, req)
+}
+
+// newRouter registers marketplace routes.
+func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
 	router.GET("/market/search", searchPosts)
 	router.GET("/market", fetchPosts)
@@ -27,10 +38,7 @@ func main() {
 	router.GET("/market/:postId/report", unsupported)
 	router.POST("/market/:postId/report", reportPost)
 
-	lambda.Start(func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		common.NormalizePath(&req)
-		return router.Handle(ctx, req)
-	})
+	return router
 }
 
 // unsupported returns a not found response for marketplace routes that are not implemented.
