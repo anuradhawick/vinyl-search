@@ -26,8 +26,8 @@ resource "aws_cognito_user_pool_client" "vinyl-lk-client" {
   name         = "vinyl-lk-client-${terraform.workspace}"
   user_pool_id = aws_cognito_user_pool.vinyl-lk.id
 
-  callback_urls                        = ["http://localhost:4200/", "https://vinyl.lk", "https://www.vinyl.lk"]
-  logout_urls                          = ["http://localhost:4200/", "https://vinyl.lk", "https://www.vinyl.lk"]
+  callback_urls                        = local.oauth_redirect_urls
+  logout_urls                          = local.oauth_redirect_urls
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["phone", "email", "profile", "openid", "aws.cognito.signin.user.admin"]
@@ -232,7 +232,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 
 # domain config
 resource "aws_cognito_user_pool_domain" "vinyl-lk-auth" {
-  domain          = "${terraform.workspace == "prod" ? "auth" : "devauth"}.vinyl.lk"
+  domain          = local.oauth_domain_name
   certificate_arn = var.ACM_CERT
   user_pool_id    = aws_cognito_user_pool.vinyl-lk.id
 }

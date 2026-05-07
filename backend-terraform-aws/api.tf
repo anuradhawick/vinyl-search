@@ -197,7 +197,7 @@ resource "aws_api_gateway_stage" "vinyl-lk" {
 # domains
 resource "aws_api_gateway_domain_name" "vinyl-lk-api" {
   certificate_arn = var.ACM_CERT
-  domain_name     = "${terraform.workspace == "prod" ? "" : terraform.workspace}api.vinyl.lk"
+  domain_name     = local.api_domain_name
   security_policy = "TLS_1_2"
 }
 

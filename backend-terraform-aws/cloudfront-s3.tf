@@ -47,12 +47,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     ssl_support_method       = "sni-only"
   }
 
-  aliases = ["${terraform.workspace == "prod" ? "" : terraform.workspace}cdn.vinyl.lk"]
+  aliases = [local.cdn_domain_name]
 }
 
 # domain config
 resource "aws_route53_record" "vinyl-lk-cdn" {
-  name    = "${terraform.workspace == "prod" ? "" : terraform.workspace}cdn.vinyl.lk"
+  name    = local.cdn_domain_name
   type    = "A"
   zone_id = var.R53_ZONE_ID
 

@@ -1,4 +1,4 @@
-import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { enableProdMode } from '@angular/core';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { Amplify } from 'aws-amplify';
@@ -33,7 +33,5 @@ Amplify.configure(environment.aws_config, {
 });
 
 platformBrowser()
-  .bootstrapModule(AppModule, {
-    applicationProviders: [provideZoneChangeDetection()],
-  })
+  .bootstrapModule(AppModule)
   .catch((err) => console.error(err));
