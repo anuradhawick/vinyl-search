@@ -33,7 +33,7 @@ locals {
 }
 
 data "external" "angular_build" {
-  program = ["python3", "${path.module}/build.py"]
+  program = ["go", "run", "${path.module}/build.go"]
 
   query = {
     workspace             = terraform.workspace
