@@ -15,28 +15,34 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+var router *lambdamux.LambdaMux
+
+func init() {
+	router = newRouter()
+}
+
 // main registers user account routes and starts the Lambda router.
 func main() {
 	lambda.Start(handler)
 }
 
-// handler normalizes API Gateway paths and dispatches requests through the users router.
+// handler dispatches requests through the users router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	common.NormalizePath(&req)
-	return newRouter().Handle(ctx, req)
+	common.LogEventPayload(req)
+	return router.Handle(ctx, req)
 }
 
 // newRouter registers user account routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/users", getProfile)
-	router.POST("/users", updateProfile)
-	router.GET("/users/records", getRecords)
-	router.DELETE("/users/records/:recordId", deleteRecord)
-	router.GET("/users/forum", getForum)
-	router.DELETE("/users/forum/:postId", deleteForum)
-	router.GET("/users/market", getMarket)
-	router.DELETE("/users/market/:postId", deleteMarket)
+	router.GET("/users", common.LogEndpoint("GET", "/users", common.AuthRequired(getProfile)))
+	router.POST("/users", common.LogEndpoint("POST", "/users", common.AuthRequired(updateProfile)))
+	router.GET("/users/records", common.LogEndpoint("GET", "/users/records", common.AuthRequired(getRecords)))
+	router.DELETE("/users/records/:recordId", common.LogEndpoint("DELETE", "/users/records/:recordId", common.AuthRequired(deleteRecord)))
+	router.GET("/users/forum", common.LogEndpoint("GET", "/users/forum", common.AuthRequired(getForum)))
+	router.DELETE("/users/forum/:postId", common.LogEndpoint("DELETE", "/users/forum/:postId", common.AuthRequired(deleteForum)))
+	router.GET("/users/market", common.LogEndpoint("GET", "/users/market", common.AuthRequired(getMarket)))
+	router.DELETE("/users/market/:postId", common.LogEndpoint("DELETE", "/users/market/:postId", common.AuthRequired(deleteMarket)))
 
 	return router
 }

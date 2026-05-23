@@ -75,7 +75,12 @@ func run(stdin io.Reader, stdout io.Writer, stderr io.Writer) error {
 		return err
 	}
 
-	hash, err := hashDir(buildDestination)
+	manifest, hash, err := buildManifest(buildDestination)
+	if err != nil {
+		return err
+	}
+
+	manifestJSON, err := json.Marshal(manifest)
 	if err != nil {
 		return err
 	}
@@ -83,6 +88,7 @@ func run(stdin io.Reader, stdout io.Writer, stderr io.Writer) error {
 	return json.NewEncoder(stdout).Encode(map[string]string{
 		"hash":              hash,
 		"build_destination": buildDestination,
+		"files_json":        string(manifestJSON),
 	})
 }
 
@@ -367,17 +373,17 @@ func splitCommand(command string) ([]string, error) {
 	return args, nil
 }
 
-func hashDir(dirPath string) (string, error) {
+func buildManifest(dirPath string) (map[string]string, string, error) {
 	info, err := os.Stat(dirPath)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			return "", fmt.Errorf("build destination does not exist: %s", dirPath)
+			return nil, "", fmt.Errorf("build destination does not exist: %s", dirPath)
 		}
-		return "", err
+		return nil, "", err
 	}
 
 	if !info.IsDir() {
-		return "", fmt.Errorf("build destination is not a directory: %s", dirPath)
+		return nil, "", fmt.Errorf("build destination is not a directory: %s", dirPath)
 	}
 
 	var files []string
@@ -392,21 +398,29 @@ func hashDir(dirPath string) (string, error) {
 
 		return nil
 	}); err != nil {
-		return "", err
+		return nil, "", err
 	}
 
 	sort.Strings(files)
 
+	manifest := make(map[string]string, len(files))
 	sha := sha1.New()
 	for _, file := range files {
 		fileHash, err := sha1OfFile(dirPath, file)
 		if err != nil {
-			return "", err
+			return nil, "", err
 		}
+
+		relativePath, err := filepath.Rel(dirPath, file)
+		if err != nil {
+			return nil, "", err
+		}
+
+		manifest[filepath.ToSlash(relativePath)] = fileHash
 		sha.Write([]byte(fileHash))
 	}
 
-	return hex.EncodeToString(sha.Sum(nil)), nil
+	return manifest, hex.EncodeToString(sha.Sum(nil)), nil
 }
 
 func sha1OfFile(root string, path string) (string, error) {

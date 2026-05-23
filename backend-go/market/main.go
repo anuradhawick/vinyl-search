@@ -15,28 +15,34 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+var router *lambdamux.LambdaMux
+
+func init() {
+	router = newRouter()
+}
+
 // main registers marketplace routes and starts the Lambda router.
 func main() {
 	lambda.Start(handler)
 }
 
-// handler normalizes API Gateway paths and dispatches requests through the market router.
+// handler dispatches requests through the market router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	common.NormalizePath(&req)
-	return newRouter().Handle(ctx, req)
+	common.LogEventPayload(req)
+	return router.Handle(ctx, req)
 }
 
 // newRouter registers marketplace routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/market/search", searchPosts)
-	router.GET("/market", fetchPosts)
-	router.POST("/market", newPost)
-	router.GET("/market/:postId", fetchPost)
-	router.POST("/market/:postId", updatePost)
-	router.DELETE("/market/:postId", unsupported)
-	router.GET("/market/:postId/report", unsupported)
-	router.POST("/market/:postId/report", reportPost)
+	router.GET("/market/search", common.LogEndpoint("GET", "/market/search", searchPosts))
+	router.GET("/market", common.LogEndpoint("GET", "/market", fetchPosts))
+	router.POST("/market", common.LogEndpoint("POST", "/market", common.AuthRequired(newPost)))
+	router.GET("/market/:postId", common.LogEndpoint("GET", "/market/:postId", common.AuthRequired(fetchPost)))
+	router.POST("/market/:postId", common.LogEndpoint("POST", "/market/:postId", common.AuthRequired(updatePost)))
+	router.DELETE("/market/:postId", common.LogEndpoint("DELETE", "/market/:postId", common.AuthRequired(unsupported)))
+	router.GET("/market/:postId/report", common.LogEndpoint("GET", "/market/:postId/report", common.AuthRequired(unsupported)))
+	router.POST("/market/:postId/report", common.LogEndpoint("POST", "/market/:postId/report", common.AuthRequired(reportPost)))
 
 	return router
 }

@@ -57,6 +57,20 @@ func TestCDNURL(t *testing.T) {
 	}
 }
 
+// TestLoadConfig verifies runtime environment variables are mapped into Config.
+func TestLoadConfig(t *testing.T) {
+	t.Setenv("MONGODB_ATLAS_CLUSTER_URI", "mongodb+srv://example.test")
+	t.Setenv("MONGODB_DATABASE_NAME", "vinyl-lk-dev")
+
+	cfg := LoadConfig()
+	if cfg.MongoURI != "mongodb+srv://example.test" {
+		t.Fatalf("mongo uri = %q", cfg.MongoURI)
+	}
+	if cfg.MongoDatabaseName != "vinyl-lk-dev" {
+		t.Fatalf("mongo database = %q", cfg.MongoDatabaseName)
+	}
+}
+
 // TestRewriteForumHTML verifies temp images are rewritten and forum text is extracted.
 func TestRewriteForumHTML(t *testing.T) {
 	t.Setenv("CDN_DOMAIN", "cdn.example.test")

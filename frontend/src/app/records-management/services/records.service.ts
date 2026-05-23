@@ -14,7 +14,7 @@ export class RecordsService {
     return from(
       post({
         apiName: '[vinyl.lk]',
-        path: 'records/',
+        path: 'records',
         options: { body: record },
       }).response,
     ).pipe(

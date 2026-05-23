@@ -1,6 +1,7 @@
 package common
 
 import (
+	"context"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -9,7 +10,11 @@ import (
 // Claims returns the authorizer claims map from an API Gateway request.
 func Claims(req events.APIGatewayProxyRequest) map[string]any {
 	if req.RequestContext.Authorizer == nil {
-		return map[string]any{}
+		claims, err := ClaimsFromAuthorizationHeader(context.Background(), req.Headers)
+		if err != nil {
+			return map[string]any{}
+		}
+		return claims
 	}
 	raw, ok := req.RequestContext.Authorizer["claims"].(map[string]any)
 	if ok {
@@ -53,4 +58,17 @@ func IsAdmin(req events.APIGatewayProxyRequest) bool {
 		}
 	}
 	return false
+}
+
+// LambdaHandler is the API Gateway handler shape used by this service.
+type LambdaHandler = func(context.Context, events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+
+// AuthRequired rejects requests that do not carry a valid Cognito uid claim.
+func AuthRequired(next LambdaHandler) LambdaHandler {
+	return func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		if UID(req) == "" {
+			return JSON(401, map[string]any{"success": false}), nil
+		}
+		return next(ctx, req)
+	}
 }

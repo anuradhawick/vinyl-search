@@ -4,6 +4,7 @@ provider "aws" {
 
 locals {
   MONGODB_ATLAS_CLUSTER_URI = terraform.workspace == "prod" ? var.MONGODB_ATLAS_CLUSTER_URI_PROD : var.MONGODB_ATLAS_CLUSTER_URI_DEV
+  MONGODB_DATABASE_NAME     = "vinyl-lk-${terraform.workspace}"
 
   api_domain_name   = "${terraform.workspace == "prod" ? "" : terraform.workspace}api.vinyl.lk"
   cdn_domain_name   = "${terraform.workspace == "prod" ? "" : terraform.workspace}cdn.vinyl.lk"

@@ -92,6 +92,32 @@ func TestWriteEnvironmentFilesWritesDevelopmentEnvironmentFiles(t *testing.T) {
 	}
 }
 
+func TestBuildManifestReturnsRelativeFileHashes(t *testing.T) {
+	dir := t.TempDir()
+	nestedDir := filepath.Join(dir, "assets")
+	if err := os.Mkdir(nestedDir, 0o755); err != nil {
+		t.Fatalf("os.Mkdir(%q) error = %v", nestedDir, err)
+	}
+
+	writeTestFile(t, filepath.Join(dir, "index.html"), "<app-root></app-root>")
+	writeTestFile(t, filepath.Join(nestedDir, "logo.svg"), "<svg></svg>")
+
+	manifest, hash, err := buildManifest(dir)
+	if err != nil {
+		t.Fatalf("buildManifest() error = %v", err)
+	}
+
+	if hash == "" {
+		t.Fatalf("buildManifest() returned an empty directory hash")
+	}
+
+	for _, path := range []string{"index.html", "assets/logo.svg"} {
+		if manifest[path] == "" {
+			t.Fatalf("manifest missing hash for %q: %#v", path, manifest)
+		}
+	}
+}
+
 func placeholderBuildArgs() buildArgs {
 	return buildArgs{
 		"workspace":             "prod",
@@ -118,4 +144,12 @@ func readFile(t *testing.T, path string) string {
 	}
 
 	return string(contents)
+}
+
+func writeTestFile(t *testing.T, path string, contents string) {
+	t.Helper()
+
+	if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
+		t.Fatalf("os.WriteFile(%q) error = %v", path, err)
+	}
 }

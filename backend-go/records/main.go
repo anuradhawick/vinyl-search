@@ -17,27 +17,33 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+var router *lambdamux.LambdaMux
+
+func init() {
+	router = newRouter()
+}
+
 // main registers record routes and starts the Lambda router.
 func main() {
 	lambda.Start(handler)
 }
 
-// handler normalizes API Gateway paths and dispatches requests through the records router.
+// handler dispatches requests through the records router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	common.NormalizePath(&req)
-	return newRouter().Handle(ctx, req)
+	common.LogEventPayload(req)
+	return router.Handle(ctx, req)
 }
 
 // newRouter registers record routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/records/search", searchRecords)
-	router.GET("/records", fetchRecords)
-	router.GET("/records/:recordId", fetchRecord)
-	router.POST("/records", newRecord)
-	router.POST("/records/:recordId", updateRecord)
-	router.GET("/records/:recordId/revisions", fetchHistory)
-	router.GET("/records/:recordId/revisions/:revisionId", fetchRevision)
+	router.GET("/records/search", common.LogEndpoint("GET", "/records/search", searchRecords))
+	router.GET("/records", common.LogEndpoint("GET", "/records", fetchRecords))
+	router.GET("/records/:recordId", common.LogEndpoint("GET", "/records/:recordId", common.AuthRequired(fetchRecord)))
+	router.POST("/records", common.LogEndpoint("POST", "/records", common.AuthRequired(newRecord)))
+	router.POST("/records/:recordId", common.LogEndpoint("POST", "/records/:recordId", common.AuthRequired(updateRecord)))
+	router.GET("/records/:recordId/revisions", common.LogEndpoint("GET", "/records/:recordId/revisions", common.AuthRequired(fetchHistory)))
+	router.GET("/records/:recordId/revisions/:revisionId", common.LogEndpoint("GET", "/records/:recordId/revisions/:revisionId", common.AuthRequired(fetchRevision)))
 
 	return router
 }

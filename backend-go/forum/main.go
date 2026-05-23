@@ -15,30 +15,36 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+var router *lambdamux.LambdaMux
+
+func init() {
+	router = newRouter()
+}
+
 // main registers forum routes and starts the Lambda router.
 func main() {
 	lambda.Start(handler)
 }
 
-// handler normalizes API Gateway paths and dispatches requests through the forum router.
+// handler dispatches requests through the forum router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	common.NormalizePath(&req)
-	return newRouter().Handle(ctx, req)
+	common.LogEventPayload(req)
+	return router.Handle(ctx, req)
 }
 
 // newRouter registers forum routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/forum", getPosts)
-	router.GET("/forum/search", searchPosts)
-	router.POST("/forum", saveNewPost)
-	router.GET("/forum/:postId/comments/:commentId", unsupported)
-	router.GET("/forum/:postId/comments", getComments)
-	router.GET("/forum/:postId", getPost)
-	router.POST("/forum/:postId/comments", saveComment)
-	router.POST("/forum/:postId", saveExistingPost)
-	router.DELETE("/forum/:postId/comments/:commentId", removeComment)
-	router.DELETE("/forum/:postId", removePost)
+	router.GET("/forum", common.LogEndpoint("GET", "/forum", getPosts))
+	router.GET("/forum/search", common.LogEndpoint("GET", "/forum/search", searchPosts))
+	router.POST("/forum", common.LogEndpoint("POST", "/forum", common.AuthRequired(saveNewPost)))
+	router.GET("/forum/:postId/comments/:commentId", common.LogEndpoint("GET", "/forum/:postId/comments/:commentId", unsupported))
+	router.GET("/forum/:postId/comments", common.LogEndpoint("GET", "/forum/:postId/comments", getComments))
+	router.GET("/forum/:postId", common.LogEndpoint("GET", "/forum/:postId", getPost))
+	router.POST("/forum/:postId/comments", common.LogEndpoint("POST", "/forum/:postId/comments", common.AuthRequired(saveComment)))
+	router.POST("/forum/:postId", common.LogEndpoint("POST", "/forum/:postId", common.AuthRequired(saveExistingPost)))
+	router.DELETE("/forum/:postId/comments/:commentId", common.LogEndpoint("DELETE", "/forum/:postId/comments/:commentId", common.AuthRequired(removeComment)))
+	router.DELETE("/forum/:postId", common.LogEndpoint("DELETE", "/forum/:postId", common.AuthRequired(removePost)))
 
 	return router
 }

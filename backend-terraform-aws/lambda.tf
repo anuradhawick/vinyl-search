@@ -15,6 +15,7 @@ module "lambda-admin-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
@@ -59,6 +60,8 @@ module "lambda-forum-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
@@ -100,6 +103,8 @@ module "lambda-market-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
@@ -142,6 +147,8 @@ module "lambda-records-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
@@ -185,6 +192,7 @@ module "lambda-user-service" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
@@ -227,6 +235,7 @@ module "lambda-user-pool-triggers" {
   tags          = var.common-tags
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
+    MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
     NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true

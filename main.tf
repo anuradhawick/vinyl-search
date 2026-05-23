@@ -88,33 +88,3 @@ module "frontend" {
   install_command     = var.frontend_install_command
   build_command       = var.frontend_build_command
 }
-
-output "api_gateway_endpoint" {
-  value       = module.backend.api_gateway_endpoint
-  description = "Custom domain API endpoint used by the frontend."
-}
-
-output "cdn_url" {
-  value       = module.backend.cdn_url
-  description = "CDN URL for S3 objects."
-}
-
-output "frontend_config" {
-  value       = module.backend.frontend_config
-  description = "Configuration used to build and host the Angular frontend."
-}
-
-output "gui_bucket_name" {
-  value       = module.frontend.gui_bucket_name
-  description = "S3 bucket that stores the Angular browser build."
-}
-
-output "gui_cloudfront_distribution_id" {
-  value       = module.frontend.gui_cloudfront_distribution_id
-  description = "CloudFront distribution id for the Angular frontend."
-}
-
-output "gui_urls" {
-  value       = module.frontend.gui_urls
-  description = "Frontend URLs for the current workspace."
-}

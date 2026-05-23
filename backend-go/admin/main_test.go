@@ -227,7 +227,7 @@ func TestAdminEndpoints(t *testing.T) {
 	})
 
 	t.Run("delete record", func(t *testing.T) {
-		resp := testutil.Call(t, handler, adminReq(http.MethodDelete, "/admin/records/"+recordID.Hex(), nil, nil))
+		resp := testutil.Call(t, handler, adminReq(http.MethodDelete, "/records/"+recordID.Hex(), nil, nil))
 		testutil.AssertOKSuccess(t, resp)
 		if count := testutil.Count(t, db, "records", bson.M{"id": recordID}); count != 0 {
 			t.Fatalf("record count = %d", count)
@@ -235,7 +235,7 @@ func TestAdminEndpoints(t *testing.T) {
 	})
 
 	t.Run("delete forum", func(t *testing.T) {
-		resp := testutil.Call(t, handler, adminReq(http.MethodDelete, "/admin/forum/"+forumID.Hex(), nil, nil))
+		resp := testutil.Call(t, handler, adminReq(http.MethodDelete, "/forum/"+forumID.Hex(), nil, nil))
 		testutil.AssertOKSuccess(t, resp)
 		if count := testutil.Count(t, db, "forum_posts", bson.M{"_id": forumID}); count != 0 {
 			t.Fatalf("forum count = %d", count)

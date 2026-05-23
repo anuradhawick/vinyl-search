@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
 )
@@ -13,16 +12,6 @@ var corsHeaders = map[string]string{
 	"Access-Control-Allow-Origin":      "*",
 	"Access-Control-Allow-Credentials": "true",
 	"Content-Type":                     "application/json",
-}
-
-// NormalizePath removes trailing slashes so Lambda routes match consistently.
-func NormalizePath(req *events.APIGatewayProxyRequest) {
-	if req.Path != "/" {
-		req.Path = strings.TrimRight(req.Path, "/")
-	}
-	if req.Path == "" {
-		req.Path = "/"
-	}
 }
 
 // JSON serializes a response body as JSON with the service CORS headers.

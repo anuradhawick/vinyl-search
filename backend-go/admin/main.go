@@ -17,35 +17,41 @@ import (
 	"vinyl-search/backend-go/common"
 )
 
+var router *lambdamux.LambdaMux
+
+func init() {
+	router = newRouter()
+}
+
 // main registers admin routes and starts the Lambda router.
 func main() {
 	lambda.Start(handler)
 }
 
-// handler normalizes API Gateway paths and dispatches requests through the admin router.
+// handler dispatches requests through the admin router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	common.NormalizePath(&req)
-	return newRouter().Handle(ctx, req)
+	common.LogEventPayload(req)
+	return router.Handle(ctx, req)
 }
 
 // newRouter registers admin routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/admin/users", adminOnly(getUsers))
-	router.GET("/admin/users/:userUid", adminOnly(getUserByUID))
-	router.GET("/admin/admin-users", adminOnly(getAdminUsers))
-	router.DELETE("/admin/admin-users/:userUid", adminOnly(removeAdmin))
-	router.POST("/admin/admin-users/:email", adminOnly(addAdmin))
-	router.GET("/admin/records", adminOnly(getRecords))
-	router.DELETE("/admin/records/:recordId", adminOnly(removeRecord))
-	router.GET("/admin/forum", adminOnly(getForumPosts))
-	router.DELETE("/admin/forum/:postId", adminOnly(removeForumPost))
-	router.GET("/admin/reports", adminOnly(getReports))
-	router.POST("/admin/reports/:reportId", adminOnly(resolveReport))
-	router.GET("/admin/market", adminOnly(getMarketPosts))
-	router.POST("/admin/market", adminOnly(marketAction))
-	router.GET("/admin/market/:postId", adminOnly(getMarketPost))
-	router.POST("/admin/market/:postId", adminOnly(updateMarketPost))
+	router.GET("/admin/users", common.LogEndpoint("GET", "/admin/users", adminOnly(getUsers)))
+	router.GET("/admin/users/:userUid", common.LogEndpoint("GET", "/admin/users/:userUid", adminOnly(getUserByUID)))
+	router.GET("/admin/admin-users", common.LogEndpoint("GET", "/admin/admin-users", adminOnly(getAdminUsers)))
+	router.DELETE("/admin/admin-users/:userUid", common.LogEndpoint("DELETE", "/admin/admin-users/:userUid", adminOnly(removeAdmin)))
+	router.POST("/admin/admin-users/:email", common.LogEndpoint("POST", "/admin/admin-users/:email", adminOnly(addAdmin)))
+	router.GET("/admin/records", common.LogEndpoint("GET", "/admin/records", adminOnly(getRecords)))
+	router.DELETE("/admin/records/:recordId", common.LogEndpoint("DELETE", "/admin/records/:recordId", adminOnly(removeRecord)))
+	router.GET("/admin/forum", common.LogEndpoint("GET", "/admin/forum", adminOnly(getForumPosts)))
+	router.DELETE("/admin/forum/:postId", common.LogEndpoint("DELETE", "/admin/forum/:postId", adminOnly(removeForumPost)))
+	router.GET("/admin/reports", common.LogEndpoint("GET", "/admin/reports", adminOnly(getReports)))
+	router.POST("/admin/reports/:reportId", common.LogEndpoint("POST", "/admin/reports/:reportId", adminOnly(resolveReport)))
+	router.GET("/admin/market", common.LogEndpoint("GET", "/admin/market", adminOnly(getMarketPosts)))
+	router.POST("/admin/market", common.LogEndpoint("POST", "/admin/market", adminOnly(marketAction)))
+	router.GET("/admin/market/:postId", common.LogEndpoint("GET", "/admin/market/:postId", adminOnly(getMarketPost)))
+	router.POST("/admin/market/:postId", common.LogEndpoint("POST", "/admin/market/:postId", adminOnly(updateMarketPost)))
 
 	return router
 }

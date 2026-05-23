@@ -17,9 +17,8 @@ var (
 )
 
 const (
-	defaultDatabaseName = "vinyl"
-	mockMongoURI        = "mongodb://localhost:27017"
-	mockDatabaseName    = "vinyl_test"
+	mockMongoURI     = "mongodb://localhost:27017"
+	mockDatabaseName = "vinyl_test"
 )
 
 // DB returns the shared Mongo database connection for the Lambda process.
@@ -35,8 +34,11 @@ func DB(ctx context.Context) (*mongo.Database, error) {
 	if cfg.MongoURI == "" {
 		return nil, errors.New("MONGODB_ATLAS_CLUSTER_URI is not set")
 	}
+	if cfg.MongoDatabaseName == "" {
+		return nil, errors.New("MONGODB_DATABASE_NAME is not set")
+	}
 
-	client, database, err := connectMongo(ctx, cfg.MongoURI, defaultDatabaseName)
+	client, database, err := connectMongo(ctx, cfg.MongoURI, cfg.MongoDatabaseName)
 	if err != nil {
 		return nil, err
 	}

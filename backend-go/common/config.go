@@ -5,6 +5,7 @@ import "os"
 // Config mirrors the Lambda environment variables used by the original Node services.
 type Config struct {
 	MongoURI          string
+	MongoDatabaseName string
 	BucketName        string
 	BucketRegion      string
 	CDNDomain         string
@@ -15,6 +16,7 @@ type Config struct {
 func LoadConfig() Config {
 	return Config{
 		MongoURI:          os.Getenv("MONGODB_ATLAS_CLUSTER_URI"),
+		MongoDatabaseName: os.Getenv("MONGODB_DATABASE_NAME"),
 		BucketName:        os.Getenv("BUCKET_NAME"),
 		BucketRegion:      os.Getenv("BUCKET_REGION"),
 		CDNDomain:         os.Getenv("CDN_DOMAIN"),

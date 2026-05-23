@@ -125,6 +125,7 @@
                   "maximumError": "4kb"
                 }
               ],
+              "ssr": false,
               "outputHashing": "all"
             },
             "development": {

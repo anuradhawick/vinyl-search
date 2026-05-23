@@ -23,6 +23,7 @@ func main() {
 
 // handler dispatches Cognito trigger events to the matching workflow.
 func handler(ctx context.Context, event map[string]any) (map[string]any, error) {
+	common.LogEventPayload(event)
 	switch stringValue(event["triggerSource"]) {
 	case "PostConfirmation_ConfirmSignUp":
 		return postConfirmation(ctx, event)

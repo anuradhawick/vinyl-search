@@ -7,7 +7,7 @@ locals {
   build_output_dir = abspath("${path.module}/${var.build_output_dir}")
   origin_id        = "vinyl-lk-gui-origin-id-${terraform.workspace}"
   build_hash       = data.external.angular_build.result.hash
-  dist_files       = toset(local.build_hash != "" ? fileset(local.build_output_dir, "**") : [])
+  dist_files       = jsondecode(data.external.angular_build.result.files_json)
 
   mime_types = {
     ".css"         = "text/css"
@@ -180,11 +180,11 @@ resource "aws_s3_object" "gui" {
   for_each = local.dist_files
 
   bucket        = aws_s3_bucket.gui.id
-  key           = each.value
-  source        = "${local.build_output_dir}/${each.value}"
-  source_hash   = filemd5("${local.build_output_dir}/${each.value}")
-  content_type  = lookup(local.mime_types, lower(try(regex("\\.[^.]+$", each.value), "")), "application/octet-stream")
-  cache_control = each.value == "index.html" ? "no-cache" : "public, max-age=86400"
+  key           = each.key
+  source        = "${local.build_output_dir}/${each.key}"
+  source_hash   = each.value
+  content_type  = lookup(local.mime_types, lower(try(regex("\\.[^.]+$", each.key), "")), "application/octet-stream")
+  cache_control = each.key == "index.html" ? "no-cache" : "public, max-age=86400"
 }
 
 resource "aws_route53_record" "gui" {
