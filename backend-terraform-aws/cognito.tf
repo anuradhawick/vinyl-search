@@ -78,11 +78,11 @@ resource "aws_cognito_identity_provider" "vinyl-lk-facebook-provider" {
     client_secret    = var.FACEBOOK_CLIENT_SECRET
     # start
     # not adding the below forces terraform to redeploy changes
-    attributes_url                = "https://graph.facebook.com/v17.0/me?fields="
+    attributes_url                = "https://graph.facebook.com/v21.0/me?fields="
     attributes_url_add_attributes = "true"
-    authorize_url                 = "https://www.facebook.com/v17.0/dialog/oauth"
+    authorize_url                 = "https://www.facebook.com/v21.0/dialog/oauth"
     token_request_method          = "GET"
-    token_url                     = "https://graph.facebook.com/v17.0/oauth/access_token"
+    token_url                     = "https://graph.facebook.com/v21.0/oauth/access_token"
     # end
   }
 
