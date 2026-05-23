@@ -37,8 +37,10 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 // newRouter registers record routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/records/search", common.LogEndpoint("GET", "/records/search", searchRecords))
+	// Register the collection route before longer prefix routes; lambdamux drops
+	// the exact handler if a shorter path is added after a longer matching path.
 	router.GET("/records", common.LogEndpoint("GET", "/records", fetchRecords))
+	router.GET("/records/search", common.LogEndpoint("GET", "/records/search", searchRecords))
 	router.GET("/records/:recordId", common.LogEndpoint("GET", "/records/:recordId", common.AuthRequired(fetchRecord)))
 	router.POST("/records", common.LogEndpoint("POST", "/records", common.AuthRequired(newRecord)))
 	router.POST("/records/:recordId", common.LogEndpoint("POST", "/records/:recordId", common.AuthRequired(updateRecord)))

@@ -35,8 +35,10 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 // newRouter registers marketplace routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
-	router.GET("/market/search", common.LogEndpoint("GET", "/market/search", searchPosts))
+	// Register the collection route before longer prefix routes; lambdamux drops
+	// the exact handler if a shorter path is added after a longer matching path.
 	router.GET("/market", common.LogEndpoint("GET", "/market", fetchPosts))
+	router.GET("/market/search", common.LogEndpoint("GET", "/market/search", searchPosts))
 	router.POST("/market", common.LogEndpoint("POST", "/market", common.AuthRequired(newPost)))
 	router.GET("/market/:postId", common.LogEndpoint("GET", "/market/:postId", common.AuthRequired(fetchPost)))
 	router.POST("/market/:postId", common.LogEndpoint("POST", "/market/:postId", common.AuthRequired(updatePost)))

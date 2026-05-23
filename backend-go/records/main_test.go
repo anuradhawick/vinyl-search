@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"testing"
 	"time"
@@ -9,6 +10,16 @@ import (
 
 	"vinyl-search/backend-go/common/testutil"
 )
+
+func TestRecordsBaseRouteMatchesBeforeDB(t *testing.T) {
+	resp, err := handler(context.Background(), testutil.Request(http.MethodGet, "/records", nil, nil, "", false))
+	if err != nil {
+		t.Fatalf("handler error = %v", err)
+	}
+	if resp.StatusCode == http.StatusNotFound {
+		t.Fatalf("expected /records to reach fetchRecords, got %d body=%s", resp.StatusCode, resp.Body)
+	}
+}
 
 func TestRecordsEndpoints(t *testing.T) {
 	db := testutil.Mongo(t, "vinyl_test_records")
