@@ -5,14 +5,15 @@ module "lambda-admin-service" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-admin-service-${terraform.workspace}"
-  description   = "admin-service"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 256
-  timeout       = 6
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-admin-service-${terraform.workspace}"
+  description                  = "admin-service"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 256
+  timeout                      = 6
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -28,16 +29,17 @@ module "lambda-admin-service" {
     data.aws_iam_policy_document.lambda-user-pool-triggers.json,
   ]
   number_of_policy_jsons = 2
+  hash_extra             = filebase64sha256("${path.module}/../backend/administration-service/wm.png")
   source_path = [
     {
-      path = "${path.module}/../backend-go/admin",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/admin",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cp ../../backend/administration-service/wm.png dist/wm.png",
-        "cd dist",
-        ":zip"
+        ":zip dist",
+        ":zip ../../backend/administration-service/wm.png"
       ]
     }
   ]
@@ -50,14 +52,15 @@ module "lambda-forum-service" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-forum-service-${terraform.workspace}"
-  description   = "forum-service"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 256
-  timeout       = 6
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-forum-service-${terraform.workspace}"
+  description                  = "forum-service"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 256
+  timeout                      = 6
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -74,13 +77,13 @@ module "lambda-forum-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend-go/forum",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/forum",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cd dist",
-        ":zip"
+        ":zip dist"
       ]
     }
   ]
@@ -93,14 +96,15 @@ module "lambda-market-service" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-market-service-${terraform.workspace}"
-  description   = "market-service"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 256
-  timeout       = 6
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-market-service-${terraform.workspace}"
+  description                  = "market-service"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 256
+  timeout                      = 6
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -115,16 +119,17 @@ module "lambda-market-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
+  hash_extra             = filebase64sha256("${path.module}/../backend/market-service/wm.png")
   source_path = [
     {
-      path = "${path.module}/../backend-go/market",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/market",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cp ../../backend/market-service/wm.png dist/wm.png",
-        "cd dist",
-        ":zip"
+        ":zip dist",
+        ":zip ../../backend/market-service/wm.png"
       ]
     }
   ]
@@ -137,14 +142,15 @@ module "lambda-records-service" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-records-service-${terraform.workspace}"
-  description   = "records-service"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 1024
-  timeout       = 29
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-records-service-${terraform.workspace}"
+  description                  = "records-service"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 1024
+  timeout                      = 29
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -160,16 +166,17 @@ module "lambda-records-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
+  hash_extra             = filebase64sha256("${path.module}/../backend/records-management-service/wm.png")
   source_path = [
     {
-      path = "${path.module}/../backend-go/records",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/records",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cp ../../backend/records-management-service/wm.png dist/wm.png",
-        "cd dist",
-        ":zip"
+        ":zip dist",
+        ":zip ../../backend/records-management-service/wm.png"
       ]
     }
   ]
@@ -182,14 +189,15 @@ module "lambda-user-service" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-user-service-${terraform.workspace}"
-  description   = "user-service"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 256
-  timeout       = 6
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-user-service-${terraform.workspace}"
+  description                  = "user-service"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 256
+  timeout                      = 6
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -206,13 +214,13 @@ module "lambda-user-service" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend-go/users",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/users",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cd dist",
-        ":zip"
+        ":zip dist"
       ]
     }
   ]
@@ -225,14 +233,15 @@ module "lambda-user-pool-triggers" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.8.0"
 
-  function_name = "vinyl-lk-user-pool-triggers-${terraform.workspace}"
-  description   = "user-pool-triggers"
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
-  architectures = ["x86_64"]
-  memory_size   = 128
-  timeout       = 6
-  tags          = var.common-tags
+  function_name                = "vinyl-lk-user-pool-triggers-${terraform.workspace}"
+  description                  = "user-pool-triggers"
+  handler                      = "bootstrap"
+  runtime                      = "provided.al2023"
+  architectures                = ["x86_64"]
+  memory_size                  = 128
+  timeout                      = 6
+  tags                         = var.common-tags
+  trigger_on_package_timestamp = false
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
@@ -245,13 +254,13 @@ module "lambda-user-pool-triggers" {
   number_of_policy_jsons = 1
   source_path = [
     {
-      path = "${path.module}/../backend-go/userpool-trigger",
+      patterns = ["!dist/", "!dist/.*"]
+      path     = "${path.module}/../backend-go/userpool-trigger",
       commands = [
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        "cd dist",
-        ":zip"
+        ":zip dist"
       ]
     }
   ]
