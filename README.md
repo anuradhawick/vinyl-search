@@ -7,6 +7,8 @@ Deployments are of two types
 * `dev` - use for development deployments
 * `prod` - use for production deployments
 
+Backend Terraform applies also create the MongoDB indexes with `mongosh`, using the workspace-selected `MONGODB_ATLAS_CLUSTER_URI` and `MONGODB_DATABASE_NAME`; the machine running `terraform apply` must have `mongosh` installed.
+
 ### Node modules
 
 * Use `npm` for package management

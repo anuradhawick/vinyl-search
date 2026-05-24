@@ -21,7 +21,6 @@ module "lambda-admin-service" {
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
-    NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
   policy_jsons = [
@@ -68,7 +67,6 @@ module "lambda-forum-service" {
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
-    NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
   policy_jsons = [
@@ -112,7 +110,6 @@ module "lambda-market-service" {
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
-    NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
   policy_jsons = [
@@ -158,8 +155,6 @@ module "lambda-records-service" {
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
-    STAGE                     = ""
-    NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
   policy_jsons = [
@@ -204,7 +199,6 @@ module "lambda-user-service" {
     COGNITO_USER_POOL_ID      = aws_cognito_user_pool.vinyl-lk.id
     BUCKET_NAME               = aws_s3_bucket.vinyl-lk-bucket.id
     BUCKET_REGION             = var.region
-    NODE_OPTIONS              = "--enable-source-maps"
     CDN_DOMAIN                = aws_route53_record.vinyl-lk-cdn.name
   }
   attach_policy_jsons = true
@@ -245,7 +239,6 @@ module "lambda-user-pool-triggers" {
   environment_variables = {
     MONGODB_ATLAS_CLUSTER_URI = local.MONGODB_ATLAS_CLUSTER_URI
     MONGODB_DATABASE_NAME     = local.MONGODB_DATABASE_NAME
-    NODE_OPTIONS              = "--enable-source-maps"
   }
   attach_policy_jsons = true
   policy_jsons = [
