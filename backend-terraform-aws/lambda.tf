@@ -29,7 +29,7 @@ module "lambda-admin-service" {
     data.aws_iam_policy_document.lambda-user-pool-triggers.json,
   ]
   number_of_policy_jsons = 2
-  hash_extra             = filebase64sha256("${path.module}/../backend/administration-service/wm.png")
+  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -38,8 +38,8 @@ module "lambda-admin-service" {
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        ":zip dist",
-        ":zip ../../backend/administration-service/wm.png"
+        "cp ../assets/wm.png dist/wm.png",
+        ":zip dist"
       ]
     }
   ]
@@ -119,7 +119,7 @@ module "lambda-market-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
-  hash_extra             = filebase64sha256("${path.module}/../backend/market-service/wm.png")
+  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -128,8 +128,8 @@ module "lambda-market-service" {
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        ":zip dist",
-        ":zip ../../backend/market-service/wm.png"
+        "cp ../assets/wm.png dist/wm.png",
+        ":zip dist"
       ]
     }
   ]
@@ -166,7 +166,7 @@ module "lambda-records-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
-  hash_extra             = filebase64sha256("${path.module}/../backend/records-management-service/wm.png")
+  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -175,8 +175,8 @@ module "lambda-records-service" {
         "rm -rf dist",
         "mkdir -p dist",
         "GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o dist/bootstrap .",
-        ":zip dist",
-        ":zip ../../backend/records-management-service/wm.png"
+        "cp ../assets/wm.png dist/wm.png",
+        ":zip dist"
       ]
     }
   ]
