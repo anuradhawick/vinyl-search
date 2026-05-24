@@ -35,18 +35,28 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 // newRouter registers marketplace routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
+	registerPublicRoutes(router)
+	registerProtectedRoutes(router)
+	return router
+}
+
+func registerPublicRoutes(router *lambdamux.LambdaMux) {
 	// Register the collection route before longer prefix routes; lambdamux drops
 	// the exact handler if a shorter path is added after a longer matching path.
-	router.GET("/market", common.LogEndpoint("GET", "/market", fetchPosts))
-	router.GET("/market/search", common.LogEndpoint("GET", "/market/search", searchPosts))
+	router.GET("/public/market", common.LogEndpoint("GET", "/public/market", fetchPosts))
+	router.GET("/public/market/search", common.LogEndpoint("GET", "/public/market/search", searchPosts))
+	router.GET("/public/market/:postId", common.LogEndpoint("GET", "/public/market/:postId", fetchPost))
+}
+
+func registerProtectedRoutes(router *lambdamux.LambdaMux) {
+	router.GET("/market", common.LogEndpoint("GET", "/market", common.AuthRequired(fetchPosts)))
+	router.GET("/market/search", common.LogEndpoint("GET", "/market/search", common.AuthRequired(searchPosts)))
 	router.POST("/market", common.LogEndpoint("POST", "/market", common.AuthRequired(newPost)))
 	router.GET("/market/:postId", common.LogEndpoint("GET", "/market/:postId", common.AuthRequired(fetchPost)))
 	router.POST("/market/:postId", common.LogEndpoint("POST", "/market/:postId", common.AuthRequired(updatePost)))
 	router.DELETE("/market/:postId", common.LogEndpoint("DELETE", "/market/:postId", common.AuthRequired(unsupported)))
 	router.GET("/market/:postId/report", common.LogEndpoint("GET", "/market/:postId/report", common.AuthRequired(unsupported)))
 	router.POST("/market/:postId/report", common.LogEndpoint("POST", "/market/:postId/report", common.AuthRequired(reportPost)))
-
-	return router
 }
 
 // unsupported returns a not found response for marketplace routes that are not implemented.

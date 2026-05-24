@@ -12,12 +12,12 @@ import (
 )
 
 func TestRecordsBaseRouteMatchesBeforeDB(t *testing.T) {
-	resp, err := handler(context.Background(), testutil.Request(http.MethodGet, "/records", nil, nil, "", false))
+	resp, err := handler(context.Background(), testutil.Request(http.MethodGet, "/public/records", nil, nil, "", false))
 	if err != nil {
 		t.Fatalf("handler error = %v", err)
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		t.Fatalf("expected /records to reach fetchRecords, got %d body=%s", resp.StatusCode, resp.Body)
+		t.Fatalf("expected /public/records to reach fetchRecords, got %d body=%s", resp.StatusCode, resp.Body)
 	}
 }
 
@@ -78,7 +78,7 @@ func TestRecordsEndpoints(t *testing.T) {
 	)
 
 	t.Run("list", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records", map[string]string{"limit": "5"}, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records", map[string]string{"limit": "5"}, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["records"].([]any)) != 1 {
 			t.Fatalf("records = %#v", body["records"])
@@ -87,7 +87,7 @@ func TestRecordsEndpoints(t *testing.T) {
 
 	t.Run("search", func(t *testing.T) {
 		query := map[string]string{"query": "Baila", "genres": `["Baila"]`, "limit": "5"}
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/search", query, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/search", query, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["records"].([]any)) != 1 {
 			t.Fatalf("records = %#v", body["records"])
@@ -95,7 +95,7 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("get", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex(), nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		record := body["record"].(map[string]any)
 		images := record["images"].([]any)
@@ -105,7 +105,7 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("history", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex()+"/revisions", nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions", nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["history"].([]any)) != 2 {
 			t.Fatalf("history = %#v", body["history"])
@@ -113,11 +113,18 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("revision", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex()+"/revisions/"+latestRevisionID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions/"+latestRevisionID.Hex(), nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		record := body["record"].(map[string]any)
 		if record["id"] != recordID.Hex() {
 			t.Fatalf("record id = %#v", record["id"])
+		}
+	})
+
+	t.Run("protected list requires auth", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records", map[string]string{"limit": "5"}, nil, "", false))
+		if resp.StatusCode != http.StatusUnauthorized {
+			t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
 		}
 	})
 

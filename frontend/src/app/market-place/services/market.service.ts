@@ -10,11 +10,14 @@ export class MarketService {
     private auth: AuthService,
   ) {}
 
+  private readonly publicBase = environment.api_gateway + 'public/market';
+  private readonly protectedBase = environment.api_gateway + 'market';
+
   async save_post(post: any) {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'market', post, {
+      .post(this.protectedBase, post, {
         headers: new HttpHeaders({
           Authorization: token,
         }),
@@ -26,7 +29,7 @@ export class MarketService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'market/' + post.id, post, {
+      .post(`${this.protectedBase}/${post.id}`, post, {
         headers: new HttpHeaders({
           Authorization: token,
         }),
@@ -35,25 +38,17 @@ export class MarketService {
   }
 
   fetch_posts(params: any) {
-    return this.http.get(environment.api_gateway + 'market', {
+    return this.http.get(this.publicBase, {
       params,
     });
   }
 
   async fetch_post(postId: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .get(environment.api_gateway + 'market/' + postId, {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .toPromise();
+    return await this.http.get(`${this.publicBase}/${postId}`).toPromise();
   }
 
   search_posts(params: any) {
-    return this.http.get(environment.api_gateway + 'market/search', {
+    return this.http.get(`${this.publicBase}/search`, {
       params,
     });
   }
@@ -62,7 +57,7 @@ export class MarketService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'market/' + postId + '/report', report, {
+      .post(`${this.protectedBase}/${postId}/report`, report, {
         headers: new HttpHeaders({
           Authorization: token,
         }),

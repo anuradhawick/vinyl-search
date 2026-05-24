@@ -12,7 +12,8 @@ resource "aws_api_gateway_method" "any_users" {
   rest_api_id   = aws_api_gateway_resource.users.rest_api_id
   resource_id   = aws_api_gateway_resource.users.id
   http_method   = "ANY"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
 }
 
 resource "aws_api_gateway_method_response" "any_users" {
@@ -44,7 +45,8 @@ resource "aws_api_gateway_method" "any_users_proxy" {
   rest_api_id   = aws_api_gateway_resource.users_proxy.rest_api_id
   resource_id   = aws_api_gateway_resource.users_proxy.id
   http_method   = "ANY"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
 
   request_parameters = {
     "method.request.path.proxy" = true

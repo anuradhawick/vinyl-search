@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecordsEditorComponentComponent } from './records-editor-component.component';
 
@@ -6,7 +6,7 @@ describe('RecordsEditorComponentComponent', () => {
   let component: RecordsEditorComponentComponent;
   let fixture: ComponentFixture<RecordsEditorComponentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RecordsEditorComponentComponent],
     }).compileComponents();

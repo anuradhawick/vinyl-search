@@ -10,24 +10,25 @@ export class ForumService {
     private auth: AuthService,
   ) {}
 
+  private readonly publicBase = environment.api_gateway + 'public/forum';
+  private readonly protectedBase = environment.api_gateway + 'forum';
+
   fetch_posts(params: any) {
-    return this.http.get(environment.api_gateway + 'forum/', {
+    return this.http.get(this.publicBase, {
       params,
     });
   }
 
   fetch_post(postId: string) {
-    return this.http.get(environment.api_gateway + 'forum/' + postId);
+    return this.http.get(`${this.publicBase}/${postId}`);
   }
 
   fetch_post_comments(postId: string) {
-    return this.http.get(
-      environment.api_gateway + 'forum/' + postId + '/comments',
-    );
+    return this.http.get(`${this.publicBase}/${postId}/comments`);
   }
 
   search_posts(params: any) {
-    return this.http.get(environment.api_gateway + 'forum/', {
+    return this.http.get(`${this.publicBase}/search`, {
       params,
     });
   }
@@ -36,7 +37,7 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'forum/', post, {
+      .post(this.protectedBase, post, {
         headers: new HttpHeaders({
           Authorization: token,
         }),
@@ -48,15 +49,11 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(
-        environment.api_gateway + 'forum/' + postId + '/comments',
-        comment,
-        {
-          headers: new HttpHeaders({
-            Authorization: token,
-          }),
-        },
-      )
+      .post(`${this.protectedBase}/${postId}/comments`, comment, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
+      })
       .toPromise();
   }
 
@@ -64,14 +61,11 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .delete(
-        environment.api_gateway + 'forum/' + postId + '/comments/' + commentId,
-        {
-          headers: new HttpHeaders({
-            Authorization: token,
-          }),
-        },
-      )
+      .delete(`${this.protectedBase}/${postId}/comments/${commentId}`, {
+        headers: new HttpHeaders({
+          Authorization: token,
+        }),
+      })
       .toPromise();
   }
 
@@ -79,7 +73,7 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'forum/' + postId, post, {
+      .post(`${this.protectedBase}/${postId}`, post, {
         headers: new HttpHeaders({
           Authorization: token,
         }),
@@ -91,7 +85,7 @@ export class ForumService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .delete(environment.api_gateway + 'forum/' + postId, {
+      .delete(`${this.protectedBase}/${postId}`, {
         headers: new HttpHeaders({
           Authorization: token,
         }),

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PendingAdsComponent } from './pending-ads.component';
 
@@ -6,7 +6,7 @@ describe('PendingAdsComponent', () => {
   let component: PendingAdsComponent;
   let fixture: ComponentFixture<PendingAdsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [PendingAdsComponent],
     }).compileComponents();

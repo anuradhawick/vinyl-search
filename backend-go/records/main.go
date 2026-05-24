@@ -37,17 +37,29 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 // newRouter registers record routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
+	registerPublicRoutes(router)
+	registerProtectedRoutes(router)
+	return router
+}
+
+func registerPublicRoutes(router *lambdamux.LambdaMux) {
 	// Register the collection route before longer prefix routes; lambdamux drops
 	// the exact handler if a shorter path is added after a longer matching path.
-	router.GET("/records", common.LogEndpoint("GET", "/records", fetchRecords))
-	router.GET("/records/search", common.LogEndpoint("GET", "/records/search", searchRecords))
+	router.GET("/public/records", common.LogEndpoint("GET", "/public/records", fetchRecords))
+	router.GET("/public/records/search", common.LogEndpoint("GET", "/public/records/search", searchRecords))
+	router.GET("/public/records/:recordId", common.LogEndpoint("GET", "/public/records/:recordId", fetchRecord))
+	router.GET("/public/records/:recordId/revisions", common.LogEndpoint("GET", "/public/records/:recordId/revisions", fetchHistory))
+	router.GET("/public/records/:recordId/revisions/:revisionId", common.LogEndpoint("GET", "/public/records/:recordId/revisions/:revisionId", fetchRevision))
+}
+
+func registerProtectedRoutes(router *lambdamux.LambdaMux) {
+	router.GET("/records", common.LogEndpoint("GET", "/records", common.AuthRequired(fetchRecords)))
+	router.GET("/records/search", common.LogEndpoint("GET", "/records/search", common.AuthRequired(searchRecords)))
 	router.GET("/records/:recordId", common.LogEndpoint("GET", "/records/:recordId", common.AuthRequired(fetchRecord)))
 	router.POST("/records", common.LogEndpoint("POST", "/records", common.AuthRequired(newRecord)))
 	router.POST("/records/:recordId", common.LogEndpoint("POST", "/records/:recordId", common.AuthRequired(updateRecord)))
 	router.GET("/records/:recordId/revisions", common.LogEndpoint("GET", "/records/:recordId/revisions", common.AuthRequired(fetchHistory)))
 	router.GET("/records/:recordId/revisions/:revisionId", common.LogEndpoint("GET", "/records/:recordId/revisions/:revisionId", common.AuthRequired(fetchRevision)))
-
-	return router
 }
 
 // searchRecords returns records matching text and facet query parameters.

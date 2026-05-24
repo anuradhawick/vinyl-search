@@ -38,14 +38,14 @@ func TestHandlerNormalizesTrailingSlash(t *testing.T) {
 	})
 
 	router = lambdamux.NewLambdaMux()
-	router.GET("/forum", func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		if req.Path != "/forum" {
+	router.GET("/public/forum", func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		if req.Path != "/public/forum" {
 			t.Fatalf("normalized path = %q", req.Path)
 		}
 		return events.APIGatewayProxyResponse{StatusCode: http.StatusOK, Body: `{"success":true}`}, nil
 	})
 
-	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/", nil, nil, "", false))
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/forum/", nil, nil, "", false))
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
 	}
@@ -90,7 +90,7 @@ func TestForumEndpoints(t *testing.T) {
 	)
 
 	t.Run("get post", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/"+postID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/forum/"+postID.Hex(), nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		post := body["post"].(map[string]any)
 		if post["id"] != postID.Hex() {
@@ -99,7 +99,7 @@ func TestForumEndpoints(t *testing.T) {
 	})
 
 	t.Run("get comments", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/"+postID.Hex()+"/comments", nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/forum/"+postID.Hex()+"/comments", nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["comments"].([]any)) != 1 {
 			t.Fatalf("comments = %#v", body["comments"])
@@ -107,14 +107,14 @@ func TestForumEndpoints(t *testing.T) {
 	})
 
 	t.Run("unsupported comment get", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/"+postID.Hex()+"/comments/"+commentID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/"+postID.Hex()+"/comments/"+commentID.Hex(), nil, nil, ownerID.Hex(), false))
 		if resp.StatusCode != http.StatusNotFound {
 			t.Fatalf("status = %d", resp.StatusCode)
 		}
 	})
 
 	t.Run("list", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum", map[string]string{"limit": "5"}, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/forum", map[string]string{"limit": "5"}, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["posts"].([]any)) != 1 {
 			t.Fatalf("posts = %#v", body["posts"])
@@ -122,10 +122,17 @@ func TestForumEndpoints(t *testing.T) {
 	})
 
 	t.Run("search", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/search", map[string]string{"query": "Needle"}, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/forum/search", map[string]string{"query": "Needle"}, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["posts"].([]any)) != 1 {
 			t.Fatalf("posts = %#v", body["posts"])
+		}
+	})
+
+	t.Run("protected list requires auth", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum", map[string]string{"limit": "5"}, nil, "", false))
+		if resp.StatusCode != http.StatusUnauthorized {
+			t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
 		}
 	})
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecordsEditPageComponent } from './records-edit-page.component';
 
@@ -6,7 +6,7 @@ describe('RecordsEditPageComponent', () => {
   let component: RecordsEditPageComponent;
   let fixture: ComponentFixture<RecordsEditPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RecordsEditPageComponent],
     }).compileComponents();

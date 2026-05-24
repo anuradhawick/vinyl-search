@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecordShouldDeleteModalComponent } from './record-should-delete-modal.component';
 
@@ -6,7 +6,7 @@ describe('RecordShouldDeleteModalComponent', () => {
   let component: RecordShouldDeleteModalComponent;
   let fixture: ComponentFixture<RecordShouldDeleteModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RecordShouldDeleteModalComponent],
     }).compileComponents();

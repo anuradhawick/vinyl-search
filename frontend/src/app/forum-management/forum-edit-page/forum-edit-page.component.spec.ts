@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForumEditPageComponent } from './forum-edit-page.component';
 
@@ -6,7 +6,7 @@ describe('ForumEditPageComponent', () => {
   let component: ForumEditPageComponent;
   let fixture: ComponentFixture<ForumEditPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ForumEditPageComponent],
     }).compileComponents();

@@ -22,7 +22,8 @@ resource "aws_api_gateway_method" "any_admin_proxy" {
   rest_api_id   = aws_api_gateway_resource.admin_proxy.rest_api_id
   resource_id   = aws_api_gateway_resource.admin_proxy.id
   http_method   = "ANY"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.vinyl-lk-authorizer.id
 
   request_parameters = {
     "method.request.path.proxy" = true

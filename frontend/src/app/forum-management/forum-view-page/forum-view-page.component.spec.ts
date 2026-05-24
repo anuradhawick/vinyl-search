@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForumViewPageComponent } from './forum-view-page.component';
 
@@ -6,7 +6,7 @@ describe('ForumViewPageComponent', () => {
   let component: ForumViewPageComponent;
   let fixture: ComponentFixture<ForumViewPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ForumViewPageComponent],
     }).compileComponents();

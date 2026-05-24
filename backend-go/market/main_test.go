@@ -12,12 +12,12 @@ import (
 )
 
 func TestMarketBaseRouteMatchesBeforeDB(t *testing.T) {
-	resp, err := handler(context.Background(), testutil.Request(http.MethodGet, "/market", nil, nil, "", false))
+	resp, err := handler(context.Background(), testutil.Request(http.MethodGet, "/public/market", nil, nil, "", false))
 	if err != nil {
 		t.Fatalf("handler error = %v", err)
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		t.Fatalf("expected /market to reach fetchPosts, got %d body=%s", resp.StatusCode, resp.Body)
+		t.Fatalf("expected /public/market to reach fetchPosts, got %d body=%s", resp.StatusCode, resp.Body)
 	}
 }
 
@@ -67,16 +67,23 @@ func TestMarketEndpoints(t *testing.T) {
 	)
 
 	t.Run("list", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market", map[string]string{"limit": "5"}, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/market", map[string]string{"limit": "5"}, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["posts"].([]any)) != 1 {
 			t.Fatalf("posts = %#v", body["posts"])
 		}
 	})
 
+	t.Run("protected list requires auth", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market", map[string]string{"limit": "5"}, nil, "", false))
+		if resp.StatusCode != http.StatusUnauthorized {
+			t.Fatalf("status = %d body=%s", resp.StatusCode, resp.Body)
+		}
+	})
+
 	t.Run("search", func(t *testing.T) {
 		query := map[string]string{"query": "Turntable", "gear": `["turntable"]`, "limit": "5"}
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market/search", query, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/market/search", query, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["posts"].([]any)) != 1 {
 			t.Fatalf("posts = %#v", body["posts"])
@@ -84,7 +91,7 @@ func TestMarketEndpoints(t *testing.T) {
 	})
 
 	t.Run("get", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market/"+postID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/market/"+postID.Hex(), nil, nil, "", false))
 		body := testutil.AssertOKSuccess(t, resp)
 		post := body["name"]
 		if post != "Turntable Deck" {
@@ -127,14 +134,14 @@ func TestMarketEndpoints(t *testing.T) {
 	})
 
 	t.Run("delete unsupported", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/market/"+postID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/market/"+postID.Hex(), nil, nil, ownerID.Hex(), false))
 		if resp.StatusCode != http.StatusNotFound {
 			t.Fatalf("status = %d", resp.StatusCode)
 		}
 	})
 
 	t.Run("report get unsupported", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market/"+postID.Hex()+"/report", nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/market/"+postID.Hex()+"/report", nil, nil, ownerID.Hex(), false))
 		if resp.StatusCode != http.StatusNotFound {
 			t.Fatalf("status = %d", resp.StatusCode)
 		}

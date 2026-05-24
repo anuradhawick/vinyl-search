@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminActionConfirmModalComponent } from './admin-action-confirm-modal.component';
 
@@ -6,7 +6,7 @@ describe('AdminActionConfirmModalComponent', () => {
   let component: AdminActionConfirmModalComponent;
   let fixture: ComponentFixture<AdminActionConfirmModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [AdminActionConfirmModalComponent],
     }).compileComponents();

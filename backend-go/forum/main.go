@@ -37,20 +37,31 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 // newRouter registers forum routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
+	registerPublicRoutes(router)
+	registerProtectedRoutes(router)
+	return router
+}
+
+func registerPublicRoutes(router *lambdamux.LambdaMux) {
 	// Register shorter paths before longer parameterized paths; lambdamux logs
 	// param conflicts and skips later routes when a deeper param route is added first.
-	router.GET("/forum", common.LogEndpoint("GET", "/forum", getPosts))
-	router.GET("/forum/search", common.LogEndpoint("GET", "/forum/search", searchPosts))
+	router.GET("/public/forum", common.LogEndpoint("GET", "/public/forum", getPosts))
+	router.GET("/public/forum/search", common.LogEndpoint("GET", "/public/forum/search", searchPosts))
+	router.GET("/public/forum/:postId", common.LogEndpoint("GET", "/public/forum/:postId", getPost))
+	router.GET("/public/forum/:postId/comments", common.LogEndpoint("GET", "/public/forum/:postId/comments", getComments))
+}
+
+func registerProtectedRoutes(router *lambdamux.LambdaMux) {
+	router.GET("/forum", common.LogEndpoint("GET", "/forum", common.AuthRequired(getPosts)))
+	router.GET("/forum/search", common.LogEndpoint("GET", "/forum/search", common.AuthRequired(searchPosts)))
 	router.POST("/forum", common.LogEndpoint("POST", "/forum", common.AuthRequired(saveNewPost)))
-	router.GET("/forum/:postId", common.LogEndpoint("GET", "/forum/:postId", getPost))
-	router.GET("/forum/:postId/comments", common.LogEndpoint("GET", "/forum/:postId/comments", getComments))
-	router.GET("/forum/:postId/comments/:commentId", common.LogEndpoint("GET", "/forum/:postId/comments/:commentId", unsupported))
+	router.GET("/forum/:postId", common.LogEndpoint("GET", "/forum/:postId", common.AuthRequired(getPost)))
+	router.GET("/forum/:postId/comments", common.LogEndpoint("GET", "/forum/:postId/comments", common.AuthRequired(getComments)))
+	router.GET("/forum/:postId/comments/:commentId", common.LogEndpoint("GET", "/forum/:postId/comments/:commentId", common.AuthRequired(unsupported)))
 	router.POST("/forum/:postId", common.LogEndpoint("POST", "/forum/:postId", common.AuthRequired(saveExistingPost)))
 	router.POST("/forum/:postId/comments", common.LogEndpoint("POST", "/forum/:postId/comments", common.AuthRequired(saveComment)))
 	router.DELETE("/forum/:postId", common.LogEndpoint("DELETE", "/forum/:postId", common.AuthRequired(removePost)))
 	router.DELETE("/forum/:postId/comments/:commentId", common.LogEndpoint("DELETE", "/forum/:postId/comments/:commentId", common.AuthRequired(removeComment)))
-
-	return router
 }
 
 func normalizeRoutePath(path string) string {

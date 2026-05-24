@@ -1,24 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Amplify } from 'aws-amplify';
-import { from, map, switchMap } from 'rxjs';
-import { get } from 'aws-amplify/api';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { from, switchMap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../shared-modules/services/auth.service';
 
 @Injectable()
 export class UsersService {
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+  ) {}
 
   getUsers(skip = 0, limit = 10) {
-    return from(
-      get({
-        apiName: '[vinyl.lk]',
-        path: 'admin/users',
-        options: {
-          queryParams: {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.get(environment.api_gateway + 'admin/users', {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
+          params: {
             skip: skip.toString(),
             limit: limit.toString(),
           },
-        },
-      }).response,
-    ).pipe(switchMap((res) => from(res.body.json())));
+        }),
+      ),
+    );
   }
 }

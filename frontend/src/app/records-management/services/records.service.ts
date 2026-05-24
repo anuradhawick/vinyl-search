@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { from, shareReplay, map, switchMap } from 'rxjs';
-import { post, get } from 'aws-amplify/api';
+import { post } from 'aws-amplify/api';
 
 @Injectable()
 export class RecordsService {
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
+
+  private readonly publicBase = environment.api_gateway + 'public/records';
 
   save_record(record: any) {
     return from(
@@ -38,53 +38,31 @@ export class RecordsService {
 
   fetch_records(params: any) {
     return this.http
-      .get(environment.api_gateway + 'records', {
+      .get(this.publicBase, {
         params,
       })
       .pipe(shareReplay(1));
   }
 
   fetch_record_history(recordId: string) {
-    return from(
-      get({
-        apiName: '[vinyl.lk]',
-        path: `records/${recordId}/revisions`,
-      }).response,
-    ).pipe(
-      map((res) => res.body),
-      switchMap((body) => from(body.json())),
-    );
+    return this.http.get(`${this.publicBase}/${recordId}/revisions`);
   }
 
   search_records(params: any) {
     return this.http
-      .get(environment.api_gateway + 'records/search', {
+      .get(`${this.publicBase}/search`, {
         params,
       })
       .pipe(shareReplay(1));
   }
 
   fetch_record(recordId: string) {
-    return from(
-      get({
-        apiName: '[vinyl.lk]',
-        path: `records/${recordId}`,
-      }).response,
-    ).pipe(
-      map((res) => res.body),
-      switchMap((body) => from(body.json())),
-    );
+    return this.http.get(`${this.publicBase}/${recordId}`);
   }
 
   fetch_record_revision(recordId: string, revisionId: string) {
-    return from(
-      get({
-        apiName: '[vinyl.lk]',
-        path: `records/${recordId}/revisions/${revisionId}`,
-      }).response,
-    ).pipe(
-      map((res) => res.body),
-      switchMap((body) => from(body.json())),
+    return this.http.get(
+      `${this.publicBase}/${recordId}/revisions/${revisionId}`,
     );
   }
 }
