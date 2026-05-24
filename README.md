@@ -31,3 +31,8 @@ Note - frontend shall not be deployed for testing
 # General Practice
 
 * Use `prettier` for formatting code
+
+# API Tooling
+
+* Import `postman/vinyl-search-api.postman_collection.json` into Postman to exercise the `backend-go` API routes.
+* Set the collection variables `authToken` and `adminToken` before running authenticated requests.

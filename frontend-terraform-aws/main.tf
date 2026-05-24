@@ -187,6 +187,29 @@ resource "aws_s3_object" "gui" {
   cache_control = each.key == "index.html" ? "no-cache" : "public, max-age=86400"
 }
 
+action "aws_cloudfront_create_invalidation" "gui" {
+  config {
+    distribution_id = aws_cloudfront_distribution.gui.id
+    paths           = ["/*"]
+  }
+}
+
+resource "terraform_data" "gui_cache_invalidation" {
+  input = local.build_hash
+
+  lifecycle {
+    action_trigger {
+      events  = [before_create, before_update]
+      actions = [action.aws_cloudfront_create_invalidation.gui]
+    }
+  }
+
+  depends_on = [
+    aws_cloudfront_distribution.gui,
+    aws_s3_object.gui,
+  ]
+}
+
 resource "aws_route53_record" "gui" {
   for_each = toset(var.frontend_config.application_domain_names)
 

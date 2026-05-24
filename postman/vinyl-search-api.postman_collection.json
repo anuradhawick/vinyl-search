@@ -1,0 +1,1096 @@
+{
+  "info": {
+    "_postman_id": "8f76e93d-9db4-49c7-b50c-7c34e74b13a1",
+    "name": "Vinyl Search API",
+    "description": "Importable Postman collection for the backend-go API.\n\nSetup:\n- Set `baseUrl` to the deployed API base URL. It defaults to the frontend dev environment value.\n- Set `authToken` to a valid Cognito ID token for user-protected routes.\n- Set `adminToken` to a valid Cognito ID token for an Admin user for `/admin/*` routes.\n- For image-bearing create/update requests, replace the `temp*ImageUrl*` variables with real uploaded temp object URLs, or replace the `existing*ImageUrl` variables with real permanent image URLs fetched from the API.\n- Array filters on search endpoints are JSON-encoded strings, matching what the frontend submits.\n\nNotes from the current codebase:\n- The frontend has a `POST /users/market/:id/sold` call, but there is no matching backend endpoint, so it is intentionally omitted here.\n- The backend exposes `/forum/search`, while the current frontend search service sends the query to `/forum`. This collection uses the actual backend search endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://devapi.vinyl.lk"
+    },
+    {
+      "key": "authToken",
+      "value": "replace-with-user-id-token"
+    },
+    {
+      "key": "adminToken",
+      "value": "replace-with-admin-id-token"
+    },
+    {
+      "key": "userUid",
+      "value": "replace-with-user-objectid"
+    },
+    {
+      "key": "adminEmail",
+      "value": "member@example.com"
+    },
+    {
+      "key": "recordId",
+      "value": "replace-with-record-id"
+    },
+    {
+      "key": "recordRevisionId",
+      "value": "replace-with-record-revision-id"
+    },
+    {
+      "key": "forumPostId",
+      "value": "replace-with-forum-post-id"
+    },
+    {
+      "key": "forumCommentId",
+      "value": "replace-with-forum-comment-id"
+    },
+    {
+      "key": "marketPostId",
+      "value": "replace-with-market-post-id"
+    },
+    {
+      "key": "reportId",
+      "value": "replace-with-report-id"
+    },
+    {
+      "key": "profilePictureUrl",
+      "value": "https://devcdn.vinyl.lk/profile-pictures/example-user.jpg"
+    },
+    {
+      "key": "tempMarketImageUrl1",
+      "value": "https://devcdn.vinyl.lk/temp/market-example-1.jpg"
+    },
+    {
+      "key": "tempMarketImageUrl2",
+      "value": "https://devcdn.vinyl.lk/temp/market-example-2.jpg"
+    },
+    {
+      "key": "tempMarketImageUrl3",
+      "value": "https://devcdn.vinyl.lk/temp/market-example-3.jpg"
+    },
+    {
+      "key": "existingSellingImageUrl",
+      "value": "https://devcdn.vinyl.lk/selling-images/watermarked/existing-market-image.jpeg"
+    },
+    {
+      "key": "tempRecordImageUrl1",
+      "value": "https://devcdn.vinyl.lk/temp/record-example-1.jpg"
+    },
+    {
+      "key": "tempRecordImageUrl2",
+      "value": "https://devcdn.vinyl.lk/temp/record-example-2.jpg"
+    },
+    {
+      "key": "tempRecordImageUrl3",
+      "value": "https://devcdn.vinyl.lk/temp/record-example-3.jpg"
+    },
+    {
+      "key": "existingRecordImageUrl",
+      "value": "https://devcdn.vinyl.lk/records-images/watermarked/existing-record-image.jpeg"
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users",
+            "description": "Returns the authenticated user profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Update profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"given_name\":\"Anuradha\",\"family_name\":\"Wickramasinghe\",\"picture\":\"{{profilePictureUrl}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/users",
+            "description": "Matches the frontend profile update payload. You can also send just `picture`, or just `given_name` + `family_name`."
+          },
+          "response": []
+        },
+        {
+          "name": "List my records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/records?limit=10&skip=0",
+            "description": "Lists records owned by the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete my record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/records/{{recordId}}",
+            "description": "Deletes all revisions for the logical record."
+          },
+          "response": []
+        },
+        {
+          "name": "List my forum posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/forum?limit=10&skip=0",
+            "description": "Lists forum posts owned by the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete my forum post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/forum/{{forumPostId}}",
+            "description": "Deletes one of the authenticated user's forum posts."
+          },
+          "response": []
+        },
+        {
+          "name": "List my market posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/market?limit=10&skip=0",
+            "description": "Lists marketplace ads owned by the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete my market post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/users/market/{{marketPostId}}",
+            "description": "Deletes all versions of the authenticated user's marketplace ad."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Records",
+      "item": [
+        {
+          "name": "List records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/records?limit=30&skip=0",
+            "description": "Public paginated record listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Search records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/records/search?limit=30&skip=0&query=baila&genres=%5B%22African%22%2C%22Asian%22%5D&styles=%5B%22Alternative%20Country%22%5D&formats=%5B%22Shellac%22%5D&countries=%5B%22Sri%20Lanka%22%5D",
+            "description": "Public search. Array filters are JSON-encoded strings because that is what the frontend submits."
+          },
+          "response": []
+        },
+        {
+          "name": "Get record",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/records/{{recordId}}",
+            "description": "Returns the latest revision for a single record."
+          },
+          "response": []
+        },
+        {
+          "name": "Create record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"chosenImage\":0,\"images\":[\"{{tempRecordImageUrl1}}\",\"{{tempRecordImageUrl2}}\"],\"date\":\"1993-12-31\",\"genres\":[\"African\",\"Asian\"],\"styles\":[\"Alternative Country\",\"Traditional Country Music\"],\"descriptions\":[\"Album\",\"Special Edition\"],\"speed\":\"33 1/3 RPM\",\"size\":\"LP\",\"country\":\"Sri Lanka\",\"tracks\":[{\"index\":\"1\",\"artists\":[{\"index\":1,\"name\":\"Artist Name 1\"}],\"title\":\"Song 1\",\"credits\":[{\"index\":1,\"text\":\"Credits 1\"}],\"duration\":\"5:00\"},{\"index\":\"2\",\"artists\":[{\"index\":1,\"name\":\"Artist Name 2\"}],\"title\":\"Song 2\",\"credits\":[{\"index\":1,\"text\":\"Credits 2\"}],\"duration\":\"4:00\"}],\"notes\":\"Example notes for the release.\",\"commonCredits\":[{\"index\":1,\"text\":\"Produced by Example Producer\"}],\"songUrls\":[{\"index\":1,\"text\":\"https://example.com/track/1\"}],\"name\":\"Test Title\",\"label\":\"Sakura\",\"mainArtist\":\"Test Artist\",\"catalogNo\":\"CAT_4569:123\",\"format\":\"Shellac\",\"channelCoding\":\"Stereo\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/records",
+            "description": "Comprehensive example matching the record editor payload. Replace temp image URLs with real uploaded temp objects before sending."
+          },
+          "response": []
+        },
+        {
+          "name": "Update record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\":\"{{recordId}}\",\"ownerUid\":\"{{userUid}}\",\"chosenImage\":1,\"images\":[\"{{existingRecordImageUrl}}\",\"{{tempRecordImageUrl3}}\"],\"date\":\"1993-12-31\",\"genres\":[\"African\",\"Asian\"],\"styles\":[\"Alternative Country\",\"Traditional Country Music\"],\"descriptions\":[\"Album\",\"Special Edition\"],\"speed\":\"33 1/3 RPM\",\"size\":\"LP\",\"country\":\"Sri Lanka\",\"tracks\":[{\"index\":\"1\",\"artists\":[{\"index\":1,\"name\":\"Artist Name 1\"}],\"title\":\"Song 1\",\"credits\":[{\"index\":1,\"text\":\"Credits 1\"}],\"duration\":\"5:00\"}],\"notes\":\"Expanded notes for the revised release.\",\"commonCredits\":[{\"index\":1,\"text\":\"Produced by Example Producer\"}],\"songUrls\":[{\"index\":1,\"text\":\"https://example.com/track/1\"}],\"name\":\"Test Title (Revised)\",\"label\":\"Sakura\",\"mainArtist\":\"Test Artist\",\"catalogNo\":\"CAT_4569:123\",\"format\":\"Shellac\",\"channelCoding\":\"Stereo\",\"revisionComments\":\"Corrected the label details and refreshed the images.\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/records/{{recordId}}",
+            "description": "Creates a new latest revision. The body mirrors the edit flow, including `id`, `ownerUid`, and `revisionComments`."
+          },
+          "response": []
+        },
+        {
+          "name": "List record revisions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/records/{{recordId}}/revisions",
+            "description": "Returns revision metadata for one logical record."
+          },
+          "response": []
+        },
+        {
+          "name": "Get record revision",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/records/{{recordId}}/revisions/{{recordRevisionId}}",
+            "description": "Returns a single historical revision."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Forum",
+      "item": [
+        {
+          "name": "List forum posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/forum?limit=10&skip=0",
+            "description": "Public forum listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Search forum posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/forum/search?limit=10&skip=0&query=needle%20care",
+            "description": "Uses the actual backend search endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Get forum post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/forum/{{forumPostId}}",
+            "description": "Returns a single forum post."
+          },
+          "response": []
+        },
+        {
+          "name": "Get forum comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/forum/{{forumPostId}}/comments",
+            "description": "Returns comments for a forum post."
+          },
+          "response": []
+        },
+        {
+          "name": "Create forum post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"postTitle\":\"Needle care tips\",\"postHTML\":\"<p>How do you clean your stylus before a listening session?</p>\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/forum",
+            "description": "Matches the frontend forum post payload."
+          },
+          "response": []
+        },
+        {
+          "name": "Update forum post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"postTitle\":\"Needle care tips (updated)\",\"postHTML\":\"<p>How do you clean your stylus before a listening session? I now use a carbon fiber brush and enzyme fluid.</p>\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/forum/{{forumPostId}}",
+            "description": "Updates a top-level forum post."
+          },
+          "response": []
+        },
+        {
+          "name": "Create forum comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"comment\":true,\"postHTML\":\"<p>I use a stylus brush after every side and a deeper clean once a month.</p>\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/forum/{{forumPostId}}/comments",
+            "description": "Matches the frontend comment submission payload."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete forum comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/forum/{{forumPostId}}/comments/{{forumCommentId}}",
+            "description": "Deletes one of the authenticated user's comments."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete forum post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/forum/{{forumPostId}}",
+            "description": "Deletes one of the authenticated user's forum posts."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Market",
+      "item": [
+        {
+          "name": "List market posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/market?limit=30&skip=0",
+            "description": "Public marketplace listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Search market posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/market/search?limit=30&skip=0&query=turntable&gear=%5B%22vinyl%22%2C%22audio%22%5D&material=%5B%22phonograph%22%5D",
+            "description": "Public marketplace search. Filter arrays are JSON-encoded strings."
+          },
+          "response": []
+        },
+        {
+          "name": "Get market post",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/market/{{marketPostId}}",
+            "description": "Returns a single marketplace ad."
+          },
+          "response": []
+        },
+        {
+          "name": "Create market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"chosenImage\":0,\"images\":[\"{{tempMarketImageUrl1}}\",\"{{tempMarketImageUrl2}}\"],\"name\":\"Technics SL-1200MK2\",\"description\":\"Well kept direct-drive deck with original dust cover.\",\"currency\":\"Rs\",\"price\":125000,\"saleType\":\"gear\",\"saleSubtype\":\"vinyl\",\"isNegotiable\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/market",
+            "description": "Matches the frontend marketplace editor payload. Replace temp image URLs with real uploaded temp objects before sending."
+          },
+          "response": []
+        },
+        {
+          "name": "Update market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\":\"{{marketPostId}}\",\"chosenImage\":1,\"images\":[\"{{existingSellingImageUrl}}\",\"{{tempMarketImageUrl3}}\"],\"name\":\"Technics SL-1200MK2 - serviced\",\"description\":\"Bearing serviced and RCA leads replaced.\",\"currency\":\"Rs\",\"price\":135000,\"saleType\":\"gear\",\"saleSubtype\":\"vinyl\",\"isNegotiable\":false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/market/{{marketPostId}}",
+            "description": "Updates an unapproved marketplace ad. The body mirrors the frontend edit payload and includes `id`."
+          },
+          "response": []
+        },
+        {
+          "name": "Report market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"description\":\"Item already sold or the listing details are misleading.\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/market/{{marketPostId}}/report",
+            "description": "Matches the frontend report modal payload."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users?limit=10&skip=0",
+            "description": "Admin-only paginated user listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Get user by UID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users/{{userUid}}",
+            "description": "Admin-only user detail lookup."
+          },
+          "response": []
+        },
+        {
+          "name": "List admin users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/admin-users",
+            "description": "Lists users with the Admin role."
+          },
+          "response": []
+        },
+        {
+          "name": "Add admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/admin/admin-users/{{adminEmail}}",
+            "description": "Matches the frontend admin creation call, which posts an empty JSON object."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove admin",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/admin-users/{{userUid}}",
+            "description": "Removes the Admin role from a user."
+          },
+          "response": []
+        },
+        {
+          "name": "List admin records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/records?limit=10&skip=0",
+            "description": "Admin-only paginated record listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete admin record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/records/{{recordId}}",
+            "description": "Deletes all revisions for a record as an admin."
+          },
+          "response": []
+        },
+        {
+          "name": "List admin forum posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/forum?limit=10&skip=0",
+            "description": "Admin-only paginated forum listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete admin forum post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/forum/{{forumPostId}}",
+            "description": "Deletes a forum post as an admin."
+          },
+          "response": []
+        },
+        {
+          "name": "List reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/reports?limit=10&skip=0",
+            "description": "Admin moderation queue."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve report",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"resolved\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/admin/reports/{{reportId}}",
+            "description": "Matches the frontend resolve-report call. The backend ignores the body and resolves by path id."
+          },
+          "response": []
+        },
+        {
+          "name": "List pending market posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/market?type=pending&limit=10&skip=0",
+            "description": "Admin view for pending marketplace ads."
+          },
+          "response": []
+        },
+        {
+          "name": "List all market posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/market?type=all&limit=10&skip=0",
+            "description": "Admin view for all latest marketplace ads."
+          },
+          "response": []
+        },
+        {
+          "name": "List approved market posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/market?type=approved&limit=10&skip=0",
+            "description": "Admin view for approved marketplace ads."
+          },
+          "response": []
+        },
+        {
+          "name": "List rejected or expired market posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/market?type=rejected-expired&limit=10&skip=0",
+            "description": "Admin view for rejected ads and ads older than the public listing window."
+          },
+          "response": []
+        },
+        {
+          "name": "Approve market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\":\"{{marketPostId}}\",\"type\":\"approve\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/admin/market",
+            "description": "Matches the frontend moderation action payload for approval."
+          },
+          "response": []
+        },
+        {
+          "name": "Reject market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\":\"{{marketPostId}}\",\"type\":\"reject\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/admin/market",
+            "description": "Matches the frontend moderation action payload for rejection."
+          },
+          "response": []
+        },
+        {
+          "name": "Get admin market post",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/market/{{marketPostId}}",
+            "description": "Fetches a marketplace ad for admin review/editing."
+          },
+          "response": []
+        },
+        {
+          "name": "Update admin market post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\":\"{{marketPostId}}\",\"ownerUid\":\"{{userUid}}\",\"chosenImage\":0,\"images\":[\"{{existingSellingImageUrl}}\",\"{{tempMarketImageUrl3}}\"],\"name\":\"Moderated listing title\",\"description\":\"Approved after description cleanup.\",\"currency\":\"Rs\",\"price\":135000,\"saleType\":\"gear\",\"saleSubtype\":\"vinyl\",\"isNegotiable\":false,\"approved\":true,\"rejected\":false,\"sold\":false,\"paid\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/admin/market/{{marketPostId}}",
+            "description": "Mirrors the admin edit flow: it posts the full item object, not just changed fields."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Unsupported or placeholder routes",
+      "item": [
+        {
+          "name": "Get forum comment by id (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/forum/{{forumPostId}}/comments/{{forumCommentId}}",
+            "description": "This route exists in the router but is intentionally unimplemented and returns 404."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete market post directly (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/market/{{marketPostId}}",
+            "description": "This route is intentionally unimplemented and returns 404."
+          },
+          "response": []
+        },
+        {
+          "name": "Get market report helper route (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/market/{{marketPostId}}/report",
+            "description": "This route is intentionally unimplemented and returns 404."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -17,7 +17,7 @@ export class UserService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .get(environment.api_gateway + 'users/', {
+      .get(environment.api_gateway + 'users', {
         headers: new HttpHeaders({
           Authorization: token,
         }),
@@ -30,7 +30,7 @@ export class UserService {
     const token = await this.auth.getToken();
 
     return await this.http
-      .post(environment.api_gateway + 'users/', user, {
+      .post(environment.api_gateway + 'users', user, {
         headers: new HttpHeaders({
           Authorization: token,
         }),

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/D-Andreev/lambdamux"
@@ -29,24 +30,34 @@ func main() {
 // handler dispatches requests through the forum router.
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	common.LogEventPayload(req)
+	req.Path = normalizeRoutePath(req.Path)
 	return router.Handle(ctx, req)
 }
 
 // newRouter registers forum routes.
 func newRouter() *lambdamux.LambdaMux {
 	router := lambdamux.NewLambdaMux()
+	// Register shorter paths before longer parameterized paths; lambdamux logs
+	// param conflicts and skips later routes when a deeper param route is added first.
 	router.GET("/forum", common.LogEndpoint("GET", "/forum", getPosts))
 	router.GET("/forum/search", common.LogEndpoint("GET", "/forum/search", searchPosts))
 	router.POST("/forum", common.LogEndpoint("POST", "/forum", common.AuthRequired(saveNewPost)))
-	router.GET("/forum/:postId/comments/:commentId", common.LogEndpoint("GET", "/forum/:postId/comments/:commentId", unsupported))
-	router.GET("/forum/:postId/comments", common.LogEndpoint("GET", "/forum/:postId/comments", getComments))
 	router.GET("/forum/:postId", common.LogEndpoint("GET", "/forum/:postId", getPost))
-	router.POST("/forum/:postId/comments", common.LogEndpoint("POST", "/forum/:postId/comments", common.AuthRequired(saveComment)))
+	router.GET("/forum/:postId/comments", common.LogEndpoint("GET", "/forum/:postId/comments", getComments))
+	router.GET("/forum/:postId/comments/:commentId", common.LogEndpoint("GET", "/forum/:postId/comments/:commentId", unsupported))
 	router.POST("/forum/:postId", common.LogEndpoint("POST", "/forum/:postId", common.AuthRequired(saveExistingPost)))
-	router.DELETE("/forum/:postId/comments/:commentId", common.LogEndpoint("DELETE", "/forum/:postId/comments/:commentId", common.AuthRequired(removeComment)))
+	router.POST("/forum/:postId/comments", common.LogEndpoint("POST", "/forum/:postId/comments", common.AuthRequired(saveComment)))
 	router.DELETE("/forum/:postId", common.LogEndpoint("DELETE", "/forum/:postId", common.AuthRequired(removePost)))
+	router.DELETE("/forum/:postId/comments/:commentId", common.LogEndpoint("DELETE", "/forum/:postId/comments/:commentId", common.AuthRequired(removeComment)))
 
 	return router
+}
+
+func normalizeRoutePath(path string) string {
+	if path == "" || path == "/" {
+		return path
+	}
+	return strings.TrimRight(path, "/")
 }
 
 // unsupported returns a not found response for forum routes that are not implemented.

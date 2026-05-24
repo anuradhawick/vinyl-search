@@ -1,14 +1,55 @@
 package main
 
 import (
+	"bytes"
+	"context"
+	"log"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/D-Andreev/lambdamux"
+	"github.com/aws/aws-lambda-go/events"
 	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"vinyl-search/backend-go/common/testutil"
 )
+
+func TestNewRouterRegistersRoutesWithoutParamConflicts(t *testing.T) {
+	var logs bytes.Buffer
+	originalWriter := log.Writer()
+	log.SetOutput(&logs)
+	t.Cleanup(func() {
+		log.SetOutput(originalWriter)
+	})
+
+	_ = newRouter()
+
+	if strings.Contains(logs.String(), "Route param conflict") {
+		t.Fatalf("unexpected route conflict log: %s", logs.String())
+	}
+}
+
+func TestHandlerNormalizesTrailingSlash(t *testing.T) {
+	originalRouter := router
+	t.Cleanup(func() {
+		router = originalRouter
+	})
+
+	router = lambdamux.NewLambdaMux()
+	router.GET("/forum", func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		if req.Path != "/forum" {
+			t.Fatalf("normalized path = %q", req.Path)
+		}
+		return events.APIGatewayProxyResponse{StatusCode: http.StatusOK, Body: `{"success":true}`}, nil
+	})
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/forum/", nil, nil, "", false))
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
+	}
+}
 
 func TestForumEndpoints(t *testing.T) {
 	db := testutil.Mongo(t, "vinyl_test_forum")

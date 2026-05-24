@@ -102,7 +102,7 @@ export class AuthService {
     this.zone.run(async () => {
       this.isLoggedIn = true;
       this.http
-        .get(environment.api_gateway + 'users/', {
+        .get(environment.api_gateway + 'users', {
           headers: new HttpHeaders({
             Authorization: await this.getToken(),
           }),
