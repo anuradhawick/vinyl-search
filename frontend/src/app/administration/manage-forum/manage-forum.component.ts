@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -37,12 +37,12 @@ import { DatePipe } from '@angular/common';
   ],
 })
 export class ManageForumComponent implements OnInit {
-  protected loading = true;
-  protected posts: any = null;
+  protected loading = signal(true);
+  protected posts = signal<any>(null);
   protected skip = 0;
-  protected limit = 10;
-  protected count = 0;
-  protected page = 1;
+  protected limit = signal(10);
+  protected count = signal(0);
+  protected page = signal(1);
 
   constructor(
     private route: ActivatedRoute,
@@ -54,34 +54,34 @@ export class ManageForumComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
-      this.posts = null;
+      this.posts.set(null);
       const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
+      this.skip = (page - 1) * this.limit();
+      this.page.set(page);
 
       this.loadPosts();
     });
   }
 
   loadPosts() {
-    this.posts = null;
-    this.loading = true;
+    this.posts.set(null);
+    this.loading.set(true);
     this.adminService
-      .fetch_forum({ limit: this.limit, skip: this.skip })
+      .fetch_forum({ limit: this.limit(), skip: this.skip })
       .then((records: any) => {
-        this.posts = records.posts;
+        this.posts.set(records.posts);
         this.skip = records.skip;
-        this.limit = records.limit;
-        this.count = records.count;
-        this.loading = false;
+        this.limit.set(records.limit);
+        this.count.set(records.count);
+        this.loading.set(false);
       })
       .catch(() => {
-        this.loading = false;
+        this.loading.set(false);
       });
   }
 
   changePage(event: any) {
-    this.posts = null;
+    this.posts.set(null);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

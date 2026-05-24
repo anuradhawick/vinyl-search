@@ -1,5 +1,5 @@
-<app-loader [hidden]="!recordLoading"></app-loader>
-@if (recordObject) {
+<app-loader [hidden]="!recordLoading()"></app-loader>
+@if (recordObject(); as recordObject) {
   <div class="flex flex-col md:flex-row">
     <!--LEFT COL-->
     <div class="w-full md:w-1/3">
@@ -44,11 +44,11 @@
               </mat-chip-listbox>
             </div>
             <hr />
-            @if (!isRevisionView) {
+            @if (!isRevisionView()) {
               <h6>Revision history</h6>
               <div>
-                <app-loader [hidden]="!histLoading"></app-loader>
-                @for (h of recordHistory; track $index) {
+                <app-loader [hidden]="!histLoading()"></app-loader>
+                @for (h of recordHistory(); track $index) {
                   <a
                     mat-button
                     [routerLink]="[
@@ -244,7 +244,7 @@
                 }
               </div>
             }
-            @if (isRevisionView) {
+            @if (isRevisionView()) {
               <hr />
               <table class="w-full border-separate border-spacing-y-3">
                 <tbody>

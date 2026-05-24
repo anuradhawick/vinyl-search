@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../shared-modules/services/auth.service';
 import { AdminService } from '../services/admin.service';
 import {
@@ -44,8 +44,8 @@ import { MatFormField, MatInput, MatError } from '@angular/material/input';
   ],
 })
 export class ManageAdminsComponent implements OnInit {
-  public admins: any = [];
-  public loading = true;
+  public admins = signal<any[]>([]);
+  public loading = signal(true);
   public form: FormGroup;
 
   constructor(
@@ -72,11 +72,11 @@ export class ManageAdminsComponent implements OnInit {
   }
 
   loadAdmins() {
-    this.admins = [];
-    this.loading = true;
+    this.admins.set([]);
+    this.loading.set(true);
     this.adminService.get_admins().then((res: any) => {
-      this.admins = res.users;
-      this.loading = false;
+      this.admins.set(res.users);
+      this.loading.set(false);
     });
   }
 

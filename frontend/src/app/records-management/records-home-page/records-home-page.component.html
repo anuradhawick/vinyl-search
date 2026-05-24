@@ -6,13 +6,14 @@
       <input
         matInput
         class="-translate-y-[10px]"
-        (focus)="autocompleteShow = true"
+        (focus)="autocompleteShow.set(true)"
         (blur)="exitSearch()"
         (keyup)="autocompleteEvent.next($any($event).target.value)"
         type="text"
         placeholder="Search records..."
         name="search-query"
-        [(ngModel)]="query"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
       />
     </mat-form-field>
     <div class="flex justify-start gap-1 md:justify-between grow">
@@ -28,13 +29,13 @@
         Add
       </button>
     </div>
-    @if (autocompleteShow && autocompleteResult?.length > 0) {
+    @if (autocompleteShow() && autocompleteResult()?.length > 0) {
       <div
         class="z-10 p-2 max-w-md absolute top-[76px] left-2 right-2 bg-white border-solid border-slate-400 border-2 rounded-md overflow-hidden"
       >
         <table class="w-full">
           <tbody>
-            @for (record of autocompleteResult; track record) {
+            @for (record of autocompleteResult(); track record) {
               <tr>
                 <td>
                   <a [routerLink]="['/records', record.id, 'view']">
@@ -64,7 +65,7 @@
     <div class="ml-3 mr-5 mt-2 text-dark">
       Search results for -
       <span class="font-semibold">{{
-        _.truncate(query, { length: 100 })
+        _.truncate(query(), { length: 100 })
       }}</span>
       (<a mat-button (click)="exitSearchRoute()">cancel</a>)
     </div>
@@ -90,7 +91,7 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             Filter by Genre
-            {{ genreFilters.length > 0 ? "(" + genreFilters.length + ")" : "" }}
+            {{ genreFilters().length > 0 ? "(" + genreFilters().length + ")" : "" }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <hr />
@@ -102,12 +103,12 @@
         >
           Select filters
         </button>
-        @if (!_.isEmpty(genreFilters)) {
+        @if (!_.isEmpty(genreFilters())) {
           <button
             mat-raised-button
             class="w-full"
             color="warn"
-            (click)="genreFilters = []; activateFilters()"
+            (click)="genreFilters.set([]); activateFilters()"
           >
             Clear filters
           </button>
@@ -117,7 +118,7 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             Filter by Style
-            {{ styleFilters.length > 0 ? "(" + styleFilters.length + ")" : "" }}
+            {{ styleFilters().length > 0 ? "(" + styleFilters().length + ")" : "" }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <hr />
@@ -129,12 +130,12 @@
         >
           Select filters
         </button>
-        @if (!_.isEmpty(styleFilters)) {
+        @if (!_.isEmpty(styleFilters())) {
           <button
             mat-raised-button
             class="w-full"
             color="warn"
-            (click)="styleFilters = []; activateFilters()"
+            (click)="styleFilters.set([]); activateFilters()"
           >
             Clear filters
           </button>
@@ -145,7 +146,9 @@
           <mat-panel-title>
             Filter by Format
             {{
-              formatFilters.length > 0 ? "(" + formatFilters.length + ")" : ""
+              formatFilters().length > 0
+                ? "(" + formatFilters().length + ")"
+                : ""
             }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -176,12 +179,12 @@
         >
           Select filters
         </button>
-        @if (!_.isEmpty(formatFilters)) {
+        @if (!_.isEmpty(formatFilters())) {
           <button
             mat-raised-button
             class="w-full"
             color="warn"
-            (click)="formatFilters = []; activateFilters()"
+            (click)="formatFilters.set([]); activateFilters()"
           >
             Clear filters
           </button>
@@ -192,7 +195,9 @@
           <mat-panel-title>
             Filter by Country
             {{
-              countryFilters.length > 0 ? "(" + countryFilters.length + ")" : ""
+              countryFilters().length > 0
+                ? "(" + countryFilters().length + ")"
+                : ""
             }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -205,12 +210,12 @@
         >
           Select filters
         </button>
-        @if (!_.isEmpty(countryFilters)) {
+        @if (!_.isEmpty(countryFilters())) {
           <button
             mat-raised-button
             class="w-full"
             color="warn"
-            (click)="countryFilters = []; activateFilters()"
+            (click)="countryFilters.set([]); activateFilters()"
           >
             Clear filters
           </button>
@@ -223,7 +228,7 @@
   <div class="w-full md:w-9/12 p-2">
     <app-loader #recordsloader></app-loader>
     <div class="grid md:grid-cols-6 md:gap-4 grid-cols-3 gap-2">
-      @for (r of records; track r) {
+      @for (r of records(); track r) {
         <div class="bg-white rounded-md shadow-xl h-full">
           <div>
             <a [routerLink]="['/records', r.id, 'view']" class="h-full w-full">
@@ -248,14 +253,14 @@
       }
     </div>
     <br />
-    @if (records && count > limit) {
+    @if (records() && count() > limit()) {
       <nav>
         <mat-paginator
           class="bg-slate-50"
           showFirstLastButtons
-          [length]="count"
-          [pageSize]="limit"
-          [pageIndex]="page - 1"
+          [length]="count()"
+          [pageSize]="limit()"
+          [pageIndex]="page() - 1"
           (page)="changePage($event)"
         ></mat-paginator>
       </nav>

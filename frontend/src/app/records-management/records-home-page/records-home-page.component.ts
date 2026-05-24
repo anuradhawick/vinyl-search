@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -58,23 +64,29 @@ export class RecordsHomePageComponent implements OnInit {
   @ViewChild('recordsloader', { static: true })
   loader!: LoaderComponent;
   // context control
-  public records: any = null;
+  public records = signal<any>(null);
   public skip = 0;
-  public limit = 30;
-  public count = 0;
-  public page = 1;
-  protected autocompleteShow = false;
-  protected autocompleteResult: any = null;
+  public limit = signal(30);
+  public count = signal(0);
+  public page = signal(1);
+  protected autocompleteShow = signal(false);
+  protected autocompleteResult = signal<any>(null);
   protected autocompleteEvent: Subject<string> = new Subject();
   public _ = _;
-  public query: any = null;
+  public query = signal('');
   public component: any = this;
 
   // page filters
-  public genreFilters = [];
-  public styleFilters = [];
-  public formatFilters = [];
-  public countryFilters = [];
+  public genreFilters = signal<any[]>([]);
+  public styleFilters = signal<any[]>([]);
+  public formatFilters = signal<any[]>([]);
+  public countryFilters = signal<any[]>([]);
+  private readonly filterSignals: Record<string, WritableSignal<any[]>> = {
+    genreFilters: this.genreFilters,
+    styleFilters: this.styleFilters,
+    formatFilters: this.formatFilters,
+    countryFilters: this.countryFilters,
+  };
 
   public environment = environment;
   @ViewChild(MatAccordion, { static: false })
@@ -90,38 +102,25 @@ export class RecordsHomePageComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
-      this.records = null;
+      this.records.set(null);
       const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
+      this.skip = (page - 1) * this.limit();
+      this.page.set(page);
       this.loader.show();
-      this.query = _.get(p, 'query', '');
-      this.genreFilters = _.get(p, 'genres', []);
-      this.styleFilters = _.get(p, 'styles', []);
-      this.formatFilters = _.get(p, 'formats', []);
-      this.countryFilters = _.get(p, 'countries', []);
-
-      if (!Array.isArray(this.genreFilters)) {
-        this.genreFilters = [this.genreFilters];
-      }
-      if (!Array.isArray(this.styleFilters)) {
-        this.styleFilters = [this.styleFilters];
-      }
-      if (!Array.isArray(this.formatFilters)) {
-        this.formatFilters = [this.formatFilters];
-      }
-      if (!Array.isArray(this.countryFilters)) {
-        this.countryFilters = [this.countryFilters];
-      }
+      this.query.set(_.get(p, 'query', ''));
+      this.genreFilters.set(this.ensureArray(_.get(p, 'genres', [])));
+      this.styleFilters.set(this.ensureArray(_.get(p, 'styles', [])));
+      this.formatFilters.set(this.ensureArray(_.get(p, 'formats', [])));
+      this.countryFilters.set(this.ensureArray(_.get(p, 'countries', [])));
 
       if (
-        _.isEmpty(_.trim(this.query)) &&
-        _.isEmpty(this.genreFilters) &&
-        _.isEmpty(this.styleFilters) &&
-        _.isEmpty(this.countryFilters) &&
-        _.isEmpty(this.formatFilters)
+        _.isEmpty(_.trim(this.query())) &&
+        _.isEmpty(this.genreFilters()) &&
+        _.isEmpty(this.styleFilters()) &&
+        _.isEmpty(this.countryFilters()) &&
+        _.isEmpty(this.formatFilters())
       ) {
-        this.autocompleteResult = null;
+        this.autocompleteResult.set(null);
         this.loadRecords();
       } else {
         this.loadSearchPage();
@@ -144,18 +143,18 @@ export class RecordsHomePageComponent implements OnInit {
       )
       .subscribe((result: any) => {
         if (result) {
-          this.autocompleteShow = true;
-          this.autocompleteResult = result.records;
+          this.autocompleteShow.set(true);
+          this.autocompleteResult.set(result.records);
         } else {
-          this.autocompleteShow = false;
-          this.autocompleteResult = null;
+          this.autocompleteShow.set(false);
+          this.autocompleteResult.set(null);
         }
       });
   }
 
   exitSearch() {
     setTimeout(() => {
-      this.autocompleteShow = false;
+      this.autocompleteShow.set(false);
     }, 300);
   }
 
@@ -178,7 +177,7 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   search() {
-    const query = _.trim(this.query);
+    const query = _.trim(this.query());
     if (_.isEmpty(query)) {
       return;
     }
@@ -196,40 +195,40 @@ export class RecordsHomePageComponent implements OnInit {
     this.recordsService
       .fetch_records({
         skip: this.skip,
-        limit: this.limit,
+        limit: this.limit(),
       })
       .subscribe((res: any) => {
         this.loader.hide();
-        this.records = res.records;
+        this.records.set(res.records);
         this.skip = res.skip;
-        this.limit = res.limit;
-        this.count = _.get(res, 'count', 0);
+        this.limit.set(res.limit);
+        this.count.set(_.get(res, 'count', 0));
       });
   }
 
   loadSearchPage() {
-    this.records = null;
-    const data = this.recordsService
+    this.records.set(null);
+    this.recordsService
       .search_records({
-        limit: this.limit,
+        limit: this.limit(),
         skip: this.skip,
-        query: this.query,
-        genres: JSON.stringify(this.genreFilters),
-        styles: JSON.stringify(this.styleFilters),
-        formats: JSON.stringify(this.formatFilters),
-        countries: JSON.stringify(this.countryFilters),
+        query: this.query(),
+        genres: JSON.stringify(this.genreFilters()),
+        styles: JSON.stringify(this.styleFilters()),
+        formats: JSON.stringify(this.formatFilters()),
+        countries: JSON.stringify(this.countryFilters()),
       })
       .subscribe((res: any) => {
-        this.records = res.records;
+        this.records.set(res.records);
         this.skip = res.skip;
-        this.limit = res.limit;
-        this.count = res.count;
+        this.limit.set(res.limit);
+        this.count.set(res.count);
         this.loader.hide();
       });
   }
 
   changePage(event: any) {
-    this.records = null;
+    this.records.set(null);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -240,7 +239,8 @@ export class RecordsHomePageComponent implements OnInit {
   }
 
   openFilter(toChooseFrom: any, ref: any) {
-    const active = _.cloneDeep(_.get(this, ref));
+    const filterSignal = this.getFilterSignal(ref);
+    const active = _.cloneDeep(filterSignal());
     const all = _.cloneDeep(toChooseFrom);
     let filterCriteria = '';
 
@@ -269,7 +269,7 @@ export class RecordsHomePageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(({ filters, selected }) => {
       if (selected) {
-        _.set(this, ref, filters);
+        filterSignal.set(filters);
         this.activateFilters();
       }
     });
@@ -279,11 +279,11 @@ export class RecordsHomePageComponent implements OnInit {
     this.filtersPanel.closeAll();
 
     const queryParams = {
-      query: _.isEmpty(this.query) ? null : this.query,
-      genres: _.isEmpty(this.genreFilters) ? null : this.genreFilters,
-      styles: _.isEmpty(this.styleFilters) ? null : this.styleFilters,
-      formats: _.isEmpty(this.formatFilters) ? null : this.formatFilters,
-      countries: _.isEmpty(this.countryFilters) ? null : this.countryFilters,
+      query: _.isEmpty(this.query()) ? null : this.query(),
+      genres: _.isEmpty(this.genreFilters()) ? null : this.genreFilters(),
+      styles: _.isEmpty(this.styleFilters()) ? null : this.styleFilters(),
+      formats: _.isEmpty(this.formatFilters()) ? null : this.formatFilters(),
+      countries: _.isEmpty(this.countryFilters()) ? null : this.countryFilters(),
     };
 
     this.router.navigateByUrl(this.router.url.split(/[?#]/)[0]).then(() => {
@@ -292,5 +292,13 @@ export class RecordsHomePageComponent implements OnInit {
         queryParams,
       });
     });
+  }
+
+  private ensureArray(value: any) {
+    return Array.isArray(value) ? value : [value];
+  }
+
+  private getFilterSignal(ref: string) {
+    return this.filterSignals[ref];
   }
 }

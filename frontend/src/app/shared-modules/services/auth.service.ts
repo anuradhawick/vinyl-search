@@ -32,6 +32,7 @@ export class AuthService {
     private router: Router,
     @Inject(MatDialog) private dialog: MatDialog,
   ) {
+    this.user.next(null);
     route.queryParams.subscribe((params: any) => {
       if (params.error === 'invalid_request' && params.error_description) {
         console.log('INVALID REQUEST', params.error_description);
@@ -63,7 +64,7 @@ export class AuthService {
         case 'signedOut':
           console.log('Logout success');
           this.isLoggedIn = false;
-          this.user = null;
+          this.user.next(null);
           this.autoLogin = false;
           this.profileLoaded = false;
 
@@ -174,7 +175,7 @@ export class AuthService {
 
   logout() {
     this.redirectUrl = null;
-    this.user = null;
+    this.user.next(null);
     this.isLoggedIn = false;
     this.autoLogin = null;
     signOut();

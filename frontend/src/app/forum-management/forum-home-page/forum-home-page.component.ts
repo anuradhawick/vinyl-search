@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../../shared-modules/services/auth.service';
@@ -50,16 +50,16 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   ],
 })
 export class ForumHomePageComponent implements OnInit {
-  protected posts: any = null;
+  protected posts = signal<any>(null);
   protected skip = 0;
-  protected limit = 10;
-  protected count = 0;
-  protected page = 1;
-  protected autocompleteShow = false;
-  protected autocompleteResult: any = null;
+  protected limit = signal(10);
+  protected count = signal(0);
+  protected page = signal(1);
+  protected autocompleteShow = signal(false);
+  protected autocompleteResult = signal<any>(null);
   protected autocompleteEvent: Subject<string> = new Subject();
-  protected query: string = '';
-  protected loading: boolean = false;
+  protected query = signal('');
+  protected loading = signal(false);
   protected _ = _;
 
   constructor(
@@ -71,13 +71,13 @@ export class ForumHomePageComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
-      this.posts = null;
+      this.posts.set(null);
       const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
-      this.query = _.get(p, 'query', '');
-      if (_.isEmpty(_.trim(this.query))) {
-        this.autocompleteResult = null;
+      this.skip = (page - 1) * this.limit();
+      this.page.set(page);
+      this.query.set(_.get(p, 'query', ''));
+      if (_.isEmpty(_.trim(this.query()))) {
+        this.autocompleteResult.set(null);
         this.loadPosts();
       } else {
         this.loadSearchPage();
@@ -100,61 +100,61 @@ export class ForumHomePageComponent implements OnInit {
       )
       .subscribe((result) => {
         if (result) {
-          this.autocompleteShow = true;
-          this.autocompleteResult = result;
+          this.autocompleteShow.set(true);
+          this.autocompleteResult.set(result);
         } else {
-          this.autocompleteShow = false;
-          this.autocompleteResult = null;
+          this.autocompleteShow.set(false);
+          this.autocompleteResult.set(null);
         }
       });
   }
 
   exitSearch() {
     setTimeout(() => {
-      this.autocompleteShow = false;
+      this.autocompleteShow.set(false);
     }, 300);
   }
 
   loadPosts() {
-    this.loading = true;
+    this.loading.set(true);
     this.forumService
       .fetch_posts({
-        limit: this.limit,
+        limit: this.limit(),
         skip: this.skip,
       })
       .pipe(catchError(() => of(null)))
       .subscribe((postsList: any) => {
         if (postsList) {
-          this.posts = postsList.posts;
+          this.posts.set(postsList.posts);
           this.skip = postsList.skip;
-          this.limit = postsList.limit;
-          this.count = _.get(postsList, 'count', 0);
+          this.limit.set(postsList.limit);
+          this.count.set(_.get(postsList, 'count', 0));
         } else {
           alert('Unable to load');
         }
-        this.loading = false;
+        this.loading.set(false);
       });
   }
 
   loadSearchPage() {
-    this.loading = true;
+    this.loading.set(true);
     this.forumService
       .search_posts({
-        limit: this.limit,
+        limit: this.limit(),
         skip: this.skip,
-        query: this.query,
+        query: this.query(),
       })
       .subscribe((postsList: any) => {
-        this.posts = postsList.posts;
+        this.posts.set(postsList.posts);
         this.skip = postsList.skip;
-        this.limit = postsList.limit;
-        this.count = postsList.count;
-        this.loading = false;
+        this.limit.set(postsList.limit);
+        this.count.set(postsList.count);
+        this.loading.set(false);
       });
   }
 
   changePage(event: any) {
-    this.posts = null;
+    this.posts.set(null);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -165,7 +165,7 @@ export class ForumHomePageComponent implements OnInit {
   }
 
   search() {
-    const query = _.trim(this.query);
+    const query = _.trim(this.query());
     if (_.isEmpty(query)) {
       return;
     }

@@ -11,7 +11,8 @@
           class="form-control"
           placeholder="Search marketplace..."
           name="search-query"
-          [(ngModel)]="query"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
         />
         <button
           mat-button
@@ -21,7 +22,7 @@
         >
           Search
         </button>
-        @if ((autocomplete | async)?.posts.length > 0) {
+        @if (autocomplete()?.posts?.length > 0) {
           <div style="background-color: #fff; left: 0">
             <div
               style="
@@ -36,7 +37,7 @@
             >
               <table class="table table-hover table-bordered shadow">
                 <tbody>
-                  @for (r of (autocomplete | async)?.posts; track r) {
+                  @for (r of autocomplete()?.posts; track r) {
                     <tr>
                       <td>
                         <a [routerLink]="['/market', r.id, 'view']">
@@ -91,7 +92,7 @@
     ) {
       <div class="ml-3 mr-5 mt-2 text-dark">
         Search results for -
-        <em>{{ _.truncate(query, { length: 100 }) }}</em> (<a
+        <em>{{ _.truncate(query(), { length: 100 }) }}</em> (<a
           [routerLink]="['/market']"
           >cancel</a
         >)
@@ -111,7 +112,7 @@
             (click)="toggleFilter(node.saleType, node.saleSubtype)"
             class="m-0 btn-block text-left"
           >
-            @if (!!selectedFilters[node.saleType + "." + node.saleSubtype]) {
+            @if (!!selectedFilters()[node.saleType + "." + node.saleSubtype]) {
               <mat-icon>done</mat-icon>
             }
             {{ node.name }}
@@ -139,7 +140,7 @@
     <div class="container">
       <app-loader #loader></app-loader>
       <div class="container">
-        @if (records | async; as posts) {
+        @if (records(); as posts) {
           <div class="row">
             @for (r of posts.posts; track r) {
               <div class="col-lg-2 col-sm-4 col-6 p-2">
@@ -170,13 +171,13 @@
         }
       </div>
       <br />
-      @if ((records | async) && count > limit) {
+      @if (records() && count() > limit()) {
         <nav aria-label="Page navigation">
           <mat-paginator
             showFirstLastButtons
-            [length]="count"
-            [pageSize]="limit"
-            [pageIndex]="page - 1"
+            [length]="count()"
+            [pageSize]="limit()"
+            [pageIndex]="page() - 1"
             (page)="changePage($event)"
           ></mat-paginator>
         </nav>

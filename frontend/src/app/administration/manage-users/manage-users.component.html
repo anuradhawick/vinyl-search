@@ -3,7 +3,7 @@
   <h3>Users</h3>
   <hr />
   <mat-list>
-    @for (user of users; track $index) {
+    @for (user of users(); track $index) {
       <mat-list-item class="hover:bg-slate-100">
         @if (user.picture) {
           <img matListItemAvatar [src]="user.picture" alt="user avatar" />
@@ -21,15 +21,15 @@
       </mat-list-item>
     }
   </mat-list>
-  <app-loader [hidden]="!loading"></app-loader>
-  @if (count > limit && !loading) {
+  <app-loader [hidden]="!loading()"></app-loader>
+  @if (count() > limit() && !loading()) {
     <nav aria-label="Page navigation">
       <mat-paginator
         class="bg-slate-50"
         showFirstLastButtons
-        [length]="count"
-        [pageSize]="limit"
-        [pageIndex]="page - 1"
+        [length]="count()"
+        [pageSize]="limit()"
+        [pageIndex]="page() - 1"
         (page)="changePage($event)"
       ></mat-paginator>
     </nav>

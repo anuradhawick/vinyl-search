@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import * as _ from 'lodash';
@@ -31,8 +31,8 @@ import { DatePipe } from '@angular/common';
 })
 export class RecordViewPageComponent implements OnInit {
   protected _ = _;
-  protected recordObject: any = null;
-  protected recordHistory: any = null;
+  protected recordObject = signal<any>(null);
+  protected recordHistory = signal<any>(null);
   protected imgvconfig: any = {
     zoomFactor: 0.1,
     wheelZoom: true,
@@ -48,9 +48,9 @@ export class RecordViewPageComponent implements OnInit {
   };
 
   // context control
-  protected histLoading = true;
-  protected recordLoading = true;
-  protected isRevisionView = false;
+  protected histLoading = signal(true);
+  protected recordLoading = signal(true);
+  protected isRevisionView = signal(false);
 
   constructor(
     protected auth: AuthService,
@@ -62,22 +62,22 @@ export class RecordViewPageComponent implements OnInit {
     this.route.paramMap.subscribe((map: any) => {
       const recordId = _.get(map, 'params.recordId', null);
       const revisionId = _.get(map, 'params.revisionId', null);
-      this.isRevisionView = !!revisionId;
+      this.isRevisionView.set(!!revisionId);
       // fetch records
-      (this.isRevisionView
+      (this.isRevisionView()
         ? this.recordsService.fetch_record_revision(recordId, revisionId)
         : this.recordsService.fetch_record(recordId)
       ).subscribe((data: any) => {
-        this.recordObject = data.record;
-        this.recordLoading = false;
+        this.recordObject.set(data.record);
+        this.recordLoading.set(false);
       });
       // fetch revisions
-      !this.isRevisionView &&
+      !this.isRevisionView() &&
         this.recordsService
           .fetch_record_history(recordId)
           .subscribe((data: any) => {
-            this.recordHistory = data.history;
-            this.histLoading = false;
+            this.recordHistory.set(data.history);
+            this.histLoading.set(false);
           });
     });
   }

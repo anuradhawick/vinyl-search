@@ -4,7 +4,7 @@
   <hr />
   <div>
     <mat-list>
-      @for (admin of admins; track $index) {
+      @for (admin of admins(); track $index) {
         <mat-list-item class="hover:bg-slate-100">
           @if (admin.picture) {
             <img matListItemAvatar [src]="admin.picture" alt="Admin avatar" />
@@ -38,7 +38,7 @@
         </mat-list-item>
       }
     </mat-list>
-    <app-loader [hidden]="!loading"></app-loader>
+    <app-loader [hidden]="!loading()"></app-loader>
   </div>
   <hr />
   <h3>Manage Admins</h3>

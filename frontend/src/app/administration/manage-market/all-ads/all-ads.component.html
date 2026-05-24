@@ -2,9 +2,9 @@
 <div class="container">
   <h3>All Ads</h3>
   <hr />
-  <app-loader [hidden]="!loading"></app-loader>
+  <app-loader [hidden]="!loading()"></app-loader>
   <mat-list role="list">
-    @for (p of posts; track p) {
+    @for (p of posts(); track p) {
       <mat-list-item role="listitem" class="hover:bg-slate-100">
         <img
           matListItemAvatar
@@ -30,14 +30,14 @@
       </mat-list-item>
     }
   </mat-list>
-  @if (count > limit && !loading) {
+  @if (count() > limit() && !loading()) {
     <nav aria-label="Page navigation">
       <mat-paginator
         class="bg-slate-50"
         showFirstLastButtons
-        [length]="count"
-        [pageSize]="limit"
-        [pageIndex]="page - 1"
+        [length]="count()"
+        [pageSize]="limit()"
+        [pageIndex]="page() - 1"
         (page)="changePage($event)"
       ></mat-paginator>
     </nav>

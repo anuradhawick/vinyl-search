@@ -1,8 +1,16 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from './shared-modules/services/auth.service';
 import { TitleTagService } from './shared-modules/services/title-tag.service';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { startWith } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -12,15 +20,22 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   public _ = _;
-  public user: Observable<any>;
-  protected menuOpen = false;
+  protected menuOpen = signal(false);
+  protected currentUser = toSignal<any>(
+    this.auth.user.pipe(startWith(null as any)),
+    {
+      initialValue: null,
+    },
+  );
+  protected isAdmin = computed(
+    () => !!this.currentUser()?.roles?.includes('Admin'),
+  );
   @ViewChild('navbar') nav!: ElementRef;
 
   constructor(
     public auth: AuthService,
     private tagService: TitleTagService,
   ) {
-    this.user = auth.user;
     this.tagService.setTitle("Vinyl.LK: Sri Lanka's largest records database");
     this.tagService.setSocialMediaTags(
       'http://www.vinyl.lk',
@@ -45,5 +60,9 @@ export class AppComponent {
       ) &&
         (this.nav.nativeElement as HTMLElement).classList.add('bg-opacity-70');
     }
+  }
+
+  toggleMenu() {
+    this.menuOpen.update((open) => !open);
   }
 }

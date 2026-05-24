@@ -2,16 +2,17 @@
 <app-loader #postloader></app-loader>
 <div class="w-full" [hidden]="!loader.isHidden()">
   <div class="mx-4 md:mx-[60px]">
-    <h2>{{ title }}</h2>
+    <h2>{{ title() }}</h2>
     <hr />
     <ckeditor
       [editor]="Editor"
-      [(ngModel)]="data"
+      [ngModel]="data()"
+      (ngModelChange)="data.set($event)"
       [config]="{ toolbar: [] }"
       [disabled]="true"
     ></ckeditor>
     <hr />
-    @if ((user | async) && post && (user | async).uid === post.ownerUid) {
+    @if ((user | async) && post() && (user | async).uid === post()?.ownerUid) {
       <div class="flex gap-1">
         <button mat-raised-button type="button" (click)="deletePost()">
           Delete
@@ -19,7 +20,7 @@
         <button
           mat-raised-button
           color="primary"
-          [routerLink]="['/forum', post.id, 'edit']"
+          [routerLink]="['/forum', post()?.id, 'edit']"
           type="button"
         >
           Edit
@@ -30,9 +31,9 @@
   <div class="mx-4 md:ml-[20%] md:w-[80%]">
     <app-loader #commentloader></app-loader>
   </div>
-  @if (comments.length > 0) {
+  @if (comments().length > 0) {
     <div class="mx-4 md:ml-[20%] md:w-[80%]">
-      @for (comment of comments; track comment) {
+      @for (comment of comments(); track comment) {
         <div>
           <ckeditor
             [editor]="Editor"
@@ -41,7 +42,7 @@
             [disabled]="true"
           ></ckeditor>
           @if (
-            (user | async) && post && (user | async).uid === comment.ownerUid
+            (user | async) && post() && (user | async).uid === comment.ownerUid
           ) {
             <div>
               <button
@@ -60,25 +61,27 @@
       }
     </div>
   }
-  @if (!((user | async) && post)) {
+  @if (!((user | async) && post())) {
     <div class="mx-4 md:ml-[20%] md:w-[80%]">
       Please login to comment on this post!
     </div>
   }
-  @if ((user | async) && post && enableCommentSection) {
+  @if ((user | async) && post() && enableCommentSection()) {
     <div class="mx-4 md:ml-[20%] md:w-[80%]">
       <app-forum-editor-component
         [is_reply]="true"
-        [(data)]="comment_data"
-        [(imageProgress)]="imageProgress"
-        [editorDisabled]="editorDisabled"
+        [data]="comment_data()"
+        (dataChange)="comment_data.set($event)"
+        [imageProgress]="imageProgress()"
+        (imageProgressChange)="imageProgress.set($event)"
+        [editorDisabled]="editorDisabled()"
       ></app-forum-editor-component>
       <br />
-      @if ((user | async) && post && enableCommentSection) {
+      @if ((user | async) && post() && enableCommentSection()) {
         <div class="flex gap-1">
           <button
             mat-raised-button
-            [disabled]="imageProgress > 0 || editorDisabled"
+            [disabled]="imageProgress() > 0 || editorDisabled()"
             type="button"
             data-toggle="modal"
             data-target="#exampleModal"
@@ -90,12 +93,12 @@
             mat-raised-button
             color="primary"
             type="button"
-            [disabled]="imageProgress > 0 || editorDisabled"
+            [disabled]="imageProgress() > 0 || editorDisabled()"
             (click)="saveComment()"
           >
             Save Comment
           </button>
-          @if (imageProgress > 0 || editorDisabled) {
+          @if (imageProgress() > 0 || editorDisabled()) {
             <mat-spinner class="!h-9 !w-10"></mat-spinner>
           }
         </div>

@@ -26,7 +26,7 @@
         >
           <mat-icon>shop</mat-icon>For Sale
         </button>
-        @if (auth.isLoggedIn && (user | async)?.roles.includes("Admin")) {
+        @if (isAdmin()) {
           <button
             mat-menu-item
             [routerLink]="['/market/new']"
@@ -85,8 +85,8 @@
         </button>
       </mat-menu>
 
-      @if (auth.isLoggedIn) {
-        @if ((user | async)?.roles.includes("Admin")) {
+      @if (currentUser(); as currentUser) {
+        @if (isAdmin()) {
           <a
             [routerLink]="['/admin']"
             class="text-black font-semibold hover:decoration-transparent"
@@ -98,15 +98,15 @@
           [routerLink]="['/profile']"
           class="text-black font-semibold hover:decoration-transparent"
         >
-          @if ((user | async)?.picture) {
+          @if (currentUser.picture) {
             <img
               class="w-[24px] h-[24px] inline border-black rounded-full border-2"
-              [src]="(user | async)?.picture"
+              [src]="currentUser.picture"
             />
           } @else {
             <mat-icon class="align-middle">account_circle</mat-icon>
           }
-          Hi {{ (user | async)?.given_name }}
+          Hi {{ currentUser.given_name }}
         </a>
         <a
           [routerLink]="[]"
@@ -126,8 +126,8 @@
       }
     </div>
     <div class="md:hidden flex items-center">
-      <button (click)="menuOpen = !menuOpen">
-        @if (!menuOpen) {
+      <button (click)="toggleMenu()">
+        @if (!menuOpen()) {
           <mat-icon>menu</mat-icon>
         } @else {
           <mat-icon>close</mat-icon>
@@ -135,7 +135,7 @@
       </button>
     </div>
   </nav>
-  <div class="md:hidden flex flex-col space-y-2" [class.hidden]="!menuOpen">
+  <div class="md:hidden flex flex-col space-y-2" [class.hidden]="!menuOpen()">
     <hr />
     <a
       [routerLink]="[]"
@@ -152,7 +152,7 @@
       >
         <mat-icon>shop</mat-icon>For Sale
       </button>
-      @if (auth.isLoggedIn && (user | async)?.roles.includes("Admin")) {
+      @if (isAdmin()) {
         <button
           mat-menu-item
           [routerLink]="['/market/new']"
@@ -211,8 +211,8 @@
       </button>
     </mat-menu>
 
-    @if (auth.isLoggedIn) {
-      @if ((user | async)?.roles.includes("Admin")) {
+    @if (currentUser(); as currentUser) {
+      @if (isAdmin()) {
         <a
           [routerLink]="['/admin']"
           class="text-black font-semibold hover:decoration-transparent"
@@ -224,15 +224,15 @@
         [routerLink]="['/profile']"
         class="text-black font-semibold hover:decoration-transparent"
       >
-        @if ((user | async)?.picture) {
+        @if (currentUser.picture) {
           <img
             class="w-[24px] h-[24px] inline border-black rounded-full border-2"
-            [src]="(user | async)?.picture"
+            [src]="currentUser.picture"
           />
         } @else {
           <mat-icon class="align-middle">account_circle</mat-icon>
         }
-        Hi {{ (user | async)?.given_name }}
+        Hi {{ currentUser.given_name }}
       </a>
       <a
         [routerLink]="[]"

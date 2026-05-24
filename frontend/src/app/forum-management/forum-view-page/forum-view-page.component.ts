@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -34,18 +34,18 @@ import { AsyncPipe } from '@angular/common';
   ],
 })
 export class ForumViewPageComponent implements OnInit {
-  public post: any = null;
+  public post = signal<any>(null);
   @ViewChild('postloader', { static: true }) loader!: LoaderComponent;
   @ViewChild('commentloader', { static: true }) commentLoader!: LoaderComponent;
   public Editor = ClassicEditor;
-  public title = '';
-  public data: any = '';
+  public title = signal('');
+  public data = signal<any>('');
   public user: Observable<any>;
-  public editorDisabled = false;
-  public imageProgress = 0;
-  public comment_data = '';
-  public comments: any = [];
-  public enableCommentSection = false;
+  public editorDisabled = signal(false);
+  public imageProgress = signal(0);
+  public comment_data = signal('');
+  public comments = signal<any[]>([]);
+  public enableCommentSection = signal(false);
   private postId: string = '';
 
   constructor(
@@ -79,10 +79,10 @@ export class ForumViewPageComponent implements OnInit {
 
       this.forumService.fetch_post(postId).subscribe((res: any) => {
         const post = res.post;
-        this.post = post;
+        this.post.set(post);
         this.postId = postId;
-        this.data = _.get(post, 'postHTML', '');
-        this.title = _.get(post, 'postTitle', '');
+        this.data.set(_.get(post, 'postHTML', ''));
+        this.title.set(_.get(post, 'postTitle', ''));
         this.loader.hide();
 
         this.loadComments();
@@ -101,7 +101,7 @@ export class ForumViewPageComponent implements OnInit {
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
         this.loader.show();
-        const data = this.forumService.delete_post(this.post.id);
+        const data = this.forumService.delete_post(this.post().id);
         data.then(() => {
           this.loader.hide();
           this.router.navigate(['/forum']);
@@ -111,18 +111,18 @@ export class ForumViewPageComponent implements OnInit {
   }
 
   saveComment() {
-    this.comments = [];
-    this.editorDisabled = true;
-    this.enableCommentSection = false;
+    this.comments.set([]);
+    this.editorDisabled.set(true);
+    this.enableCommentSection.set(false);
 
-    if (_.isEmpty(this.title) || _.isEmpty(this.data)) {
-      this.editorDisabled = false;
-      this.enableCommentSection = true;
+    if (_.isEmpty(this.title()) || _.isEmpty(this.data())) {
+      this.editorDisabled.set(false);
+      this.enableCommentSection.set(true);
       this.toastr.error('Title or the post body cannot be blank', 'Error');
       return;
-    } else if (this.imageProgress > 0) {
-      this.editorDisabled = false;
-      this.enableCommentSection = true;
+    } else if (this.imageProgress() > 0) {
+      this.editorDisabled.set(false);
+      this.enableCommentSection.set(true);
       this.toastr.warning(
         'Images are still uploading... Please wait',
         'Warning',
@@ -130,38 +130,38 @@ export class ForumViewPageComponent implements OnInit {
       return;
     }
     const object = {
-      postHTML: this.comment_data,
+      postHTML: this.comment_data(),
       comment: true,
     };
 
-    if (this.comment_data.length < 10) {
+    if (this.comment_data().length < 10) {
       this.toastr.warning(
         `Your comment is either empty or too short for submission`,
         'Error',
       );
-      this.editorDisabled = false;
-      this.enableCommentSection = true;
+      this.editorDisabled.set(false);
+      this.enableCommentSection.set(true);
       return;
     }
-    this.comment_data = '';
+    this.comment_data.set('');
 
     const data = this.forumService.comment_post(this.postId, object);
     data.then(
       () => {
         this.toastr.success(`Comment submitted successfully`, 'Success');
-        this.editorDisabled = false;
+        this.editorDisabled.set(false);
         this.loadComments();
       },
       (err) => {
-        this.editorDisabled = false;
-        this.enableCommentSection = true;
+        this.editorDisabled.set(false);
+        this.enableCommentSection.set(true);
         this.toastr.error(`Saving failed! Please try again later`, 'Error');
       },
     );
   }
 
   discardComment() {
-    this.comment_data = '';
+    this.comment_data.set('');
   }
 
   loadComments() {
@@ -169,9 +169,9 @@ export class ForumViewPageComponent implements OnInit {
     const data2 = this.forumService.fetch_post_comments(this.postId);
 
     data2.subscribe((res2: any) => {
-      this.comments = res2.comments;
+      this.comments.set(res2.comments);
       this.commentLoader.hide();
-      this.enableCommentSection = true;
+      this.enableCommentSection.set(true);
     });
   }
 
@@ -185,9 +185,9 @@ export class ForumViewPageComponent implements OnInit {
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
-        this.comments = [];
+        this.comments.set([]);
         this.commentLoader.show();
-        this.enableCommentSection = false;
+        this.enableCommentSection.set(false);
 
         const data = this.forumService.comment_delete(this.postId, id);
 
@@ -200,7 +200,7 @@ export class ForumViewPageComponent implements OnInit {
           () => {
             this.toastr.error(`Action failed! Please try again later`, 'Error');
             this.loadComments();
-            this.enableCommentSection = true;
+            this.enableCommentSection.set(true);
           },
         );
       }

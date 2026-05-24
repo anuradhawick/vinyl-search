@@ -10,8 +10,8 @@
 <!--<b>Approval Pending:</b> Your advertisement needs approval. Until then it will not be visible on our website-->
 <!--</div>-->
 <!--</div>-->
-<app-loader [hidden]="!postLoading"></app-loader>
-@if (postObject) {
+<app-loader [hidden]="!postLoading()"></app-loader>
+@if (postObject(); as postObject) {
   <div class="row container-fluid">
     <!--LEFT COL-->
     <div class="col-12 col-sm-4">

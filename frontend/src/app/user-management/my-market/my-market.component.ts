@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { LoaderComponent } from '../../shared-modules/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -37,11 +37,11 @@ import { DatePipe } from '@angular/common';
 })
 export class MyMarketComponent implements OnInit {
   @ViewChild('loader', { static: true }) loader!: LoaderComponent;
-  public posts: any = null;
+  public posts = signal<any>(null);
   public skip = 0;
-  public limit = 10;
-  public count = 0;
-  public page = 1;
+  public limit = signal(10);
+  public count = signal(0);
+  public page = signal(1);
   public _ = _;
 
   constructor(
@@ -55,10 +55,10 @@ export class MyMarketComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((p: any) => {
-      this.posts = null;
+      this.posts.set(null);
       const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
+      this.skip = (page - 1) * this.limit();
+      this.page.set(page);
       this.loader.show();
 
       this.loadPosts();
@@ -68,12 +68,12 @@ export class MyMarketComponent implements OnInit {
   loadPosts() {
     this.loader.show();
     this.userService
-      .get_market_posts({ limit: this.limit, skip: this.skip })
+      .get_market_posts({ limit: this.limit(), skip: this.skip })
       .then((records: any) => {
-        this.posts = records.posts;
+        this.posts.set(records.posts);
         this.skip = records.skip;
-        this.limit = records.limit;
-        this.count = records.count;
+        this.limit.set(records.limit);
+        this.count.set(records.count);
         this.loader.hide();
       })
       .catch(() => {
@@ -82,7 +82,7 @@ export class MyMarketComponent implements OnInit {
   }
 
   changePage(event: any) {
-    this.posts = null;
+    this.posts.set(null);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

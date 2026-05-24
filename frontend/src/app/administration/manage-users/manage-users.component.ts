@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { catchError, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,12 +28,12 @@ import { LoaderComponent } from '../../shared-modules/loader/loader.component';
   ],
 })
 export class ManageUsersComponent implements OnInit {
-  protected users: any = [];
-  protected loading = false;
+  protected users = signal<any[]>([]);
+  protected loading = signal(false);
   protected skip = 0;
-  protected limit = 10;
-  protected count = 0;
-  protected page = 1;
+  protected limit = signal(10);
+  protected count = signal(0);
+  protected page = signal(1);
 
   constructor(
     private us: UsersService,
@@ -43,33 +43,33 @@ export class ManageUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((p: any) => {
-      this.users = [];
+      this.users.set([]);
       const page = _.max([_.get(p, 'page', 1), 1]);
-      this.skip = (page - 1) * this.limit;
-      this.page = page;
+      this.skip = (page - 1) * this.limit();
+      this.page.set(page);
 
       this.loadUsers();
     });
   }
 
   loadUsers() {
-    this.loading = true;
+    this.loading.set(true);
     this.us
-      .getUsers(this.skip, this.limit)
+      .getUsers(this.skip, this.limit())
       .pipe(catchError(() => of(null)))
       .subscribe((users: any) => {
         if (!!users) {
-          this.users = users.users;
-          this.count = users.count;
+          this.users.set(users.users);
+          this.count.set(users.count);
           this.skip = users.skip;
-          this.limit = users.limit;
+          this.limit.set(users.limit);
         }
-        this.loading = false;
+        this.loading.set(false);
       });
   }
 
   changePage(event: PageEvent) {
-    this.users = [];
+    this.users.set([]);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared-modules/services/auth.service';
@@ -18,7 +18,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class PostViewPageComponent implements OnInit {
   public _ = _;
-  public postObject: any = null;
+  public postObject = signal<any>(null);
   public recordHistory: any = null;
   public imgvconfig = {
     zoomFactor: 0.1,
@@ -63,7 +63,7 @@ export class PostViewPageComponent implements OnInit {
   };
 
   // context control
-  public postLoading = true;
+  public postLoading = signal(true);
 
   constructor(
     public route: ActivatedRoute,
@@ -77,8 +77,8 @@ export class PostViewPageComponent implements OnInit {
     this.route.paramMap.subscribe((map: any) => {
       const postId = _.get(map, 'params.postId', null);
       this.marketService.fetch_post(postId).then((data) => {
-        this.postObject = data;
-        this.postLoading = false;
+        this.postObject.set(data);
+        this.postLoading.set(false);
       });
     });
   }
@@ -91,7 +91,7 @@ export class PostViewPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (!_.isEmpty(result)) {
-        this.marketService.report_post(this.postObject.id, {
+        this.marketService.report_post(this.postObject().id, {
           description: result,
         });
         this.toastr.success(`Records saved successfully`, 'Success');
