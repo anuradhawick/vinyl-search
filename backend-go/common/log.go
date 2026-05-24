@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -21,7 +22,11 @@ func LogEventPayload(event any) {
 // LogEndpoint wraps an API handler with route-level request and response logging.
 func LogEndpoint(method, route string, next LambdaHandler) LambdaHandler {
 	return func(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		log.Printf("endpoint called: method=%s route=%s", method, route)
+		if query := queryLogPayload(req); query != "" {
+			log.Printf("endpoint called: method=%s route=%s query=%s", method, route, query)
+		} else {
+			log.Printf("endpoint called: method=%s route=%s", method, route)
+		}
 		response, err := next(ctx, req)
 		LogReturnPayload(response)
 		if err != nil {
@@ -40,4 +45,23 @@ func LogReturnPayload(response any) {
 		return
 	}
 	log.Printf("return payload: %s", payload)
+}
+
+func queryLogPayload(req events.APIGatewayProxyRequest) string {
+	switch {
+	case len(req.MultiValueQueryStringParameters) > 0:
+		payload, err := json.Marshal(req.MultiValueQueryStringParameters)
+		if err != nil {
+			return fmt.Sprintf("%+v", req.MultiValueQueryStringParameters)
+		}
+		return string(payload)
+	case len(req.QueryStringParameters) > 0:
+		payload, err := json.Marshal(req.QueryStringParameters)
+		if err != nil {
+			return fmt.Sprintf("%+v", req.QueryStringParameters)
+		}
+		return string(payload)
+	default:
+		return ""
+	}
 }
