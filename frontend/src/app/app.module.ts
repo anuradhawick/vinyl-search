@@ -22,6 +22,7 @@ import {
   DetachedRouteHandle,
   RouteReuseStrategy,
 } from '@angular/router';
+import { NavbarComponent } from './layout/navbar/navbar.component';
 
 class CustomReuseStrategy implements RouteReuseStrategy {
   private handlers: { [key: string]: DetachedRouteHandle } = {};
@@ -72,6 +73,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
+    NavbarComponent,
     SharedModules,
     BrowserModule,
     AppRoutingModule,

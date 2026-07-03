@@ -1,0 +1,152 @@
+:host {
+  display: block;
+}
+
+.navbar-shell {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.navbar-row {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  height: 4rem;
+  margin: 0 auto;
+  max-width: 1536px;
+  padding: 0 1rem;
+}
+
+.brand-link,
+.nav-link,
+.mobile-toggle,
+.mobile-toggle-button {
+  align-items: center;
+  display: flex;
+}
+
+.brand-link {
+  flex: 0 0 auto;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.brand-logo {
+  display: block;
+  flex: 0 0 auto;
+  height: 2.5rem;
+  width: auto;
+}
+
+.brand-name {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primary-nav {
+  display: none;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+}
+
+.nav-link-group,
+.account-nav {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.account-nav {
+  display: none;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.nav-link {
+  flex: 0 0 auto;
+  font-weight: 600;
+  gap: 0.25rem;
+  line-height: 1;
+}
+
+.nav-link mat-icon,
+.mobile-toggle-button mat-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 24px;
+  font-size: 24px;
+  height: 24px;
+  justify-content: center;
+  line-height: 1;
+  width: 24px;
+}
+
+.profile-link {
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.profile-image {
+  border-radius: 9999px;
+  border-width: 2px;
+  flex: 0 0 auto;
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
+.mobile-toggle {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.mobile-toggle-button {
+  border-radius: 0.25rem;
+  height: 2.5rem;
+  justify-content: center;
+  padding: 0;
+  width: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .navbar-row {
+    padding: 0 1.5rem;
+  }
+
+  .brand-logo {
+    height: 2.75rem;
+  }
+
+  .brand-name {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .primary-nav,
+  .account-nav {
+    display: flex;
+  }
+
+  .mobile-toggle {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-link-group {
+    gap: 2rem;
+  }
+
+  .account-nav {
+    gap: 1rem;
+  }
+}

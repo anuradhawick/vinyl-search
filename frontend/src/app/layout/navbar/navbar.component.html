@@ -1,0 +1,248 @@
+<div
+  #navbar
+  class="navbar-shell bg-slate-50 bg-opacity-70 shadow-xl backdrop-blur-sm"
+>
+  <nav class="navbar-row">
+    <a
+      [routerLink]="['/']"
+      class="brand-link text-black hover:decoration-transparent"
+      (click)="closeMenu()"
+    >
+      <img
+        src="assets/images/records-new-sample.svg"
+        alt="Vinyl.LK logo"
+        class="brand-logo"
+      />
+      <span class="brand-name">VINYL.LK</span>
+    </a>
+
+    <div class="primary-nav">
+      <div class="nav-link-group">
+        <a
+          [routerLink]="[]"
+          [matMenuTriggerFor]="menuMarket"
+          class="nav-link text-black hover:decoration-transparent"
+        >
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Marketplace</span>
+        </a>
+        <a
+          [routerLink]="[]"
+          [matMenuTriggerFor]="menuRecords"
+          class="nav-link text-black hover:decoration-transparent"
+        >
+          <mat-icon>library_music</mat-icon>
+          <span>Records</span>
+        </a>
+        <a
+          [routerLink]="[]"
+          [matMenuTriggerFor]="menuForum"
+          class="nav-link text-black hover:decoration-transparent"
+        >
+          <mat-icon>forum</mat-icon>
+          <span>Forum</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="account-nav">
+      @if (isAdmin()) {
+        <a
+          [routerLink]="['/admin']"
+          class="nav-link text-black hover:decoration-transparent"
+        >
+          <mat-icon>security</mat-icon>
+          <span>Admin</span>
+        </a>
+      }
+
+      @if (currentUser(); as currentUser) {
+        <a
+          [routerLink]="['/profile']"
+          class="nav-link profile-link text-black hover:decoration-transparent"
+        >
+          @if (currentUser.picture) {
+            <img
+              class="profile-image border-black"
+              [src]="currentUser.picture"
+              alt="Profile picture"
+            />
+          } @else {
+            <mat-icon>account_circle</mat-icon>
+          }
+          <span class="max-w-32 truncate">Hi {{ currentUser.given_name }}</span>
+        </a>
+        <a
+          [routerLink]="[]"
+          class="nav-link text-black hover:decoration-transparent"
+          (click)="logout()"
+        >
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </a>
+      } @else {
+        <a
+          [routerLink]="[]"
+          class="nav-link text-black hover:decoration-transparent"
+          (click)="login()"
+        >
+          <mat-icon>account_circle</mat-icon>
+          <span>Login</span>
+        </a>
+      }
+    </div>
+
+    <div class="mobile-toggle">
+      <button
+        type="button"
+        class="mobile-toggle-button text-black"
+        (click)="toggleMenu()"
+        aria-label="Toggle menu"
+      >
+        @if (!menuOpen()) {
+          <mat-icon>menu</mat-icon>
+        } @else {
+          <mat-icon>close</mat-icon>
+        }
+      </button>
+    </div>
+  </nav>
+
+  <div
+    class="border-t border-black/10 px-4 pb-4 pt-3 md:hidden"
+    [class.hidden]="!menuOpen()"
+  >
+    <div class="flex flex-col space-y-3">
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuMarket"
+        class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+      >
+        <mat-icon class="align-middle">shopping_cart</mat-icon>
+        <span>Marketplace</span>
+      </a>
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuRecords"
+        class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+      >
+        <mat-icon class="align-middle">library_music</mat-icon>
+        <span>Records</span>
+      </a>
+      <a
+        [routerLink]="[]"
+        [matMenuTriggerFor]="menuForum"
+        class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+      >
+        <mat-icon class="align-middle">forum</mat-icon>
+        <span>Forum</span>
+      </a>
+
+      @if (isAdmin()) {
+        <a
+          [routerLink]="['/admin']"
+          class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+          (click)="closeMenu()"
+        >
+          <mat-icon class="align-middle">security</mat-icon>
+          <span>Admin</span>
+        </a>
+      }
+
+      @if (currentUser(); as currentUser) {
+        <a
+          [routerLink]="['/profile']"
+          class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+          (click)="closeMenu()"
+        >
+          @if (currentUser.picture) {
+            <img
+              class="h-7 w-7 rounded-full border-2 border-black"
+              [src]="currentUser.picture"
+              alt="Profile picture"
+            />
+          } @else {
+            <mat-icon class="align-middle">account_circle</mat-icon>
+          }
+          <span class="truncate">Hi {{ currentUser.given_name }}</span>
+        </a>
+        <a
+          [routerLink]="[]"
+          class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+          (click)="logout()"
+        >
+          <mat-icon class="align-middle">exit_to_app</mat-icon>
+          <span>Logout</span>
+        </a>
+      } @else {
+        <a
+          [routerLink]="[]"
+          class="flex items-center gap-2 font-semibold text-black hover:decoration-transparent"
+          (click)="login()"
+        >
+          <mat-icon class="align-middle">account_circle</mat-icon>
+          <span>Login</span>
+        </a>
+      }
+    </div>
+  </div>
+
+  <mat-menu #menuMarket="matMenu">
+    <button
+      mat-menu-item
+      [routerLink]="['/market']"
+      class="font-semibold text-black"
+      (click)="closeMenu()"
+    >
+      <mat-icon>shop</mat-icon>For Sale
+    </button>
+    @if (isAdmin()) {
+      <button
+        mat-menu-item
+        [routerLink]="['/market/new']"
+        class="font-semibold text-black"
+        (click)="closeMenu()"
+      >
+        <mat-icon class="align-middle">content_paste</mat-icon>New Sale
+      </button>
+    }
+  </mat-menu>
+
+  <mat-menu #menuRecords="matMenu">
+    <button
+      mat-menu-item
+      [routerLink]="['/records']"
+      class="font-semibold text-black"
+      (click)="closeMenu()"
+    >
+      <mat-icon>library_music</mat-icon>Browse Records
+    </button>
+    <button
+      mat-menu-item
+      [routerLink]="['/records/new']"
+      class="font-semibold text-black"
+      (click)="closeMenu()"
+    >
+      <mat-icon>content_paste</mat-icon>New Record
+    </button>
+  </mat-menu>
+
+  <mat-menu #menuForum="matMenu">
+    <button
+      mat-menu-item
+      [routerLink]="['/forum']"
+      class="font-semibold text-black"
+      (click)="closeMenu()"
+    >
+      <mat-icon>forum</mat-icon>Browse Forum
+    </button>
+    <button
+      mat-menu-item
+      [routerLink]="['/forum/new']"
+      class="font-semibold text-black"
+      (click)="closeMenu()"
+    >
+      <mat-icon>content_paste</mat-icon>New Post
+    </button>
+  </mat-menu>
+</div>
