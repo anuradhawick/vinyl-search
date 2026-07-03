@@ -29,6 +29,7 @@ variable "frontend_config" {
     user_pool_id             = string
     user_pool_client_id      = string
     oauth_domain             = string
+    oauth_redirect_urls      = list(string)
     storage_bucket_name      = string
     application_domain_names = list(string)
     application_urls         = list(string)

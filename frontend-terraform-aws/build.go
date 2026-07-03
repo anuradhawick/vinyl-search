@@ -139,6 +139,20 @@ func renderEnvironment(args buildArgs, production bool) (string, error) {
 		applicationURLs[index] = normalizeURL(url)
 	}
 
+	oauthRedirectURLsJSON, err := args.require("oauth_redirect_urls_json")
+	if err != nil {
+		return "", err
+	}
+
+	var oauthRedirectURLs []string
+	if err := json.Unmarshal([]byte(oauthRedirectURLsJSON), &oauthRedirectURLs); err != nil {
+		return "", fmt.Errorf("invalid oauth_redirect_urls_json: %w", err)
+	}
+
+	for index, url := range oauthRedirectURLs {
+		oauthRedirectURLs[index] = normalizeURL(url)
+	}
+
 	apiEndpoint, err := requiredNormalizedURL(args, "api_endpoint")
 	if err != nil {
 		return "", err
@@ -230,8 +244,8 @@ func renderEnvironment(args buildArgs, production bool) (string, error) {
 		ts(userPoolClientID),
 		ts(oauthDomain),
 		indentedTS(oauthScopes, 12),
-		ts(applicationURLs),
-		ts(applicationURLs),
+		ts(oauthRedirectURLs),
+		ts(oauthRedirectURLs),
 		ts(storageBucketName),
 		ts(region),
 		ts(applicationAPIName),

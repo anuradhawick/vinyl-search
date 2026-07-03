@@ -91,6 +91,7 @@ output "frontend_config" {
     user_pool_id             = aws_cognito_user_pool.vinyl-lk.id
     user_pool_client_id      = aws_cognito_user_pool_client.vinyl-lk-client.id
     oauth_domain             = aws_cognito_user_pool_domain.vinyl-lk-auth.domain
+    oauth_redirect_urls      = local.oauth_redirect_urls
     storage_bucket_name      = aws_s3_bucket.vinyl-lk-bucket.id
     application_domain_names = local.frontend_domain_names
     application_urls         = local.frontend_urls

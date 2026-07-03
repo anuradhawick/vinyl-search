@@ -45,7 +45,7 @@ func TestWriteEnvironmentFilesWritesProdEnvironmentFile(t *testing.T) {
 		`bucket: "placeholder-storage-bucket"`,
 		`"placeholder-api": {`,
 		`endpoint: "https://api.placeholder.test/"`,
-		`redirectSignIn: ["https://app.placeholder.test/","http://localhost:4200/"]`,
+		`redirectSignIn: ["http://localhost:4200/","https://app.placeholder.test/"]`,
 		`api_gateway: "https://api.placeholder.test/"`,
 		`cdn_url: "https://cdn.placeholder.test/"`,
 	}
@@ -120,18 +120,19 @@ func TestBuildManifestReturnsRelativeFileHashes(t *testing.T) {
 
 func placeholderBuildArgs() buildArgs {
 	return buildArgs{
-		"workspace":             "prod",
-		"production":            "true",
-		"region":                "ap-southeast-1",
-		"identity_pool_id":      "placeholder-identity-pool-id",
-		"user_pool_id":          "placeholder-user-pool-id",
-		"user_pool_client_id":   "placeholder-user-pool-client-id",
-		"oauth_domain":          "placeholder.auth.ap-southeast-1.amazoncognito.com",
-		"storage_bucket_name":   "placeholder-storage-bucket",
-		"api_endpoint":          "https://api.placeholder.test",
-		"cdn_url":               "https://cdn.placeholder.test",
-		"application_urls_json": `["https://app.placeholder.test","http://localhost:4200/"]`,
-		"application_api_name":  "placeholder-api",
+		"workspace":                "prod",
+		"production":               "true",
+		"region":                   "ap-southeast-1",
+		"identity_pool_id":         "placeholder-identity-pool-id",
+		"user_pool_id":             "placeholder-user-pool-id",
+		"user_pool_client_id":      "placeholder-user-pool-client-id",
+		"oauth_domain":             "placeholder.auth.ap-southeast-1.amazoncognito.com",
+		"storage_bucket_name":      "placeholder-storage-bucket",
+		"api_endpoint":             "https://api.placeholder.test",
+		"cdn_url":                  "https://cdn.placeholder.test",
+		"application_urls_json":    `["https://app.placeholder.test"]`,
+		"oauth_redirect_urls_json": `["http://localhost:4200/","https://app.placeholder.test"]`,
+		"application_api_name":     "placeholder-api",
 	}
 }
 

@@ -36,22 +36,23 @@ data "external" "angular_build" {
   program = ["go", "run", "${path.module}/build.go"]
 
   query = {
-    workspace             = terraform.workspace
-    production            = tostring(terraform.workspace == "prod")
-    webapp_dir            = local.webapp_dir
-    build_destination     = local.build_output_dir
-    install_command       = var.install_command
-    build_command         = var.build_command
-    region                = var.frontend_config.region
-    identity_pool_id      = var.frontend_config.identity_pool_id
-    user_pool_id          = var.frontend_config.user_pool_id
-    user_pool_client_id   = var.frontend_config.user_pool_client_id
-    oauth_domain          = var.frontend_config.oauth_domain
-    storage_bucket_name   = var.frontend_config.storage_bucket_name
-    api_endpoint          = var.frontend_config.api_endpoint
-    cdn_url               = var.frontend_config.cdn_url
-    application_urls_json = jsonencode(var.frontend_config.application_urls)
-    application_api_name  = "[vinyl.lk]"
+    workspace                = terraform.workspace
+    production               = tostring(terraform.workspace == "prod")
+    webapp_dir               = local.webapp_dir
+    build_destination        = local.build_output_dir
+    install_command          = var.install_command
+    build_command            = var.build_command
+    region                   = var.frontend_config.region
+    identity_pool_id         = var.frontend_config.identity_pool_id
+    user_pool_id             = var.frontend_config.user_pool_id
+    user_pool_client_id      = var.frontend_config.user_pool_client_id
+    oauth_domain             = var.frontend_config.oauth_domain
+    storage_bucket_name      = var.frontend_config.storage_bucket_name
+    api_endpoint             = var.frontend_config.api_endpoint
+    cdn_url                  = var.frontend_config.cdn_url
+    application_urls_json    = jsonencode(var.frontend_config.application_urls)
+    oauth_redirect_urls_json = jsonencode(var.frontend_config.oauth_redirect_urls)
+    application_api_name     = "[vinyl.lk]"
   }
 }
 
