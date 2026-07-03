@@ -1,23 +1,19 @@
-@if (user | async) {
+@if (user | async; as currentUser) {
   <div class="w-full">
-    <div class="w-full lg:h-[75px] pt-4 lg:pt-0">
-      @if ((user | async)?.picture) {
+    <div class="flex w-full justify-center pt-4 lg:h-[150px] lg:pt-0">
+      <div
+        class="flex size-36 items-center justify-center overflow-hidden rounded-full border-2 border-black bg-slate-100 shadow-lg ring-4 ring-slate-50 lg:size-[300px] lg:-translate-y-[150px]"
+      >
         <img
-          [src]="(user | async)?.picture"
+          [src]="currentUser.picture || '../../../assets/images/profile.png'"
           alt="Profile picture"
-          class="h-[150px] w-[150x] aspect-square border-solid border-2 border-black rounded-full mx-auto lg:-translate-y-[75px]"
+          class="h-full w-full object-cover"
         />
-      } @else {
-        <img
-          src="../../../assets/images/profile.png"
-          alt="Profile picture"
-          class="img-raised rounded-circle img-fluid"
-        />
-      }
+      </div>
     </div>
     <div class="w-full text-center">
-      <h3 class="font-semibold">{{ (user | async)?.name }}</h3>
-      <h6 class="font-medium">{{ (user | async)?.email }}</h6>
+      <h3 class="font-semibold">{{ currentUser.name }}</h3>
+      <h6 class="font-medium">{{ currentUser.email }}</h6>
     </div>
   </div>
 }
