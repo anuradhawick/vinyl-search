@@ -22,6 +22,7 @@ import {
   DetachedRouteHandle,
   RouteReuseStrategy,
 } from '@angular/router';
+import { FooterComponent } from './layout/footer/footer.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 
 class CustomReuseStrategy implements RouteReuseStrategy {
@@ -73,6 +74,7 @@ class CustomReuseStrategy implements RouteReuseStrategy {
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
+    FooterComponent,
     NavbarComponent,
     SharedModules,
     BrowserModule,
