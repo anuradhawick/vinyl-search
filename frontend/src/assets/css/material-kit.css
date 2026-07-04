@@ -935,8 +935,9 @@ code,
 kbd,
 pre,
 samp {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-family:
+    SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
 }
 
 code {
@@ -12540,29 +12541,20 @@ fieldset[disabled] .is-focused .switch label:focus {
 
 .form-control,
 .is-focused .form-control {
-  background-image: linear-gradient(
-      to top,
-      #9c27b0 2px,
-      rgba(156, 39, 176, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -12583,33 +12575,24 @@ fieldset[disabled][disabled] .form-control,
 
 .form-control.form-control-success,
 .is-focused .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #9c27b0 2px,
-      rgba(156, 39, 176, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .form-control.form-control-warning,
 .is-focused .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #9c27b0 2px,
-      rgba(156, 39, 176, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .form-control.form-control-danger,
 .is-focused .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #9c27b0 2px,
-      rgba(156, 39, 176, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -12766,29 +12749,20 @@ fieldset[disabled][disabled] .form-control,
 
 .has-success .form-control,
 .is-focused .has-success .form-control {
-  background-image: linear-gradient(
-      to top,
-      #4caf50 2px,
-      rgba(76, 175, 80, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #4caf50 2px, rgba(76, 175, 80, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-success .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-success .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -12809,33 +12783,24 @@ fieldset[disabled][disabled] .has-success .form-control,
 
 .has-success .form-control.form-control-success,
 .is-focused .has-success .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #4caf50 2px,
-      rgba(76, 175, 80, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #4caf50 2px, rgba(76, 175, 80, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-success .form-control.form-control-warning,
 .is-focused .has-success .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #4caf50 2px,
-      rgba(76, 175, 80, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #4caf50 2px, rgba(76, 175, 80, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-success .form-control.form-control-danger,
 .is-focused .has-success .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #4caf50 2px,
-      rgba(76, 175, 80, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #4caf50 2px, rgba(76, 175, 80, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -13050,29 +13015,20 @@ fieldset[disabled][disabled] .has-success .form-control,
 
 .has-info .form-control,
 .is-focused .has-info .form-control {
-  background-image: linear-gradient(
-      to top,
-      #00bcd4 2px,
-      rgba(0, 188, 212, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #00bcd4 2px, rgba(0, 188, 212, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-info .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-info .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -13093,33 +13049,24 @@ fieldset[disabled][disabled] .has-info .form-control,
 
 .has-info .form-control.form-control-success,
 .is-focused .has-info .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #00bcd4 2px,
-      rgba(0, 188, 212, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #00bcd4 2px, rgba(0, 188, 212, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-info .form-control.form-control-warning,
 .is-focused .has-info .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #00bcd4 2px,
-      rgba(0, 188, 212, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #00bcd4 2px, rgba(0, 188, 212, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-info .form-control.form-control-danger,
 .is-focused .has-info .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #00bcd4 2px,
-      rgba(0, 188, 212, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #00bcd4 2px, rgba(0, 188, 212, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -13309,29 +13256,20 @@ fieldset[disabled][disabled] .has-info .form-control,
 
 .has-white .form-control,
 .is-focused .has-white .form-control {
-  background-image: linear-gradient(
-      to top,
-      #fff 2px,
-      rgba(255, 255, 255, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #fff 2px, rgba(255, 255, 255, 0) 2px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px);
 }
 
 .has-white .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px);
 }
 
 .has-white .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px);
 }
 
@@ -13352,33 +13290,24 @@ fieldset[disabled][disabled] .has-white .form-control,
 
 .has-white .form-control.form-control-success,
 .is-focused .has-white .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #fff 2px,
-      rgba(255, 255, 255, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #fff 2px, rgba(255, 255, 255, 0) 2px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-white .form-control.form-control-warning,
 .is-focused .has-white .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #fff 2px,
-      rgba(255, 255, 255, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #fff 2px, rgba(255, 255, 255, 0) 2px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-white .form-control.form-control-danger,
 .is-focused .has-white .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #fff 2px,
-      rgba(255, 255, 255, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #fff 2px, rgba(255, 255, 255, 0) 2px),
     linear-gradient(to top, #ffffff 1px, rgba(255, 255, 255, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -13579,29 +13508,20 @@ fieldset[disabled][disabled] .has-white .form-control,
 
 .has-warning .form-control,
 .is-focused .has-warning .form-control {
-  background-image: linear-gradient(
-      to top,
-      #ff9800 2px,
-      rgba(255, 152, 0, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #ff9800 2px, rgba(255, 152, 0, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-warning .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-warning .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -13622,33 +13542,24 @@ fieldset[disabled][disabled] .has-warning .form-control,
 
 .has-warning .form-control.form-control-success,
 .is-focused .has-warning .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #ff9800 2px,
-      rgba(255, 152, 0, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #ff9800 2px, rgba(255, 152, 0, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-warning .form-control.form-control-warning,
 .is-focused .has-warning .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #ff9800 2px,
-      rgba(255, 152, 0, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #ff9800 2px, rgba(255, 152, 0, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-warning .form-control.form-control-danger,
 .is-focused .has-warning .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #ff9800 2px,
-      rgba(255, 152, 0, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #ff9800 2px, rgba(255, 152, 0, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -13863,29 +13774,20 @@ fieldset[disabled][disabled] .has-warning .form-control,
 
 .has-danger .form-control,
 .is-focused .has-danger .form-control {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-danger .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-danger .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -13906,33 +13808,24 @@ fieldset[disabled][disabled] .has-danger .form-control,
 
 .has-danger .form-control.form-control-success,
 .is-focused .has-danger .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-danger .form-control.form-control-warning,
 .is-focused .has-danger .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-danger .form-control.form-control-danger,
 .is-focused .has-danger .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
@@ -14137,29 +14030,20 @@ fieldset[disabled][disabled] .has-danger .form-control,
 
 .has-rose .form-control,
 .is-focused .has-rose .form-control {
-  background-image: linear-gradient(
-      to top,
-      #e91e63 2px,
-      rgba(233, 30, 99, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #e91e63 2px, rgba(233, 30, 99, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-rose .form-control:invalid {
-  background-image: linear-gradient(
-      to top,
-      #f44336 2px,
-      rgba(244, 67, 54, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #f44336 2px, rgba(244, 67, 54, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
 .has-rose .form-control:read-only {
-  background-image: linear-gradient(
-      to top,
-      #d2d2d2 1px,
-      rgba(210, 210, 210, 0) 1px
-    ),
+  background-image:
+    linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
 }
 
@@ -14180,33 +14064,24 @@ fieldset[disabled][disabled] .has-rose .form-control,
 
 .has-rose .form-control.form-control-success,
 .is-focused .has-rose .form-control.form-control-success {
-  background-image: linear-gradient(
-      to top,
-      #e91e63 2px,
-      rgba(233, 30, 99, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #e91e63 2px, rgba(233, 30, 99, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjNWNiODVjIiBkPSJNMjMzLjggNjEwYy0xMy4zIDAtMjYtNi0zNC0xNi44TDkwLjUgNDQ4LjhDNzYuMyA0MzAgODAgNDAzLjMgOTguOCAzODljMTguOC0xNC4yIDQ1LjUtMTAuNCA1OS44IDguNGw3MiA5NUw0NTEuMyAyNDJjMTIuNS0yMCAzOC44LTI2LjIgNTguOC0xMy43IDIwIDEyLjQgMjYgMzguNyAxMy43IDU4LjhMMjcwIDU5MGMtNy40IDEyLTIwLjIgMTkuNC0zNC4zIDIwaC0yeiIvPjwvc3ZnPg==";
 }
 
 .has-rose .form-control.form-control-warning,
 .is-focused .has-rose .form-control.form-control-warning {
-  background-image: linear-gradient(
-      to top,
-      #e91e63 2px,
-      rgba(233, 30, 99, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #e91e63 2px, rgba(233, 30, 99, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZjBhZDRlIiBkPSJNNjAzIDY0MC4ybC0yNzguNS01MDljLTMuOC02LjYtMTAuOC0xMC42LTE4LjUtMTAuNnMtMTQuNyA0LTE4LjUgMTAuNkw5IDY0MC4yYy0zLjcgNi41LTMuNiAxNC40LjIgMjAuOCAzLjggNi41IDEwLjggMTAuNCAxOC4zIDEwLjRoNTU3YzcuNiAwIDE0LjYtNCAxOC40LTEwLjQgMy41LTYuNCAzLjYtMTQuNCAwLTIwLjh6bS0yNjYuNC0zMGgtNjEuMlY1NDloNjEuMnY2MS4yem0wLTEwN2gtNjEuMlYzMDRoNjEuMnYxOTl6Ii8+PC9zdmc+";
 }
 
 .has-rose .form-control.form-control-danger,
 .is-focused .has-rose .form-control.form-control-danger {
-  background-image: linear-gradient(
-      to top,
-      #e91e63 2px,
-      rgba(233, 30, 99, 0) 2px
-    ),
+  background-image:
+    linear-gradient(to top, #e91e63 2px, rgba(233, 30, 99, 0) 2px),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px),
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MTIgNzkyIj48cGF0aCBmaWxsPSIjZDk1MzRmIiBkPSJNNDQ3IDU0NC40Yy0xNC40IDE0LjQtMzcuNiAxNC40LTUyIDBsLTg5LTkyLjctODkgOTIuN2MtMTQuNSAxNC40LTM3LjcgMTQuNC01MiAwLTE0LjQtMTQuNC0xNC40LTM3LjYgMC01Mmw5Mi40LTk2LjMtOTIuNC05Ni4zYy0xNC40LTE0LjQtMTQuNC0zNy42IDAtNTJzMzcuNi0xNC4zIDUyIDBsODkgOTIuOCA4OS4yLTkyLjdjMTQuNC0xNC40IDM3LjYtMTQuNCA1MiAwIDE0LjMgMTQuNCAxNC4zIDM3LjYgMCA1MkwzNTQuNiAzOTZsOTIuNCA5Ni40YzE0LjQgMTQuNCAxNC40IDM3LjYgMCA1MnoiLz48L3N2Zz4=";
 }
