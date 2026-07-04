@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import {
   FormBuilder,
@@ -19,7 +19,7 @@ import { environment } from '../../../environments/environment';
 import { uploadData } from 'aws-amplify/storage';
 import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
-import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { ImageViewerComponent } from '../../shared/components/image-viewer/image-viewer.component';
 import { MatButton } from '@angular/material/button';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatFormField, MatInput, MatError } from '@angular/material/input';

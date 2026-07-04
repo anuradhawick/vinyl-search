@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Observable } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';

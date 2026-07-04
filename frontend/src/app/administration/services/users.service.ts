@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Injectable()
 export class UsersService {

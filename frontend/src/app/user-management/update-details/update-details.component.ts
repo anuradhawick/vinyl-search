@@ -8,9 +8,9 @@ import {
 } from '@angular/forms';
 import * as _ from 'lodash';
 import { uploadData } from 'aws-amplify/storage';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../shared-modules/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { environment } from '../../../environments/environment';
 import { MatFormField, MatInput, MatError } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';

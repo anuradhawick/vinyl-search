@@ -4,7 +4,7 @@ import { AdminService } from '../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import {
   MatList,
   MatListItem,

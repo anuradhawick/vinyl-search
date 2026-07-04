@@ -6,7 +6,7 @@ import { PostEditorComponent } from '../../../market-place/post-editor-module/po
 import { AdminService } from '../../services/admin.service';
 import * as _ from 'lodash';
 import { Location } from '@angular/common';
-import { LoaderComponent } from '../../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { MatButton } from '@angular/material/button';
 
 @Component({

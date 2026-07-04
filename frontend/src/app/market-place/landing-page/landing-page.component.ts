@@ -1,8 +1,8 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   MatTreeFlatDataSource,

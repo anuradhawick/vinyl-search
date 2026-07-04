@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ForumService } from '../services/forum.service';
 import {
   Subject,
@@ -15,7 +15,7 @@ import { MatFormField, MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import {
   MatList,
   MatListItem,

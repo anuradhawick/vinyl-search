@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { Router } from '@angular/router';
 import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
+import { ActionConfirmModalComponent } from '../../shared/components/modals/action-confirm-modal/action-confirm-modal.component';
 import { catchError, of } from 'rxjs';
 import { ForumEditorComponentComponent } from '../forum-editor-component/forum-editor-component.component';
 import { MatButton } from '@angular/material/button';

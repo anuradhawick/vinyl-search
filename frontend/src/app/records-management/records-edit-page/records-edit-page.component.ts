@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RecordsEditorComponentComponent } from '../records-editor-component/records-editor-component.component';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { RecordsService } from '../services/records.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';

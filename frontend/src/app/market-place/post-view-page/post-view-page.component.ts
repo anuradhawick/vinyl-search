@@ -1,13 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarketService } from '../services/market.service';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import * as _ from 'lodash';
 import { ReportModalComponent } from '../modals/report-modal/report-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
-import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { ImageViewerComponent } from '../../shared/components/image-viewer/image-viewer.component';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({

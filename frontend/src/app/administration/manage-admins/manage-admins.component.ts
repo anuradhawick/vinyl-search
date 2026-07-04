@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { AdminService } from '../services/admin.service';
 import {
   FormBuilder,
@@ -19,7 +19,7 @@ import {
 } from '@angular/material/list';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { MatFormField, MatInput, MatError } from '@angular/material/input';
 
 @Component({

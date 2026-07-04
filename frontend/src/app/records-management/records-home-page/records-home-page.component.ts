@@ -6,9 +6,9 @@ import {
   WritableSignal,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { RecordsService } from '../services/records.service';
 import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,9 +27,9 @@ import {
   switchMap,
 } from 'rxjs';
 // @ts-ignore
-import genresJSON from '../../shared-modules/data/genres.json';
+import genresJSON from '../../shared/data/genres.json';
 // @ts-ignore
-import countriesJSON from '../../shared-modules/data/countries.json';
+import countriesJSON from '../../shared/data/countries.json';
 import { MatFormField, MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';

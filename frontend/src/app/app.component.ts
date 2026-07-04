@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './layout/footer/footer.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
-import { TitleTagService } from './shared-modules/services/title-tag.service';
+import { TitleTagService } from './shared/services/title-tag.service';
 
 @Component({
   selector: 'app-root',

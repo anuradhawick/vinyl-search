@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MarketService } from '../services/market.service';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';

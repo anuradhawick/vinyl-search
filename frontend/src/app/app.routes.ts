@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './home/home-page/home-page.component';
-import { adminGuard } from './shared-modules/guards/admin.guard';
-import { authGuard } from './shared-modules/guards/auth.guard';
+import { adminGuard } from './shared/guards/admin.guard';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const appRoutes: Routes = [
   {
@@ -48,7 +48,7 @@ export const appRoutes: Routes = [
   {
     path: 'privacy-policy',
     loadChildren: () =>
-      import('./pages/privacy-policy-page/privacy-policy-page.routes').then(
+      import('./home/privacy-policy-page/privacy-policy-page.routes').then(
         (mod) => mod.privacyPolicyPageRoutes,
       ),
   },

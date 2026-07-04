@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MarketService } from '../../services/market.service';
 import * as _ from 'lodash';
-import { LoaderComponent } from '../../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import {
   MatList,
   MatListItem,

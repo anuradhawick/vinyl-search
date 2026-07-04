@@ -7,7 +7,7 @@ import {
 import { firstValueFrom } from 'rxjs';
 
 import { ForumService } from './forum.service';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { environment } from '../../../environments/environment';
 
 describe('ForumService', () => {

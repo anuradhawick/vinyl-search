@@ -11,7 +11,7 @@ import {
 import * as _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { uploadData } from 'aws-amplify/storage';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -46,16 +46,16 @@ import {
 // @ts-ignore
 import moment from 'moment';
 // @ts-ignore
-import genresJSON from '../../shared-modules/data/genres.json';
+import genresJSON from '../../shared/data/genres.json';
 // @ts-ignore
-import countriesJSON from '../../shared-modules/data/countries.json';
+import countriesJSON from '../../shared/data/countries.json';
 // @ts-ignore
-import speedsJSON from '../../shared-modules/data/speed.json';
+import speedsJSON from '../../shared/data/speed.json';
 // @ts-ignore
-import sizesJSON from '../../shared-modules/data/size.json';
+import sizesJSON from '../../shared/data/size.json';
 // @ts-ignore
-import descrJSON from '../../shared-modules/data/description.json';
-import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import descrJSON from '../../shared/data/description.json';
+import { ImageViewerComponent } from '../../shared/components/image-viewer/image-viewer.component';
 import { MatButton } from '@angular/material/button';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import {

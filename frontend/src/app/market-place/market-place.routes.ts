@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '../shared-modules/guards/auth.guard';
+import { authGuard } from '../shared/guards/auth.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { NewPostComponent } from './new-post/new-post.component';
 import { PostEditPageComponent } from './post-edit-page/post-edit-page.component';

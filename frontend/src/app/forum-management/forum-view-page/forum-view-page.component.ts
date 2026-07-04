@@ -1,14 +1,14 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as _ from 'lodash';
-import { AuthService } from '../../shared-modules/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { ForumService } from '../services/forum.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { ActionConfirmModalComponent } from '../../shared-modules/modals/action-confirm-modal/action-confirm-modal.component';
-import { TitleTagService } from '../../shared-modules/services/title-tag.service';
+import { ActionConfirmModalComponent } from '../../shared/components/modals/action-confirm-modal/action-confirm-modal.component';
+import { TitleTagService } from '../../shared/services/title-tag.service';
 import { Observable } from 'rxjs';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormsModule } from '@angular/forms';

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '../shared-modules/guards/auth.guard';
+import { authGuard } from '../shared/guards/auth.guard';
 import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
 import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.component';
 import { RecordsHomePageComponent } from './records-home-page/records-home-page.component';

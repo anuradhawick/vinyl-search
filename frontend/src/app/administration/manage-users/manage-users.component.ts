@@ -11,7 +11,7 @@ import {
   MatListItemTitle,
   MatListItemLine,
 } from '@angular/material/list';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-manage-users',

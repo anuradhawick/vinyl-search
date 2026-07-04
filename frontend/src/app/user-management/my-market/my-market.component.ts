@@ -1,9 +1,9 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../../shared-modules/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 import * as _ from 'lodash';
 import {
   MatList,

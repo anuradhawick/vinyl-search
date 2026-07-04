@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
+import { LoginModalComponent } from '../components/modals/login-modal/login-modal.component';
 
 @Injectable({
   providedIn: 'root',

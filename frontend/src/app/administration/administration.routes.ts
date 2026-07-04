@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '../shared-modules/guards/auth.guard';
+import { authGuard } from '../shared/guards/auth.guard';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
 import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';

@@ -1,10 +1,10 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LoaderComponent } from '../../shared-modules/loader/loader.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import * as _ from 'lodash';
 import { RecordsService } from '../services/records.service';
-import { AuthService } from '../../shared-modules/services/auth.service';
-import { ImageViewerComponent } from '../../shared-modules/image-viewer/image-viewer.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { ImageViewerComponent } from '../../shared/components/image-viewer/image-viewer.component';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatChipListbox, MatChip } from '@angular/material/chips';
 import { MatButton, MatFabButton } from '@angular/material/button';
