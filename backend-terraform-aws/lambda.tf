@@ -28,7 +28,7 @@ module "lambda-admin-service" {
     data.aws_iam_policy_document.lambda-user-pool-triggers.json,
   ]
   number_of_policy_jsons = 2
-  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
+  hash_extra             = sha256("${local.common_lambda_hash}:${filebase64sha256("${path.module}/../backend-go/assets/wm.png")}")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -73,6 +73,7 @@ module "lambda-forum-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
+  hash_extra             = local.common_lambda_hash
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -116,7 +117,7 @@ module "lambda-market-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
-  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
+  hash_extra             = sha256("${local.common_lambda_hash}:${filebase64sha256("${path.module}/../backend-go/assets/wm.png")}")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -161,7 +162,7 @@ module "lambda-records-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
-  hash_extra             = filebase64sha256("${path.module}/../backend-go/assets/wm.png")
+  hash_extra             = sha256("${local.common_lambda_hash}:${filebase64sha256("${path.module}/../backend-go/assets/wm.png")}")
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -206,6 +207,7 @@ module "lambda-user-service" {
     data.aws_iam_policy_document.lambda-s3-full-access.json,
   ]
   number_of_policy_jsons = 1
+  hash_extra             = local.common_lambda_hash
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
@@ -245,6 +247,7 @@ module "lambda-user-pool-triggers" {
     data.aws_iam_policy_document.lambda-user-pool-triggers.json,
   ]
   number_of_policy_jsons = 1
+  hash_extra             = local.common_lambda_hash
   source_path = [
     {
       patterns = ["!dist/", "!dist/.*"]
