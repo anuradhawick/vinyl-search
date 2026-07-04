@@ -1,17 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../shared/guards/auth.guard';
-import { HomePageComponent } from './home-page/home-page.component';
-import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
-import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
-import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
-import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
-import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
-import { ManageMarketComponent } from './manage-market/manage-market.component';
-import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
-import { ManageForumComponent } from './manage-forum/manage-forum.component';
-import { ManageRecordsComponent } from './manage-records/manage-records.component';
-import { ManageReportsComponent } from './manage-reports/manage-reports.component';
-import { ManageUsersComponent } from './manage-users/manage-users.component';
+
 import { AdminService } from './services/admin.service';
 import { MarketService } from './services/market.service';
 import { UsersService } from './services/users.service';
@@ -19,7 +8,10 @@ import { UsersService } from './services/users.service';
 export const administrationRoutes: Routes = [
   {
     path: '',
-    component: HomePageComponent,
+    loadComponent: () =>
+      import('./home-page/home-page.component').then(
+        (m) => m.HomePageComponent,
+      ),
     providers: [AdminService, MarketService, UsersService],
     canActivate: [authGuard],
     canActivateChild: [authGuard],
@@ -31,27 +23,45 @@ export const administrationRoutes: Routes = [
       },
       {
         path: 'home',
-        component: ManageAdminsComponent,
+        loadComponent: () =>
+          import('./manage-admins/manage-admins.component').then(
+            (m) => m.ManageAdminsComponent,
+          ),
       },
       {
         path: 'users',
-        component: ManageUsersComponent,
+        loadComponent: () =>
+          import('./manage-users/manage-users.component').then(
+            (m) => m.ManageUsersComponent,
+          ),
       },
       {
         path: 'records',
-        component: ManageRecordsComponent,
+        loadComponent: () =>
+          import('./manage-records/manage-records.component').then(
+            (m) => m.ManageRecordsComponent,
+          ),
       },
       {
         path: 'forum',
-        component: ManageForumComponent,
+        loadComponent: () =>
+          import('./manage-forum/manage-forum.component').then(
+            (m) => m.ManageForumComponent,
+          ),
       },
       {
         path: 'reports',
-        component: ManageReportsComponent,
+        loadComponent: () =>
+          import('./manage-reports/manage-reports.component').then(
+            (m) => m.ManageReportsComponent,
+          ),
       },
       {
         path: 'market',
-        component: ManageMarketComponent,
+        loadComponent: () =>
+          import('./manage-market/manage-market.component').then(
+            (m) => m.ManageMarketComponent,
+          ),
         children: [
           {
             path: '',
@@ -60,23 +70,38 @@ export const administrationRoutes: Routes = [
           },
           {
             path: 'pending',
-            component: PendingAdsComponent,
+            loadComponent: () =>
+              import('./manage-market/pending-ads/pending-ads.component').then(
+                (m) => m.PendingAdsComponent,
+              ),
           },
           {
             path: 'all',
-            component: AllAdsComponent,
+            loadComponent: () =>
+              import('./manage-market/all-ads/all-ads.component').then(
+                (m) => m.AllAdsComponent,
+              ),
           },
           {
             path: 'expired',
-            component: ExpiredAdsComponent,
+            loadComponent: () =>
+              import('./manage-market/expired-ads/expired-ads.component').then(
+                (m) => m.ExpiredAdsComponent,
+              ),
           },
           {
             path: 'approved',
-            component: ApprovedAdsComponent,
+            loadComponent: () =>
+              import(
+                './manage-market/approved-ads/approved-ads.component'
+              ).then((m) => m.ApprovedAdsComponent),
           },
           {
             path: ':postId/edit',
-            component: EditAdComponent,
+            loadComponent: () =>
+              import('./manage-market/edit-ad/edit-ad.component').then(
+                (m) => m.EditAdComponent,
+              ),
           },
         ],
       },

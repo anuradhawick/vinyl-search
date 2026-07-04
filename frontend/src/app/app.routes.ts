@@ -1,12 +1,15 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './home/home-page/home-page.component';
+
 import { adminGuard } from './shared/guards/admin.guard';
 import { authGuard } from './shared/guards/auth.guard';
 
 export const appRoutes: Routes = [
   {
     path: '',
-    component: HomePageComponent,
+    loadComponent: () =>
+      import('./home/home-page/home-page.component').then(
+        (m) => m.HomePageComponent,
+      ),
   },
   {
     path: 'forum',

@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../shared/guards/auth.guard';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { NewPostComponent } from './new-post/new-post.component';
-import { PostEditPageComponent } from './post-edit-page/post-edit-page.component';
-import { PostViewPageComponent } from './post-view-page/post-view-page.component';
+
 import { MarketService } from './services/market.service';
 
 export const marketPlaceRoutes: Routes = [
@@ -13,21 +10,33 @@ export const marketPlaceRoutes: Routes = [
     children: [
       {
         path: '',
-        component: LandingPageComponent,
+        loadComponent: () =>
+          import('./landing-page/landing-page.component').then(
+            (m) => m.LandingPageComponent,
+          ),
       },
       {
         path: 'new',
-        component: NewPostComponent,
+        loadComponent: () =>
+          import('./new-post/new-post.component').then(
+            (m) => m.NewPostComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':postId/view',
-        component: PostViewPageComponent,
+        loadComponent: () =>
+          import('./post-view-page/post-view-page.component').then(
+            (m) => m.PostViewPageComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':postId/edit',
-        component: PostEditPageComponent,
+        loadComponent: () =>
+          import('./post-edit-page/post-edit-page.component').then(
+            (m) => m.PostEditPageComponent,
+          ),
         canActivate: [authGuard],
       },
     ],

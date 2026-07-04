@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
-import { MyForumComponent } from './my-forum/my-forum.component';
-import { MyMarketComponent } from './my-market/my-market.component';
-import { MyRecordsComponent } from './my-records/my-records.component';
-import { UpdateDetailsComponent } from './update-details/update-details.component';
-import { UserHomePageComponent } from './user-home-page/user-home-page.component';
 
 export const userManagementRoutes: Routes = [
   {
     path: '',
-    component: UserHomePageComponent,
+    loadComponent: () =>
+      import('./user-home-page/user-home-page.component').then(
+        (m) => m.UserHomePageComponent,
+      ),
     children: [
       {
         path: '',
@@ -17,19 +15,31 @@ export const userManagementRoutes: Routes = [
       },
       {
         path: 'records',
-        component: MyRecordsComponent,
+        loadComponent: () =>
+          import('./my-records/my-records.component').then(
+            (m) => m.MyRecordsComponent,
+          ),
       },
       {
         path: 'forum',
-        component: MyForumComponent,
+        loadComponent: () =>
+          import('./my-forum/my-forum.component').then(
+            (m) => m.MyForumComponent,
+          ),
       },
       {
         path: 'market',
-        component: MyMarketComponent,
+        loadComponent: () =>
+          import('./my-market/my-market.component').then(
+            (m) => m.MyMarketComponent,
+          ),
       },
       {
         path: 'update',
-        component: UpdateDetailsComponent,
+        loadComponent: () =>
+          import('./update-details/update-details.component').then(
+            (m) => m.UpdateDetailsComponent,
+          ),
       },
     ],
   },

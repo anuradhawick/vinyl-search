@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../shared/guards/auth.guard';
-import { RecordViewPageComponent } from './record-view-page/record-view-page.component';
-import { RecordsEditPageComponent } from './records-edit-page/records-edit-page.component';
-import { RecordsHomePageComponent } from './records-home-page/records-home-page.component';
+
 import { RecordsService } from './services/records.service';
 
 export const recordsManagementRoutes: Routes = [
@@ -12,26 +10,41 @@ export const recordsManagementRoutes: Routes = [
     children: [
       {
         path: '',
-        component: RecordsHomePageComponent,
+        loadComponent: () =>
+          import('./records-home-page/records-home-page.component').then(
+            (m) => m.RecordsHomePageComponent,
+          ),
       },
       {
         path: 'new',
-        component: RecordsEditPageComponent,
+        loadComponent: () =>
+          import('./records-edit-page/records-edit-page.component').then(
+            (m) => m.RecordsEditPageComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':recordId/edit',
-        component: RecordsEditPageComponent,
+        loadComponent: () =>
+          import('./records-edit-page/records-edit-page.component').then(
+            (m) => m.RecordsEditPageComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':recordId/view',
-        component: RecordViewPageComponent,
+        loadComponent: () =>
+          import('./record-view-page/record-view-page.component').then(
+            (m) => m.RecordViewPageComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':recordId/revisions/:revisionId',
-        component: RecordViewPageComponent,
+        loadComponent: () =>
+          import('./record-view-page/record-view-page.component').then(
+            (m) => m.RecordViewPageComponent,
+          ),
         canActivate: [authGuard],
       },
     ],

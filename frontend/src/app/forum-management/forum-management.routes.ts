@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../shared/guards/auth.guard';
-import { ForumEditPageComponent } from './forum-edit-page/forum-edit-page.component';
-import { ForumHomePageComponent } from './forum-home-page/forum-home-page.component';
-import { ForumViewPageComponent } from './forum-view-page/forum-view-page.component';
+
 import { ForumService } from './services/forum.service';
 
 export const forumManagementRoutes: Routes = [
@@ -10,16 +8,34 @@ export const forumManagementRoutes: Routes = [
     path: '',
     providers: [ForumService],
     children: [
-      { path: '', component: ForumHomePageComponent },
-      { path: ':postId/view', component: ForumViewPageComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./forum-home-page/forum-home-page.component').then(
+            (m) => m.ForumHomePageComponent,
+          ),
+      },
+      {
+        path: ':postId/view',
+        loadComponent: () =>
+          import('./forum-view-page/forum-view-page.component').then(
+            (m) => m.ForumViewPageComponent,
+          ),
+      },
       {
         path: 'new',
-        component: ForumEditPageComponent,
+        loadComponent: () =>
+          import('./forum-edit-page/forum-edit-page.component').then(
+            (m) => m.ForumEditPageComponent,
+          ),
         canActivate: [authGuard],
       },
       {
         path: ':postId/edit',
-        component: ForumEditPageComponent,
+        loadComponent: () =>
+          import('./forum-edit-page/forum-edit-page.component').then(
+            (m) => m.ForumEditPageComponent,
+          ),
         canActivate: [authGuard],
       },
     ],
