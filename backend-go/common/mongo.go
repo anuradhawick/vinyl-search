@@ -152,27 +152,45 @@ func PreviousPathSegment(image string) string {
 
 // RewriteImages rewrites a document's image list to CDN URLs for the requested variant.
 func RewriteImages(doc bson.M, prefix, variant string) {
-	raw, ok := doc["images"].(bson.A)
-	if !ok {
-		if list, ok := doc["images"].([]any); ok {
-			raw = bson.A(list)
-		} else {
-			return
-		}
+	raw := StringSlice(doc["images"])
+	if len(raw) == 0 {
+		return
 	}
+
 	images := make(bson.A, 0, len(raw))
 	for _, image := range raw {
-		if s, ok := image.(string); ok {
-			images = append(images, CDNURL(prefix, variant, s))
-		}
+		images = append(images, CDNURL(prefix, variant, image))
 	}
 	doc["images"] = images
 }
 
 // RewriteImageList rewrites image lists on every child document in a container field.
 func RewriteImageList(container bson.M, key, prefix, variant string) {
-	for _, doc := range Docs(container[key]) {
-		RewriteImages(doc, prefix, variant)
+	switch typed := container[key].(type) {
+	case []bson.M:
+		for i := range typed {
+			RewriteImages(typed[i], prefix, variant)
+		}
+	case []map[string]any:
+		for i := range typed {
+			doc := bson.M(typed[i])
+			RewriteImages(doc, prefix, variant)
+			typed[i] = map[string]any(doc)
+		}
+	case bson.A:
+		for i, item := range typed {
+			if doc, ok := Doc(item); ok {
+				RewriteImages(doc, prefix, variant)
+				typed[i] = doc
+			}
+		}
+	case []any:
+		for i, item := range typed {
+			if doc, ok := Doc(item); ok {
+				RewriteImages(doc, prefix, variant)
+				typed[i] = doc
+			}
+		}
 	}
 }
 
@@ -181,10 +199,16 @@ func Docs(value any) []bson.M {
 	switch typed := value.(type) {
 	case []bson.M:
 		return typed
+	case []map[string]any:
+		out := make([]bson.M, 0, len(typed))
+		for _, item := range typed {
+			out = append(out, bson.M(item))
+		}
+		return out
 	case bson.A:
 		out := make([]bson.M, 0, len(typed))
 		for _, item := range typed {
-			if doc, ok := item.(bson.M); ok {
+			if doc, ok := Doc(item); ok {
 				out = append(out, doc)
 			}
 		}
@@ -192,13 +216,31 @@ func Docs(value any) []bson.M {
 	case []any:
 		out := make([]bson.M, 0, len(typed))
 		for _, item := range typed {
-			if doc, ok := item.(bson.M); ok {
+			if doc, ok := Doc(item); ok {
 				out = append(out, doc)
 			}
 		}
 		return out
 	default:
 		return nil
+	}
+}
+
+// Doc converts supported document shapes into a BSON map.
+func Doc(value any) (bson.M, bool) {
+	switch typed := value.(type) {
+	case bson.M:
+		return typed, true
+	case map[string]any:
+		return bson.M(typed), true
+	case bson.D:
+		out := bson.M{}
+		for _, elem := range typed {
+			out[elem.Key] = elem.Value
+		}
+		return out, true
+	default:
+		return nil, false
 	}
 }
 

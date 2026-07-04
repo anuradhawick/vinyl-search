@@ -57,6 +57,90 @@ func TestCDNURL(t *testing.T) {
 	}
 }
 
+// TestRewriteImageList verifies normalized document arrays are rewritten too.
+func TestRewriteImageList(t *testing.T) {
+	t.Setenv("CDN_DOMAIN", "cdn.example.test")
+	container := bson.M{
+		"records": []any{
+			map[string]any{
+				"images": []any{
+					"https://bucket/records-images/first.png",
+					"https://bucket/records-images/second.png",
+				},
+			},
+		},
+	}
+
+	RewriteImageList(container, "records", "records-images", "thumbnails")
+
+	records, ok := container["records"].([]any)
+	if !ok || len(records) != 1 {
+		t.Fatalf("records = %#v", container["records"])
+	}
+	record, ok := Doc(records[0])
+	if !ok {
+		t.Fatalf("record = %#v", records[0])
+	}
+	images, ok := record["images"].(bson.A)
+	if !ok {
+		t.Fatalf("images = %#v", record["images"])
+	}
+	want := []string{
+		"https://cdn.example.test/records-images/thumbnails/first.jpeg",
+		"https://cdn.example.test/records-images/thumbnails/second.jpeg",
+	}
+	if len(images) != len(want) {
+		t.Fatalf("images len = %d", len(images))
+	}
+	for i, image := range images {
+		if image != want[i] {
+			t.Fatalf("images[%d] = %#v want %q", i, image, want[i])
+		}
+	}
+}
+
+// TestRewriteImageListStringSlice verifies native string slices are rewritten too.
+func TestRewriteImageListStringSlice(t *testing.T) {
+	t.Setenv("CDN_DOMAIN", "cdn.example.test")
+	container := bson.M{
+		"records": []any{
+			map[string]any{
+				"images": []string{
+					"records-images/first.png",
+					"records-images/second.png",
+				},
+			},
+		},
+	}
+
+	RewriteImageList(container, "records", "records-images", "thumbnails")
+
+	records, ok := container["records"].([]any)
+	if !ok || len(records) != 1 {
+		t.Fatalf("records = %#v", container["records"])
+	}
+	record, ok := Doc(records[0])
+	if !ok {
+		t.Fatalf("record = %#v", records[0])
+	}
+	images, ok := record["images"].(bson.A)
+	if !ok {
+		t.Fatalf("images = %#v", record["images"])
+	}
+	want := []string{
+		"https://cdn.example.test/records-images/thumbnails/first.jpeg",
+		"https://cdn.example.test/records-images/thumbnails/second.jpeg",
+	}
+	if len(images) != len(want) {
+		t.Fatalf("images len = %d", len(images))
+	}
+	for i, image := range images {
+		if image != want[i] {
+			t.Fatalf("images[%d] = %#v want %q", i, image, want[i])
+		}
+	}
+}
+
 // TestLoadConfig verifies runtime environment variables are mapped into Config.
 func TestLoadConfig(t *testing.T) {
 	t.Setenv("MONGODB_ATLAS_CLUSTER_URI", "mongodb+srv://example.test")

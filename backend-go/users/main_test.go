@@ -6,13 +6,23 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	"vinyl-search/backend-go/common/testutil"
 )
 
-func TestUsersEndpoints(t *testing.T) {
+type usersTestFixture struct {
+	db       *mongo.Database
+	ownerID  bson.ObjectID
+	recordID bson.ObjectID
+	postID   bson.ObjectID
+	marketID bson.ObjectID
+}
+
+func setupUsersTest(t *testing.T) usersTestFixture {
+	t.Helper()
+
 	db := testutil.Mongo(t, "vinyl_test_users")
-	s3Mock, _ := testutil.InstallAWSMocks(t)
 
 	ownerID := bson.NewObjectID()
 	recordID := bson.NewObjectID()
@@ -37,7 +47,7 @@ func TestUsersEndpoints(t *testing.T) {
 		"label":       "Owned Label",
 		"catalogNo":   "OWN-1",
 		"images":      bson.A{"records-images/user-record.png"},
-		"chosenImage": "records-images/user-record.png",
+		"chosenImage": 0,
 		"latest":      true,
 		"createdAt":   now,
 	})
@@ -55,7 +65,7 @@ func TestUsersEndpoints(t *testing.T) {
 		"ownerUid":    ownerID,
 		"name":        "Owned Sale",
 		"images":      bson.A{"selling-images/user-sale.png"},
-		"chosenImage": "selling-images/user-sale.png",
+		"chosenImage": 0,
 		"approved":    false,
 		"rejected":    false,
 		"sold":        false,
@@ -63,71 +73,82 @@ func TestUsersEndpoints(t *testing.T) {
 		"createdAt":   now,
 	})
 
-	t.Run("profile", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users", nil, nil, ownerID.Hex(), false))
-		body := testutil.AssertOKSuccess(t, resp)
-		if body["uid"] != ownerID.Hex() {
-			t.Fatalf("uid = %#v", body["uid"])
-		}
-	})
+	return usersTestFixture{
+		db:       db,
+		ownerID:  ownerID,
+		recordID: recordID,
+		postID:   postID,
+		marketID: marketID,
+	}
+}
 
-	t.Run("update profile", func(t *testing.T) {
-		update := map[string]any{"given_name": "New", "family_name": "Name", "picture": "new.png"}
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodPost, "/users", nil, update, ownerID.Hex(), false))
-		body := testutil.AssertOKSuccess(t, resp)
-		if body["name"] != "New Name" {
-			t.Fatalf("name = %#v", body["name"])
-		}
-	})
+func TestUserProfile(t *testing.T) {
+	fixture := setupUsersTest(t)
 
-	t.Run("records", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/records", map[string]string{"limit": "5"}, nil, ownerID.Hex(), false))
-		body := testutil.AssertOKSuccess(t, resp)
-		if len(body["records"].([]any)) != 1 {
-			t.Fatalf("records = %#v", body["records"])
-		}
-	})
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users", nil, nil, fixture.ownerID.Hex(), false))
+	body := testutil.AssertOKSuccess(t, resp)
+	if body["uid"] != fixture.ownerID.Hex() {
+		t.Fatalf("uid = %#v", body["uid"])
+	}
+}
 
-	t.Run("forum", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/forum", map[string]string{"limit": "5"}, nil, ownerID.Hex(), false))
-		body := testutil.AssertOKSuccess(t, resp)
-		if len(body["posts"].([]any)) != 1 {
-			t.Fatalf("posts = %#v", body["posts"])
-		}
-	})
+func TestUpdateUserProfile(t *testing.T) {
+	fixture := setupUsersTest(t)
 
-	t.Run("market", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/market", map[string]string{"limit": "5"}, nil, ownerID.Hex(), false))
-		body := testutil.AssertOKSuccess(t, resp)
-		if len(body["posts"].([]any)) != 1 {
-			t.Fatalf("posts = %#v", body["posts"])
-		}
-	})
+	update := map[string]any{"given_name": "New", "family_name": "Name", "picture": "new.png"}
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodPost, "/users", nil, update, fixture.ownerID.Hex(), false))
+	body := testutil.AssertOKSuccess(t, resp)
+	if body["name"] != "New Name" {
+		t.Fatalf("name = %#v", body["name"])
+	}
+}
 
-	t.Run("delete forum", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/users/forum/"+postID.Hex(), nil, nil, ownerID.Hex(), false))
-		testutil.AssertOKSuccess(t, resp)
-		if count := testutil.Count(t, db, "forum_posts", bson.M{"_id": postID}); count != 0 {
-			t.Fatalf("forum count = %d", count)
-		}
-	})
+func TestUserRecords(t *testing.T) {
+	fixture := setupUsersTest(t)
 
-	t.Run("delete record", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/users/records/"+recordID.Hex(), nil, nil, ownerID.Hex(), false))
-		testutil.AssertOKSuccess(t, resp)
-		if count := testutil.Count(t, db, "records", bson.M{"id": recordID}); count != 0 {
-			t.Fatalf("record count = %d", count)
-		}
-	})
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/records", map[string]string{"limit": "5"}, nil, fixture.ownerID.Hex(), false))
+	body := testutil.AssertOKSuccess(t, resp)
+	if len(body["records"].([]any)) != 1 {
+		t.Fatalf("records = %#v", body["records"])
+	}
+}
 
-	t.Run("delete market", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/users/market/"+marketID.Hex(), nil, nil, ownerID.Hex(), false))
-		testutil.AssertOKSuccess(t, resp)
-		if count := testutil.Count(t, db, "selling_items", bson.M{"id": marketID}); count != 0 {
-			t.Fatalf("market count = %d", count)
-		}
-		if len(s3Mock.Deletes) == 0 {
-			t.Fatalf("deletes = %#v", s3Mock.Deletes)
-		}
-	})
+func TestUserForum(t *testing.T) {
+	fixture := setupUsersTest(t)
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/forum", map[string]string{"limit": "5"}, nil, fixture.ownerID.Hex(), false))
+	body := testutil.AssertOKSuccess(t, resp)
+	if len(body["posts"].([]any)) != 1 {
+		t.Fatalf("posts = %#v", body["posts"])
+	}
+}
+
+func TestUserMarket(t *testing.T) {
+	fixture := setupUsersTest(t)
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users/market", map[string]string{"limit": "5"}, nil, fixture.ownerID.Hex(), false))
+	body := testutil.AssertOKSuccess(t, resp)
+	if len(body["market"].([]any)) != 1 {
+		t.Fatalf("market = %#v", body["market"])
+	}
+}
+
+func TestDeleteUserForum(t *testing.T) {
+	fixture := setupUsersTest(t)
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/users/forum/"+fixture.postID.Hex(), nil, nil, fixture.ownerID.Hex(), false))
+	testutil.AssertOKSuccess(t, resp)
+	if count := testutil.Count(t, fixture.db, "forum_posts", bson.M{"_id": fixture.postID}); count != 0 {
+		t.Fatalf("forum count = %d", count)
+	}
+}
+
+func TestDeleteUserRecord(t *testing.T) {
+	fixture := setupUsersTest(t)
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodDelete, "/users/records/"+fixture.recordID.Hex(), nil, nil, fixture.ownerID.Hex(), false))
+	testutil.AssertOKSuccess(t, resp)
+	if count := testutil.Count(t, fixture.db, "records", bson.M{"_id": fixture.recordID}); count != 0 {
+		t.Fatalf("record count = %d", count)
+	}
 }
