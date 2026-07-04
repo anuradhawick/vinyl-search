@@ -1,55 +1,61 @@
-<hr />
-<app-loader #loader></app-loader>
-<mat-list role="list" class="mx-auto max-w-[800px]">
-  @for (p of posts(); track p) {
-    <mat-list-item role="listitem" class="hover:bg-slate-100">
-      <img
-        matListItemAvatar
-        [src]="
-          p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
-        "
-        alt="..."
-      />
-      <h3 matListItemTitle>{{ p.name }}</h3>
-      <p matListItemLine>
-        posted on: {{ p.createdAt | date: "medium" }}
-        <span class="absolute top-0 right-0 h-full pt-[12px]">
-          @if (!p.approved && !p.rejected) {
+<div class="mx-auto max-w-[800px]">
+  <hr />
+  <app-loader #loader></app-loader>
+  <mat-list role="list">
+    @for (p of posts(); track p) {
+      <mat-list-item role="listitem" class="hover:bg-slate-100">
+        <img
+          matListItemAvatar
+          [src]="
+            p.images[p.chosenImage] || '/assets/images/records-new-sample.svg'
+          "
+          alt="..."
+        />
+        <h3 matListItemTitle>{{ p.name }}</h3>
+        <p matListItemLine>
+          posted on: {{ p.createdAt | date: "medium" }}
+          <span class="absolute top-0 right-0 h-full pt-[12px]">
+            @if (!p.approved && !p.rejected) {
+              <a
+                mat-icon-button
+                target="_blank"
+                color="primary"
+                [routerLink]="['/market', p.id, 'edit']"
+              >
+                <mat-icon>edit</mat-icon>
+              </a>
+            }
             <a
               mat-icon-button
               target="_blank"
               color="primary"
-              [routerLink]="['/market', p.id, 'edit']"
+              [routerLink]="['/market', p.id, 'view']"
             >
-              <mat-icon>edit</mat-icon>
+              <mat-icon>open_in_new</mat-icon>
             </a>
-          }
-          <a
-            mat-icon-button
-            target="_blank"
-            color="primary"
-            [routerLink]="['/market', p.id, 'view']"
-          >
-            <mat-icon>open_in_new</mat-icon>
-          </a>
-          @if (!p.sold) {
-            <button mat-icon-button color="primary" (click)="markAsSold(p._id)">
-              <mat-icon>done</mat-icon>
-            </button>
-          }
-        </span>
-      </p>
-    </mat-list-item>
+            @if (!p.sold) {
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="markAsSold(p._id)"
+              >
+                <mat-icon>done</mat-icon>
+              </button>
+            }
+          </span>
+        </p>
+      </mat-list-item>
+    }
+  </mat-list>
+  @if (count() > limit() && loader.isHidden()) {
+    <nav aria-label="Page navigation">
+      <mat-paginator
+        showFirstLastButtons
+        [length]="count()"
+        [pageSize]="limit()"
+        [pageIndex]="page() - 1"
+        (page)="changePage($event)"
+      ></mat-paginator>
+    </nav>
   }
-</mat-list>
-@if (count() > limit() && loader.isHidden()) {
-  <nav aria-label="Page navigation">
-    <mat-paginator
-      showFirstLastButtons
-      [length]="count()"
-      [pageSize]="limit()"
-      [pageIndex]="page() - 1"
-      (page)="changePage($event)"
-    ></mat-paginator>
-  </nav>
-}
+</div>
