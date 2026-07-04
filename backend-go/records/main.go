@@ -47,9 +47,6 @@ func registerPublicRoutes(router *lambdamux.LambdaMux) {
 	// the exact handler if a shorter path is added after a longer matching path.
 	router.GET("/public/records", common.LogEndpoint("GET", "/public/records", fetchRecords))
 	router.GET("/public/records/search", common.LogEndpoint("GET", "/public/records/search", searchRecords))
-	router.GET("/public/records/:recordId", common.LogEndpoint("GET", "/public/records/:recordId", fetchRecord))
-	router.GET("/public/records/:recordId/revisions", common.LogEndpoint("GET", "/public/records/:recordId/revisions", fetchHistory))
-	router.GET("/public/records/:recordId/revisions/:revisionId", common.LogEndpoint("GET", "/public/records/:recordId/revisions/:revisionId", fetchRevision))
 }
 
 func registerProtectedRoutes(router *lambdamux.LambdaMux) {

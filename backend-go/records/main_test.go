@@ -95,7 +95,7 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("get", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex(), nil, nil, ownerID.Hex(), false))
 		body := testutil.AssertOKSuccess(t, resp)
 		record := body["record"].(map[string]any)
 		images := record["images"].([]any)
@@ -105,7 +105,7 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("history", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions", nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex()+"/revisions", nil, nil, ownerID.Hex(), false))
 		body := testutil.AssertOKSuccess(t, resp)
 		if len(body["history"].([]any)) != 2 {
 			t.Fatalf("history = %#v", body["history"])
@@ -113,11 +113,32 @@ func TestRecordsEndpoints(t *testing.T) {
 	})
 
 	t.Run("revision", func(t *testing.T) {
-		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions/"+latestRevisionID.Hex(), nil, nil, "", false))
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/records/"+recordID.Hex()+"/revisions/"+latestRevisionID.Hex(), nil, nil, ownerID.Hex(), false))
 		body := testutil.AssertOKSuccess(t, resp)
 		record := body["record"].(map[string]any)
 		if record["id"] != recordID.Hex() {
 			t.Fatalf("record id = %#v", record["id"])
+		}
+	})
+
+	t.Run("public get is not registered", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex(), nil, nil, "", false))
+		if resp.StatusCode != http.StatusNotFound {
+			t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
+		}
+	})
+
+	t.Run("public history is not registered", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions", nil, nil, "", false))
+		if resp.StatusCode != http.StatusNotFound {
+			t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
+		}
+	})
+
+	t.Run("public revision is not registered", func(t *testing.T) {
+		resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/public/records/"+recordID.Hex()+"/revisions/"+latestRevisionID.Hex(), nil, nil, "", false))
+		if resp.StatusCode != http.StatusNotFound {
+			t.Fatalf("status = %d body = %s", resp.StatusCode, resp.Body)
 		}
 	})
 
