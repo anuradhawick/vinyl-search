@@ -28,3 +28,21 @@
 .modal-backdrop {
   z-index: -1 !important;
 }
+
+tr[cdkdrag],
+.cdk-drag-preview {
+  background-color: #f3f4f6;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 8px 20px rgb(0 0 0 / 18%);
+  display: table;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.35;
+}
+
+.cdk-drop-list-dragging tr[cdkdrag]:not(.cdk-drag-placeholder) {
+  transition: transform 180ms cubic-bezier(0, 0, 0.2, 1);
+}

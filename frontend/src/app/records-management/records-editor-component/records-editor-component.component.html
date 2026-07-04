@@ -3,12 +3,7 @@
     <div class="m-2">
       <app-image-viewer
         [config]="imgvconfig"
-        [src]="
-          (_.isEmpty(recordObject.images) && [
-            '/assets/images/records-new-sample.svg',
-          ]) ||
-          recordObject.images
-        "
+        [src]="imageSources"
         [(index)]="recordObject.chosenImage"
         (customEvent)="handleEvent($event)"
       ></app-image-viewer>
@@ -137,7 +132,7 @@
                   name="country"
                   placeholder="Country of origin"
                 >
-                  @for (c of countriesJSON; track c) {
+                  @for (c of countriesJSON; track c.name) {
                     <mat-option [value]="c.name">{{ c.name }}</mat-option>
                   }
                 </mat-select>
@@ -218,7 +213,7 @@
           <hr />
           <mat-card-content>
             <mat-chip-listbox>
-              @for (g of genres; track g) {
+              @for (g of genres; track g.name) {
                 <mat-chip (click)="selectGenre(g.name)">{{ g.name }} </mat-chip>
               }
             </mat-chip-listbox>
@@ -304,9 +299,15 @@
                     <th>Options</th>
                   </tr>
                 </thead>
-                <tbody #table id="bb" formArrayName="tracks">
+                <tbody
+                  id="bb"
+                  formArrayName="tracks"
+                  cdkDropList
+                  [cdkDropListData]="tracks.controls"
+                  (cdkDropListDropped)="dropTrack($event)"
+                >
                   @for (
-                    track of $any(form.get("tracks")).controls;
+                    track of tracks.controls;
                     track track;
                     let ti = $index
                   ) {
@@ -314,6 +315,7 @@
                       class="cursor-all-scroll align-top bg-gray-100"
                       id="track-row-{{ ti }}"
                       [formGroupName]="ti"
+                      cdkDrag
                     >
                       <td>
                         <mat-form-field class="w-[100px]">
@@ -324,19 +326,15 @@
                             name="track-{{ ti }}-index"
                             formControlName="index"
                           />
-                          @if (
-                            $any(form.get("tracks")).controls[ti].get("index")
-                              .invalid
-                          ) {
+                          @if (tracks.controls[ti].get("index")?.invalid) {
                             <mat-error>Required</mat-error>
                           }
                         </mat-form-field>
                       </td>
                       <td formArrayName="artists" class="w-[300px]">
                         @for (
-                          artist of $any(form.get("tracks")).controls[ti].get(
-                            "artists"
-                          ).controls;
+                          artist of $any(tracks.controls[ti].get("artists"))
+                            .controls;
                           track artist;
                           let i = $index
                         ) {
@@ -355,18 +353,17 @@
                               <button
                                 mat-button
                                 (click)="
-                                  $any(form.get('tracks'))
-                                    .controls[ti].get('artists')
-                                    .removeAt(i)
+                                  $any(
+                                    tracks.controls[ti].get('artists')
+                                  ).removeAt(i)
                                 "
                                 matSuffix
                               >
                                 <mat-icon>cancel</mat-icon>
                               </button>
                               @if (
-                                $any(form.get("tracks")).controls[ti].get(
-                                  "artists"
-                                ).controls[i].invalid
+                                $any(tracks.controls[ti].get("artists"))
+                                  .controls[i].invalid
                               ) {
                                 <mat-error
                                   >Enter name or remove the field
@@ -380,11 +377,7 @@
                           class="block"
                           mat-button
                           (click)="
-                            addArtist(
-                              $any(form.get('tracks')).controls[ti].get(
-                                'artists'
-                              )
-                            )
+                            addArtist($any(tracks.controls[ti].get('artists')))
                           "
                           matSuffix
                         >
@@ -401,18 +394,14 @@
                             name="track-{{ ti }}-title"
                             formControlName="title"
                           />
-                          @if (
-                            $any(form.get("tracks")).controls[ti].get("title")
-                              .invalid
-                          ) {
+                          @if (tracks.controls[ti].get("title")?.invalid) {
                             <mat-error>Enter the song title </mat-error>
                           }
                         </mat-form-field>
                         <div formArrayName="credits">
                           @for (
-                            credit of $any(form.get("tracks")).controls[ti].get(
-                              "credits"
-                            ).controls;
+                            credit of $any(tracks.controls[ti].get("credits"))
+                              .controls;
                             track credit;
                             let i = $index
                           ) {
@@ -428,18 +417,17 @@
                                 <button
                                   mat-button
                                   (click)="
-                                    $any(form.get('tracks'))
-                                      .controls[ti].get('credits')
-                                      .removeAt(i)
+                                    $any(
+                                      tracks.controls[ti].get('credits')
+                                    ).removeAt(i)
                                   "
                                   matSuffix
                                 >
                                   <mat-icon>cancel</mat-icon>
                                 </button>
                                 @if (
-                                  $any(form.get("tracks")).controls[ti].get(
-                                    "credits"
-                                  ).controls[i].invalid
+                                  $any(tracks.controls[ti].get("credits"))
+                                    .controls[i].invalid
                                 ) {
                                   <mat-error
                                     >Enter name or remove the field
@@ -452,9 +440,7 @@
                             mat-button
                             (click)="
                               addCredit(
-                                $any(form.get('tracks')).controls[ti].get(
-                                  'credits'
-                                )
+                                $any(tracks.controls[ti].get('credits'))
                               )
                             "
                             matSuffix
@@ -473,11 +459,7 @@
                             name="track-{{ ti }}-duration"
                             formControlName="duration"
                           />
-                          @if (
-                            $any(form.get("tracks")).controls[ti].get(
-                              "duration"
-                            ).invalid
-                          ) {
+                          @if (tracks.controls[ti].get("duration")?.invalid) {
                             <mat-error>MM:SS</mat-error>
                           }
                         </mat-form-field>
@@ -487,25 +469,18 @@
                           <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #beforeMenu="matMenu" xPosition="before">
-                          <button
-                            mat-menu-item
-                            (click)="$any(form.get('tracks')).removeAt(ti)"
-                          >
+                          <button mat-menu-item (click)="tracks.removeAt(ti)">
                             Remove
                           </button>
                           <button
                             mat-menu-item
-                            (click)="
-                              insertTrackBefore($any(form.get('tracks')), ti)
-                            "
+                            (click)="insertTrackBefore(tracks, ti)"
                           >
                             Add track Above
                           </button>
                           <button
                             mat-menu-item
-                            (click)="
-                              insertTrackAfter($any(form.get('tracks')), ti)
-                            "
+                            (click)="insertTrackAfter(tracks, ti)"
                           >
                             Add Track Below
                           </button>
@@ -518,7 +493,7 @@
             </div>
           </mat-card-content>
           <mat-card-content>
-            <button mat-button (click)="appendTrack($any(form.get('tracks')))">
+            <button mat-button (click)="appendTrack(tracks)">
               Track
               <mat-icon>add_circle</mat-icon>
             </button>
@@ -558,7 +533,7 @@
           formArrayName="commonCredits"
         >
           @for (
-            credit of $any(form.get("commonCredits")).controls;
+            credit of commonCredits.controls;
             track credit;
             let i = $index
           ) {
@@ -573,32 +548,25 @@
                 />
                 <button
                   mat-button
-                  (click)="$any(form.get('commonCredits')).removeAt(i)"
+                  (click)="commonCredits.removeAt(i)"
                   matSuffix
                 >
                   <mat-icon>cancel</mat-icon>
                 </button>
-                @if ($any(form.get("commonCredits")).controls[i].invalid) {
+                @if (commonCredits.controls[i].invalid) {
                   <mat-error> Enter credits or remove the field </mat-error>
                 }
               </mat-form-field>
             </ng-container>
           }
-          <button
-            mat-button
-            (click)="addCommonCredit($any(form.get('commonCredits')))"
-          >
+          <button mat-button (click)="addCommonCredit(commonCredits)">
             Credit
             <mat-icon>add_circle</mat-icon>
           </button>
         </div>
         <hr />
         <div class="flex flex-col w-full items-start" formArrayName="songUrls">
-          @for (
-            songUrl of $any(form.get("songUrls")).controls;
-            track songUrl;
-            let i = $index
-          ) {
+          @for (songUrl of songUrls.controls; track songUrl; let i = $index) {
             <ng-container [formGroupName]="i">
               <mat-form-field class="w-full">
                 <input
@@ -608,14 +576,10 @@
                   name="song-url-{{ i }}"
                   formControlName="text"
                 />
-                <button
-                  mat-button
-                  (click)="$any(form.get('songUrls')).removeAt(i)"
-                  matSuffix
-                >
+                <button mat-button (click)="songUrls.removeAt(i)" matSuffix>
                   <mat-icon>cancel</mat-icon>
                 </button>
-                @if ($any(form.get("songUrls")).controls[i].invalid) {
+                @if (songUrls.controls[i].invalid) {
                   <mat-error>
                     Enter a valid web link or remove the field
                   </mat-error>
@@ -623,7 +587,7 @@
               </mat-form-field>
             </ng-container>
           }
-          <button mat-button (click)="addSongUrl($any(form.get('songUrls')))">
+          <button mat-button (click)="addSongUrl(songUrls)">
             Song Link
             <mat-icon>add_circle</mat-icon>
           </button>
