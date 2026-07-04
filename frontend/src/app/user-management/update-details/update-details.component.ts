@@ -61,8 +61,8 @@ export class UpdateDetailsComponent implements OnInit {
       this.user = u;
       this.originalUser = _.cloneDeep(u);
       this.form.reset({
-        firstName: this.originalUser.given_name,
-        lastName: this.originalUser.family_name,
+        firstName: this.originalUser?.given_name,
+        lastName: this.originalUser?.family_name,
       });
     });
     this.form.valueChanges.subscribe((value) => {
