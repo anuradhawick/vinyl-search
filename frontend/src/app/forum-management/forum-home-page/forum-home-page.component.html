@@ -64,10 +64,7 @@
   <div class="ml-5 mr-5 mt-1 mb-2 text-dark">
     Search results for -
     <em>{{ _.truncate(query(), { length: 100 }) }}</em>
-    (<a
-      [routerLink]="['/forum']"
-      >cancel</a
-    >)
+    (<a [routerLink]="['/forum']">cancel</a>)
   </div>
 }
 <div class="flex flex-col md:flex-row">

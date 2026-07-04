@@ -1,23 +1,26 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
+import { authGuard } from '../shared-modules/guards/auth.guard';
 import { HomePageComponent } from './home-page/home-page.component';
 import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
-import { ManageRecordsComponent } from './manage-records/manage-records.component';
-import { ManageForumComponent } from './manage-forum/manage-forum.component';
-import { ManageMarketComponent } from './manage-market/manage-market.component';
-import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
 import { AllAdsComponent } from './manage-market/all-ads/all-ads.component';
-import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
 import { ApprovedAdsComponent } from './manage-market/approved-ads/approved-ads.component';
 import { EditAdComponent } from './manage-market/edit-ad/edit-ad.component';
+import { ExpiredAdsComponent } from './manage-market/expired-ads/expired-ads.component';
+import { ManageMarketComponent } from './manage-market/manage-market.component';
+import { PendingAdsComponent } from './manage-market/pending-ads/pending-ads.component';
+import { ManageForumComponent } from './manage-forum/manage-forum.component';
+import { ManageRecordsComponent } from './manage-records/manage-records.component';
 import { ManageReportsComponent } from './manage-reports/manage-reports.component';
-import { authGuard } from '../shared-modules/guards/auth.guard';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { AdminService } from './services/admin.service';
+import { MarketService } from './services/market.service';
+import { UsersService } from './services/users.service';
 
-const routes: Routes = [
+export const administrationRoutes: Routes = [
   {
     path: '',
     component: HomePageComponent,
+    providers: [AdminService, MarketService, UsersService],
     canActivate: [authGuard],
     canActivateChild: [authGuard],
     children: [
@@ -80,9 +83,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class AdministrationRoutingModule {}

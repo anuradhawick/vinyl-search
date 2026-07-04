@@ -313,15 +313,15 @@ export class LandingPageComponent implements OnInit {
   loadRecords() {
     this.marketService
       .fetch_posts({
-      skip: this.skip,
-      limit: this.limit(),
+        skip: this.skip,
+        limit: this.limit(),
       })
       .subscribe((records: any) => {
-      this.records.set(records);
-      this.skip = records.skip;
-      this.limit.set(records.limit);
-      this.count.set(_.get(records, 'count', 0));
-      this.loader.hide();
+        this.records.set(records);
+        this.skip = records.skip;
+        this.limit.set(records.limit);
+        this.count.set(_.get(records, 'count', 0));
+        this.loader.hide();
       });
   }
 
@@ -329,37 +329,37 @@ export class LandingPageComponent implements OnInit {
     this.records.set(null);
     this.marketService
       .search_posts({
-      limit: this.limit(),
-      skip: this.skip,
-      query: this.query(),
-      gear: JSON.stringify(this.gearFilters()),
-      material: JSON.stringify(this.materialFilters()),
+        limit: this.limit(),
+        skip: this.skip,
+        query: this.query(),
+        gear: JSON.stringify(this.gearFilters()),
+        material: JSON.stringify(this.materialFilters()),
       })
       .subscribe((postsList: any) => {
-      this.records.set(postsList);
-      this.skip = postsList.skip;
-      this.limit.set(postsList.limit);
-      this.count.set(postsList.count);
-      this.loader.hide();
+        this.records.set(postsList);
+        this.skip = postsList.skip;
+        this.limit.set(postsList.limit);
+        this.count.set(postsList.count);
+        this.loader.hide();
       });
   }
 
   toggleFilter(type: any, subType: any) {
     if (type === 'material') {
       if (_.find(this.materialFilters(), (i) => i === subType)) {
-      this.materialFilters.update((filters) =>
-        filters.filter((item) => item !== subType),
-      );
+        this.materialFilters.update((filters) =>
+          filters.filter((item) => item !== subType),
+        );
       } else {
-      this.materialFilters.update((filters) => [...filters, subType]);
+        this.materialFilters.update((filters) => [...filters, subType]);
       }
     } else {
       if (_.find(this.gearFilters(), (i) => i === subType)) {
-      this.gearFilters.update((filters) =>
-        filters.filter((item) => item !== subType),
-      );
+        this.gearFilters.update((filters) =>
+          filters.filter((item) => item !== subType),
+        );
       } else {
-      this.gearFilters.update((filters) => [...filters, subType]);
+        this.gearFilters.update((filters) => [...filters, subType]);
       }
     }
     this.selectedFilters.update((filters) => ({
@@ -373,8 +373,8 @@ export class LandingPageComponent implements OnInit {
     const queryParams = {
       query: _.isEmpty(this.query()) ? null : this.query(),
       material: _.isEmpty(this.materialFilters())
-      ? null
-      : this.materialFilters(),
+        ? null
+        : this.materialFilters(),
       gear: _.isEmpty(this.gearFilters()) ? null : this.gearFilters(),
     };
 

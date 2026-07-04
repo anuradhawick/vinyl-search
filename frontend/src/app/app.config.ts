@@ -1,29 +1,19 @@
-import { NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  provideClientHydration,
-} from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomePageComponent } from './home/home-page/home-page.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ApplicationConfig } from '@angular/core';
 import {
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { SharedModules } from './shared-modules/shared.module';
-import { ToastrModule } from 'ngx-toastr';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   ActivatedRouteSnapshot,
   DetachedRouteHandle,
+  provideRouter,
   RouteReuseStrategy,
 } from '@angular/router';
-import { FooterComponent } from './layout/footer/footer.component';
-import { NavbarComponent } from './layout/navbar/navbar.component';
+import { provideToastr } from 'ngx-toastr';
+import { appRoutes } from './app.routes';
 
 class CustomReuseStrategy implements RouteReuseStrategy {
   private handlers: { [key: string]: DetachedRouteHandle } = {};
@@ -70,31 +60,18 @@ class CustomReuseStrategy implements RouteReuseStrategy {
   }
 }
 
-@NgModule({
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-  imports: [
-    FooterComponent,
-    NavbarComponent,
-    SharedModules,
-    BrowserModule,
-    AppRoutingModule,
-    MatIconModule,
-    MatMenuModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(appRoutes),
+    provideClientHydration(),
+    provideAnimations(),
+    provideToastr({
       preventDuplicates: true,
     }),
-    HomePageComponent,
-  ],
-  providers: [
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     {
       provide: RouteReuseStrategy,
       useClass: CustomReuseStrategy,
     },
-    provideClientHydration(),
-    provideHttpClient(withFetch()),
-    provideHttpClient(withInterceptorsFromDi()),
   ],
-})
-export class AppModule {}
+};

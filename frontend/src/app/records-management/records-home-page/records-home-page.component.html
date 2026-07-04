@@ -91,7 +91,9 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             Filter by Genre
-            {{ genreFilters().length > 0 ? "(" + genreFilters().length + ")" : "" }}
+            {{
+              genreFilters().length > 0 ? "(" + genreFilters().length + ")" : ""
+            }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <hr />
@@ -118,7 +120,9 @@
         <mat-expansion-panel-header>
           <mat-panel-title>
             Filter by Style
-            {{ styleFilters().length > 0 ? "(" + styleFilters().length + ")" : "" }}
+            {{
+              styleFilters().length > 0 ? "(" + styleFilters().length + ")" : ""
+            }}
           </mat-panel-title>
         </mat-expansion-panel-header>
         <hr />
@@ -171,7 +175,7 @@
                 'Cassette Tape',
                 '4-Track Cartridge',
                 '8-Track Cartridge',
-                'Other/Unknown'
+                'Other/Unknown',
               ],
               'formatFilters'
             )
@@ -234,17 +238,19 @@
             <a [routerLink]="['/records', r.id, 'view']" class="h-full w-full">
               <div class="w-full h-full">
                 <img
-                [src]="
-                  r.images[r.chosenImage] ||
-                  '/assets/images/records-new-sample.svg'
+                  [src]="
+                    r.images[r.chosenImage] ||
+                    '/assets/images/records-new-sample.svg'
                   "
-                class="min-w-full object-cover object-center aspect-square rounded-t-md"
+                  class="min-w-full object-cover object-center aspect-square rounded-t-md"
                 />
               </div>
               <p class="m-0 mx-1 mt-1 font-medium text-black text-sm truncate">
                 {{ r.name }}
               </p>
-              <p class="m-0 mx-1 mb-1 font-medium text-gray-700 text-xs truncate">
+              <p
+                class="m-0 mx-1 mb-1 font-medium text-gray-700 text-xs truncate"
+              >
                 {{ r.label }}
               </p>
             </a>

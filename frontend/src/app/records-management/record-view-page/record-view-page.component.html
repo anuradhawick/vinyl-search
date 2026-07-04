@@ -8,7 +8,7 @@
           [config]="imgvconfig"
           [src]="
             (_.isEmpty(recordObject.images) && [
-              '/assets/images/records-new-sample.svg'
+              '/assets/images/records-new-sample.svg',
             ]) ||
             recordObject.images
           "
@@ -55,7 +55,7 @@
                       '/records',
                       recordObject.id,
                       'revisions',
-                      h._id
+                      h._id,
                     ]"
                     >Revision - {{ h.createdAt | date: "medium" }}</a
                   >

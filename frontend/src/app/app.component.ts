@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from './layout/footer/footer.component';
+import { NavbarComponent } from './layout/navbar/navbar.component';
 import { TitleTagService } from './shared-modules/services/title-tag.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: false,
+  imports: [FooterComponent, NavbarComponent, RouterOutlet],
 })
 export class AppComponent {
   constructor(private tagService: TitleTagService) {

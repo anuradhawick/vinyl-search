@@ -66,7 +66,11 @@ export class AllAdsComponent implements OnInit {
     this.posts.set(null);
     this.loading.set(true);
     this.adminMarketService
-      .fetch_posts_by_type({ limit: this.limit(), skip: this.skip, type: 'all' })
+      .fetch_posts_by_type({
+        limit: this.limit(),
+        skip: this.skip,
+        type: 'all',
+      })
       .then((records: any) => {
         this.posts.set(records.posts);
         this.skip = records.skip;

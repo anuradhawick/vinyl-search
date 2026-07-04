@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { UserHomePageComponent } from './user-home-page/user-home-page.component';
-import { MyRecordsComponent } from './my-records/my-records.component';
+import { Routes } from '@angular/router';
 import { MyForumComponent } from './my-forum/my-forum.component';
-import { UpdateDetailsComponent } from './update-details/update-details.component';
 import { MyMarketComponent } from './my-market/my-market.component';
+import { MyRecordsComponent } from './my-records/my-records.component';
+import { UpdateDetailsComponent } from './update-details/update-details.component';
+import { UserHomePageComponent } from './user-home-page/user-home-page.component';
 
-const routes: Routes = [
+export const userManagementRoutes: Routes = [
   {
     path: '',
     component: UserHomePageComponent,
@@ -35,9 +34,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class UserManagementRoutingModule {}

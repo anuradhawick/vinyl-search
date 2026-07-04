@@ -283,7 +283,9 @@ export class RecordsHomePageComponent implements OnInit {
       genres: _.isEmpty(this.genreFilters()) ? null : this.genreFilters(),
       styles: _.isEmpty(this.styleFilters()) ? null : this.styleFilters(),
       formats: _.isEmpty(this.formatFilters()) ? null : this.formatFilters(),
-      countries: _.isEmpty(this.countryFilters()) ? null : this.countryFilters(),
+      countries: _.isEmpty(this.countryFilters())
+        ? null
+        : this.countryFilters(),
     };
 
     this.router.navigateByUrl(this.router.url.split(/[?#]/)[0]).then(() => {
