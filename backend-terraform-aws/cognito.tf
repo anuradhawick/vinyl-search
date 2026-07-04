@@ -34,6 +34,13 @@ resource "aws_cognito_user_pool_client" "vinyl-lk-client" {
   supported_identity_providers         = ["Facebook", "Google"]
 }
 
+resource "aws_cognito_user_group" "admin" {
+  name         = "Admin"
+  user_pool_id = aws_cognito_user_pool.vinyl-lk.id
+  description  = "Users who can access the administration area."
+  precedence   = 0
+}
+
 # google identity provider
 resource "aws_cognito_identity_provider" "vinyl-lk-google-provider" {
   user_pool_id  = aws_cognito_user_pool.vinyl-lk.id
