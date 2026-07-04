@@ -12,6 +12,16 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
+// Check if bson.A contains a string value.
+func ArrayContainsString(array bson.A, value string) bool {
+	for _, item := range array {
+		if s, ok := item.(string); ok && s == value {
+			return true
+		}
+	}
+	return false
+}
+
 // ParseOID parses a non-empty hex string into a Mongo ObjectID.
 func ParseOID(value string) (bson.ObjectID, error) {
 	if value == "" {

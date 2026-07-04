@@ -53,6 +53,13 @@ func getProfile(ctx context.Context, req events.APIGatewayProxyRequest) (events.
 	if err != nil {
 		return common.Internal(map[string]any{"records": "ERROR", "success": false}, err), nil
 	}
+
+	if common.IsAdmin(req) && !common.ArrayContainsString(userRoles(user), "Admin") {
+		if err := addAdminRole(ctx, common.UID(req)); err != nil {
+			return common.Internal(map[string]any{"records": "ERROR", "success": false}, err), nil
+		}
+		user["roles"] = append(userRoles(user), "Admin")
+	}
 	user["success"] = true
 	return common.JSON(http.StatusOK, user), nil
 }
@@ -159,6 +166,28 @@ func updateUser(ctx context.Context, uid string, data bson.M) (bson.M, error) {
 		options.FindOneAndUpdate().SetReturnDocument(options.After),
 	).Decode(&user)
 	return user, err
+}
+
+// addAdminRole mirrors the Cognito Admin group into Mongo without using profile updates.
+func addAdminRole(ctx context.Context, uid string) error {
+	oid, err := common.ParseOID(uid)
+	if err != nil {
+		return err
+	}
+	db, err := common.DB(ctx)
+	if err != nil {
+		return err
+	}
+	_, err = db.Collection("users").UpdateOne(ctx, bson.M{"_id": oid}, bson.M{"$addToSet": bson.M{"roles": "Admin"}})
+	return err
+}
+
+func userRoles(user bson.M) bson.A {
+	roles, ok := user["roles"].(bson.A)
+	if !ok {
+		return bson.A{}
+	}
+	return roles
 }
 
 // user fetches the authenticated user's profile by uid.

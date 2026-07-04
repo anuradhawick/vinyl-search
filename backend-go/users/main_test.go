@@ -92,6 +92,20 @@ func TestUserProfile(t *testing.T) {
 	}
 }
 
+func TestUserProfileSyncsAdminRole(t *testing.T) {
+	fixture := setupUsersTest(t)
+
+	resp := testutil.Call(t, handler, testutil.Request(http.MethodGet, "/users", nil, nil, fixture.ownerID.Hex(), true))
+	body := testutil.AssertOKSuccess(t, resp)
+	roles := body["roles"].([]any)
+	if len(roles) != 1 || roles[0] != "Admin" {
+		t.Fatalf("roles = %#v", roles)
+	}
+	if count := testutil.Count(t, fixture.db, "users", bson.M{"_id": fixture.ownerID, "roles": "Admin"}); count != 1 {
+		t.Fatalf("admin role count = %d", count)
+	}
+}
+
 func TestUpdateUserProfile(t *testing.T) {
 	fixture := setupUsersTest(t)
 
