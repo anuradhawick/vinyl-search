@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import {
   FormControl,
   FormGroup,
@@ -91,18 +92,18 @@ export class UpdateDetailsComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.userService
-      .update_profile({
+    firstValueFrom(
+      this.userService.update_profile({
         given_name: this.user.given_name,
         family_name: this.user.family_name,
-      })
-      .then(() => {
-        this.userService.get_profile().then((u: any) => {
-          this.user = u;
-          this.originalUser = _.cloneDeep(u);
-          this.auth.setUser(u);
-        });
+      }),
+    ).then(() => {
+      firstValueFrom(this.userService.get_profile()).then((u: any) => {
+        this.user = u;
+        this.originalUser = _.cloneDeep(u);
+        this.auth.setUser(u);
       });
+    });
   }
 
   discardDetails() {
@@ -140,15 +141,15 @@ export class UpdateDetailsComponent implements OnInit {
         const url = `${environment.cdn_url}profile-pictures/${filename}`;
 
         this.uploading = false;
-        this.userService
-          .update_profile({
+        firstValueFrom(
+          this.userService.update_profile({
             picture: url,
-          })
-          .then(() => {
-            this.userService.get_profile().then((u: any) => {
-              this.auth.setUser(u);
-            });
+          }),
+        ).then(() => {
+          firstValueFrom(this.userService.get_profile()).then((u: any) => {
+            this.auth.setUser(u);
           });
+        });
       })
       .catch((e: any) => {
         this.uploading = false;

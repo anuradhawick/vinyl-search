@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -65,12 +66,13 @@ export class AllAdsComponent implements OnInit {
   loadPosts() {
     this.posts.set(null);
     this.loading.set(true);
-    this.adminMarketService
-      .fetch_posts_by_type({
+    firstValueFrom(
+      this.adminMarketService.fetch_posts_by_type({
         limit: this.limit(),
         skip: this.skip,
         type: 'all',
-      })
+      }),
+    )
       .then((records: any) => {
         this.posts.set(records.posts);
         this.skip = records.skip;

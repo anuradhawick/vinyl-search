@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -66,12 +67,13 @@ export class ApprovedAdsComponent implements OnInit {
   loadPosts() {
     this.posts.set(null);
     this.loading.set(true);
-    this.adminMarketService
-      .fetch_posts_by_type({
+    firstValueFrom(
+      this.adminMarketService.fetch_posts_by_type({
         limit: this.limit(),
         skip: this.skip,
         type: 'approved',
-      })
+      }),
+    )
       .then((records: any) => {
         this.posts.set(records.posts);
         this.skip = records.skip;
@@ -100,7 +102,7 @@ export class ApprovedAdsComponent implements OnInit {
   //
   //   modal.afterClosed().subscribe((ok) => {
   //     if (ok) {
-  //       this.adminMarketService.transit_post(id, 'approve').then((res: any) => {
+  //       firstValueFrom(this.adminMarketService.transit_post(id, 'approve')).then((res: any) => {
   //         if (res.success) {
   //           this.toastr.success('Approved successfully', 'Success');
   //           this.loadPosts();
@@ -117,7 +119,7 @@ export class ApprovedAdsComponent implements OnInit {
   //
   //   modal.afterClosed().subscribe((ok) => {
   //     if (ok) {
-  //       this.adminMarketService.transit_post(id, 'reject').then((res: any) => {
+  //       firstValueFrom(this.adminMarketService.transit_post(id, 'reject')).then((res: any) => {
   //         if (res.success) {
   //           this.toastr.success('Rejected successfully', 'Success');
   //           this.loadPosts();

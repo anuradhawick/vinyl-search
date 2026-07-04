@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
@@ -66,8 +67,12 @@ export class MyForumComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService
-      .get_forum_posts({ limit: this.limit(), skip: this.skip })
+    firstValueFrom(
+      this.userService.get_forum_posts({
+        limit: this.limit(),
+        skip: this.skip,
+      }),
+    )
       .then((records: any) => {
         this.posts.set(records.posts);
         this.skip = records.skip;
@@ -96,8 +101,7 @@ export class MyForumComponent implements OnInit {
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
-        this.userService
-          .delete_forum_post(id)
+        firstValueFrom(this.userService.delete_forum_post(id))
           .then(() => {
             this.loadPosts();
             this.toastr.success('Forum item deleted successfully', 'Success');

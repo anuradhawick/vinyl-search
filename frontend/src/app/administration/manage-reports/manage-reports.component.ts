@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AdminService } from '../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
@@ -66,8 +67,9 @@ export class ManageReportsComponent implements OnInit {
   loadPosts() {
     this.posts.set(null);
     this.loading.set(true);
-    this.adminService
-      .fetch_reports({ limit: this.limit(), skip: this.skip })
+    firstValueFrom(
+      this.adminService.fetch_reports({ limit: this.limit(), skip: this.skip }),
+    )
       .then((records: any) => {
         const posts = _.map(records.reports, (post: any) => {
           if (post.type === 'report_selling_ad') {
@@ -99,7 +101,7 @@ export class ManageReportsComponent implements OnInit {
   }
 
   resolveReport(reportId: string) {
-    this.adminService.resolve_report(reportId).then(() => {
+    firstValueFrom(this.adminService.resolve_report(reportId)).then(() => {
       this.toastr.success('Resolved successfully', 'Success');
       this.loadPosts();
     });

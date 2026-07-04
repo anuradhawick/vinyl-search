@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
 import { environment } from '../../../environments/environment';
+import { from, switchMap } from 'rxjs';
 
 @Injectable()
 export class MarketService {
@@ -13,28 +14,28 @@ export class MarketService {
   private readonly publicBase = environment.api_gateway + 'public/market';
   private readonly protectedBase = environment.api_gateway + 'market';
 
-  async save_post(post: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(this.protectedBase, post, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  save_post(post: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(this.protectedBase, post, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 
-  async update_post(post: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(`${this.protectedBase}/${post.id}`, post, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  update_post(post: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(`${this.protectedBase}/${post.id}`, post, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 
   fetch_posts(params: any) {
@@ -43,8 +44,8 @@ export class MarketService {
     });
   }
 
-  async fetch_post(postId: any) {
-    return await this.http.get(`${this.publicBase}/${postId}`).toPromise();
+  fetch_post(postId: any) {
+    return this.http.get(`${this.publicBase}/${postId}`);
   }
 
   search_posts(params: any) {
@@ -53,15 +54,15 @@ export class MarketService {
     });
   }
 
-  async report_post(postId: any, report: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(`${this.protectedBase}/${postId}/report`, report, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  report_post(postId: any, report: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(`${this.protectedBase}/${postId}/report`, report, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 }

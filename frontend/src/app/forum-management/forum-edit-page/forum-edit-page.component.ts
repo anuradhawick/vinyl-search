@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
@@ -86,7 +87,7 @@ export class ForumEditPageComponent implements OnInit {
     };
 
     if (this.newMode) {
-      const data = this.forumService.new_post(object);
+      const data = firstValueFrom(this.forumService.new_post(object));
 
       data.then(
         (result: any) => {
@@ -101,7 +102,9 @@ export class ForumEditPageComponent implements OnInit {
         },
       );
     } else {
-      const data = this.forumService.update_post(this.postId, object);
+      const data = firstValueFrom(
+        this.forumService.update_post(this.postId, object),
+      );
       data.then(
         () => {
           this.router.navigate([

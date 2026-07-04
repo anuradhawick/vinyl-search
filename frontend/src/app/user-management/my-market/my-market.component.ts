@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -67,8 +68,12 @@ export class MyMarketComponent implements OnInit {
 
   loadPosts() {
     this.loader.show();
-    this.userService
-      .get_market_posts({ limit: this.limit(), skip: this.skip })
+    firstValueFrom(
+      this.userService.get_market_posts({
+        limit: this.limit(),
+        skip: this.skip,
+      }),
+    )
       .then((records: any) => {
         this.posts.set(records.posts);
         this.skip = records.skip;
@@ -93,7 +98,7 @@ export class MyMarketComponent implements OnInit {
   }
 
   markAsSold(id: string) {
-    this.userService.mark_selling_item_sold(id).then(() => {
+    firstValueFrom(this.userService.mark_selling_item_sold(id)).then(() => {
       this.loadPosts();
       this.toastr.success('Item marked as sold successfully', 'Success');
     });

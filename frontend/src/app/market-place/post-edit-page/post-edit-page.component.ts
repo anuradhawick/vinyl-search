@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -37,7 +38,7 @@ export class PostEditPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postId = _.get(map, 'params.postId', null);
-      this.marketService.fetch_post(postId).then((data) => {
+      firstValueFrom(this.marketService.fetch_post(postId)).then((data) => {
         this.postObject = data;
       });
     });
@@ -55,7 +56,7 @@ export class PostEditPageComponent implements OnInit {
       this.loader.show();
       this.ready = false;
 
-      const data = this.marketService.update_post(post);
+      const data = firstValueFrom(this.marketService.update_post(post));
 
       data.then(
         (result: any) => {

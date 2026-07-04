@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { PostEditorComponent } from '../post-editor-module/post-editor.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -46,7 +47,7 @@ export class NewPostComponent implements OnInit {
       this.loader.show();
       this.ready = false;
 
-      const data = this.marketService.save_post(post);
+      const data = firstValueFrom(this.marketService.save_post(post));
 
       data.then(
         (result: any) => {

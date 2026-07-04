@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,7 +35,7 @@ export class EditAdComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postID = _.get(map, 'params.postId', null);
-      const data = this.adminService.get_market_post(postID);
+      const data = firstValueFrom(this.adminService.get_market_post(postID));
 
       data
         .then((post) => {
@@ -53,7 +54,7 @@ export class EditAdComponent implements OnInit {
       this.ready = false;
       this.post = post;
 
-      const data = this.adminService.update_market_post(post);
+      const data = firstValueFrom(this.adminService.update_market_post(post));
 
       data.then(
         (result: any) => {

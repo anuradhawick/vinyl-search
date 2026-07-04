@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../shared/services/auth.service';
 import { AdminService } from '../services/admin.service';
 import {
@@ -74,7 +75,7 @@ export class ManageAdminsComponent implements OnInit {
   loadAdmins() {
     this.admins.set([]);
     this.loading.set(true);
-    this.adminService.get_admins().then((res: any) => {
+    firstValueFrom(this.adminService.get_admins()).then((res: any) => {
       this.admins.set(res.users);
       this.loading.set(false);
     });
@@ -90,7 +91,7 @@ export class ManageAdminsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((yes) => {
       if (yes) {
-        this.adminService.remove_admin(uid).then((res: any) => {
+        firstValueFrom(this.adminService.remove_admin(uid)).then((res: any) => {
           if (res.success) {
             this.toastr.success('Admin removed successfully', 'Success');
             this.loadAdmins();
@@ -108,8 +109,7 @@ export class ManageAdminsComponent implements OnInit {
   createAdmin() {
     if (!this.form.invalid) {
       const email = this.form.get('email')!.value;
-      this.adminService
-        .create_admin(email)
+      firstValueFrom(this.adminService.create_admin(email))
         .then((res: any) => {
           if (res.success) {
             this.toastr.success('Admin created successfully', 'Success');

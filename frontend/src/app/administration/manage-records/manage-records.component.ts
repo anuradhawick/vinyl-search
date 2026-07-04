@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../services/admin.service';
@@ -63,8 +64,9 @@ export class ManageRecordsComponent implements OnInit {
   loadPosts() {
     this.records.set(null);
     this.loading.set(true);
-    this.adminService
-      .fetch_records({ limit: this.limit(), skip: this.skip })
+    firstValueFrom(
+      this.adminService.fetch_records({ limit: this.limit(), skip: this.skip }),
+    )
       .then((records: any) => {
         this.records.set(records.records);
         this.skip = records.skip;
@@ -97,8 +99,7 @@ export class ManageRecordsComponent implements OnInit {
 
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
-        this.adminService
-          .delete_record(id)
+        firstValueFrom(this.adminService.delete_record(id))
           .then(() => {
             this.loadPosts();
             this.toastr.success('Forum item deleted successfully', 'Success');

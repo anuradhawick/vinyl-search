@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../shared/services/auth.service';
+import { from, switchMap } from 'rxjs';
 
 @Injectable()
 export class ForumService {
@@ -33,63 +34,66 @@ export class ForumService {
     });
   }
 
-  async new_post(post: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(this.protectedBase, post, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  new_post(post: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(this.protectedBase, post, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 
-  async comment_post(postId: string, comment: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(`${this.protectedBase}/${postId}/comments`, comment, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  comment_post(postId: string, comment: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(`${this.protectedBase}/${postId}/comments`, comment, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 
-  async comment_delete(postId: string, commentId: string) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .delete(`${this.protectedBase}/${postId}/comments/${commentId}`, {
-        headers: new HttpHeaders({
-          Authorization: token,
-        }),
-      })
-      .toPromise();
+  comment_delete(postId: string, commentId: string) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.delete(
+          `${this.protectedBase}/${postId}/comments/${commentId}`,
+          {
+            headers: new HttpHeaders({
+              Authorization: token,
+            }),
+          },
+        ),
+      ),
+    );
   }
 
-  async update_post(postId: string, post: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .post(`${this.protectedBase}/${postId}`, post, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  update_post(postId: string, post: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.post(`${this.protectedBase}/${postId}`, post, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 
-  async delete_post(postId: any) {
-    const token = await this.auth.getToken();
-
-    return await this.http
-      .delete(`${this.protectedBase}/${postId}`, {
-        headers: new HttpHeaders({
-          Authorization: token,
+  delete_post(postId: any) {
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.delete(`${this.protectedBase}/${postId}`, {
+          headers: new HttpHeaders({
+            Authorization: token,
+          }),
         }),
-      })
-      .toPromise();
+      ),
+    );
   }
 }

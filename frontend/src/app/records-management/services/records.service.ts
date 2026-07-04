@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { from, shareReplay, map, switchMap } from 'rxjs';
+import { from, map, shareReplay, switchMap } from 'rxjs';
 import { post } from 'aws-amplify/api';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Injectable()
 export class RecordsService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService,
+  ) {}
 
   private readonly publicBase = environment.api_gateway + 'public/records';
+  private readonly protectedBase = environment.api_gateway + 'records';
 
   save_record(record: any) {
     return from(
@@ -45,7 +50,15 @@ export class RecordsService {
   }
 
   fetch_record_history(recordId: string) {
-    return this.http.get(`${this.publicBase}/${recordId}/revisions`);
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.get(`${this.protectedBase}/${recordId}/revisions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      ),
+    );
   }
 
   search_records(params: any) {
@@ -57,12 +70,29 @@ export class RecordsService {
   }
 
   fetch_record(recordId: string) {
-    return this.http.get(`${this.publicBase}/${recordId}`);
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.get(`${this.protectedBase}/${recordId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      ),
+    );
   }
 
   fetch_record_revision(recordId: string, revisionId: string) {
-    return this.http.get(
-      `${this.publicBase}/${recordId}/revisions/${revisionId}`,
+    return from(this.auth.getToken()).pipe(
+      switchMap((token) =>
+        this.http.get(
+          `${this.protectedBase}/${recordId}/revisions/${revisionId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        ),
+      ),
     );
   }
 }

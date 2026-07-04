@@ -1,4 +1,5 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -101,7 +102,9 @@ export class ForumViewPageComponent implements OnInit {
     modal.afterClosed().subscribe((ok) => {
       if (ok) {
         this.loader.show();
-        const data = this.forumService.delete_post(this.post().id);
+        const data = firstValueFrom(
+          this.forumService.delete_post(this.post().id),
+        );
         data.then(() => {
           this.loader.hide();
           this.router.navigate(['/forum']);
@@ -145,7 +148,9 @@ export class ForumViewPageComponent implements OnInit {
     }
     this.comment_data.set('');
 
-    const data = this.forumService.comment_post(this.postId, object);
+    const data = firstValueFrom(
+      this.forumService.comment_post(this.postId, object),
+    );
     data.then(
       () => {
         this.toastr.success(`Comment submitted successfully`, 'Success');
@@ -189,7 +194,9 @@ export class ForumViewPageComponent implements OnInit {
         this.commentLoader.show();
         this.enableCommentSection.set(false);
 
-        const data = this.forumService.comment_delete(this.postId, id);
+        const data = firstValueFrom(
+          this.forumService.comment_delete(this.postId, id),
+        );
 
         data.then(
           () => {

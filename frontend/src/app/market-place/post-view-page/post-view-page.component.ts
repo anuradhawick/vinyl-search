@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { MarketService } from '../services/market.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -76,7 +77,7 @@ export class PostViewPageComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((map: any) => {
       const postId = _.get(map, 'params.postId', null);
-      this.marketService.fetch_post(postId).then((data) => {
+      firstValueFrom(this.marketService.fetch_post(postId)).then((data) => {
         this.postObject.set(data);
         this.postLoading.set(false);
       });

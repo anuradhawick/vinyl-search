@@ -28,13 +28,7 @@
               "src/assets/css/material-kit.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/jquery-ui-dist/jquery-ui.js",
-              "src/assets/js/core/popper.min.js",
-              "src/assets/js/core/bootstrap-material-design.min.js",
-              "src/assets/js/material-kit.js"
-            ],
+            "scripts": [],
             "allowedCommonJsDependencies": [
               "@ckeditor/ckeditor5-build-classic",
               "crypto-js",
@@ -174,13 +168,7 @@
               "src/assets/css/material-kit.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/jquery-ui-dist/jquery-ui.js",
-              "src/assets/js/core/popper.min.js",
-              "src/assets/js/core/bootstrap-material-design.min.js",
-              "src/assets/js/material-kit.js"
-            ]
+            "scripts": []
           }
         }
       }
